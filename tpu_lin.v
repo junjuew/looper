@@ -1,10 +1,24 @@
 `default_nettype none
 
   //////////////////////////////////////////////////
-// represent each line of valid bit
-  // clr_val,set_val in charge of valid bit
-  // clr_wat, set_wat in charge of wait bit
-  // fls in charge of inst bits, doesn't alter valid and wait bit
+  // tpu_inst_rdy goes high when the instruction is not valid,
+  // or all possible physical registers are ready
+  //
+  // isq line input format:
+  // idx | inst vld | vld , lsrc1 | vld, ldst | vld, lsrc2 | controls... | pdest
+  // tpu line out format:
+  // idx | inst vld | vld, psrc1 | vld, psrc2 | other control signals ... | pdest
+  //
+  // prv_map input format:
+  // logical mapping for reg 15, 14, 13, ...., 1,0
+  //
+  // input signal operations:
+  // when loading a new instruction, dst_rdy_reg_en=1, dst_reg_rdy=0, so that inst below
+  // will be blocked
+  //
+  // when an instruction finished executed, dst_rdy_reg_en=1, dst_reg_rdy=1, so that inst
+  // below will start evaluate
+  //
   /////////////////////////////////////////////////// /
   module tpu_lin(/*autoarg*/
    // Outputs
@@ -15,14 +29,18 @@
 
    parameter INST_WIDTH=67;
    parameter TPU_MAP_WIDTH= 7 * 16; //7 bit for each logical register
-   parameter TPU_INST_WIDTH= 7 * 16; //7 bit for each logical register   
-   localparam ISQ_LINE_WIDTH=INST_WIDTH +2;
+   // 6 is just an arbitrary value for widths of idx bit   
+   parameter ISQ_IDX_BITS_NUM= 6;
+   localparam ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM;
+   //for each logical source register, physical register index has 2 more bits
+   parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 ; 
+   
    //bitmap for instructions
    //everything is relative to the inst_width
-   localparam BIT_INST_VLD = INST_WIDTH -1 ;
-   localparam BIT_LSRC1_VLD = INST_WIDTH -1 -1  ;   
-   localparam BIT_LSRC2_VLD = INST_WIDTH -1 - 11;      
-   localparam BIT_LDST_VLD = INST_WIDTH -1 - 6;
+   localparam BIT_INST_VLD = INST_WIDTH  - 1 ;
+   localparam BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
+   localparam BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
+   localparam BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
    
    
    
@@ -31,19 +49,21 @@
    //////////////////////////////////////
 
    //used for the preg rdy register
+   // dst_reg_rdy: ready signal for destination register (physical)
+   // dst_rdy_reg_en: enable signal to read in dst_reg_rdy
    input wire rst_n, clk, dst_reg_rdy, dst_rdy_reg_en;
    //correspond to each line in isq
    input wire [ISQ_LINE_WIDTH-1:0] isq_lin;
    input wire [TPU_MAP_WIDTH-1:0]  prv_map;
    
-   output wire [TPU_MAP_WIDTH-1:0]  cur_map;
+   output reg [TPU_MAP_WIDTH-1:0]  cur_map;
    output wire [TPU_INST_WIDTH-1:0] tpu_out;
    output wire                      tpu_inst_rdy;
    
    reg                             dst_rdy;
-   // valid bit + rdy bit + since we have 64 registers (6 bits)
-   wire [7:0]                      psrc1;
-   wire [7:0]                      psrc2;   
+   // rdy bit + since we have 64 registers (6 bits)
+   wire [6:0]                      psrc1;
+   wire [6:0]                      psrc2;   
 
    reg [6:0]                       psrc1_map;
    reg [6:0]                       psrc2_map;   
@@ -51,24 +71,32 @@
    wire [TPU_MAP_WIDTH-1:0]        pos_map[15:0];
    wire [5:0]                      pdst; //allocated physical register
    wire [3:0]                      ldst;
+
+   //valid bit | logical reg number 
+   wire [4:0]                      lsrc1, lsrc2;
+
+                      
    
    
    ///////////////////////////////
    //grab ldst from inst
    ////////////////////////////
    assign ldst = isq_lin[BIT_LDST_VLD -1 :BIT_LDST_VLD -4];
+   //by default the physical register addr is at the LSB of inst coming in
    assign pdst = isq_lin [5:0];
+   assign lsrc1 = isq_lin[BIT_LSRC1_VLD : BIT_LSRC1_VLD - 4];
+   assign lsrc2 = isq_lin[BIT_LSRC2_VLD : BIT_LSRC2_VLD - 4];   
+   
    
    ///////////////////////////////////////
    //source register renaming
    //////////////////////////////////////
    //find the physical mapping for all instructions
    //combinational logic
-   always @(/*autosense*/isq_lin
-            or prv_map)
+   always @(/*autosense*/isq_lin or prv_map)
      begin
         //16 logical registers (4 bits)
-        case (isq_lin[BIT_LSRC1_VLD -1: BIT_LSRC1_VLD -4])
+        case (lsrc1[3:0])
           4'd0: psrc1_map = prv_map[6:0];
           4'd1: psrc1_map = prv_map[13:7];
           4'd2: psrc1_map = prv_map[20:14];           
@@ -87,7 +115,7 @@
           4'd15: psrc1_map = prv_map[111:105];           
         endcase // case ()
 
-        case (isq_lin[BIT_LSRC2_VLD -1: BIT_LSRC2_VLD -4])
+        case (lsrc2[3:0])
           4'd0: psrc2_map = prv_map[6:0];
           4'd1: psrc2_map = prv_map[13:7];
           4'd2: psrc2_map = prv_map[20:14];           
@@ -110,8 +138,10 @@
    //for operations that doesn't write to register file
    //the ready bit should goes high instantly so that no furthur insts will
    //be blocked
-   assign psrc1 = (!isq_lin[BIT_LSRC1_VLD])? 7'h40:{1'b1, psrc1_map};
-   assign psrc1 = (!isq_lin[BIT_LSRC2_VLD])? 7'h40:{1'b1, psrc2_map};
+   // if the instruction is not valid, then psrc1 and psrc2 are
+   // rdy immediately
+   assign psrc1 = ( (!isq_lin[BIT_LSRC1_VLD]) || (!isq_lin[BIT_INST_VLD]) )? 7'h40:{psrc1_map};
+   assign psrc2 = ( (!isq_lin[BIT_LSRC2_VLD]) || (!isq_lin[BIT_INST_VLD]) )? 7'h40:{psrc2_map};
    
 
    ////////////////////////////////////
@@ -143,10 +173,34 @@
    //output
    ///////////////////////////
    assign tpu_inst_rdy = psrc1[6] && psrc2[6];
-   //TODO: not sure if this works
-   //can convert it into an always block
-   assign cur_map = pos_map[ldst];
    assign tpu_out = {isq_lin[ISQ_LINE_WIDTH-1:BIT_LSRC1_VLD+1], psrc1, psrc2, isq_lin[BIT_LSRC2_VLD-1:0]};
+
+   //output current mappping
+   always @(ldst, pos_map[0],pos_map[1],pos_map[2],pos_map[3],pos_map[4],pos_map[5],pos_map[6],pos_map[7],pos_map[8],pos_map[9],pos_map[10],pos_map[11],pos_map[12],pos_map[13],pos_map[14],pos_map[15])
+     begin
+        case (ldst)
+          0: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[0];
+          1: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[1];
+          2: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[2];
+          3: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[3];
+          4: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[4];
+          5: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[5];
+          6: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[6];
+          7: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[7];
+          8: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[8];
+          9: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[9];
+          10: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[10];
+          11: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[11];
+          12: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[12];
+          13: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[13];
+          14: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[14];
+          15: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[15];
+          default:
+            cur_map[TPU_MAP_WIDTH-1:0] = {TPU_MAP_WIDTH{1'b0}};
+        endcase // case (ldst)
+     end
+   
+
    
    //generate output mapping
    generate

@@ -142,7 +142,9 @@
       genvar                                      out_i;
       for (out_i=0; out_i<ISQ_DEPTH; out_i=out_i+1) 
         begin
-           assign isq_out_flat[ISQ_OUT_WIDTH*(out_i+1)-1 : ISQ_OUT_WIDTH*out_i] =  {isq_lin_out[out_i], indices[out_i]};
+           //append indices at the beginning of inst line!!
+           //tpu rely on this property to parse the bus
+           assign isq_out_flat[ISQ_OUT_WIDTH*(out_i+1)-1 : ISQ_OUT_WIDTH*out_i] =  { indices[out_i], isq_lin_out[out_i]};
         end
    endgenerate
 
