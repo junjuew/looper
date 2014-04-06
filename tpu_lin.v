@@ -22,7 +22,7 @@
   /////////////////////////////////////////////////// /
   module tpu_lin(/*autoarg*/
    // Outputs
-   cur_map, tpu_out, tpu_inst_rdy,
+   cur_map, tpu_out, tpu_inst_rdy, fre_preg,
    // Inputs
    rst_n, clk, dst_reg_rdy, dst_rdy_reg_en, isq_lin, prv_map
    );
@@ -33,10 +33,10 @@
    parameter ISQ_IDX_BITS_NUM= 6;
    localparam ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM;
    //for each logical source register, physical register index has 2 more bits
-   parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 ; 
+   localparam TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
    
    //bitmap for instructions
-   //everything is relative to the inst_width
+   //everything is relative to the inst_width, not isq_lin_width!!
    localparam BIT_INST_VLD = INST_WIDTH  - 1 ;
    localparam BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
    localparam BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
@@ -51,12 +51,15 @@
    //used for the preg rdy register
    // dst_reg_rdy: ready signal for destination register (physical)
    // dst_rdy_reg_en: enable signal to read in dst_reg_rdy
+
    input wire rst_n, clk, dst_reg_rdy, dst_rdy_reg_en;
    //correspond to each line in isq
    input wire [ISQ_LINE_WIDTH-1:0] isq_lin;
    input wire [TPU_MAP_WIDTH-1:0]  prv_map;
    
    output reg [TPU_MAP_WIDTH-1:0]  cur_map;
+   //free previously occupied physical register, if needed
+   output wire [6:0]  fre_preg; 
    output wire [TPU_INST_WIDTH-1:0] tpu_out;
    output wire                      tpu_inst_rdy;
    
@@ -75,7 +78,13 @@
    //valid bit | logical reg number 
    wire [4:0]                      lsrc1, lsrc2;
 
-                      
+   //mapping wires separated from prv_map
+   wire [6:0]                      idi_map[15:0];
+
+   //async reset signal for destination ready register
+   //bad idea????: right now global rst_n is and with a module signal
+   //that signfies a new instruction is loaded
+   wire                            dst_rdy_rst;
    
    
    ///////////////////////////////
@@ -153,7 +162,7 @@
    ///////////////////////////////////
    always @(posedge clk, negedge rst_n)
      begin
-        if (!rst_n)
+        if (~rst_n)
           dst_rdy<=1'b0;
         else if (dst_rdy_reg_en)
           begin
@@ -173,9 +182,11 @@
    //output
    ///////////////////////////
    assign tpu_inst_rdy = psrc1[6] && psrc2[6];
-   assign tpu_out = {isq_lin[ISQ_LINE_WIDTH-1:BIT_LSRC1_VLD+1], psrc1, psrc2, isq_lin[BIT_LSRC2_VLD-1:0]};
+   assign tpu_out = {isq_lin[ISQ_LINE_WIDTH-1:BIT_LSRC1_VLD+1], psrc1, psrc2, isq_lin[BIT_LSRC2_VLD-1 - 4:0]};
 
    //output current mappping
+   //cur_map is the actual mapping output
+   //pos_map is the potential mapping output
    always @(ldst, pos_map[0],pos_map[1],pos_map[2],pos_map[3],pos_map[4],pos_map[5],pos_map[6],pos_map[7],pos_map[8],pos_map[9],pos_map[10],pos_map[11],pos_map[12],pos_map[13],pos_map[14],pos_map[15])
      begin
         case (ldst)
@@ -199,7 +210,23 @@
             cur_map[TPU_MAP_WIDTH-1:0] = {TPU_MAP_WIDTH{1'b0}};
         endcase // case (ldst)
      end
+
+
+   ////////////////////////////////////////
+   // separate previous mapping bus into different wires
+   // /////////
+   generate
+      genvar prv_map_i;
+      for (prv_map_i =0 ; prv_map_i<16; prv_map_i=prv_map_i+1)
+        assign idi_map[prv_map_i][6:0]=prv_map[7 * (prv_map_i+1)-1: 7*prv_map_i];
+   endgenerate
    
+   /////////////////////////////////////
+   //figure out what register to free
+   // if this instruction allocate a new
+   // physical register for current ldst
+   ////////////////////////////////////
+   assign fre_preg[6:0] = {isq_lin[BIT_LDST_VLD], idi_map[ldst][5:0]};
 
    
    //generate output mapping

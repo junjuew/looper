@@ -91,6 +91,4 @@ module isq_lin_tb(/*autoarg*/
         $finish;
      end
    
-   
-   
 endmodule   
