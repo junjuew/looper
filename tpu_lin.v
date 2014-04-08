@@ -27,7 +27,7 @@
    rst_n, clk, dst_reg_rdy, dst_rdy_reg_en, isq_lin, prv_map
    );
 
-   parameter INST_WIDTH=67;
+   parameter INST_WIDTH= 56;
    parameter TPU_MAP_WIDTH= 7 * 16; //7 bit for each logical register
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;

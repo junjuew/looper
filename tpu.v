@@ -18,13 +18,13 @@
 
   module tpu(/*autoarg*/
    // Outputs
-   tpu_inst_rdy, tpu_out_flat, fre_preg_out_flat, tpu_out_reo_flat,
+   tpu_inst_rdy, tpu_out_reo_flat, fre_preg_out_flat, isq_ful,
    // Inputs
-   clk, rst_n, isq_lin_flat, dst_reg_rdy, dst_rdy_reg_en, arch_swt
+   clk, rst_n, isq_out_flat, dst_reg_rdy, dst_rdy_reg_en, counter
    );
 
    parameter ISQ_DEPTH = 64;
-   parameter INST_WIDTH=67;
+   parameter INST_WIDTH= 56;
    parameter TPU_MAP_WIDTH= 7 * 16; //7 bit for each logical register
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
@@ -34,27 +34,30 @@
    //bitmap for instructions
    //everything is relative to the inst_width, not isq_lin_width, by default!!
    parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
+   parameter BIT_INST_WAT = INST_WIDTH  - 1 -1;   
    parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
    parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
    parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
-
+   parameter BITS_IN_COUNT = 4;//=log2(ISQ_DEPTH/INST_PORT)
 
    input wire clk, rst_n;
-   input wire [ISQ_LINE_WIDTH*ISQ_DEPTH-1:0] isq_lin_flat;
+   input wire [ISQ_LINE_WIDTH*ISQ_DEPTH-1:0] isq_out_flat;
    
    input wire [ISQ_DEPTH-1:0]               dst_reg_rdy;
-   input wire [ISQ_DEPTH-1:0]               dst_rdy_reg_en;   
+   input wire [ISQ_DEPTH-1:0]               dst_rdy_reg_en;
+   
+   input wire [BITS_IN_COUNT-1:0]          counter;   
    //switch architecture state.
    //should happen when there is no branch instruction waiting to be cleared
    //and every inst in below section has 0 as wait bit
-   input wire                      arch_swt; //switch architecture state
+   wire                                     arch_swt; //switch architecture state
 
    output wire [ISQ_DEPTH-1:0]              tpu_inst_rdy;   
-   output wire [TPU_INST_WIDTH * ISQ_DEPTH-1:0] tpu_out_flat;
    //re-order tpu lines, so that insts with high priority always goes to the physcial low
    //lines which serve as input insts to pdc
    output wire [TPU_INST_WIDTH * ISQ_DEPTH-1:0] tpu_out_reo_flat;   
    output wire [7 * ISQ_DEPTH-1:0] fre_preg_out_flat;
+   output wire                            isq_ful;
 
    // get the tpu_inst_rdy before reordered
    wire [ISQ_DEPTH-1:0]            tpu_inst_rdy_raw;      
@@ -75,6 +78,16 @@
    reg[TPU_MAP_WIDTH-1:0]    top_hed_map, mid_hed_map;
    wire                      top_hed_map_en,mid_hed_map_en;
 
+   //inst valid
+   wire [ISQ_LINE_WIDTH-1:0] inst_vld;
+   //inst wait
+   wire [ISQ_LINE_WIDTH-1:0] inst_wat;
+   //inst done: 1. inst not valid 
+   //           or
+   //           1. inst valid
+   //           2. inst not wait
+   wire [ISQ_LINE_WIDTH-1:0] inst_done;                         
+
 
    ////////////////////////////
    //unflat input wire
@@ -83,7 +96,7 @@
       genvar                                      isq_lin_i;
       for (isq_lin_i=0; isq_lin_i<ISQ_DEPTH; isq_lin_i=isq_lin_i+1) 
         begin
-           assign isq_lin[isq_lin_i][ISQ_LINE_WIDTH-1:0] = isq_lin_flat[ISQ_LINE_WIDTH*(isq_lin_i+1)-1 : ISQ_LINE_WIDTH*isq_lin_i];
+           assign isq_lin[isq_lin_i][ISQ_LINE_WIDTH-1:0] = isq_out_flat[ISQ_LINE_WIDTH*(isq_lin_i+1)-1 : ISQ_LINE_WIDTH*isq_lin_i];
         end
    endgenerate
    
@@ -97,7 +110,6 @@
       genvar                                      out_i;
       for (out_i=0; out_i<ISQ_DEPTH; out_i=out_i+1) 
         begin
-           assign tpu_out_flat[TPU_INST_WIDTH*(out_i+1)-1:TPU_INST_WIDTH*out_i]= tpu_out[out_i][TPU_INST_WIDTH-1:0];
            //tpu output lines after priority routing
            // if arch == 0, then normal order 0--63
            // else 32 -- 63, 0 -- 31
@@ -131,10 +143,17 @@
            else 
              assign prv_map[tpu_lin_idx][TPU_MAP_WIDTH-1:0]= cur_map[tpu_lin_idx-1][TPU_MAP_WIDTH-1:0];
            
-           tpu_lin #(.INST_WIDTH(INST_WIDTH), .TPU_MAP_WIDTH(TPU_MAP_WIDTH),
-                       .ISQ_IDX_BITS_NUM(ISQ_IDX_BITS_NUM), .BIT_INST_VLD(BIT_INST_VLD)
-                     ,.BIT_LSRC1_VLD(BIT_LSRC1_VLD), .BIT_LSRC2_VLD(BIT_LSRC2_VLD)
-                     ,.BIT_LDST_VLD(BIT_LDST_VLD) )
+           tpu_lin #(/*autoinstparam*/
+                     // Parameters
+                     .INST_WIDTH        (INST_WIDTH),
+                     .TPU_MAP_WIDTH     (TPU_MAP_WIDTH),
+                     .ISQ_IDX_BITS_NUM  (ISQ_IDX_BITS_NUM),
+                     .ISQ_LINE_WIDTH    (ISQ_LINE_WIDTH),
+                     .TPU_INST_WIDTH    (TPU_INST_WIDTH),
+                     .BIT_INST_VLD      (BIT_INST_VLD),
+                     .BIT_LSRC1_VLD     (BIT_LSRC1_VLD),
+                     .BIT_LSRC2_VLD     (BIT_LSRC2_VLD),
+                     .BIT_LDST_VLD      (BIT_LDST_VLD))
            tpu_mat(
                    // Outputs
                    .cur_map           (cur_map[tpu_lin_idx][TPU_MAP_WIDTH-1:0]),
@@ -174,6 +193,26 @@
           mid_hed_map[TPU_MAP_WIDTH-1:0] <=cur_map[(ISQ_DEPTH/2)-1][TPU_MAP_WIDTH-1:0];
      end
 
+
+   /////////////////////////////////
+   // grasp all valid and wat bits
+   // from inst
+   ////////////////////////////////
+   generate
+      genvar                                      inst_vld_i;
+      for (inst_vld_i=0; inst_vld_i<ISQ_DEPTH; inst_vld_i=inst_vld_i+1) 
+        begin
+           assign inst_vld[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_VLD];
+           assign inst_wat[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_WAT];
+           assign inst_done[inst_vld_i]= (inst_vld[inst_vld_i])? (~inst_wat[inst_vld_i]):1'b1;
+        end
+   endgenerate
+   
+   // architecture switch happens when all following criteria is satisfied
+   // 1. region below current header wat=0 for all valid insts ( invalid insts may exist )
+   // 2. counter's value is outside of region below current header
+   assign arch_swt= ((~arch) && (counter > 6'd31) && (&inst_done[31:0])) || ((arch) && (counter < 6'd32) && (&inst_done[63:32]));
+   assign isq_ful = ((~arch) && (counter == 6'd60)) || ((arch) && (counter == 6'd28)); 
 
    //architecture recorder
    always @(posedge clk, negedge rst_n)
