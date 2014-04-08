@@ -11,10 +11,14 @@
   // tpu module:
   // an array of tpu lines (ISQ_DEPTH = 64)
   // two segment headers to record architecture state
+  // tpu will also output the instructions with higher prority to lower physical lines
+  // tpu_out_reo_flat: reordered instructions as described above, should use this output
+  // tpu_out_flat: same-order instructiosn as issue queue
   /////////////////////////////////////////////////// /
+
   module tpu(/*autoarg*/
    // Outputs
-   tpu_inst_rdy, tpu_out_flat, fre_preg_out_flat,
+   tpu_inst_rdy, tpu_out_flat, fre_preg_out_flat, tpu_out_reo_flat,
    // Inputs
    clk, rst_n, isq_lin_flat, dst_reg_rdy, dst_rdy_reg_en, arch_swt
    );
@@ -24,7 +28,8 @@
    parameter TPU_MAP_WIDTH= 7 * 16; //7 bit for each logical register
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
-   localparam ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM;
+   parameter ISQ_LINE_WIDTH= INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
+   
    //psrc1 and psrc2 need two more bits than lsrc1, lsrc2
    localparam TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
 
@@ -40,6 +45,9 @@
 
    output wire [ISQ_DEPTH-1:0]              tpu_inst_rdy;   
    output wire [TPU_INST_WIDTH * ISQ_DEPTH-1:0] tpu_out_flat;
+   //re-order tpu lines, so that insts with high priority always goes to the physcial low
+   //lines which serve as input insts to pdc
+   output wire [TPU_INST_WIDTH * ISQ_DEPTH-1:0] tpu_out_reo_flat;   
    output wire [7 * ISQ_DEPTH-1:0] fre_preg_out_flat;
 
    
@@ -81,6 +89,12 @@
       for (out_i=0; out_i<ISQ_DEPTH; out_i=out_i+1) 
         begin
            assign tpu_out_flat[TPU_INST_WIDTH*(out_i+1)-1:TPU_INST_WIDTH*out_i]= tpu_out[out_i][TPU_INST_WIDTH-1:0];
+           //tpu output lines after priority routing
+           // if arch == 0, then normal order 0--63
+           // else 32 -- 63, 0 -- 31
+           assign tpu_out_reo_flat[TPU_INST_WIDTH*(out_i+1)-1:TPU_INST_WIDTH*out_i]= (~arch)? tpu_out[out_i][TPU_INST_WIDTH-1:0]:
+                                                                                     (out_i< ISQ_DEPTH/2)? tpu_out[out_i + ISQ_DEPTH/2][TPU_INST_WIDTH-1:0]:
+                                                                                     tpu_out[out_i - ISQ_DEPTH/2][TPU_INST_WIDTH-1:0];
            assign fre_preg_out_flat[7*(out_i+1)-1:7*out_i]= fre_preg[out_i][6:0];
         end
    endgenerate

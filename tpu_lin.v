@@ -31,7 +31,7 @@
    parameter TPU_MAP_WIDTH= 7 * 16; //7 bit for each logical register
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
-   localparam ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM;
+   parameter ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
    //for each logical source register, physical register index has 2 more bits
    localparam TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
    
