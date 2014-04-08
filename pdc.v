@@ -13,7 +13,7 @@
   ////////////////////////
   module pdc(/*autoarg*/
    // Outputs
-   set_inst_wat, set_inst_val, mul_ins_to_rf, alu1_ins_to_rf,
+   clr_inst_wat,  mul_ins_to_rf, alu1_ins_to_rf,
    alu2_ins_to_rf, adr_add_ins_to_rf,
    // Inputs
    fun_rdy, tpu_out_reo_flat, tpu_inst_rdy
@@ -25,7 +25,7 @@
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
    // +2 : 1 for vld, 1 for wat
-   localparam ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
+   parameter ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
    
    // which bit is representing each function unit
    parameter FUN_MULT_BIT= 0;
@@ -43,7 +43,7 @@
    parameter BIT_CTRL_JMP_VLD= 19;      
 
    //psrc1 and psrc2 need two more bits than lsrc1, lsrc2, no ldest
-   localparam TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
+   parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
    
    //function unit ready bit
    input wire [3:0] fun_rdy;
@@ -51,8 +51,7 @@
    input wire [TPU_INST_WIDTH * ISQ_DEPTH-1:0] tpu_out_reo_flat;
    input wire [ISQ_DEPTH-1:0]                  tpu_inst_rdy;
 
-   output wire [ISQ_DEPTH-1:0]                 set_inst_wat;
-   output wire [ISQ_DEPTH-1:0]                 set_inst_val;   
+   output wire [ISQ_DEPTH-1:0]                 clr_inst_wat;
 
    //output instruction to rf stage
    output wire [TPU_INST_WIDTH -1 :0]          mul_ins_to_rf;
@@ -91,7 +90,7 @@
       genvar                                      mult_rdy_i;
       for (mult_rdy_i=0; mult_rdy_i<ISQ_DEPTH; mult_rdy_i=mult_rdy_i+1) 
         begin
-           assign mult_rdy[mult_rdy_i] = fun_rdy[FUN_MULT_BIT] && tpu_out[mult_rdy_i][BIT_CTRL_MULT] && tpu_out[BIT_INST_VLD] && tpu_inst_rdy[mult_rdy_i] && tpu_out[BIT_INST_WAT];
+           assign mult_rdy[mult_rdy_i] = fun_rdy[FUN_MULT_BIT] && tpu_out[mult_rdy_i][BIT_CTRL_MULT] && tpu_out[mult_rdy_i][BIT_INST_VLD] && tpu_inst_rdy[mult_rdy_i] && tpu_out[mult_rdy_i][BIT_INST_WAT];
         end
    endgenerate
    // priority decoder
@@ -128,7 +127,7 @@
       genvar                                      add1_rdy_i;
       for (add1_rdy_i=0; add1_rdy_i<ISQ_DEPTH; add1_rdy_i=add1_rdy_i+1) 
         begin
-           assign add1_rdy[add1_rdy_i] = fun_rdy[FUN_ADD1_BIT] && ( (tpu_out[add1_rdy_i][BIT_CTRL_ADD] && (add1_rdy_i % 3 == 0)) ||  ( (tpu_out[add1_rdy_i][BIT_CTRL_BR:BIT_CTRL_BR-1] != 2'b00) || tpu_out[add1_rdy_i][BIT_CTRL_JMP_VLD]) ) && tpu_out[BIT_INST_VLD] && tpu_inst_rdy[add1_rdy_i] && tpu_out[BIT_INST_WAT];
+           assign add1_rdy[add1_rdy_i] = fun_rdy[FUN_ADD1_BIT] && ( (tpu_out[add1_rdy_i][BIT_CTRL_ADD] && (add1_rdy_i % 3 == 0)) ||  (tpu_out[add1_rdy_i][BIT_CTRL_BR:BIT_CTRL_BR-1] != 2'b00) || tpu_out[add1_rdy_i][BIT_CTRL_JMP_VLD] ) && tpu_out[add1_rdy_i][BIT_INST_VLD] && tpu_inst_rdy[add1_rdy_i] && tpu_out[add1_rdy_i][BIT_INST_WAT];
         end
    endgenerate
    // priority decoder
@@ -166,7 +165,7 @@
       genvar                                      add2_rdy_i;
       for (add2_rdy_i=0; add2_rdy_i<ISQ_DEPTH; add2_rdy_i=add2_rdy_i+1) 
         begin
-           assign add2_rdy[add2_rdy_i] = fun_rdy[FUN_ADD2_BIT] && ( tpu_out[add2_rdy_i][BIT_CTRL_ADD] && (add2_rdy_i % 3 != 0) ) && tpu_out[BIT_INST_VLD] && tpu_inst_rdy[add2_rdy_i] && tpu_out[BIT_INST_WAT];
+           assign add2_rdy[add2_rdy_i] = fun_rdy[FUN_ADD2_BIT] && ( tpu_out[add2_rdy_i][BIT_CTRL_ADD] && (add2_rdy_i % 3 != 0) ) && tpu_out[add2_rdy_i][BIT_INST_VLD] && tpu_inst_rdy[add2_rdy_i] && tpu_out[add2_rdy_i][BIT_INST_WAT];
         end
    endgenerate
    // priority decoder
@@ -200,7 +199,7 @@
       genvar                                      addr_rdy_i;
       for (addr_rdy_i=0; addr_rdy_i<ISQ_DEPTH; addr_rdy_i=addr_rdy_i+1) 
         begin
-           assign addr_rdy[addr_rdy_i] = fun_rdy[FUN_ADDR_BIT] && tpu_out[addr_rdy_i][BIT_CTRL_ADDR] && tpu_out[BIT_INST_VLD] && tpu_inst_rdy[addr_rdy_i] && tpu_out[BIT_INST_WAT];
+           assign addr_rdy[addr_rdy_i] = fun_rdy[FUN_ADDR_BIT] && tpu_out[addr_rdy_i][BIT_CTRL_ADDR] && tpu_out[addr_rdy_i][BIT_INST_VLD] && tpu_inst_rdy[addr_rdy_i] && tpu_out[addr_rdy_i][BIT_INST_WAT];
         end
    endgenerate
    // priority decoder
@@ -220,18 +219,18 @@
 
 
    // send signals out to set wait bit of each instruction to 0
-   wire[ISQ_DEPTH -1 :0]  set_inst_wat_mult;
-   wire[ISQ_DEPTH -1 :0]  set_inst_wat_add1;
-   wire[ISQ_DEPTH -1 :0]  set_inst_wat_add2;
-   wire [ISQ_DEPTH -1 :0] set_inst_wat_addr;
+   wire[ISQ_DEPTH -1 :0]  clr_inst_wat_mult;
+   wire[ISQ_DEPTH -1 :0]  clr_inst_wat_add1;
+   wire[ISQ_DEPTH -1 :0]  clr_inst_wat_add2;
+   wire [ISQ_DEPTH -1 :0] clr_inst_wat_addr;
    
-   assign set_inst_wat_mult[ISQ_DEPTH -1 :0] = (mul_ins_to_rf[BIT_INST_VLD])? (1<<mul_ins_to_rf[BIT_IDX: BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
+   assign clr_inst_wat_mult[ISQ_DEPTH -1 :0] = (mul_ins_to_rf[BIT_INST_VLD])? (1<<mul_ins_to_rf[BIT_IDX: BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
    // only set the wait bit when it's an add
    // branch and jump instruction doesn't set wait bit immediately.
-   assign set_inst_wat_add1[ISQ_DEPTH -1 :0] = (alu1_ins_to_rf[BIT_INST_VLD] && (2'b00 == alu1_ins_to_rf[BIT_CTRL_BR:BIT_CTRL_BR-1]) && (~alu1_ins_to_rf[BIT_CTRL_JMP_VLD]) )? (1<<alu1_ins_to_rf[BIT_IDX: BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
-   assign set_inst_wat_add2[ISQ_DEPTH -1 :0] = (alu2_ins_to_rf[BIT_INST_VLD])? (1<<alu2_ins_to_rf[BIT_IDX: BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
-   assign set_inst_wat_addr[ISQ_DEPTH -1 :0] = (adr_add_ins_to_rf[BIT_INST_VLD])? (1<<adr_add_ins_to_rf[BIT_IDX: BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};   
+   assign clr_inst_wat_add1[ISQ_DEPTH -1 :0] = (alu1_ins_to_rf[BIT_INST_VLD] && (2'b00 == alu1_ins_to_rf[BIT_CTRL_BR:BIT_CTRL_BR-1]) && (~alu1_ins_to_rf[BIT_CTRL_JMP_VLD]) )? (1<<alu1_ins_to_rf[BIT_IDX: BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
+   assign clr_inst_wat_add2[ISQ_DEPTH -1 :0] = (alu2_ins_to_rf[BIT_INST_VLD])? (1<<alu2_ins_to_rf[BIT_IDX: BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
+   assign clr_inst_wat_addr[ISQ_DEPTH -1 :0] = (adr_add_ins_to_rf[BIT_INST_VLD])? (1<<adr_add_ins_to_rf[BIT_IDX: BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};   
    //or these signals to get a sum of what instrcutions' wait to set in one time instance
-   assign set_inst_wat[ISQ_DEPTH -1 :0] = set_inst_wat_mult[ISQ_DEPTH -1:0] |  set_inst_wat_add1[ISQ_DEPTH -1:0] |  set_inst_wat_add2[ISQ_DEPTH -1:0] |  set_inst_wat_addr[ISQ_DEPTH -1:0];
+   assign clr_inst_wat[ISQ_DEPTH -1 :0] = clr_inst_wat_mult[ISQ_DEPTH -1:0] |  clr_inst_wat_add1[ISQ_DEPTH -1:0] |  clr_inst_wat_add2[ISQ_DEPTH -1:0] |  clr_inst_wat_addr[ISQ_DEPTH -1:0];
    
 endmodule // isq_lin

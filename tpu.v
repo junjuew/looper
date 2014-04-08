@@ -29,9 +29,15 @@
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
    parameter ISQ_LINE_WIDTH= INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
-   
    //psrc1 and psrc2 need two more bits than lsrc1, lsrc2
-   localparam TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
+   parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
+   //bitmap for instructions
+   //everything is relative to the inst_width, not isq_lin_width, by default!!
+   parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
+   parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
+   parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
+   parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
+
 
    input wire clk, rst_n;
    input wire [ISQ_LINE_WIDTH*ISQ_DEPTH-1:0] isq_lin_flat;
@@ -50,7 +56,8 @@
    output wire [TPU_INST_WIDTH * ISQ_DEPTH-1:0] tpu_out_reo_flat;   
    output wire [7 * ISQ_DEPTH-1:0] fre_preg_out_flat;
 
-   
+   // get the tpu_inst_rdy before reordered
+   wire [ISQ_DEPTH-1:0]            tpu_inst_rdy_raw;      
    // output from tpu lines
    wire [TPU_INST_WIDTH-1:0] tpu_out[ISQ_DEPTH-1:0];      
    //current mapping from logical to physical for all existing mappings
@@ -82,7 +89,9 @@
    
 
    ////////////////////////////
-   //flat output wire
+   // reorder all the output wires correspondingly
+   // not only tpu_out_flat needs to be reorderd, but also fre_preg and inst_rdy
+   // flat output wire
    //////////////////////////
    generate
       genvar                                      out_i;
@@ -95,7 +104,12 @@
            assign tpu_out_reo_flat[TPU_INST_WIDTH*(out_i+1)-1:TPU_INST_WIDTH*out_i]= (~arch)? tpu_out[out_i][TPU_INST_WIDTH-1:0]:
                                                                                      (out_i< ISQ_DEPTH/2)? tpu_out[out_i + ISQ_DEPTH/2][TPU_INST_WIDTH-1:0]:
                                                                                      tpu_out[out_i - ISQ_DEPTH/2][TPU_INST_WIDTH-1:0];
-           assign fre_preg_out_flat[7*(out_i+1)-1:7*out_i]= fre_preg[out_i][6:0];
+           assign fre_preg_out_flat[7*(out_i+1)-1:7*out_i]= (~arch)? fre_preg[out_i][6:0]:
+                                                            (out_i< ISQ_DEPTH/2)? fre_preg[out_i + ISQ_DEPTH/2][6:0]:
+                                                            fre_preg[out_i - ISQ_DEPTH/2][6:0];
+           assign tpu_inst_rdy[out_i]= (~arch)? tpu_inst_rdy_raw[out_i]:
+                                       (out_i< ISQ_DEPTH/2)? tpu_inst_rdy_raw[out_i + ISQ_DEPTH/2]:
+                                       tpu_inst_rdy_raw[out_i - ISQ_DEPTH/2];
         end
    endgenerate
 
@@ -118,12 +132,14 @@
              assign prv_map[tpu_lin_idx][TPU_MAP_WIDTH-1:0]= cur_map[tpu_lin_idx-1][TPU_MAP_WIDTH-1:0];
            
            tpu_lin #(.INST_WIDTH(INST_WIDTH), .TPU_MAP_WIDTH(TPU_MAP_WIDTH),
-                       .ISQ_IDX_BITS_NUM(ISQ_IDX_BITS_NUM) )
+                       .ISQ_IDX_BITS_NUM(ISQ_IDX_BITS_NUM), .BIT_INST_VLD(BIT_INST_VLD)
+                     ,.BIT_LSRC1_VLD(BIT_LSRC1_VLD), .BIT_LSRC2_VLD(BIT_LSRC2_VLD)
+                     ,.BIT_LDST_VLD(BIT_LDST_VLD) )
            tpu_mat(
                    // Outputs
                    .cur_map           (cur_map[tpu_lin_idx][TPU_MAP_WIDTH-1:0]),
                    .tpu_out           (tpu_out[tpu_lin_idx][TPU_INST_WIDTH-1:0]),
-                   .tpu_inst_rdy      (tpu_inst_rdy[tpu_lin_idx]),
+                   .tpu_inst_rdy      (tpu_inst_rdy_raw[tpu_lin_idx]),
                    .fre_preg          (fre_preg[tpu_lin_idx][6:0]),
                    // Inputs
                    .rst_n             (rst_n),

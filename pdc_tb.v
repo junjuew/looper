@@ -13,20 +13,28 @@
    localparam ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 2;//31
    localparam TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5;  //30
 
-   parameter BIT_IDX= TPU_INST_WIDTH-1; //29
-   parameter BIT_INST_VLD= TPU_INST_WIDTH -1 -ISQ_IDX_BITS_NUM; //27
-   parameter BIT_INST_WAT= TPU_INST_WIDTH -1 -ISQ_IDX_BITS_NUM -1;  //26 
-   parameter BIT_CTRL_MULT= TPU_INST_WIDTH -1 -7; //22
-   parameter BIT_CTRL_ADD=  TPU_INST_WIDTH -1 -8; //21
-   parameter BIT_CTRL_ADDR= TPU_INST_WIDTH -1 -9; //20
-   parameter BIT_CTRL_BR= TPU_INST_WIDTH -1 -4; //25
-   parameter BIT_CTRL_JMP_VLD= TPU_INST_WIDTH -1 -6; //23
-   
    ////////////////////////////
    // instruction format used for testing:
    // inst idx | inst vld | inst wat | BR | JMP | MULT| ADD | ADDR | lsrc1 | ldst | lsrc2 | pdest
    //     2         1           1      2     1     1     1     1       5       5      5       6
    ///////////////////////////
+   
+   //instruction format before tpu
+   parameter BIT_INST_VLD = ISQ_LINE_WIDTH  - 1 -2;
+   parameter BIT_LSRC1_VLD = 20;
+   parameter BIT_LSRC2_VLD = 10;
+   parameter BIT_LDST_VLD = 15;
+
+   //instruction format after tpu
+   parameter TPU_BIT_IDX= TPU_INST_WIDTH-1; //29
+   parameter TPU_BIT_INST_VLD= TPU_INST_WIDTH -1 -ISQ_IDX_BITS_NUM; //27
+   parameter TPU_BIT_INST_WAT= TPU_INST_WIDTH -1 -ISQ_IDX_BITS_NUM -1;  //26 
+   parameter TPU_BIT_CTRL_MULT= TPU_INST_WIDTH -1 -7; //22
+   parameter TPU_BIT_CTRL_ADD=  TPU_INST_WIDTH -1 -8; //21
+   parameter TPU_BIT_CTRL_ADDR= TPU_INST_WIDTH -1 -9; //20
+   parameter TPU_BIT_CTRL_BR= TPU_INST_WIDTH -1 -4; //25
+   parameter TPU_BIT_CTRL_JMP_VLD= TPU_INST_WIDTH -1 -6; //23
+   
    
    reg clk,rst_n, arch_swt;
 
@@ -66,15 +74,17 @@
    /////////////////////////////////////////
    // wires for pdc output
    /////////////////////////////////////////
-   wire [ISQ_DEPTH-1:0]     set_inst_wat;
-   wire [ISQ_DEPTH-1:0]     set_inst_val;   
+   wire [ISQ_DEPTH-1:0]     clr_inst_wat;
    wire [TPU_INST_WIDTH -1 :0] mul_ins_to_rf;
    wire [TPU_INST_WIDTH -1 :0] alu1_ins_to_rf;
    wire [TPU_INST_WIDTH -1 :0] alu2_ins_to_rf;
    wire [TPU_INST_WIDTH -1 :0] adr_add_ins_to_rf;         
 
         
-   tpu #(.ISQ_DEPTH(ISQ_DEPTH), .INST_WIDTH(INST_WIDTH), .ISQ_IDX_BITS_NUM(ISQ_IDX_BITS_NUM), .ISQ_LINE_WIDTH(ISQ_LINE_WIDTH) ) DUT(
+   tpu #(.ISQ_DEPTH(ISQ_DEPTH), .INST_WIDTH(INST_WIDTH), 
+         .ISQ_IDX_BITS_NUM(ISQ_IDX_BITS_NUM), .ISQ_LINE_WIDTH(ISQ_LINE_WIDTH),
+         .BIT_INST_VLD(BIT_INST_VLD), .BIT_LSRC1_VLD(BIT_LSRC1_VLD), .BIT_LSRC2_VLD(BIT_LSRC2_VLD),
+         .BIT_LDST_VLD(BIT_LDST_VLD) ) DUT(
             // Outputs
             .tpu_inst_rdy               (tpu_inst_rdy[ISQ_DEPTH-1:0]),
             .tpu_out_flat               (tpu_out_flat[TPU_INST_WIDTH*ISQ_DEPTH-1:0]),
@@ -92,18 +102,17 @@
    pdc #(.ISQ_DEPTH(ISQ_DEPTH), 
          .INST_WIDTH(INST_WIDTH), 
          .ISQ_IDX_BITS_NUM(ISQ_IDX_BITS_NUM),
-         .BIT_IDX(BIT_IDX),
-         .BIT_INST_VLD(BIT_INST_VLD),
-         .BIT_INST_WAT(BIT_INST_WAT),
-         .BIT_CTRL_MULT(BIT_CTRL_MULT),
-         .BIT_CTRL_ADD(BIT_CTRL_ADD),
-         .BIT_CTRL_ADDR(BIT_CTRL_ADDR),
-         .BIT_CTRL_BR(BIT_CTRL_BR),
-         .BIT_CTRL_JMP_VLD(BIT_CTRL_JMP_VLD)
+         .BIT_IDX(TPU_BIT_IDX),
+         .BIT_INST_VLD(TPU_BIT_INST_VLD),
+         .BIT_INST_WAT(TPU_BIT_INST_WAT),
+         .BIT_CTRL_MULT(TPU_BIT_CTRL_MULT),
+         .BIT_CTRL_ADD(TPU_BIT_CTRL_ADD),
+         .BIT_CTRL_ADDR(TPU_BIT_CTRL_ADDR),
+         .BIT_CTRL_BR(TPU_BIT_CTRL_BR),
+         .BIT_CTRL_JMP_VLD(TPU_BIT_CTRL_JMP_VLD)
          ) PDC_DUT( /*autoinst*/
                    // Outputs
-                   .set_inst_wat        (set_inst_wat[ISQ_DEPTH-1:0]),
-                   .set_inst_val        (set_inst_val[ISQ_DEPTH-1:0]),
+                   .clr_inst_wat        (clr_inst_wat[ISQ_DEPTH-1:0]),
                    .mul_ins_to_rf       (mul_ins_to_rf[TPU_INST_WIDTH-1:0]),
                    .alu1_ins_to_rf      (alu1_ins_to_rf[TPU_INST_WIDTH-1:0]),
                    .alu2_ins_to_rf      (alu2_ins_to_rf[TPU_INST_WIDTH-1:0]),
@@ -191,7 +200,7 @@
         ////////////////////////////////////////////////
         //dump all the signals
         $wlfdumpvars(0, pdc_tb);
-        $monitor("%g\n mul_ins_to_rf: %x, alu1_ins_to_rf: %x, alu2_ins_to_rf: %x, adr_add_ins_to_rf: %x\n set_inst_wat: %x, set_inst_val:%x", $time, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf, adr_add_ins_to_rf, set_inst_wat, set_inst_val);
+        $monitor("%g\n mul_ins_to_rf: %x, alu1_ins_to_rf: %x, alu2_ins_to_rf: %x, adr_add_ins_to_rf: %x\n clr_inst_wat: %x,", $time, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf, adr_add_ins_to_rf, clr_inst_wat);
 //        $monitor ("%g\n (3)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (2)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (1)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (0)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n top head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, mid head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, arch:%b ",$time, tpu_inst_rdy[3],  inst_idx[3], inst_vld[3], inst_psrc1[3], inst_psrc2[3], inst_pdst[3] , fre_preg[3] ,  tpu_inst_rdy[2],  inst_idx[2], inst_vld[2], inst_psrc1[2], inst_psrc2[2], inst_pdst[2] , fre_preg[2] , tpu_inst_rdy[1],  inst_idx[1], inst_vld[1], inst_psrc1[1], inst_psrc2[1], inst_pdst[1] , fre_preg[1] , tpu_inst_rdy[0],  inst_idx[0], inst_vld[0], inst_psrc1[0], inst_psrc2[0], inst_pdst[0] , fre_preg[0],top_hed[15],  top_hed[14],  top_hed[13],  top_hed[12], top_hed[11],  top_hed[10],  top_hed[9],  top_hed[8],  top_hed[7],  top_hed[6],  top_hed[5],  top_hed[4], top_hed[3],  top_hed[2],  top_hed[1],  top_hed[0],mid_hed[15],  mid_hed[14],  mid_hed[13],  mid_hed[12], mid_hed[11],  mid_hed[10],  mid_hed[9],  mid_hed[8],  mid_hed[7],  mid_hed[6],  mid_hed[5],  mid_hed[4], mid_hed[3],  mid_hed[2],  mid_hed[1],  mid_hed[0], DUT.arch);
         
         clk=0;
@@ -228,12 +237,15 @@
         @(posedge clk);
         $display("%g  ============= valid inst. physcial register ready  ==========", $time);
         $display("%g  ===inst: idx:00, vld:1, src1:1,0000, src2:1,0001, ldst:1,0010, pdst:010000", $time);
+        $display ("%g ==== multiply ======", $time);
         //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
         isq_lin[0] = { 2'b00, 1'b1, 1'b1, 2'b00, 1'b0, 1'b1, 1'b0, 1'b0, 1'b1, 4'b0000, 1'b1, 4'b0010, 1'b1, 4'b0001, 6'b010000};
+
         
         @(posedge clk);
         $display("%g  ============= valid inst. no dependency  ==========", $time);
         $display("%g  ===inst: idx:01, vld:1, src1:1,0011, src2:1,0100, ldst:1,0101, pdst:010001", $time);
+        $display ("%g ==== add ======", $time);        
         //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001
         isq_lin[1] = { 2'b01, 1'b1, 1'b1, 2'b00, 1'b0, 1'b1, 1'b0, 1'b0, 1'b1, 4'b0011, 1'b1, 4'b0101, 1'b1, 4'b0100, 6'b010001};
 
@@ -241,20 +253,32 @@
         @(posedge clk);
         $display("%g  ============= valid inst. no dependency  ==========", $time);
         $display("%g  ===inst: idx:10, vld:1, src1:1,0011, src2:1,0100, ldst:1,0101, pdst:010010", $time);
+        $display ("%g ==== add ======", $time);                
         //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001          
-        isq_lin[2] = { 2'b10, 1'b1, 1'b1, 2'b00, 1'b0, 1'b1, 1'b0, 1'b0, 1'b1, 4'b0011, 1'b1, 4'b0101, 1'b1, 4'b0100, 6'b010010};
+        isq_lin[2] = { 2'b10, 1'b1, 1'b1, 2'b00, 1'b0, 1'b0, 1'b1, 1'b0, 1'b1, 4'b0011, 1'b1, 4'b0101, 1'b1, 4'b0100, 6'b010010};
 
         //test dependency        
         @(posedge clk);
         $display("%g  ============= valid inst. src1 has dependency  ==========", $time);
         $display("%g  ===inst: idx:11, vld:1, src1:1,0101, src2:1,0100, ldst:1,0110, pdst:010011", $time);
+        $display ("%g ==== add addr======", $time);                        
         //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001          
-        isq_lin[3] = { 2'b11, 1'b1, 1'b1, 2'b00, 1'b0, 1'b1, 1'b0, 1'b0,  1'b1, 4'b0101, 1'b1, 4'b0110, 1'b1, 4'b0100, 6'b010011};
-        
+        isq_lin[3] = { 2'b11, 1'b1, 1'b1, 2'b00, 1'b0, 1'b0, 1'b0, 1'b1,  1'b1, 4'b0101, 1'b1, 4'b0110, 1'b1, 4'b0100, 6'b010011};
+
+
+        @(posedge clk);
+        $display("%g  ============= after sending, inst0 is no longer waiting  ==========", $time);
+        $display("%g  ===inst: idx:00, vld:1, src1:1,0000, src2:1,0001, ldst:1,0010, pdst:010000", $time);
+        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
+        isq_lin[0] = { 2'b00, 1'b1, 1'b0, 2'b00, 1'b0, 1'b1, 1'b0, 1'b0, 1'b1, 4'b0000, 1'b1, 4'b0010, 1'b1, 4'b0001, 6'b010000};
+
+
         //test physical register becomes rdy
         @(posedge clk);
         $display("%g  ============= physical register of ldst 0101 becomes rdy ==========", $time);
         $display("%g  ===inst[3] should become ready", $time);
+        dst_rdy_reg_en[3]=1'b1;
+        dst_reg_rdy[3]=1'b1;
         dst_rdy_reg_en[2]=1'b1;
         dst_reg_rdy[2]=1'b1;
         dst_rdy_reg_en[1]=1'b1;
@@ -263,6 +287,8 @@
         dst_reg_rdy[0]=1'b1;
 
         @(posedge clk);
+        dst_rdy_reg_en[3]=1'b0;
+        dst_reg_rdy[3]=1'b0;
         dst_rdy_reg_en[2]=1'b0;
         dst_reg_rdy[2]=1'b0;
         dst_rdy_reg_en[1]=1'b0;
@@ -297,23 +323,27 @@
         dst_rdy_reg_en[3]=0;
         dst_rdy_reg_en[0]=0;
         
-/* -----\/----- EXCLUDED -----\/-----
+
         $display("%g  ============= test suit 2  ==========", $time);
         $display("%g  ===inst 2: idx:00, vld:1, src1:1,2, src2:1,3, ldst:1,0, pdst:20", $time);
-        //inst, src1, ldst (0010) valid, src2, physical 000001        
-        isq_lin[2] = { 2'b10, 1'b1, 1'b1, 4'd2, 1'b1, 4'd0, 1'b1, 4'd3, 6'b100000};
+        $display("%g  ===inst 2: branch ", $time);        
+        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
+        isq_lin[2] = { 2'b10, 1'b1, 1'b1, 2'b01, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 4'd2, 1'b1, 4'd0, 1'b1, 4'd3, 6'b100000};
         
         $display("%g  ===inst 3: idx:01, vld:1, src1:1,0, src2:1,1, ldst:1,0, pdst:21", $time);
-        //inst, src1, ldst (0010) valid, src2, physical 000001
-        isq_lin[3] = { 2'b11, 1'b1, 1'b1, 4'd0, 1'b1, 4'd0, 1'b1, 4'd1, 6'b100001};
+        $display("%g  ===inst 3: add, should go to 2 ", $time);                
+        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
+        isq_lin[3] = { 2'b11, 1'b1, 1'b1, 2'b00, 1'b0, 1'b0, 1'b1, 1'b0, 1'b1, 4'd0, 1'b1, 4'd0, 1'b1, 4'd1, 6'b100001};
         
         $display("%g  ===inst 0: idx:10, vld:1, src1:1,0, src2:1,0, ldst:1,1, pdst:22", $time);
-        //inst, src1, ldst (0010) valid, src2, physical 000001
-        isq_lin[0] = { 2'b00, 1'b1, 1'b1, 4'd0, 1'b1, 4'd1, 1'b1, 4'd0, 6'b100010};
+        $display ("%g ==== jmp ======", $time);                        
+        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
+        isq_lin[0] = { 2'b00, 1'b1, 1'b1, 2'b00, 1'b1, 1'b0, 1'b0, 1'b0, 1'b1, 4'd0, 1'b1, 4'd1, 1'b1, 4'd0, 6'b100010};
 
         $display("%g  ===inst 1: idx:11, vld:1, src1:1,0, src2:1,1, ldst:1,3, pdst:23", $time);
-        //inst, src1, ldst (0010) valid, src2, physical 000001        
-        isq_lin[1] = { 2'b01, 1'b1, 1'b1, 4'd0, 1'b1, 4'd3, 1'b1, 4'd1, 6'b100011};
+        $display ("%g ==== add, should got to 1 ======", $time);                                
+        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
+        isq_lin[1] = { 2'b01, 1'b1, 1'b1, 2'b00, 1'b0, 1'b0, 1'b1, 1'b0,  1'b1, 4'd0, 1'b1, 4'd3, 1'b1, 4'd1, 6'b100011};
 
         @(posedge clk);
         dst_rdy_reg_en[2]=1'b1;
@@ -332,14 +362,44 @@
         $display("%g  ============= 03 inst dest solved  ==========", $time);                        
         dst_rdy_reg_en[3]=1'b0;
         dst_reg_rdy[3]=1'b0;
+        dst_rdy_reg_en[0]=1'b1;
+        dst_reg_rdy[0]=1'b1;
+
+
+        @(posedge clk);
+        $display("%g  ============= 00 inst dest solved  ==========", $time);                        
+        dst_rdy_reg_en[0]=1'b0;
+        dst_reg_rdy[0]=1'b0;
+        
+
+        @(posedge clk);
+        $display("%g  ============= inst 2 sent.  ==========", $time);
+        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001
+        isq_lin[2] = { 2'b10, 1'b1, 1'b0, 2'b01, 1'b0, 1'b0, 1'b0, 1'b0, 1'b1, 4'd2, 1'b1, 4'd0, 1'b1, 4'd3, 6'b100000};        
+
+
+        @(posedge clk);
+        $display("%g  ============= inst 3 sent.  ==========", $time);
+        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001
+        isq_lin[3] = { 2'b11, 1'b1, 1'b0, 2'b00, 1'b0, 1'b0, 1'b1, 1'b0, 1'b1, 4'd0, 1'b1, 4'd0, 1'b1, 4'd1, 6'b100001};
+
+
+        @(posedge clk);
+        $display("%g  ============= inst 0 sent.   ==========", $time);
+        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001
+        isq_lin[0] = { 2'b00, 1'b1, 1'b0, 2'b00, 1'b1, 1'b0, 1'b0, 1'b0, 1'b1, 4'd0, 1'b1, 4'd1, 1'b1, 4'd0, 6'b100010};        
+        
+        @(posedge clk);
+        $display("%g  ============= inst 1 sent.   ==========", $time);
+        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001
+        isq_lin[1] = { 2'b01, 1'b1, 1'b0, 2'b00, 1'b0, 1'b0, 1'b1, 1'b0,  1'b1, 4'd0, 1'b1, 4'd3, 1'b1, 4'd1, 6'b100011};
+        
 
         @(posedge clk);
         arch_swt=1;
         @(posedge clk);
         $display("%g  ============= arch swt  ==========", $time);                                
         arch_swt=0;
- -----/\----- EXCLUDED -----/\----- */
-
         
         
         repeat(20)@(posedge clk);        

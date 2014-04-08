@@ -33,14 +33,14 @@
    parameter ISQ_IDX_BITS_NUM= 6;
    parameter ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
    //for each logical source register, physical register index has 2 more bits
-   localparam TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
+   parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
    
    //bitmap for instructions
    //everything is relative to the inst_width, not isq_lin_width!!
-   localparam BIT_INST_VLD = INST_WIDTH  - 1 ;
-   localparam BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
-   localparam BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
-   localparam BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
+   parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
+   parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
+   parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
+   parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
    
    
    
