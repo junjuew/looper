@@ -3,6 +3,7 @@
 
   ////////////////////////////////////
   //  issue queue
+  // instruction in the lowest bits goes to top
   ///////////////////////////////////
   module isq(/*autoarg*/
    // Outputs
@@ -33,7 +34,7 @@
    //wires that clears out some contents in the isssue queue
    /////////////////////                                                   
    wire                                           clr_val[0:ISQ_DEPTH-1];
-   wire                                           set_val[0:ISQ_DEPTH-1];   
+//   wire                                           set_val[0:ISQ_DEPTH-1];   
    wire                                           clr_wat[0:ISQ_DEPTH-1];
    wire                                           set_wat[0:ISQ_DEPTH-1];
    wire                                           fls[0:ISQ_DEPTH-1];
@@ -82,7 +83,7 @@
       for (clr_i=0; clr_i<ISQ_DEPTH; clr_i=clr_i+1) 
         begin
            assign clr_val[clr_i] = 1'b0;
-           assign set_val[clr_i] = 1'b0;
+//           assign set_val[clr_i] = 1'b0;
            assign set_wat[clr_i] = 1'b0;
            assign fls[clr_i] = 1'b0;           
         end
@@ -112,7 +113,7 @@
                            .clr_wat         (clr_inst_wat[i]),
                            .set_wat         (set_wat[i]),
                            .clr_val         (clr_val[i]),
-                           .set_val         (set_val[i]),
+//                           .set_val         (set_val[i]),
                            .fls             (fls[i]),
                            .isq_lin_in      (isq_lin_in[i]));
         end

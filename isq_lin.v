@@ -10,14 +10,14 @@ module isq_lin(/*autoarg*/
    // Outputs
    isq_lin_out,
    // Inputs
-   clk, rst_n, en, clr_wat, set_wat, clr_val, set_val, fls,
+   clk, rst_n, en, clr_wat, set_wat, clr_val, /*set_val,*/ fls,
    isq_lin_in
    );
    parameter INST_WIDTH=56;
    parameter ISQ_LINE_NO_IDX_WIDTH=INST_WIDTH +2;
    
    input wire clk, rst_n, en;
-   input wire clr_wat, set_wat,clr_val, set_val, fls;
+   input wire clr_wat, set_wat,clr_val, /*set_val,*/ fls;
    input wire [ISQ_LINE_NO_IDX_WIDTH-1:0] isq_lin_in;
    output wire [ISQ_LINE_NO_IDX_WIDTH-1:0] isq_lin_out;
 
@@ -28,6 +28,7 @@ module isq_lin(/*autoarg*/
    /////////////////////////////////////
    //valid bit
    /////////////////////////////////////
+/* -----\/----- EXCLUDED -----\/-----
    always @(posedge clk, negedge rst_n)
      begin
         if (!rst_n)
@@ -39,6 +40,7 @@ module isq_lin(/*autoarg*/
         else if (en)
           val<=isq_lin_in[ISQ_LINE_NO_IDX_WIDTH-1];
      end
+ -----/\----- EXCLUDED -----/\----- */
    
 
    /////////////////////////////////////
@@ -74,6 +76,6 @@ module isq_lin(/*autoarg*/
    ///////////////////////////
    //output
    ///////////////////////////
-   assign isq_lin_out = {val,wat, inst};
+   assign isq_lin_out = {/*val,*/wat, inst};
    
 endmodule // isq_lin

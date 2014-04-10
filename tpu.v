@@ -3,9 +3,9 @@
   //////////////////////////////////////////////////
   //
   // isq line input format:
-  // idx | inst vld | vld , lsrc1 | vld, ldst | vld, lsrc2 | controls... | pdest
+  // idx | wat| inst vld | vld , lsrc1 | vld, ldst | vld, lsrc2 | controls... | pdest
   // tpu line out format:
-  // idx | inst vld | vld, psrc1 | vld, psrc2 |  other control signals ... | pdest
+  // idx | wat | inst vld | vld, psrc1 | vld, psrc2 |  other control signals ... | pdest
   //
   //
   // tpu module:
@@ -28,13 +28,13 @@
    parameter TPU_MAP_WIDTH= 7 * 16; //7 bit for each logical register
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
-   parameter ISQ_LINE_WIDTH= INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
+   parameter ISQ_LINE_WIDTH= INST_WIDTH + ISQ_IDX_BITS_NUM + 1;
    //psrc1 and psrc2 need two more bits than lsrc1, lsrc2
    parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
    //bitmap for instructions
    //everything is relative to the inst_width, not isq_lin_width, by default!!
    parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
-   parameter BIT_INST_WAT = INST_WIDTH  - 1 -1;   
+   parameter BIT_INST_WAT = INST_WIDTH  + 1 ;   
    parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
    parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
    parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
@@ -86,7 +86,7 @@
    //           or
    //           1. inst valid
    //           2. inst not wait
-   wire [ISQ_LINE_WIDTH-1:0] inst_done;                         
+   wire [ISQ_DEPTH-1:0] inst_done;                         
 
 
    ////////////////////////////
@@ -211,8 +211,8 @@
    // architecture switch happens when all following criteria is satisfied
    // 1. region below current header wat=0 for all valid insts ( invalid insts may exist )
    // 2. counter's value is outside of region below current header
-   assign arch_swt= ((~arch) && (counter > 6'd31) && (&inst_done[31:0])) || ((arch) && (counter < 6'd32) && (&inst_done[63:32]));
-   assign isq_ful = ((~arch) && (counter == 6'd60)) || ((arch) && (counter == 6'd28)); 
+   assign arch_swt= ((~arch) && (counter > (ISQ_DEPTH/2-1) ) && ( &(inst_done[ISQ_DEPTH/2-1:0]) )) || ((arch) && (counter < ISQ_DEPTH/2) && ( &(inst_done[(ISQ_DEPTH-1):(ISQ_DEPTH/2)]) ));
+   assign isq_ful = ((~arch) && (counter == (ISQ_DEPTH-4) )) || ((arch) && (counter == (ISQ_DEPTH/2 -4) )); 
 
    //architecture recorder
    always @(posedge clk, negedge rst_n)
