@@ -1,0 +1,10 @@
+// test of subtracting negative number, 
+// and Rt dependency on the result of previous operation
+
+ldi r1, -5
+ldi r2, -10
+sub r3, r2, r1  // expect r3 = -15
+sub r4, r2, r3  // expect r4 = 5
+sub r5, r3, r4  // expect r5 = -20
+ldi r1, 0
+jr  r1, 0

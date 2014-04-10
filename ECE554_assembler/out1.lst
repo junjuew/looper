@@ -1,0 +1,20 @@
+PC: 0000 Binary: 0001000100100011 Hex: 1123 add r1, r2, r3
+PC: 0001 Binary: 0010001100100001 Hex: 2321 sub r3, r2, r1
+0002      .L2:
+PC: 0002 Binary: 0011001000110001 Hex: 3231 and r2, r3, r1
+PC: 0003 Binary: 0100100010011010 Hex: 489a or r8, r9, r10
+0004      .L3:
+PC: 0004 Binary: 0101101111001101 Hex: 5bcd xor r11, r12, r13
+PC: 0005 Binary: 0110001111100000 Hex: 63e0 not r3, r14
+0006      .L1:
+PC: 0006 Binary: 1000010101100111 Hex: 8567 mult r5, r6, r7
+PC: 0007 Binary: 1001010011111110 Hex: 94fe beqz r4 .L1
+PC: 0008 Binary: 1010010111111011 Hex: a5fb bltz r5 .L3
+PC: 0009 Binary: 1011100011111000 Hex: b8f8 bgtz r8 .L2
+PC: 000a Binary: 1100010111101100 Hex: c5ec ldi r5, -20
+PC: 000b Binary: 1101010110100111 Hex: d5a7 str r5 r10 7
+PC: 000c Binary: 1110011010111111 Hex: e6bf ldr r6 r11 -1
+PC: 000d Binary: 1111111111100000 Hex: ffe0 j .L1
+PC: 000e Binary: 1111010111001101 Hex: f5cd jr r5 .L2
+PC: 000f Binary: 1111111111010010 Hex: ffd2 jal .L3
+PC: 0010 Binary: 1111101011000111 Hex: fac7 jalr r10 .L2
