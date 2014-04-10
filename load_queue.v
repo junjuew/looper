@@ -10,7 +10,7 @@ input [5:0] phy_addr_ld_in, indx_ls;
 input [15:0] addr_ls, data_ca, data_sq;
 output vld_ld, reg_wrt_ld, stll, ld_req;
 output [5:0] indx_ld, phy_addr_ld;
-output [6:0] indx_fwd;
+output [6:0] indx_fwd;dfdf
 output [15:0] data_ld, addr;
 wire [3:0] vld;
 wire ld_rdy, loop_back; // indicate whether a load instruction is ready to execute
