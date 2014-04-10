@@ -13,6 +13,7 @@ module reorderUnit(/*autoarg*/
    output wire [31:0] ld_indx_to_lsq;
    output wire [31:0] st_indx_to_lsq;
    
+   
    wire 	      indx1,indx2,indx3;
 
    assign indx1 = nxt_indx + 7'h1;   

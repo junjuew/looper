@@ -1,13 +1,13 @@
 `default_nettype none
 module branchUnit(/*autoarg*/
    // Outputs
-   flush_pos, flush,
+   flush_pos, flush, all_nop_from_branchUnit,
    // Inputs
    inst0, inst1, inst2, inst3, nxt_indx, brch_mis_indx, curr_pos,
    pr_need_inst, mis_pred, cmt_brch_indx, cmt_brch, clk, rst_n
    );
    input wire [65:0] inst0,inst1, inst2, inst3;
-   input wire [5:0] 	nxt_indx;
+   input wire [6:0] 	nxt_indx;
    input wire [5:0] 	brch_mis_indx;
    input wire [5:0] 	curr_pos;
    input wire [3:0] 	pr_need_inst;
@@ -17,6 +17,8 @@ module branchUnit(/*autoarg*/
    output wire [6:0] 	flush_pos;
    output reg 		flush; 		
    input wire 		clk,rst_n;
+   output wire 		all_nop_from_branchUnit;
+   
    
    wire 	     indx1,indx2,indx3;
    wire [5:0] 	     curr_pos1,curr_pos2,curr_pos3;
@@ -31,7 +33,8 @@ module branchUnit(/*autoarg*/
    assign indx1 = nxt_indx + 1;
    assign indx2 = nxt_indx + 2;
    assign indx3 = nxt_indx + 3;
-
+   
+   
    assign curr_pos1 = curr_pos + pr_need_inst[0];
    assign curr_pos2 = curr_pos + pr_need_inst[1] + pr_need_inst[0];
    assign curr_pos3 = curr_pos + pr_need_inst[2] + pr_need_inst[1] + pr_need_inst[0];
@@ -175,7 +178,8 @@ module branchUnit(/*autoarg*/
    
    assign flush_pos = flush_pos_sel ? pos_reg1:pos_reg0;
    
-
+   assign all_nop_from_branchUnit = (mis_pred) ? 1: 0;
+   
    
    
 endmodule // branchUnit
