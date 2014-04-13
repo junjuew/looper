@@ -12,10 +12,10 @@ module rob(
     input [3:0] brnc_pred,
     input [63:0] rcvr_PC,
     input [3:0] reg_wrt_in,
-    input [3:0] no_exec_in, //?
-    input [3:0] jr_in,      //?
-    input loop_strt,        //?
-    input [3:0] loop_end,   //?
+    //input [3:0] no_exec_in, //?
+    //input [3:0] jr_in,      //?
+    //input loop_strt,        //?
+    //input [3:0] loop_end,   //?
 
     // from IS Issue Queue
     input mult_inst_vld,
