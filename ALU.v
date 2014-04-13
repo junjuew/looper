@@ -29,7 +29,7 @@ module ALU( alu_op1, alu_op2, alu_mode, alu_en, alu_inv_Rt, alu_out);
 ////////////////////////////////////
 //   Input Inverter 
 ///////////////////////////////////
-	assign alu_op2_new = alu_op2 ^ {16{alu_inv_Rt}};
+	assign alu_op2_new = (alu_op2 ^ {16{alu_inv_Rt}});
   
   
   //////// Change this to combinational logic and for multiplier hold all the controll signal
@@ -37,7 +37,7 @@ module ALU( alu_op1, alu_op2, alu_mode, alu_en, alu_inv_Rt, alu_out);
   if(alu_en == 1'b1) begin
   	casex(alu_mode)
 		3'b00x:	begin alu_out <= alu_op1 + alu_op2_new; end	  // Nop 0+0?
-		3'b010:	begin alu_out <= alu_op1 + alu_op2_new;	end	  // SUB
+		3'b010:	begin alu_out <= alu_op1 + alu_op2_new + 1;	end	  // SUB
 		3'b011:	begin alu_out <= alu_op1 & alu_op2_new; end   // AND
 		3'b100:	begin alu_out <= alu_op1 | alu_op2_new; end   // OR
 		3'b101:	begin alu_out <= alu_op1 ^ alu_op2_new; end   // XOR
