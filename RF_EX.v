@@ -23,7 +23,7 @@ module RF_EX (
     input  [15:0]          mult_op1_rf_ex_in, //
     input  [15:0]          mult_op2_rf_ex_in, //
     input  [15:0]          addr_op1_rf_ex_in, //
-    input  [15:0]          data_str_rf_wb_in, //
+    input  [15:0]          data_str_rf_ex_in, //
 
     input  [15:0]          alu1_imm_rf_ex_in, //
     input  [15:0]          alu2_imm_rf_ex_in, //
@@ -86,7 +86,7 @@ module RF_EX (
     output  [15:0]         mult_op1_rf_ex_out,
     output  [15:0]         mult_op2_rf_ex_out,
     output  [15:0]         addr_op1_rf_ex_out,
-    output  [15:0]         data_str_rf_wb_out,
+    output  [15:0]         data_str_rf_ex_out,
 
     output  [15:0]         alu1_imm_rf_ex_out,
     output  [15:0]         alu2_imm_rf_ex_out,
@@ -157,7 +157,7 @@ module RF_EX (
     rf_enable mult_op1     [15:0]    ( .q(mult_op1_rf_ex_out), .d(mult_op1_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
     rf_enable mult_op2     [15:0]    ( .q(mult_op2_rf_ex_out), .d(mult_op2_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
     rf_enable addr_op1     [15:0]    ( .q(addr_op1_rf_ex_out), .d(addr_op1_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
-    rf_enable str_data     [15:0]    ( .q(data_str_rf_wb_out), .d(data_str_rf_wb_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
+    rf_enable str_data     [15:0]    ( .q(data_str_rf_ex_out), .d(data_str_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
 
     //imm
     rf_enable alu1_imm     [15:0]    ( .q(alu1_imm_rf_ex_out), .d(alu1_imm_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
