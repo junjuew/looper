@@ -62,7 +62,7 @@ module rob(
     output [5:0] cmt_brnc_idx,        // to AL-freelist and IS-issue_queue
     output [15:0] rcvr_PC_out,        // to IF 
     output rob_full_stll,             // to IF, ID, AL
-    output rob_empt,
+    output rob_empt,				  // to IS for final reg-map outputting
     output cmmt_st,                   // to Store Queue
     output [4:0] mis_pred_ld_ptr_num, // to Load Queue
     output [3:0] mis_pred_st_ptr_num, // to Store Queue
@@ -128,7 +128,7 @@ ROB per entry:
     // misprediction
     assign mis_pred = ((brnc_cmp_rslt != 0) && rob_brnc[brnc_idx] && 
                       // here comes a branch result read from RegFile and this rob entry is branch
-                      (rob_brnc_pred[brnc_idx] != ((rob_brnc_cond[brnc_idx] ^ brnc_cmp_rslt) == 0)));
+                      (rob_brnc_pred[brnc_idx] != (rob_brnc_cond[brnc_idx] == brnc_cmp_rslt)));
                       // and the predicted behavior is incorrect
     assign flush = mis_pred;
     assign mis_pred_brnc_idx = brnc_idx;
@@ -137,7 +137,7 @@ ROB per entry:
     // commit a correct prediction
     assign cmt_brnc = ((brnc_cmp_rslt != 0) && rob_brnc[brnc_idx] && 
                       // here comes a branch result read from RegFile and this rob entry is branch
-                      (rob_brnc_pred[brnc_idx] == ((rob_brnc_cond[brnc_idx] ^ brnc_cmp_rslt) == 0)));
+                      (rob_brnc_pred[brnc_idx] == (rob_brnc_cond[brnc_idx] == brnc_cmp_rslt)));
                       // and the predicted behavior is incorrect
     assign cmt_brnc_idx = brnc_idx;
     
@@ -304,6 +304,9 @@ ROB per entry:
     always@(posedge clk, negedge rst_n)begin
         if(!rst_n)
             rob_st_cntr <= 0;
+		else if(mis_pred)begin
+			rob_st_cntr <= rob_st_ptr[mis_pred_brnc_idx];
+		end
         else if(st_in == 0)begin
             rob_st_cntr <= rob_st_cntr;
         end
@@ -341,6 +344,9 @@ ROB per entry:
     always@(posedge clk, negedge rst_n)begin
         if(!rst_n)
             rob_ld_cntr <= 0;
+		else if(mis_pred)begin
+			rob_ld_cntr <= rob_ld_ptr[mis_pred_brnc_idx];
+		end
         else if(ld_in == 0)begin
             rob_ld_cntr <= rob_ld_cntr;
         end
@@ -607,35 +613,54 @@ ROB per entry:
                 rob_st_ptr[rob_st_idx] <= 0;
             end
             // adding into ROB
-            else if ((!all_nop) && st_in[0] && (rob_st_idx == rob_tail)) begin 
-                rob_st    [rob_st_idx] <= 1;
-                rob_st_ptr[rob_st_idx] <= rob_st_cntr + 1;
+            else if ((!all_nop) && (rob_st_idx == rob_tail)) begin 
+                rob_st    [rob_st_idx] <= (st_in[0]) ? 1:0;
+                rob_st_ptr[rob_st_idx] <= (st_in[0]) ? rob_st_cntr + 1
+                                        : rob_st_cntr;
             end
-            else if ((!all_nop) && st_in[1] && 
+            else if ((!all_nop) && 
                     ((rob_st_idx == rob_tail + 1) || (rob_st_idx == (rob_tail-63)))) begin
-                rob_st    [rob_st_idx] <= 1;
-                rob_st_ptr[rob_st_idx] <= (st_in[0]) ? rob_st_cntr + 2
-                                        : rob_st_cntr + 1;
+                rob_st    [rob_st_idx] <= (st_in[1]) ? 1:0;
+                rob_st_ptr[rob_st_idx] <= (st_in[1:0] == 2'b11) ? rob_st_cntr + 2
+                                        : (st_in[1:0] == 2'b01) ? rob_st_cntr + 1
+                                        : (st_in[1:0] == 2'b10) ? rob_st_cntr + 1
+                                        : rob_st_cntr;
             end
-            else if ((!all_nop) && st_in[2] && 
+            else if ((!all_nop) && 
                     ((rob_st_idx == rob_tail + 2) || (rob_st_idx == (rob_tail-62)))) begin
-                rob_st    [rob_st_idx] <= 1;
-                rob_st_ptr[rob_st_idx] <= (st_in[1:0] == 2'b11) ? rob_st_cntr + 3
-                                        : (st_in[1:0] == 2'b01) ? rob_st_cntr + 2
-                                        : (st_in[1:0] == 2'b10) ? rob_st_cntr + 2
-                                        : rob_st_cntr + 1;
+                rob_st    [rob_st_idx] <= (st_in[2]) ? 1:0
+                rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 3
+                                        : (st_in[2:0] == 3'b011) ? rob_st_cntr + 2
+                                        : (st_in[2:0] == 3'b110) ? rob_st_cntr + 2
+                                        : (st_in[2:0] == 3'b101) ? rob_st_cntr + 2
+                                        : (st_in[2:0] == 3'b001) ? rob_st_cntr + 1
+                                        : (st_in[2:0] == 3'b010) ? rob_st_cntr + 1
+                                        : (st_in[2:0] == 3'b100) ? rob_st_cntr + 1
+                                        : rob_st_cntr;
             end
-            else if ((!all_nop) && st_in[3] && 
+            else if ((!all_nop) && 
                     ((rob_st_idx == rob_tail + 3) || (rob_st_idx == (rob_tail-61)))) begin
-                rob_st    [rob_st_idx] <= 1;
-                rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 4
-                                        : (st_in[2:0] == 3'b011) ? rob_st_cntr + 3
-                                        : (st_in[2:0] == 3'b110) ? rob_st_cntr + 3
-                                        : (st_in[2:0] == 3'b101) ? rob_st_cntr + 3
-                                        : (st_in[2:0] == 3'b001) ? rob_st_cntr + 2
-                                        : (st_in[2:0] == 3'b010) ? rob_st_cntr + 2
-                                        : (st_in[2:0] == 3'b100) ? rob_st_cntr + 2
-                                        : rob_st_cntr + 1;
+                rob_st    [rob_st_idx] <= (st_in[3]) ? 1:0;
+                if (st_in[3]) begin
+                    rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 4
+                                            : (st_in[2:0] == 3'b011) ? rob_st_cntr + 3
+                                            : (st_in[2:0] == 3'b110) ? rob_st_cntr + 3
+                                            : (st_in[2:0] == 3'b101) ? rob_st_cntr + 3
+                                            : (st_in[2:0] == 3'b001) ? rob_st_cntr + 2
+                                            : (st_in[2:0] == 3'b010) ? rob_st_cntr + 2
+                                            : (st_in[2:0] == 3'b100) ? rob_st_cntr + 2
+                                            : rob_st_cntr + 1;
+                end
+                else begin
+                    rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 3
+                                            : (st_in[2:0] == 3'b011) ? rob_st_cntr + 2
+                                            : (st_in[2:0] == 3'b110) ? rob_st_cntr + 2
+                                            : (st_in[2:0] == 3'b101) ? rob_st_cntr + 2
+                                            : (st_in[2:0] == 3'b001) ? rob_st_cntr + 1
+                                            : (st_in[2:0] == 3'b010) ? rob_st_cntr + 1
+                                            : (st_in[2:0] == 3'b100) ? rob_st_cntr + 1
+                                            : rob_st_cntr;
+                end
             end
             else begin
                 rob_st    [rob_st_idx] <= rob_st    [rob_st_idx];
