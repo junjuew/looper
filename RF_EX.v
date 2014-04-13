@@ -128,7 +128,7 @@ module RF_EX (
     output  [5:0]          alu1_done_idx_rf_ex_out,
     output  [5:0]          alu2_done_idx_rf_ex_out,
     output  [5:0]          mult_done_idx_rf_ex_out,
-    output  [5:0]          addr_done_idx_rf_ex_in,
+    output  [5:0]          addr_done_idx_rf_ex_out,
 
     output  [5:0]          phy_addr_alu1_rf_ex_out,
     output  [5:0]          phy_addr_alu2_rf_ex_out,

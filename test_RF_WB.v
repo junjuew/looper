@@ -101,7 +101,7 @@ module test_RF_WB(
     output [5:0]           alu1_done_idx_ex_wb_out,
     output [5:0]           alu2_done_idx_ex_wb_out,
     output [5:0]           mult_done_idx_ex_wb_out,
-    output [5:0]           addr_done_idx_ex_wb_out,
+    output [5:0]           addr_done_idx_ex_wb_out
  
     //output [5:0]           phy_addr_alu1_ex_wb_out,
     //output [5:0]           phy_addr_alu2_ex_wb_out,
@@ -366,7 +366,7 @@ module test_RF_WB(
         .alu1_done_idx_rf_ex_out(alu1_done_idx_rf_ex_out),
         .alu2_done_idx_rf_ex_out(alu2_done_idx_rf_ex_out),
         .mult_done_idx_rf_ex_out(mult_done_idx_rf_ex_out),
-        .addr_done_idx_rf_ex_in(addr_done_idx_rf_ex_in),
+        .addr_done_idx_rf_ex_out(addr_done_idx_rf_ex_out),
 
         .phy_addr_alu1_rf_ex_out(phy_addr_alu1_rf_ex_out),
         .phy_addr_alu2_rf_ex_out(phy_addr_alu2_rf_ex_out),
