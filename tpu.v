@@ -28,9 +28,9 @@
    parameter TPU_MAP_WIDTH= 7 * 16; //7 bit for each logical register
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
-   parameter ISQ_LINE_WIDTH= INST_WIDTH + ISQ_IDX_BITS_NUM + 1;
-   //psrc1 and psrc2 need two more bits than lsrc1, lsrc2
-   parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
+   parameter ISQ_LINE_WIDTH= INST_WIDTH + ISQ_IDX_BITS_NUM + 1; //62
+   //psrc1 and psrc2 need two more bits than lsrc1, lsrc2, ldst is not outputed
+   parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; //61
    //bitmap for instructions
    //everything is relative to the inst_width, not isq_lin_width, by default!!
    parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
@@ -79,9 +79,9 @@
    wire                      top_hed_map_en,mid_hed_map_en;
 
    //inst valid
-   wire [ISQ_LINE_WIDTH-1:0] inst_vld;
+   wire [ISQ_DEPTH-1:0] inst_vld;
    //inst wait
-   wire [ISQ_LINE_WIDTH-1:0] inst_wat;
+   wire [ISQ_DEPTH-1:0] inst_wat;
    //inst done: 1. inst not valid 
    //           or
    //           1. inst valid

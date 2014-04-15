@@ -1,0 +1,24 @@
+allocation instruction packet format:
+        inst_valid |  rs    |  rd   |  rt   | imm_valid_bit | ...| RegWr | preg
+          55         54-50    49-45   44-40      39 --------------- 7      6-0
+
+isq_lin: output format
+         wat | inst 
+         56    55-0
+
+isq: isq will add idx to the output of isq_lin so the output becomes ( input to tpu )
+         idx | wat | inst
+        62-57  56    55-0
+        
+tpu: output format (input to pdc)
+idx | wat |  inst_valid | psrc1 | psrc2 | imm_valid| imm | LDI | brn | jmp_valid_bit | jump |... |add| mult |addr| invtRt | RegWrite| pr_valid | pr_number
+61-56  55       54         53-47   46-40     39     38-23  22   21-20   19            18-17 ------11   10     9     8         7         6          5-0
+        
+        physical register to be freed is output in a separate fre_preg signal
+
+pdc: supposed output (need to change pdc)
+     inst_valid | idx  | psrc1 | psrc2 | pdest | imm_valid_bit | .....| RegWr | freeReg
+        65       64-59   58-52   51-45   44-39   38              37-7    6       5-0
+
+     regWr signals is the valid bit for both pdest and freeReg
+         

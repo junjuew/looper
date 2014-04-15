@@ -15,8 +15,8 @@
    parameter ISQ_DEPTH=64;
    parameter ISQ_IDX_BITS_NUM=6;   
    parameter INST_PORT=4;
-   parameter INST_WIDTH=67;
-   parameter ISQ_LINE_WIDTH=INST_WIDTH +2 + ISQ_IDX_BITS_NUM;
+   parameter INST_WIDTH=56;
+   parameter ISQ_LINE_WIDTH=INST_WIDTH +1 + ISQ_IDX_BITS_NUM;
    localparam ISQ_LINE_NO_IDX_WIDTH = ISQ_LINE_WIDTH - ISQ_IDX_BITS_NUM;
 
    input wire[INST_WIDTH * INST_PORT-1:0] inst_in_flat;

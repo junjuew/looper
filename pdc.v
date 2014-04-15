@@ -1,7 +1,8 @@
 `default_nettype none
 
   //TODO: output all the bits in the tpu_inst?? some may not be needed for next stage. need to strip those bits off
-
+  // added reorder function to solve the problem
+  
    ////////////////////////////
    // instruction format used for testing:
    // inst idx | inst vld | inst wat | BR | JMP | MULT| ADD | ADDR | lsrc1 | ldst | lsrc2 | pdest
@@ -32,11 +33,11 @@
    parameter FUN_ADD2_BIT= 2;
    parameter FUN_ADDR_BIT= 3;
    //tpu bit
-   parameter TPU_BIT_IDX= ISQ_LINE_WIDTH-1;
-   parameter TPU_BIT_INST_VLD= ISQ_LINE_WIDTH -1 -ISQ_IDX_BITS_NUM;
-   parameter TPU_BIT_INST_WAT= ISQ_LINE_WIDTH -1 -ISQ_IDX_BITS_NUM -1;
+   parameter TPU_BIT_IDX= 61;
+   parameter TPU_BIT_INST_VLD= 54;
+   parameter TPU_BIT_INST_WAT= 55;
    parameter TPU_BIT_PDEST= 6;         
-   parameter TPU_BIT_CTRL_START= ISQ_LINE_WIDTH -1 - ISQ_IDX_BITS_NUM - 2*7;
+   parameter TPU_BIT_CTRL_START= 39;
    parameter TPU_BIT_CTRL_END= TPU_BIT_PDEST + 1;   
    parameter TPU_BIT_CTRL_MULT= 10;
    parameter TPU_BIT_CTRL_ADD= 11;
@@ -59,10 +60,10 @@
    output wire [ISQ_DEPTH-1:0]                 clr_inst_wat;
 
    //output instruction to rf stage
-   output wire [TPU_INST_WIDTH -1 :0]          mul_ins_to_rf;
-   output wire [TPU_INST_WIDTH -1 :0]          alu1_ins_to_rf;
-   output wire [TPU_INST_WIDTH -1 :0]          alu2_ins_to_rf;
-   output wire [TPU_INST_WIDTH -1 :0]          adr_ins_to_rf;         
+   output wire [IS_INST_WIDTH -1 :0]          mul_ins_to_rf;
+   output wire [IS_INST_WIDTH -1 :0]          alu1_ins_to_rf;
+   output wire [IS_INST_WIDTH -1 :0]          alu2_ins_to_rf;
+   output wire [IS_INST_WIDTH -1 :0]          adr_ins_to_rf;         
    
    
    //wires decoding flat line from tpu
@@ -78,10 +79,10 @@ function[IS_INST_WIDTH-1:0]  reorder;
    input [6:0]                            preg;
    begin
       // tpu line out format:
-      // idx | inst vld | vld, psrc1 | vld, psrc2 |  other control signals ... | pdest
+      // idx | wat |  inst vld | vld, psrc1 | vld, psrc2 |  other control signals ... | pdest
       // is stage out format:
       // inst vld | idx | psrc1 | psrc2 | pdest | other control signals ...(to RegWrite) | freepreg
-      reorder = {tpu_out_packet[TPU_BIT_INST_VLD], tpu_out_packet[TPU_BIT_IDX: TPU_BIT_IDX - (ISQ_IDX_BITS_NUM-1)], tpu_out_packet[TPU_BIT_PDEST:0] , tpu_out_packet[TPU_BIT_CTRL_START: TPU_BIT_CTRL_END], preg};
+      reorder = {tpu_out_packet[TPU_BIT_INST_VLD], tpu_out_packet[TPU_BIT_IDX: TPU_BIT_CTRL_START+1], tpu_out_packet[TPU_BIT_PDEST:0] , tpu_out_packet[TPU_BIT_CTRL_START: TPU_BIT_CTRL_END], preg};
    end
 endfunction
    
@@ -110,7 +111,7 @@ endfunction
    //            4. inst wait
    //           
    wire mult_rdy[ISQ_DEPTH -1 : 0];
-   wire[TPU_INST_WIDTH-1:0] mult_out[ISQ_DEPTH -1 :0];
+   wire[IS_INST_WIDTH-1:0] mult_out[ISQ_DEPTH -1 :0];
    generate
       genvar                                      mult_rdy_i;
       for (mult_rdy_i=0; mult_rdy_i<ISQ_DEPTH; mult_rdy_i=mult_rdy_i+1) 
@@ -124,13 +125,13 @@ endfunction
       for (mult_pdc_i=0; mult_pdc_i<ISQ_DEPTH; mult_pdc_i=mult_pdc_i+1) 
         begin
            if (mult_pdc_i < ISQ_DEPTH -1 )
-             assign mult_out[mult_pdc_i][TPU_INST_WIDTH-1:0] = ( mult_rdy[mult_pdc_i] )? reorder(tpu_out[mult_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[mult_pdc_i]) : mult_out[mult_pdc_i +1][TPU_INST_WIDTH-1:0];
+             assign mult_out[mult_pdc_i][IS_INST_WIDTH-1:0] = ( mult_rdy[mult_pdc_i] )? reorder(tpu_out[mult_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[mult_pdc_i]) : mult_out[mult_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line mult_pdc_i == ISQ_DEPTH -1
-             assign mult_out[mult_pdc_i][TPU_INST_WIDTH-1:0] = ( mult_rdy[mult_pdc_i] )? reorder(tpu_out[mult_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[mult_pdc_i]) : { (TPU_INST_WIDTH) {1'b0} };
+             assign mult_out[mult_pdc_i][IS_INST_WIDTH-1:0] = ( mult_rdy[mult_pdc_i] )? reorder(tpu_out[mult_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[mult_pdc_i]) : { (IS_INST_WIDTH) {1'b0} };
         end
    endgenerate
    // the final output value is output from 0
-   assign mul_ins_to_rf[TPU_INST_WIDTH -1 :0] = mult_out[0][TPU_INST_WIDTH -1 :0];
+   assign mul_ins_to_rf[IS_INST_WIDTH -1 :0] = mult_out[0][IS_INST_WIDTH -1 :0];
    
    
    //////////////////////////
@@ -147,7 +148,7 @@ endfunction
    // currently use genvar to control which add to go to
    // add1_rdy_i %3 dictates
    wire add1_rdy[ISQ_DEPTH -1 : 0];
-   wire[TPU_INST_WIDTH-1:0] add1_out[ISQ_DEPTH -1 :0];
+   wire[IS_INST_WIDTH-1:0] add1_out[ISQ_DEPTH -1 :0];
    generate
       genvar                                      add1_rdy_i;
       for (add1_rdy_i=0; add1_rdy_i<ISQ_DEPTH; add1_rdy_i=add1_rdy_i+1) 
@@ -161,13 +162,13 @@ endfunction
       for (add1_pdc_i=0; add1_pdc_i<ISQ_DEPTH; add1_pdc_i=add1_pdc_i+1) 
         begin
            if (add1_pdc_i < ISQ_DEPTH -1 )
-             assign add1_out[add1_pdc_i][TPU_INST_WIDTH-1:0] = ( add1_rdy[add1_pdc_i] )? reorder(tpu_out[add1_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add1_pdc_i]) : add1_out[add1_pdc_i +1][TPU_INST_WIDTH-1:0];
+             assign add1_out[add1_pdc_i][IS_INST_WIDTH-1:0] = ( add1_rdy[add1_pdc_i] )? reorder(tpu_out[add1_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add1_pdc_i]) : add1_out[add1_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line add1_pdc_i == ISQ_DEPTH -1
-             assign add1_out[add1_pdc_i][TPU_INST_WIDTH-1:0] = ( add1_rdy[add1_pdc_i] )? reorder(tpu_out[add1_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add1_pdc_i]) :  { (TPU_INST_WIDTH) {1'b0} };
+             assign add1_out[add1_pdc_i][IS_INST_WIDTH-1:0] = ( add1_rdy[add1_pdc_i] )? reorder(tpu_out[add1_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add1_pdc_i]) :  { (IS_INST_WIDTH) {1'b0} };
         end
    endgenerate
    // the final output value is output from 0
-   assign alu1_ins_to_rf[TPU_INST_WIDTH -1 :0] = add1_out[0][TPU_INST_WIDTH -1 :0];
+   assign alu1_ins_to_rf[IS_INST_WIDTH -1 :0] = add1_out[0][IS_INST_WIDTH -1 :0];
 
 
    
@@ -185,7 +186,7 @@ endfunction
    // currently use genvar to control which add to go to
    // add1_rdy_i %3 dictates
    wire add2_rdy[ISQ_DEPTH -1 : 0];
-   wire[TPU_INST_WIDTH-1:0] add2_out[ISQ_DEPTH -1 :0];
+   wire[IS_INST_WIDTH-1:0] add2_out[ISQ_DEPTH -1 :0];
    generate
       genvar                                      add2_rdy_i;
       for (add2_rdy_i=0; add2_rdy_i<ISQ_DEPTH; add2_rdy_i=add2_rdy_i+1) 
@@ -199,13 +200,13 @@ endfunction
       for (add2_pdc_i=0; add2_pdc_i<ISQ_DEPTH; add2_pdc_i=add2_pdc_i+1) 
         begin
            if (add2_pdc_i < ISQ_DEPTH -1 )
-             assign add2_out[add2_pdc_i][TPU_INST_WIDTH-1:0] = ( add2_rdy[add2_pdc_i] )? reorder(tpu_out[add2_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add2_pdc_i]) : add2_out[add2_pdc_i +1][TPU_INST_WIDTH-1:0];
+             assign add2_out[add2_pdc_i][IS_INST_WIDTH-1:0] = ( add2_rdy[add2_pdc_i] )? reorder(tpu_out[add2_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add2_pdc_i]) : add2_out[add2_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line add2_pdc_i == ISQ_DEPTH -1
-             assign add2_out[add2_pdc_i][TPU_INST_WIDTH-1:0] = ( add2_rdy[add2_pdc_i] )? reorder(tpu_out[add2_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add2_pdc_i]) :  { (TPU_INST_WIDTH) {1'b0} };
+             assign add2_out[add2_pdc_i][IS_INST_WIDTH-1:0] = ( add2_rdy[add2_pdc_i] )? reorder(tpu_out[add2_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add2_pdc_i]) :  { (IS_INST_WIDTH) {1'b0} };
         end
    endgenerate
    // the final output value is output from 0
-   assign alu2_ins_to_rf[TPU_INST_WIDTH -1 :0] = add2_out[0][TPU_INST_WIDTH -1 :0];
+   assign alu2_ins_to_rf[IS_INST_WIDTH -1 :0] = add2_out[0][IS_INST_WIDTH -1 :0];
 
 
    //////////////////////////
@@ -219,7 +220,7 @@ endfunction
    //            4. inst wait                                                                    
    //
    wire addr_rdy[ISQ_DEPTH -1 : 0];
-   wire[TPU_INST_WIDTH-1:0] addr_out[ISQ_DEPTH -1 :0];
+   wire[IS_INST_WIDTH-1:0] addr_out[ISQ_DEPTH -1 :0];
    generate
       genvar                                      addr_rdy_i;
       for (addr_rdy_i=0; addr_rdy_i<ISQ_DEPTH; addr_rdy_i=addr_rdy_i+1) 
@@ -233,13 +234,13 @@ endfunction
       for (addr_pdc_i=0; addr_pdc_i<ISQ_DEPTH; addr_pdc_i=addr_pdc_i+1) 
         begin
            if (addr_pdc_i < ISQ_DEPTH -1 )
-             assign addr_out[addr_pdc_i][TPU_INST_WIDTH-1:0] = ( addr_rdy[addr_pdc_i] )? reorder(tpu_out[addr_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[addr_pdc_i]) : addr_out[addr_pdc_i +1][TPU_INST_WIDTH-1:0];
+             assign addr_out[addr_pdc_i][IS_INST_WIDTH-1:0] = ( addr_rdy[addr_pdc_i] )? reorder(tpu_out[addr_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[addr_pdc_i]) : addr_out[addr_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line addr_pdc_i == ISQ_DEPTH -1
-             assign addr_out[addr_pdc_i][TPU_INST_WIDTH-1:0] = ( addr_rdy[addr_pdc_i] )? reorder(tpu_out[addr_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[addr_pdc_i]) :  { (TPU_INST_WIDTH) {1'b0} };
+             assign addr_out[addr_pdc_i][IS_INST_WIDTH-1:0] = ( addr_rdy[addr_pdc_i] )? reorder(tpu_out[addr_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[addr_pdc_i]) :  { (IS_INST_WIDTH) {1'b0} };
         end
    endgenerate
    // the final output value is output from 0
-   assign adr_ins_to_rf[TPU_INST_WIDTH -1 :0] = addr_out[0][TPU_INST_WIDTH -1 :0];
+   assign adr_ins_to_rf[IS_INST_WIDTH -1 :0] = addr_out[0][IS_INST_WIDTH -1 :0];
 
 
 

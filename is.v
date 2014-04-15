@@ -8,8 +8,8 @@
    ful_to_al, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf,
    adr_ins_to_rf, fre_prg_to_rob,
    // Inputs
-   clk, rst_n, inst_frm_al, fls_frm_rob, cmt_frm_rob, fun_rdy_frm_exe,
-   prg_rdy_frm_exe, lop_sta
+   clk, rst_n, inst_frm_al, lop_sta, fls_frm_rob, cmt_frm_rob,
+   fun_rdy_frm_exe, prg_rdy_frm_exe
    );
 
    /*********** param for stage inputs ***************/
@@ -18,8 +18,7 @@
    //vld + 6 bit indx
    parameter PRG_SIG_WIDTH=7;
    parameter INST_WIDTH=56;
-   //TODO. need changes, reorganize insts   
-   parameter IS_INST_WIDTH = INST_WIDTH;   
+   parameter IS_INST_WIDTH = 66;   
    
    //isq
    parameter ISQ_DEPTH = 64;
@@ -49,18 +48,19 @@
    parameter FUN_ADDR_BIT= 3;
    parameter BIT_IDX= ISQ_LINE_WIDTH-1;
    
-   parameter TPU_BIT_IDX= ISQ_LINE_WIDTH-1;
+   //tpu bit
+   parameter TPU_BIT_IDX= 61;
+   parameter TPU_BIT_INST_VLD= 54;
+   parameter TPU_BIT_INST_WAT= 55;
    parameter TPU_BIT_PDEST= 6;         
-   parameter TPU_BIT_CTRL_START= ISQ_LINE_WIDTH -1 - ISQ_IDX_BITS_NUM - 2*7;
+   parameter TPU_BIT_CTRL_START= 39;
    parameter TPU_BIT_CTRL_END= TPU_BIT_PDEST + 1;   
-   parameter TPU_BIT_INST_VLD= ISQ_LINE_WIDTH -1 -ISQ_IDX_BITS_NUM;
-   parameter TPU_BIT_INST_WAT= ISQ_LINE_WIDTH -1 -ISQ_IDX_BITS_NUM -1;   
    parameter TPU_BIT_CTRL_MULT= 10;
    parameter TPU_BIT_CTRL_ADD= 11;
    parameter TPU_BIT_CTRL_ADDR= 9;
    parameter TPU_BIT_CTRL_BR= 21;
    parameter TPU_BIT_CTRL_JMP_VLD= 19;      
-
+   
 
    /********************** input **********************/
    //global input signals
@@ -226,10 +226,10 @@
    is_pdc (/*autoinst*/
            // Outputs
            .clr_inst_wat                (clr_inst_wat[ISQ_DEPTH-1:0]),
-           .mul_ins_to_rf               (mul_ins_to_rf[TPU_INST_WIDTH-1:0]),
-           .alu1_ins_to_rf              (alu1_ins_to_rf[TPU_INST_WIDTH-1:0]),
-           .alu2_ins_to_rf              (alu2_ins_to_rf[TPU_INST_WIDTH-1:0]),
-           .adr_ins_to_rf               (adr_ins_to_rf[TPU_INST_WIDTH-1:0]),
+           .mul_ins_to_rf               (mul_ins_to_rf[IS_INST_WIDTH-1:0]),
+           .alu1_ins_to_rf              (alu1_ins_to_rf[IS_INST_WIDTH-1:0]),
+           .alu2_ins_to_rf              (alu2_ins_to_rf[IS_INST_WIDTH-1:0]),
+           .adr_ins_to_rf               (adr_ins_to_rf[IS_INST_WIDTH-1:0]),
            // Inputs
            .fun_rdy_frm_exe             (fun_rdy_frm_exe[3:0]),
            .tpu_out_reo_flat            (tpu_out_reo_flat[TPU_INST_WIDTH*ISQ_DEPTH-1:0]),

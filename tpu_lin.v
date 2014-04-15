@@ -4,11 +4,6 @@
   // tpu_inst_rdy goes high when the instruction is not valid,
   // or all possible physical registers are ready
   //
-  // isq line input format:
-  // idx | inst vld | vld , lsrc1 | vld, ldst | vld, lsrc2 | controls... | pdest
-  // tpu line out format:
-  // idx | inst vld | vld, psrc1 | vld, psrc2 | other control signals ... | pdest
-  //
   // prv_map input format:
   // logical mapping for reg 15, 14, 13, ...., 1,0
   //
@@ -31,7 +26,7 @@
    parameter TPU_MAP_WIDTH= 7 * 16; //7 bit for each logical register
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
-   parameter ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
+   parameter ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 1;
    //for each logical source register, physical register index has 2 more bits
    parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
    
@@ -41,7 +36,6 @@
    parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
    parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
    parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
-   
    
    
    ///////////////////////////////////////

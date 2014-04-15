@@ -14,7 +14,8 @@ module isq_lin(/*autoarg*/
    isq_lin_in
    );
    parameter INST_WIDTH=56;
-   parameter ISQ_LINE_NO_IDX_WIDTH=INST_WIDTH +2;
+   parameter ISQ_LINE_NO_IDX_WIDTH=INST_WIDTH +1;
+   localparam ISQ_LINE_NO_IDX_BIT_WAT=INST_WIDTH;
    
    input wire clk, rst_n, en;
    input wire clr_wat, set_wat,clr_val, /*set_val,*/ fls;
@@ -55,7 +56,7 @@ module isq_lin(/*autoarg*/
         else if (set_wat)
           wat<=1'b1;
         else if (en)
-          wat<=isq_lin_in[ISQ_LINE_NO_IDX_WIDTH-2];
+          wat<=isq_lin_in[ISQ_LINE_NO_IDX_BIT_WAT];
      end
      
 
@@ -69,7 +70,7 @@ module isq_lin(/*autoarg*/
         else if (fls)
           inst[INST_WIDTH-1:0]<=0;
         else if (en)
-          inst[INST_WIDTH-1:0]<=isq_lin_in[ISQ_LINE_NO_IDX_WIDTH-3:0];
+          inst[INST_WIDTH-1:0]<=isq_lin_in[INST_WIDTH-1:0];
      end
 
    

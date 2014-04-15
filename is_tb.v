@@ -43,20 +43,19 @@
    parameter FUN_ADD2_BIT= 2;
    parameter FUN_ADDR_BIT= 3;
    parameter BIT_IDX= ISQ_LINE_WIDTH-1;
-   
-   parameter TPU_BIT_IDX= ISQ_LINE_WIDTH-1;
+
+   parameter TPU_BIT_IDX= 61;
+   parameter TPU_BIT_INST_VLD= 54;
+   parameter TPU_BIT_INST_WAT= 55;
    parameter TPU_BIT_PDEST= 6;         
-   parameter TPU_BIT_CTRL_START= ISQ_LINE_WIDTH -1 - ISQ_IDX_BITS_NUM - 2*7;
+   parameter TPU_BIT_CTRL_START= 39;
    parameter TPU_BIT_CTRL_END= TPU_BIT_PDEST + 1;   
-   parameter TPU_BIT_INST_VLD= ISQ_LINE_WIDTH -1 -ISQ_IDX_BITS_NUM;
-   parameter TPU_BIT_INST_WAT= ISQ_LINE_WIDTH -1 -ISQ_IDX_BITS_NUM -1;   
    parameter TPU_BIT_CTRL_MULT= 10;
    parameter TPU_BIT_CTRL_ADD= 11;
    parameter TPU_BIT_CTRL_ADDR= 9;
    parameter TPU_BIT_CTRL_BR= 21;
    parameter TPU_BIT_CTRL_JMP_VLD= 19;      
-   
-   
+
    reg clk,rst_n;
 
    /********** input **********/
@@ -67,6 +66,8 @@
    //input from ROB
    reg  [BRN_WIDTH-1:0]         fls_frm_rob;
    reg  [BRN_WIDTH-1:0]         cmt_frm_rob; //commit signal for branch
+
+   reg                          lop_sta;
    
    //input from execution
    //function rdy
@@ -159,18 +160,35 @@
        .clk                             (clk),
        .rst_n                           (rst_n),
        .inst_frm_al                     (inst_frm_al[4*INST_WIDTH-1:0]),
+       .lop_sta                         (lop_sta),
        .fls_frm_rob                     (fls_frm_rob[BRN_WIDTH-1:0]),
        .cmt_frm_rob                     (cmt_frm_rob[BRN_WIDTH-1:0]),
        .fun_rdy_frm_exe                 (fun_rdy_frm_exe[3:0]),
        .prg_rdy_frm_exe                 (prg_rdy_frm_exe[4*PRG_SIG_WIDTH-1:0]));
 
-   /********* tasks to display the output of issue queue ****************/
-   task tell;
+   
+   /********* tasks to display the output of a single line of issue stage ****************/
+   task tell_single;
       input [IS_INST_WIDTH:0] is_out;
       begin
          $display("==%g vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, is_out[65],is_out[64:59], is_out[58:52], is_out[51:45], is_out[44:39], is_out[38:6], is_out[5:0]);
       end
    endtask
+
+   /******** take a snapshot of output of issue stage***/
+   task snapshot;
+      begin
+         $display("mult");
+         tell_single(mul_ins_to_rf);
+         $display("alu1");         
+         tell_single(alu1_ins_to_rf);
+         $display("alu2");         
+         tell_single(alu2_ins_to_rf);
+         $display("adr");         
+         tell_single(adr_ins_to_rf);         
+      end
+   endtask
+   
    
 
 
@@ -325,18 +343,21 @@
         //=== use display since we are working on combinational logic
         $display("%g =============begin test. reset==========", $time);
         rst_n=0;
+        snapshot();
         
         @(posedge clk);
         $display("%g  =============reset finished ==========", $time);
         rst_n=1;
+        snapshot();        
         
         @(posedge clk);
         $display("%g  =============load invalid instruction ==========", $time);
-
-        @(posedge clk);
-        $display("%g  ============= valid inst  ==========", $time);
-        clear();
+        snapshot();
         
+        @(posedge clk);
+        $display("%g  ============= start valid inst test  ==========", $time);
+        clear();
+        snapshot();        
 
 
         
@@ -349,6 +370,7 @@
 
 
         @(posedge clk);
+        snapshot();                
         $display("%g  ============= valid inst. no dependency  ==========", $time);
         $display("%g  ===inst: idx:10, vld:1, src1:1,0011, src2:1,0100, ldst:1,0101, pdst:010010", $time);
         $display ("%g ==== add ======", $time);                
@@ -357,6 +379,7 @@
 
         //test dependency        
         @(posedge clk);
+        snapshot();                
         $display("%g  ============= valid inst. src1 has dependency  ==========", $time);
         $display("%g  ===inst: idx:11, vld:1, src1:1,0101, src2:1,0100, ldst:1,0110, pdst:010011", $time);
         $display ("%g ==== add addr======", $time);                        
@@ -365,6 +388,7 @@
 
 
         @(posedge clk);
+        snapshot();                
         $display("%g  ============= after sending, inst0 is no longer waiting  ==========", $time);
         $display("%g  ===inst: idx:00, vld:1, src1:1,0000, src2:1,0001, ldst:1,0010, pdst:010000", $time);
         //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
@@ -373,6 +397,7 @@
 
         //test physical register becomes rdy
         @(posedge clk);
+        snapshot();        
         $display("%g  ============= physical register of ldst 0101 becomes rdy ==========", $time);
         $display("%g  ===inst[3] should become ready", $time);
 
