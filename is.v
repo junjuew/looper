@@ -9,7 +9,7 @@
    adr_ins_to_rf, fre_prg_to_rob,
    // Inputs
    clk, rst_n, inst_frm_al, fls_frm_rob, cmt_frm_rob, fun_rdy_frm_exe,
-   prg_rdy_frm_exe
+   prg_rdy_frm_exe, lop_sta
    );
 
    /*********** param for stage inputs ***************/
@@ -68,6 +68,7 @@
    
    //input from allocation stage
    input wire [4 * INST_WIDTH-1:0] inst_frm_al;
+   input wire                      lop_sta; //loop start
    
    //input from ROB
    input wire [BRN_WIDTH-1:0]         fls_frm_rob;
