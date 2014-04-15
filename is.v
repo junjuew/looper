@@ -6,7 +6,7 @@
   module is(/*autoarg*/
    // Outputs
    ful_to_al, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf,
-   adr_ins_to_rf, fre_prg_to_rob,
+   adr_ins_to_rf,
    // Inputs
    clk, rst_n, inst_frm_al, lop_sta, fls_frm_rob, cmt_frm_rob,
    fun_rdy_frm_exe, prg_rdy_frm_exe
@@ -89,8 +89,6 @@
    output wire [IS_INST_WIDTH-1:0]    alu1_ins_to_rf;
    output wire [IS_INST_WIDTH-1:0]    alu2_ins_to_rf;
    output wire [IS_INST_WIDTH-1:0]    adr_ins_to_rf;   
-   //to rob
-   output wire [4* PRG_SIG_WIDTH -1 :0] fre_prg_to_rob;
 
 
    /******************** in-module wire****************/
@@ -109,6 +107,11 @@
    assign val=fls_frm_rob[ISQ_IDX_BITS_NUM-1:0];
    //valid bits from al port
    wire [3:0]                                  inst_vld;
+   assign inst_vld[0] = inst_frm_al[BIT_INST_VLD];
+   assign inst_vld[1] = inst_frm_al[2*INST_WIDTH -1];
+   assign inst_vld[2] = inst_frm_al[3*INST_WIDTH -1];
+   assign inst_vld[3] = inst_frm_al[4*INST_WIDTH -1];   
+   
    wire                                        isq_ful;
    
    wire[ISQ_DEPTH-1:0]                         isq_lin_en;
@@ -236,5 +239,6 @@
            .tpu_inst_rdy                (tpu_inst_rdy[ISQ_DEPTH-1:0]),
            .fre_preg_out_flat           (fre_preg_out_flat[7*ISQ_DEPTH-1:0]));   
    
-   
+
+
 endmodule 

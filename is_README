@@ -21,4 +21,31 @@ pdc: supposed output (need to change pdc)
         65       64-59   58-52   51-45   44-39   38              37-7    6       5-0
 
      regWr signals is the valid bit for both pdest and freeReg
-         
+
+
+
+is stage tb input inst components:
+
+        inst_valid =0;
+        Rs_valid_bit=0;
+        Rs=0;
+        Rd_valid_bit=0;
+        Rd=0;
+        Rt_valid_bit=0;
+        Rt=0;
+        imm_valid_bit=0;
+        imme=0;
+        LDI=0;
+        brn=0;
+        jmp_valid_bit=0;
+        jump=0;
+        MemRd=0;
+        MemWr=0;
+        ALU_ctrl=0;
+        ALU_to_adder=0;
+        ALU_to_mult=0;
+        ALU_to_addr=0;
+        invtRt=0;
+        RegWr=0;
+        pr_valid=0;
+        pr_number=0;     

@@ -4,6 +4,9 @@
   //test problem: when load in a new instruction, need to reset dst_rdy_reg
   // to 0, but if synchronous, only can be resetted next cycle
   // need to add async reset to dst_rdy register in tpu_lin
+  //
+  // TODO: inst_al is not simulated as actual registers. needs to use
+  // generate to assign values to it
   //////////////////////////////////////////////
   module is_tb();
 
@@ -60,7 +63,7 @@
 
    /********** input **********/
    //input from allocation stage   
-   reg [IS_INST_WIDTH-1:0]                      inst_al[3:0];
+   reg [INST_WIDTH-1:0]                      inst_al[3:0];
    wire [4 * INST_WIDTH-1:0] inst_frm_al;
 
    //input from ROB
@@ -281,16 +284,15 @@
    task load;
       input inst_idx;
       begin
-        inst_al[inst_idx]=inst(inst_valid,Rs_valid_bit,Rs,Rd_valid_bit,Rd,Rt_valid_bit,Rt,imm_valid_bit,imme, LDI,  brn, jmp_valid_bit, jump, MemRd, MemWr, ALU_ctrl,ALU_to_adder, ALU_to_mult,ALU_to_addr,invtRt, RegWr, pr_valid, pr_number);
+        inst_al[inst_idx][INST_WIDTH-1:0]=inst(inst_valid,Rs_valid_bit,Rs,Rd_valid_bit,Rd,Rt_valid_bit,Rt,imm_valid_bit,imme, LDI,  brn, jmp_valid_bit, jump, MemRd, MemWr, ALU_ctrl,ALU_to_adder, ALU_to_mult,ALU_to_addr,invtRt, RegWr, pr_valid, pr_number);
          $display("%g load_inst:%x  === :%x Rs_valid_bit:%x Rs:%x Rd_valid_bit:%x Rd:%x Rt_valid_bit:%x Rt:%x imm_valid_bit:%x imme:%x  LDI:%x   brn:%x  jmp_valid_bit:%x  jump:%x  MemRd:%x  MemWr:%x  ALU_ctrl:%x ALU_to_adder:%x  ALU_to_mult:%x ALU_to_addr:%x invtRt:%x  RegWr:%x  pr_valid:%x  pr_number:%x", $time, inst_idx, inst_valid,Rs_valid_bit,Rs,Rd_valid_bit,Rd,Rt_valid_bit,Rt,imm_valid_bit,imme, LDI,  brn, jmp_valid_bit, jump, MemRd, MemWr, ALU_ctrl,ALU_to_adder, ALU_to_mult,ALU_to_addr,invtRt, RegWr, pr_valid, pr_number);
       end           
    endtask
    
    
-   //================== group instruction together =====
+   //================== group input instruction together =====
    generate
       genvar                                      al_inst_i;
-      //16 logical registers to physical mappings
       for (al_inst_i=0; al_inst_i<4; al_inst_i=al_inst_i+1) 
         begin
            assign inst_frm_al[INST_WIDTH*(al_inst_i+1)-1:INST_WIDTH*al_inst_i]= inst_al[al_inst_i][INST_WIDTH-1:0];
@@ -357,6 +359,18 @@
         @(posedge clk);
         $display("%g  ============= start valid inst test  ==========", $time);
         clear();
+        //r0 =r1 + r2
+        inst_valid=1;
+        Rs_valid_bit=1;
+        Rs=1;
+        Rd_valid_bit=1;
+        Rd=0;
+        Rt_valid_bit=1;
+        Rt=2;
+        ALU_to_adder=1;
+        RegWr=1;
+        pr_valid=1;
+        pr_number=16;
         snapshot();        
 
 
@@ -366,7 +380,7 @@
         $display("%g  ===inst: idx:01, vld:1, src1:1,0011, src2:1,0100, ldst:1,0101, pdst:010001", $time);
         $display ("%g ==== add ======", $time);        
         //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001
-
+        clear();
 
 
         @(posedge clk);
