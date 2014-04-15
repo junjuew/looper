@@ -6,7 +6,7 @@
    // Outputs
    inst_out_to_SCH0, inst_out_to_SCH1, inst_out_to_SCH2,
    inst_out_to_SCH3, no_empt_preg_to_IF, rcvr_pc_to_CMT,
-   reg_wrt_to_CMT, st_en_to_CMT, spec_to_CMT, brch_mode_to_CMT,
+   reg_wrt_to_CMT, st_en_to_CMT, spec_to_CMT, brch_mode_to_CMT,ld_en_to_CMT,
    brch_pred_res_to_CMT, ld_indx_to_WB, st_indx_to_WB,
    all_nop_to_CMTIS, lbd_state_out_to_SCH, fnsh_unrll_out_to_SCH,
    loop_strt_to_SCH,
@@ -38,7 +38,7 @@
    output wire [55:0] inst_out_to_SCH0,inst_out_to_SCH1,inst_out_to_SCH2,inst_out_to_SCH3;
    output wire 	      no_empt_preg_to_IF;
    output wire [63:0] rcvr_pc_to_CMT;
-   output wire [3:0]  reg_wrt_to_CMT,st_en_to_CMT,spec_to_CMT;
+   output wire [3:0]  reg_wrt_to_CMT,st_en_to_CMT,spec_to_CMT,ld_en_to_CMT;
    output wire [7:0]  brch_mode_to_CMT;
    output wire [3:0]  brch_pred_res_to_CMT;
    output wire [31:0] ld_indx_to_WB,st_indx_to_WB;
@@ -68,6 +68,7 @@
 		   .pr_need_inst_out	(pr_need_inst),
 		   .rcvr_pc_to_rob	(rcvr_pc_to_CMT),
 		   .str_en_to_rob	(st_en_to_CMT),
+		   .ld_en_to_rob	(ld_en_to_CMT),
 		   .spec_brch_to_rob	(spec_to_CMT),
 		   .brch_mode_to_rob	(brch_mode_to_CMT),
 		   .brch_pred_res_to_rob(brch_pred_res_to_CMT),
@@ -120,7 +121,7 @@
 	       .free_pr_num		(free_pr_num_from_CMT),
 	       .clk			(clk),
 	       .rst_n			(rst_n),
-	       .stall			(stall));
+	       .stall			(stall | fnsh_unrll_out_from_ID | full_signal_from_SCH ));
 
    
    //reorder Unit

@@ -59,7 +59,6 @@ module tb_freeList();
    always@(negedge clk)
      pr_need_inst_in = pr_need_inst_in + 1;
    
-   
    always@(posedge clk)
      begin
 	#0;
@@ -68,6 +67,8 @@ module tb_freeList();
 	$display("%t, current alloc ptr is %b, cmt ptr is %b\n",$time,DUT.alloc_ptr,DUT.cmt_ptr);
 	
      end
+
+
 
    initial begin
       free_pr_num_in0 = 6'h10;
@@ -102,6 +103,7 @@ module tb_freeList();
      
      end
 
+   
    
      
    initial begin
