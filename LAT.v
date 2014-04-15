@@ -1,4 +1,4 @@
-module LoopAddressTable(
+module LAT(
 	// input
 	bck_lp_bus_in,
 	inst_in,

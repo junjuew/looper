@@ -277,7 +277,7 @@ module ID_top(
 
 				.pred_result_in(pred_result_frm_IF[3]),
 
-				.fnsh_unrll_in(fnsh_unrll_out),
+				.fnsh_unrll_in(fnsh_unrll_out_to_AL),
 
 				.recv_PC_in(recv_pc_in_frm_IF[63:48]),
 
@@ -333,7 +333,7 @@ module ID_top(
 
 				.pred_result_in(pred_result_frm_IF[2]),
 
-				.fnsh_unrll_in(fnsh_unrll_out),
+				.fnsh_unrll_in(fnsh_unrll_out_to_AL),
 
 				.recv_PC_in(recv_pc_in_frm_IF[47:32]),
 
@@ -389,7 +389,7 @@ module ID_top(
 
 				.pred_result_in(pred_result_frm_IF[1]),
 
-				.fnsh_unrll_in(fnsh_unrll_out),
+				.fnsh_unrll_in(fnsh_unrll_out_to_AL),
 
 				.recv_PC_in(recv_pc_in_frm_IF[31:16]),
 
@@ -445,7 +445,7 @@ module ID_top(
 
 				.pred_result_in(pred_result_frm_IF[0]),
 
-				.fnsh_unrll_in(fnsh_unrll_out),
+				.fnsh_unrll_in(fnsh_unrll_out_to_AL),
 
 				.recv_PC_in(recv_pc_in_frm_IF[15:0]),
 
@@ -458,7 +458,7 @@ module ID_top(
 				.bck_lp_out(bck_lp_out4)
 			);
 
-	LoopAddressTable(
+	LAT LAT_DUT(
 			// input
 			.bck_lp_bus_in(bck_lp_bus),
 
