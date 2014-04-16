@@ -1,5 +1,7 @@
-module top_module_looper(clk,rst_n);
+module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
 input clk, rst_n;
+input [15:0] extern_pc;
+input extern_pc_en;
 
 // IF output wires
 wire [63:0] pc_to_dec,inst_to_dec,recv_pc_to_dec;
@@ -136,6 +138,7 @@ wire                   mult_valid_ex_out;
 wire                   mult_free_ex_is_out;
 
 // EX_WB output wires
+wire				   reg_wrt_mul_wb_rf;
 wire [5:0]             wrt_mult_dst_pnum;
 wire [15:0]            wrt_mult_data;
 wire                   reg_wrt_alu1_wb_rf;
@@ -201,20 +204,22 @@ wire [5:0] free_preg_num3_ROB_out;
 wire [5:0] free_preg_num4_ROB_out;
 wire [2:0] free_preg_cnt_ROB_out; 
 
-
+wire jump_base_rdy_from_rf;
+assign jump_base_rdy_from_rf == (alu1_inst_pkg_is_rf_out[18:16] == 3'b101) ? 1:0;
 
 
 // implementation of all the modules
 fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
 	//input	
 	.stall_fetch(stll_ftch_out_to_IF),
-	.loop_start,
+	.loop_start(loop_strt_out_to_AL),
 	.decr_count_brnch,
-	.has_mispredict,
-	.jump_base_rdy_from_rf, 
-	.pc_recovery,
-	.jump_base_from_rf,
-	.exter_pc,exter_pc_en,
+	.has_mispredict(mis_pred_ROB_out),
+	.jump_base_rdy_from_rf(jump_base_rdy_from_rf),
+	.pc_recovery(rcvr_PC_out_ROB_out),
+	.jump_base_from_rf(alu1_op1_data_rf_out),
+	.exter_pc(extern_pc),
+	.exter_pc_en(extern_pc_en),
 	.mispred_num,
 	//output
 	.pc_to_dec(pc_to_dec),
@@ -319,11 +324,11 @@ al al_DUT(.clk(clk), .rst_n(rst_n),
 
 is is_DUT(.clk(clk), .rst_n(rst_n),
 	// Inputs
-	.inst_frm_al({inst_out_to_SCH0,inst_out_to_SCH0,inst_out_to_SCH0,inst_out_to_SCH0}), 
+	.inst_frm_al({inst_out_to_SCH3,inst_out_to_SCH2,inst_out_to_SCH1,inst_out_to_SCH0}), 
 	.fls_frm_rob(flush_ROB_out), 
 	.cmt_frm_rob(cmt_brnc_ROB_out), 
 	.fun_rdy_frm_exe({mult_free_ex_is_out,3'b111}),
-	.prg_rdy_frm_exe(), 
+	.prg_rdy_frm_exe({reg_wrt_mul_wb_rf,mult_done_idx_ex_wb_out,reg_wrt_alu1_wb_rf,alu1_done_idx_ex_wb_out,reg_wrt_alu2_wb_rf,alu2_done_idx_ex_wb_out,reg_wrt_ld_wb_out,indx_ld_wb_out}), 
 	.lop_sta(loop_strt_to_SCH), 
 	// Outputs
 	.ful_to_al(ful_to_al_is_out), 
@@ -380,9 +385,9 @@ reg_file reg_file_DUT(.clk(clk), .rst_n(rst_n),
 	.wrt_alu2_vld(reg_wrt_alu2_wb_rf), 
 	.wrt_alu2_dst_pnum(wrt_alu2_dst_pnum),
 	.wrt_alu2_data(wrt_alu2_data),
-	.wrt_addr_vld(reg_wrt_addr_wb_rf),
-	.wrt_addr_dst_pnum(wrt_addr_dst_pnum),
-	.wrt_addr_data(wrt_addr_data)
+	.wrt_addr_vld(reg_wrt_ld_wb_out),
+	.wrt_addr_dst_pnum(phy_addr_ld_wb_out),
+	.wrt_addr_data(data_ld_wb_out)
 );
 
 RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n),
