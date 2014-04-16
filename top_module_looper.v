@@ -23,22 +23,23 @@ wire loop_strt_id_al_out,
 
 // AL output wires
 wire [55:0] inst_out_to_SCH0,inst_out_to_SCH1,inst_out_to_SCH2,inst_out_to_SCH3;
-wire 	      no_empt_preg_to_IF;
+wire 	    no_empt_preg_to_IF;
 wire [63:0] rcvr_pc_to_CMT;
-wire [3:0]  reg_wrt_to_CMT,st_en_to_CMT,spec_to_CMT;
+wire [3:0]  reg_wrt_to_CMT,st_en_to_CMT,ld_en_to_CMT,spec_to_CMT;
 wire [7:0]  brch_mode_to_CMT;
 wire [3:0]  brch_pred_res_to_CMT;
 wire [31:0] ld_indx_to_WB,st_indx_to_WB;
-wire 	      all_nop_to_CMTIS;
+wire 	    all_nop_to_CMTIS;
 wire [1:0]  lbd_state_out_to_SCH;
-wire 	      fnsh_unrll_out_to_SCH;
-wire 	      loop_strt_to_SCH;
+wire 	    fnsh_unrll_out_to_SCH;
+wire 	    loop_strt_to_SCH;
 
 // IS output wires
-    input  [65:0]          mult_inst_pkg_in,// INCORRECT HERE !!!!!!!!!!!!!!!
-    input  [65:0]          alu1_inst_pkg_in,// INCORRECT HERE !!!!!!!!!!!!!!!
-    input  [65:0]          alu2_inst_pkg_in,// INCORRECT HERE !!!!!!!!!!!!!!!
-    input  [65:0]           addr_inst_pkg_in,// INCORRECT HERE !!!!!!!!!!!!!!!
+wire ful_to_al(ful_to_al_is_out), 
+wire [65:0] mul_ins_to_rf(mul_ins_to_rf_is_out), 
+wire [65:0] alu1_ins_to_rf(alu1_ins_to_rf_is_out), 
+wire [65:0] alu2_ins_to_rf(alu2_ins_to_rf_is_out),
+wire [65:0] adr_ins_to_rf(adr_ins_to_rf_is_out), 
 
 // IS_RF output wires
 wire [65:0] mult_inst_pkg_is_rf_out,
@@ -147,6 +148,30 @@ wire                   reg_wrt_addr_wb_rf;
 wire [5:0]             wrt_addr_dst_pnum;
 wire [15:0]            wrt_addr_data;
 
+wire [15:0]            data_str_ex_wb_out;
+wire mult_valid_wb_ex_wb_out;
+wire mult_free_ex_wb_out;
+
+wire alu1_mem_wrt_ex_wb_out; //?
+wire alu2_mem_wrt_ex_wb_out; //?
+wire mult_mem_wrt_ex_wb_out; //?
+wire addr_mem_wrt_ex_wb_out; //
+
+wire alu1_mem_rd_ex_wb_out; //?
+wire alu2_mem_rd_ex_wb_out; //?
+wire mult_mem_rd_ex_wb_out; //?
+wire addr_mem_rd_ex_wb_out; //
+
+wire alu1_done_vld_ex_wb_out;
+wire alu2_done_vld_ex_wb_out;
+wire mult_done_vld_ex_wb_out;
+wire addr_done_vld_ex_wb_out;
+ 
+wire [5:0] alu1_done_idx_ex_wb_out;
+wire [5:0] alu2_done_idx_ex_wb_out;
+wire [5:0] mult_done_idx_ex_wb_out;
+wire [5:0] addr_done_idx_ex_wb_out;
+
 // WB output wires
 wire stll_wb_out;
 wire vld_ld_wb_out;
@@ -175,6 +200,9 @@ wire [5:0] free_preg_num2_ROB_out;
 wire [5:0] free_preg_num3_ROB_out;
 wire [5:0] free_preg_num4_ROB_out;
 wire [2:0] free_preg_cnt_ROB_out; 
+
+
+
 
 // implementation of all the modules
 fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
@@ -212,7 +240,7 @@ ID_top ID_top_DUT(.clk(clk), .rst(~rst_n),
 	// input
 	.inst_in_frm_IF(inst_if_id_out),
 	.pc_in_frm_IF(pc_if_id_out),
-	.mis_pred_in_frm_ROB,
+	.mis_pred_in_frm_ROB(mis_pred_ROB_out),
 	.recv_pc_in_frm_IF(recv_pc_if_id_out),
 	.pred_result_frm_IF(pred_result_if_id_out),
 
@@ -262,7 +290,7 @@ al al_DUT(.clk(clk), .rst_n(rst_n),
 	.lbd_state_out_from_ID(lbd_state_id_al_out), 
 	.fnsh_unrll_out_from_ID(fnsh_unrll_id_al_out), 
 	.loop_strt_from_ID(loop_strt_id_al_out),
-	.full_signal_from_SCH, 
+	.full_signal_from_SCH(ful_to_al_is_out), 
 	.mis_pred_from_CMT, 
 	.mis_pred_indx_from_CMT,
 	.cmt_brch_from_CMT, 
@@ -277,6 +305,7 @@ al al_DUT(.clk(clk), .rst_n(rst_n),
 	.rcvr_pc_to_CMT(rcvr_pc_to_CMT),
 	.reg_wrt_to_CMT(reg_wrt_to_CMT), 
 	.st_en_to_CMT(st_en_to_CMT), 
+	.ld_en_to_CMT(ld_en_to_CMT), 
 	.spec_to_CMT(spec_to_CMT), 
 	.brch_mode_to_CMT(brch_mode_to_CMT),
 	.brch_pred_res_to_CMT(brch_pred_res_to_CMT), 
@@ -288,18 +317,28 @@ al al_DUT(.clk(clk), .rst_n(rst_n),
 	.loop_strt_to_SCH(loop_strt_to_SCH)
 );
 
-/*************************************************/
-/*************************************************/
-/***** Lack of the IS top module here ************/
-/*************************************************/
-/*************************************************/
+is is_DUT(.clk(clk), .rst_n(rst_n),
+	// Inputs
+	.inst_frm_al({inst_out_to_SCH0,inst_out_to_SCH0,inst_out_to_SCH0,inst_out_to_SCH0}), 
+	.fls_frm_rob(flush_ROB_out), 
+	.cmt_frm_rob(cmt_brnc_ROB_out), 
+	.fun_rdy_frm_exe({mult_free_ex_is_out,3'b111}),
+	.prg_rdy_frm_exe(), 
+	.lop_sta(loop_strt_to_SCH), 
+	// Outputs
+	.ful_to_al(ful_to_al_is_out), 
+	.mul_ins_to_rf(mul_ins_to_rf_is_out), 
+	.alu1_ins_to_rf(alu1_ins_to_rf_is_out), 
+	.alu2_ins_to_rf(alu2_ins_to_rf_is_out),
+	.adr_ins_to_rf(adr_ins_to_rf_is_out) 
+);
 
 IS_RF IS_RF(.clk(clk), .rst_n(rst_n),
 	// Inputs
-	.mult_inst_pkg_in(),
-	.alu1_inst_pkg_in(),
-	.alu2_inst_pkg_in(),
-	.addr_inst_pkg_in(),
+	.mult_inst_pkg_in(mul_ins_to_rf_is_out),
+	.alu1_inst_pkg_in(alu1_ins_to_rf_is_out),
+	.alu2_inst_pkg_in(alu2_ins_to_rf_is_out),
+	.addr_inst_pkg_in(adr_ins_to_rf_is_out),
 	// Outputs
 	.mult_inst_pkg_out(mult_inst_pkg_is_rf_out),
 	.alu1_inst_pkg_out(alu1_inst_pkg_is_rf_out),
@@ -597,8 +636,8 @@ EX_WB EX_WB_DUT(.clk(clk), .rst_n(rst_n),
 );
 
 top_level_wb top_level_WB_DUT(.clk(clk), .rst(~rst_n),
-	// Inputs								// WHERE ARE ALL THESE COMMING FROM?
-	.flsh(flsh_ROB_out),
+	// Inputs
+	.flsh(flush_ROB_out),
 	.mem_rd(addr_mem_rd_ex_wb_out), 
 	.cmmt_str(cmmt_st_ROB_out), 
 	.mem_wrt(addr_mem_wrt_ex_wb_out), 
@@ -627,50 +666,50 @@ top_level_wb top_level_WB_DUT(.clk(clk), .rst(~rst_n),
 rob rob_DUT(.clk(clk), .rst_n(rst_n),
     // Inputs 
     // from AL
-    .all_nop(),
-    .st_in(),
-    .ld_in(),
-    .brnc_in(),
-    .brnc_cond(),
-    .brnc_pred(),
-    .rcvr_PC(),
-    .reg_wrt_in(),
-    .loop_strt(),
+    .all_nop(all_nop_to_CMTIS),
+    .st_in(st_en_to_CMT),
+    .ld_in(ld_en_to_CMT),
+    .brnc_in(spec_to_CMT),
+    .brnc_cond(brch_mode_to_CMT),
+    .brnc_pred(brch_pred_res_to_CMT),
+    .rcvr_PC(rcvr_pc_to_CMT),
+    .reg_wrt_in(reg_wrt_to_CMT),
+    .loop_strt(loop_strt_to_SCH),
 
     // from IS Issue Queue
-    .mult_inst_vld(),
-    .mult_reg_wrt(),
-    .mult_idx(),
-    .mult_free_preg_num(),
-    .alu1_inst_vld(),
-    .alu1_reg_wrt(),
-    .alu1_idx(),
-    .alu1_free_preg_num(),
-    .alu2_inst_vld(),
-    .alu2_reg_wrt(),
-    .alu2_idx(),
-    .alu2_free_preg_num(),
-    .addr_inst_vld(),
-    .addr_reg_wrt(),
-    .addr_idx(),
-    .addr_free_preg_num(),
+    .mult_inst_vld(mul_ins_to_rf_is_out[65]),
+    .mult_reg_wrt(mul_ins_to_rf_is_out[6]),
+    .mult_idx(mul_ins_to_rf_is_out[64:59]),
+    .mult_free_preg_num(mul_ins_to_rf_is_out[5:0]),
+    .alu1_inst_vld(alu1_ins_to_rf_is_out[65]),
+    .alu1_reg_wrt(alu1_ins_to_rf_is_out[6]),
+    .alu1_idx(alu1_ins_to_rf_is_out[64:59]),
+    .alu1_free_preg_num(alu1_ins_to_rf_is_out[5:0]),
+    .alu2_inst_vld(alu2_ins_to_rf_is_out[65]),
+    .alu2_reg_wrt(alu2_ins_to_rf_is_out[6]),
+    .alu2_idx(alu2_ins_to_rf_is_out[64:59]),
+    .alu2_free_preg_num(alu2_ins_to_rf_is_out[5:0]),
+    .addr_inst_vld(adr_ins_to_rf_is_out[65]),
+    .addr_reg_wrt(adr_ins_to_rf_is_out[6]),
+    .addr_idx(adr_ins_to_rf_is_out[64:59]),
+    .addr_free_preg_num(adr_ins_to_rf_is_out[5:0]),
 
     // from EX/WB pipeline regs
-    .mult_done_idx(),
-    .alu1_done_idx(),
-    .alu2_done_idx(),
-    .mult_done_vld(),
-    .alu1_done_vld(),
-    .alu2_done_vld(),
+    .mult_done_idx(mult_done_idx_ex_wb_out),
+    .alu1_done_idx(alu1_done_idx_ex_wb_out),
+    .alu2_done_idx(alu2_done_idx_ex_wb_out),
+    .mult_done_vld(mult_done_vld_ex_wb_out),
+    .alu1_done_vld(alu1_done_vld_ex_wb_out),
+    .alu2_done_vld(alu2_done_vld_ex_wb_out),
 
     // from RF
-    .brnc_idx(),
-    .brnc_cmp_rslt(),
+    .brnc_idx(alu1_ins_to_rf_is_out[64:59]),
+    .brnc_cmp_rslt(brn_cmp_rslt_rf_out),
 
     // from WB
-    .ld_done_idx(),
-    .ld_done_vld(), 
-    .st_iss(), 
+    .ld_done_idx(indx_ld_wb_out),
+    .ld_done_vld(vld_ld_wb_out), 
+    .st_iss(str_iss_wb_out), 
 
     // Outputs
     .next_idx(next_idx_ROB_out),// to Allocation
