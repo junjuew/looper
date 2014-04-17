@@ -18,7 +18,7 @@ module imemory(
 	
 	
 	initial begin
-      $readmemb("IM.mif", mem); // IM.mif is memory file
+      $readmemb("j1_mif.mif", mem); // IM.mif is memory file
    end
 	
 	

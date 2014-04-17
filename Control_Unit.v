@@ -28,7 +28,7 @@ module Control_Unit(
 	output reg		LDI_out, MemRd_out, MemWr_out, invRt_out, Rs_v_out, Rd_v_out, Rt_v_out, im_v_out, RegWr_out, jmp_v_out;
 	output reg	[1:0]	brn_out;
 	output reg	[1:0]	jmp_out;
-	output reg	[3:0]	ALU_ctrl_out;
+	output reg	[2:0]	ALU_ctrl_out;
 	
 	always @(opco_in, jmp_off_in)
 		begin
