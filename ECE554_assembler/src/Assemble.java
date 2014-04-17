@@ -59,12 +59,12 @@ class Assemble {
                    new Hashtable<String, Integer>();
 
         if (args.length != 4) {
-            System.err.println("Usage: java Assemble <file> <outfile> -m <coe or lst>");
+            System.err.println("Usage: java Assemble <file> <outfile> -m <coe or lst or mif>");
             System.exit(-1);
         }
         
-        if (!args[2].equals("-m") || (!args[3].equals("lst") && !args[3].equals("coe"))){
-            System.err.println("Usage: java Assemble <file> <outfile> -m <coe or lst>");
+        if (!args[2].equals("-m") || (!args[3].equals("lst") && !args[3].equals("coe") && !args[3].equals("mif"))){
+            System.err.println("Usage: java Assemble <file> <outfile> -m <coe or lst or mif>");
             System.exit(-1);
         }
 
@@ -78,8 +78,10 @@ class Assemble {
         String listFileName = "";
         if (args[3].equals("lst")){
         	listFileName = args[1] + "_lst.lst";
-        }else{
+        }else if (args[3].equals("coe")){
         	listFileName = args[1] + "_coe.coe";
+        }else {
+        	listFileName = args[1] + "_mif.mif";
         }
         try {
                 listOut = new PrintWriter(listFileName);
@@ -229,6 +231,7 @@ class Assemble {
         mem3out.println("@0"); // tell memory 3 to start at 0*/
 
     String instr4String = "";
+    String instr4StringBinary = "";
     int count = 0;
     if (option.equals("coe")){
         listOut.println("memory_initialization_radix=16;");
@@ -383,7 +386,7 @@ class Assemble {
 		    listOut.print("PC: " + PCstring + " ");
 		    listOut.print("Binary: " + instrString + " " + "Hex: " + instrStringHex + " ");
 		    listOut.println(l.srcLine);
-	    }else{
+	    }else if (option.equals("coe")){
 	    	instr4String += instrStringHex;
 	    	if (count % 4 == 3){
 	    		if (i != sourceLineID - 1){
@@ -405,6 +408,25 @@ class Assemble {
 	    		}
 	    		listOut.println(instr4String);
 	    		instr4String = "";
+	    	}
+	    	count ++;
+	    }else{
+	    	instr4StringBinary += instrString;
+	    	if (i == sourceLineID - 1){
+	    		if (count % 4 == 0){
+	    			instr4StringBinary  += "000000000000000000000000000000000000000000000000";
+	    			count = count + 3;
+	    		}else if (count % 4 == 1){
+	    			instr4StringBinary  += "00000000000000000000000000000000";
+	    			count = count + 2;
+	    		}else if (count % 4 == 2){
+	    			instr4StringBinary  += "0000000000000000";
+	    			count = count + 1;
+	    		}
+	    	}
+	    	if (count % 4 == 3){
+	    		listOut.println(instr4StringBinary);
+	    		instr4StringBinary = "";
 	    	}
 	    	count ++;
 	    }
