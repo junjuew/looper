@@ -19,9 +19,9 @@ wire loop_strt_out_to_AL;
 
 // ID_AL output wires
 wire [65:0] inst0_id_al_out, inst1_id_al_out, inst2_id_al_out, inst3_id_al_out;
-wire [1:0] lbd_state_id_al_out,
-wire fnsh_unrll_id_al_out,
-wire loop_strt_id_al_out,
+wire [1:0] lbd_state_id_al_out;
+wire fnsh_unrll_id_al_out;
+wire loop_strt_id_al_out;
 
 // AL output wires
 wire [55:0] inst_out_to_SCH0,inst_out_to_SCH1,inst_out_to_SCH2,inst_out_to_SCH3;
@@ -37,17 +37,17 @@ wire 	    fnsh_unrll_out_to_SCH;
 wire 	    loop_strt_to_SCH;
 
 // IS output wires
-wire ful_to_al(ful_to_al_is_out), 
-wire [65:0] mul_ins_to_rf(mul_ins_to_rf_is_out), 
-wire [65:0] alu1_ins_to_rf(alu1_ins_to_rf_is_out), 
-wire [65:0] alu2_ins_to_rf(alu2_ins_to_rf_is_out),
-wire [65:0] adr_ins_to_rf(adr_ins_to_rf_is_out), 
+wire ful_to_al_is_out;
+wire [65:0] mul_ins_to_rf_is_out;
+wire [65:0] alu1_ins_to_rf_is_out; 
+wire [65:0] alu2_ins_to_rf_is_out;
+wire [65:0] adr_ins_to_rf_is_out;
 
 // IS_RF output wires
-wire [65:0] mult_inst_pkg_is_rf_out,
-wire [65:0] alu1_inst_pkg_is_rf_out,
-wire [65:0] alu2_inst_pkg_is_rf_out, 
-wire [65:0] addr_inst_pkg_is_rf_out,
+wire [65:0] mult_inst_pkg_is_rf_out;
+wire [65:0] alu1_inst_pkg_is_rf_out;
+wire [65:0] alu2_inst_pkg_is_rf_out; 
+wire [65:0] addr_inst_pkg_is_rf_out;
 
 // RF output wires
 wire   [15:0]          mult_op1_data_rf_out;
@@ -205,7 +205,7 @@ wire [5:0] free_preg_num4_ROB_out;
 wire [2:0] free_preg_cnt_ROB_out; 
 
 wire jump_base_rdy_from_rf;
-assign jump_base_rdy_from_rf == (alu1_inst_pkg_is_rf_out[18:16] == 3'b101) ? 1:0;
+assign jump_base_rdy_from_rf = (alu1_inst_pkg_is_rf_out[18:16] == 3'b101) ? 1:0;
 
 
 // implementation of all the modules
@@ -282,25 +282,25 @@ ID_AL ID_AL_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 
 al al_DUT(.clk(clk), .rst_n(rst_n),
 	// Inputs
-	.free_pr_from_SCH0, 
-	.free_pr_from_SCH1, 
-	.free_pr_from_SCH2,
-	.free_pr_from_SCH3, 
+	.free_pr_from_SCH0(free_preg_num1_ROB_out), 
+	.free_pr_from_SCH1(free_preg_num2_ROB_out), 
+	.free_pr_from_SCH2(free_preg_num3_ROB_out),
+	.free_pr_from_SCH3(free_preg_num4_ROB_out), 
 	.inst_from_ID0(inst0_id_al_out), 
 	.inst_from_ID1(inst1_id_al_out), 
 	.inst_from_ID2(inst2_id_al_out),
 	.inst_from_ID3(inst3_id_al_out), 
-	.nxt_indx_from_CMT,
-	.stall, 
+	.nxt_indx_from_CMT(next_idx_ROB_out),
+	.stall(rob_full_stll_ROB_out), 
 	.lbd_state_out_from_ID(lbd_state_id_al_out), 
 	.fnsh_unrll_out_from_ID(fnsh_unrll_id_al_out), 
 	.loop_strt_from_ID(loop_strt_id_al_out),
 	.full_signal_from_SCH(ful_to_al_is_out), 
-	.mis_pred_from_CMT, 
-	.mis_pred_indx_from_CMT,
-	.cmt_brch_from_CMT, 
-	.cmt_brch_indx_from_CMT,
-	.free_pr_num_from_CMT,
+	.mis_pred_from_CMT(mis_pred_ROB_out), 
+	.mis_pred_indx_from_CMT(mis_pred_brnc_idx_ROB_out),
+	.cmt_brch_from_CMT(cmt_brnc_ROB_out), 
+	.cmt_brch_indx_from_CMT(cmt_brnc_idx_ROB_out),
+	.free_pr_num_from_CMT(free_preg_cnt_ROB_out),
 	// Outputs
 	.inst_out_to_SCH0(inst_out_to_SCH0), 
 	.inst_out_to_SCH1(inst_out_to_SCH1), 
