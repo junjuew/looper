@@ -128,9 +128,9 @@ wire BsJmp3=disable_ins?0:(instruction3[15:12]==4'b1111)&&(instruction3[0]==1);
    (ImJmp3?(pc+1+{{6{instruction3[11]}},instruction3[11:2]}):16'b0)))))));*/
 wire [15:0] ImJmp_addr;
 assign ImJmp_addr=(ImJmp0?(pc+1+{{6{instruction0[11]}},instruction0[11:2]}):
-   (ImJmp1?(pc+1+{{6{instruction1[11]}},instruction1[11:2]}):
-   (ImJmp2?(pc+1+{{6{instruction2[11]}},instruction2[11:2]}):
-   (ImJmp3?(pc+1+{{6{instruction3[11]}},instruction3[11:2]}):16'b0))));
+   (ImJmp1?(pc+2+{{6{instruction1[11]}},instruction1[11:2]}):
+   (ImJmp2?(pc+3+{{6{instruction2[11]}},instruction2[11:2]}):
+   (ImJmp3?(pc+4+{{6{instruction3[11]}},instruction3[11:2]}):16'b0))));
 always@(posedge clk or negedge rst_n)begin
    if(!rst_n)
       jump_addr_pc<=16'b0;
