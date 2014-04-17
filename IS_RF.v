@@ -5,15 +5,15 @@ module IS_RF (
     input  [65:0]          mult_inst_pkg_in,             // pc_to_dec
     input  [65:0]          alu1_inst_pkg_in,           // inst_to_dec
     input  [65:0]          alu2_inst_pkg_in,        // recv_pc_to_dec
-    input  [65:0]           addr_inst_pkg_in,    // pred_result_to_dec
-
+    input  [65:0]          addr_inst_pkg_in,    // pred_result_to_dec
+    input                  stall,
 
 
 
     output [65:0]          mult_inst_pkg_out,             // pc_to_dec
     output [65:0]          alu1_inst_pkg_out,           // inst_to_dec
     output [65:0]          alu2_inst_pkg_out,        // recv_pc_to_dec
-    output [65:0]           addr_inst_pkg_out,    // pred_result_to_dec
+    output [65:0]           addr_inst_pkg_out    // pred_result_to_dec
 );
     
     wire enable;   // ~stall

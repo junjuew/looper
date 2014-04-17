@@ -212,7 +212,9 @@
    generate
       genvar prv_map_i;
       for (prv_map_i =0 ; prv_map_i<16; prv_map_i=prv_map_i+1)
+      begin
         assign idi_map[prv_map_i][6:0]=prv_map[7 * (prv_map_i+1)-1: 7*prv_map_i];
+    end
    endgenerate
    
    /////////////////////////////////////

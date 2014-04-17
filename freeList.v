@@ -76,9 +76,11 @@ module freeList(/*autoarg*/
    generate
       genvar 	     fifo_en_i;
       for(fifo_en_i = 0; fifo_en_i < 64; fifo_en_i = fifo_en_i + 1)
+      begin
 	assign list_commit_en[fifo_en_i] = (cmt_pos[5:0] > cmt_ptr[5:0]) ? (((fifo_en_i >= cmt_ptr[5:0]) && (fifo_en_i < cmt_pos[5:0])) ? 1:0):
 					   (cmt_pos[5:0] < cmt_ptr[5:0]) ? (((fifo_en_i >= cmt_ptr[5:0]) || (fifo_en_i < cmt_pos[5:0])) ? 1:0):
 					   0;
+		end
    endgenerate
 
    

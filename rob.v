@@ -628,7 +628,7 @@ ROB per entry:
             end
             else if ((!all_nop) && 
                     ((rob_st_idx == rob_tail + 2) || (rob_st_idx == (rob_tail-62)))) begin
-                rob_st    [rob_st_idx] <= (st_in[2]) ? 1:0
+                rob_st    [rob_st_idx] <= (st_in[2]) ? 1:0;
                 rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 3
                                         : (st_in[2:0] == 3'b011) ? rob_st_cntr + 2
                                         : (st_in[2:0] == 3'b110) ? rob_st_cntr + 2
