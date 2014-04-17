@@ -13,137 +13,137 @@
 //                      stall signal need to be reconsidered
 //////////////////////////////////////////////////////////////////////////////////
 module RF_EX (
-    input clk, 
-    input rst_n,
-    
-    input  [15:0]          alu1_op1_rf_ex_in, //
-    input  [15:0]          alu1_op2_rf_ex_in, //
-    input  [15:0]          alu2_op1_rf_ex_in, //
-    input  [15:0]          alu2_op2_rf_ex_in, //
-    input  [15:0]          mult_op1_rf_ex_in, //
-    input  [15:0]          mult_op2_rf_ex_in, //
-    input  [15:0]          addr_op1_rf_ex_in, //
-    input  [15:0]          data_str_rf_ex_in, //
+    input 	  clk, 
+    input 	  rst_n,
+    input 	  stall,
+    input [15:0]  alu1_op1_rf_ex_in, //
+    input [15:0]  alu1_op2_rf_ex_in, //
+    input [15:0]  alu2_op1_rf_ex_in, //
+    input [15:0]  alu2_op2_rf_ex_in, //
+    input [15:0]  mult_op1_rf_ex_in, //
+    input [15:0]  mult_op2_rf_ex_in, //
+    input [15:0]  addr_op1_rf_ex_in, //
+    input [15:0]  data_str_rf_ex_in, //
 
-    input  [15:0]          alu1_imm_rf_ex_in, //
-    input  [15:0]          alu2_imm_rf_ex_in, //
-    input  [15:0]          mult_imm_rf_ex_in, //
-    input  [15:0]          addr_imm_rf_ex_in, //
-    input                  alu1_imm_vld_rf_ex_in, //
-    input                  alu2_imm_vld_rf_ex_in, //
-    input                  mult_imm_vld_rf_ex_in, //
-    input                  addr_imm_vld_rf_ex_in, //
+    input [15:0]  alu1_imm_rf_ex_in, //
+    input [15:0]  alu2_imm_rf_ex_in, //
+    input [15:0]  mult_imm_rf_ex_in, //
+    input [15:0]  addr_imm_rf_ex_in, //
+    input 	  alu1_imm_vld_rf_ex_in, //
+    input 	  alu2_imm_vld_rf_ex_in, //
+    input 	  mult_imm_vld_rf_ex_in, //
+    input 	  addr_imm_vld_rf_ex_in, //
 
-    input                  alu1_inst_vld_rf_ex_in, //
-    input                  alu2_inst_vld_rf_ex_in, //
-    input                  mult_inst_vld_rf_ex_in, //
-    input                  addr_inst_vld_rf_ex_in, //
+    input 	  alu1_inst_vld_rf_ex_in, //
+    input 	  alu2_inst_vld_rf_ex_in, //
+    input 	  mult_inst_vld_rf_ex_in, //
+    input 	  addr_inst_vld_rf_ex_in, //
 
-    input                  alu1_mem_wrt_rf_ex_in, //
-    input                  alu2_mem_wrt_rf_ex_in, //
-    input                  mult_mem_wrt_rf_ex_in, //
-    input                  addr_mem_wrt_rf_ex_in, //
+    input 	  alu1_mem_wrt_rf_ex_in, //
+    input 	  alu2_mem_wrt_rf_ex_in, //
+    input 	  mult_mem_wrt_rf_ex_in, //
+    input 	  addr_mem_wrt_rf_ex_in, //
 
-    input                  alu1_mem_rd_rf_ex_in, //
-    input                  alu2_mem_rd_rf_ex_in, //
-    input                  mult_mem_rd_rf_ex_in, //
-    input                  addr_mem_rd_rf_ex_in, //
+    input 	  alu1_mem_rd_rf_ex_in, //
+    input 	  alu2_mem_rd_rf_ex_in, //
+    input 	  mult_mem_rd_rf_ex_in, //
+    input 	  addr_mem_rd_rf_ex_in, //
 
-    input                  alu1_ldi_rf_ex_in, // 
-    input                  alu2_ldi_rf_ex_in, //
-    input                  mult_ldi_rf_ex_in, // 
-    input                  addr_ldi_rf_ex_in, // 
+    input 	  alu1_ldi_rf_ex_in, // 
+    input 	  alu2_ldi_rf_ex_in, //
+    input 	  mult_ldi_rf_ex_in, // 
+    input 	  addr_ldi_rf_ex_in, // 
 
-    input  [2:0]           alu1_mode_rf_ex_in,
-    input  [2:0]           alu2_mode_rf_ex_in,
+    input [2:0]   alu1_mode_rf_ex_in,
+    input [2:0]   alu2_mode_rf_ex_in,
 
-    input  [5:0]           alu1_done_idx_rf_ex_in, // 
-    input  [5:0]           alu2_done_idx_rf_ex_in, // 
-    input  [5:0]           mult_done_idx_rf_ex_in, //
-    input  [5:0]           addr_done_idx_rf_ex_in, //
+    input [5:0]   alu1_done_idx_rf_ex_in, // 
+    input [5:0]   alu2_done_idx_rf_ex_in, // 
+    input [5:0]   mult_done_idx_rf_ex_in, //
+    input [5:0]   addr_done_idx_rf_ex_in, //
 
-    input  [5:0]           phy_addr_alu1_rf_ex_in, //
-    input  [5:0]           phy_addr_alu2_rf_ex_in, //
-    input  [5:0]           phy_addr_mult_rf_ex_in, //
-    input  [5:0]           phy_addr_ld_rf_ex_in, //
+    input [5:0]   phy_addr_alu1_rf_ex_in, //
+    input [5:0]   phy_addr_alu2_rf_ex_in, //
+    input [5:0]   phy_addr_mult_rf_ex_in, //
+    input [5:0]   phy_addr_ld_rf_ex_in, //
 
-    input                  reg_wrt_mul_rf_ex_in, //
-    input                  reg_wrt_alu1_rf_ex_in, //
-    input                  reg_wrt_alu2_rf_ex_in, //
-    input                  reg_wrt_ld_rf_ex_in, //
+    input 	  reg_wrt_mul_rf_ex_in, //
+    input 	  reg_wrt_alu1_rf_ex_in, //
+    input 	  reg_wrt_alu2_rf_ex_in, //
+    input 	  reg_wrt_ld_rf_ex_in, //
 
-    input                  alu1_invtRt_rf_ex_in, //
-    input                  alu2_invtRt_rf_ex_in, //
-    input                  mult_invtRt_rf_ex_in, //
-    input                  addr_invtRt_rf_ex_in, //
+    input 	  alu1_invtRt_rf_ex_in, //
+    input 	  alu2_invtRt_rf_ex_in, //
+    input 	  mult_invtRt_rf_ex_in, //
+    input 	  addr_invtRt_rf_ex_in, //
 
 
 
-    output  [15:0]         alu1_op1_rf_ex_out,
-    output  [15:0]         alu1_op2_rf_ex_out,
-    output  [15:0]         alu2_op1_rf_ex_out,
-    output  [15:0]         alu2_op2_rf_ex_out,
-    output  [15:0]         mult_op1_rf_ex_out,
-    output  [15:0]         mult_op2_rf_ex_out,
-    output  [15:0]         addr_op1_rf_ex_out,
-    output  [15:0]         data_str_rf_ex_out,
+    output [15:0] alu1_op1_rf_ex_out,
+    output [15:0] alu1_op2_rf_ex_out,
+    output [15:0] alu2_op1_rf_ex_out,
+    output [15:0] alu2_op2_rf_ex_out,
+    output [15:0] mult_op1_rf_ex_out,
+    output [15:0] mult_op2_rf_ex_out,
+    output [15:0] addr_op1_rf_ex_out,
+    output [15:0] data_str_rf_ex_out,
 
-    output  [15:0]         alu1_imm_rf_ex_out,
-    output  [15:0]         alu2_imm_rf_ex_out,
-    output  [15:0]         mult_imm_rf_ex_out,
-    output  [15:0]         addr_imm_rf_ex_out,
-    output                 alu1_imm_vld_rf_ex_out,
-    output                 alu2_imm_vld_rf_ex_out,
-    output                 mult_imm_vld_rf_ex_out,
-    output                 addr_imm_vld_rf_ex_out,
+    output [15:0] alu1_imm_rf_ex_out,
+    output [15:0] alu2_imm_rf_ex_out,
+    output [15:0] mult_imm_rf_ex_out,
+    output [15:0] addr_imm_rf_ex_out,
+    output 	  alu1_imm_vld_rf_ex_out,
+    output 	  alu2_imm_vld_rf_ex_out,
+    output 	  mult_imm_vld_rf_ex_out,
+    output 	  addr_imm_vld_rf_ex_out,
 
-    output                 alu1_inst_vld_rf_ex_out, //
-    output                 alu2_inst_vld_rf_ex_out, //
-    output                 mult_inst_vld_rf_ex_out, //
-    output                 addr_inst_vld_rf_ex_out, //
+    output 	  alu1_inst_vld_rf_ex_out, //
+    output 	  alu2_inst_vld_rf_ex_out, //
+    output 	  mult_inst_vld_rf_ex_out, //
+    output 	  addr_inst_vld_rf_ex_out, //
 
-    output                 alu1_mem_wrt_rf_ex_out, //
-    output                 alu2_mem_wrt_rf_ex_out, //
-    output                 mult_mem_wrt_rf_ex_out, //
-    output                 addr_mem_wrt_rf_ex_out, //
+    output 	  alu1_mem_wrt_rf_ex_out, //
+    output 	  alu2_mem_wrt_rf_ex_out, //
+    output 	  mult_mem_wrt_rf_ex_out, //
+    output 	  addr_mem_wrt_rf_ex_out, //
 
-    output                 alu1_mem_rd_rf_ex_out,
-    output                 alu2_mem_rd_rf_ex_out,
-    output                 mult_mem_rd_rf_ex_out,
-    output                 addr_mem_rd_rf_ex_out,
+    output 	  alu1_mem_rd_rf_ex_out,
+    output 	  alu2_mem_rd_rf_ex_out,
+    output 	  mult_mem_rd_rf_ex_out,
+    output 	  addr_mem_rd_rf_ex_out,
 
-    output                 alu1_en_rf_ex_out,
-    output                 alu2_en_rf_ex_out,
-    output                 mult_en_rf_ex_out, 
-    output                 addr_en_rf_ex_out,
+    output 	  alu1_en_rf_ex_out,
+    output 	  alu2_en_rf_ex_out,
+    output 	  mult_en_rf_ex_out, 
+    output 	  addr_en_rf_ex_out,
 
-    output                 alu1_ldi_rf_ex_out, 
-    output                 alu2_ldi_rf_ex_out, 
-    output                 mult_ldi_rf_ex_out, 
-    output                 addr_ldi_rf_ex_out, 
+    output 	  alu1_ldi_rf_ex_out, 
+    output 	  alu2_ldi_rf_ex_out, 
+    output 	  mult_ldi_rf_ex_out, 
+    output 	  addr_ldi_rf_ex_out, 
 
-    output  [2:0]          alu1_mode_rf_ex_out,
-    output  [2:0]          alu2_mode_rf_ex_out,
+    output [2:0]  alu1_mode_rf_ex_out,
+    output [2:0]  alu2_mode_rf_ex_out,
 
-    output  [5:0]          alu1_done_idx_rf_ex_out,
-    output  [5:0]          alu2_done_idx_rf_ex_out,
-    output  [5:0]          mult_done_idx_rf_ex_out,
-    output  [5:0]          addr_done_idx_rf_ex_out,
+    output [5:0]  alu1_done_idx_rf_ex_out,
+    output [5:0]  alu2_done_idx_rf_ex_out,
+    output [5:0]  mult_done_idx_rf_ex_out,
+    output [5:0]  addr_done_idx_rf_ex_out,
 
-    output  [5:0]          phy_addr_alu1_rf_ex_out,
-    output  [5:0]          phy_addr_alu2_rf_ex_out,
-    output  [5:0]          phy_addr_mult_rf_ex_out,
-    output  [5:0]          phy_addr_ld_rf_ex_out,
+    output [5:0]  phy_addr_alu1_rf_ex_out,
+    output [5:0]  phy_addr_alu2_rf_ex_out,
+    output [5:0]  phy_addr_mult_rf_ex_out,
+    output [5:0]  phy_addr_ld_rf_ex_out,
 
-    output                 reg_wrt_mul_rf_ex_out,
-    output                 reg_wrt_alu1_rf_ex_out,
-    output                 reg_wrt_alu2_rf_ex_out,
-    output                 reg_wrt_ld_rf_ex_out,
+    output 	  reg_wrt_mul_rf_ex_out,
+    output 	  reg_wrt_alu1_rf_ex_out,
+    output 	  reg_wrt_alu2_rf_ex_out,
+    output 	  reg_wrt_ld_rf_ex_out,
 
-    output                 alu1_invtRt_rf_ex_out,
-    output                 alu2_invtRt_rf_ex_out,
-    output                 mult_invtRt_rf_ex_out,
-    output                 addr_invtRt_rf_ex_out
+    output 	  alu1_invtRt_rf_ex_out,
+    output 	  alu2_invtRt_rf_ex_out,
+    output 	  mult_invtRt_rf_ex_out,
+    output 	  addr_invtRt_rf_ex_out
 
 );
     
@@ -166,10 +166,10 @@ module RF_EX (
     rf_enable addr_imm     [15:0]    ( .q(addr_imm_rf_ex_out), .d(addr_imm_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
 
     //imm valid
-    rf_enable alu1_imm_vld           ( .q(alu1_imm_rf_ex_out), .d(alu1_imm_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
-    rf_enable alu2_imm_vld           ( .q(alu2_imm_rf_ex_out), .d(alu2_imm_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
-    rf_enable mult_imm_vld           ( .q(mult_imm_rf_ex_out), .d(mult_imm_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
-    rf_enable addr_imm_vld           ( .q(addr_imm_rf_ex_out), .d(addr_imm_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
+    rf_enable alu1_imm_vld           ( .q(alu1_imm_vld_rf_ex_out), .d(alu1_imm_vld_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
+   rf_enable alu2_imm_vld           ( .q(alu2_imm_vld_rf_ex_out), .d(alu2_imm_vld_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
+    rf_enable mult_imm_vld           ( .q(mult_imm_vld_rf_ex_out), .d(mult_imm_vld_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
+   rf_enable addr_imm_vld           ( .q(addr_imm_vld_rf_ex_out), .d(addr_imm_vld_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
 
     //instruction valid (function unit enable)
     rf_enable alu1_inst_vld          ( .q(alu1_inst_vld_rf_ex_out), .d(alu1_inst_vld_rf_ex_in), .wrt_en(enable), .clk(clk), .rst(rst_n));

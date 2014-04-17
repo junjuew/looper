@@ -18,7 +18,9 @@ module imemory(
 	
 	
 	initial begin
-      $readmemb("simple_lp_mif.mif", mem); // IM.mif is memory file
+
+      $readmemb("add1_mif.mif", mem); // IM.mif is memory file
+
    end
 	
 	

@@ -13,7 +13,7 @@ module instChecker(/*autoarg*/
    output wire [3:0]  str_en_to_rob;
    output wire [3:0]  ld_en_to_rob;
    output wire [3:0]  spec_brch_to_rob;
-   output wire [3:0]  brch_mode_to_rob;
+   output wire [7:0]  brch_mode_to_rob;
    output wire [3:0]  brch_pred_res_to_rob;
    output wire 	      all_nop_from_instChecker;
    

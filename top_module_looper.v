@@ -185,7 +185,7 @@ wire [5:0] phy_addr_ld_wb_out;
 wire [15:0] data_ld_wb_out;
 
 // ROB output wires
-wire [5:0] next_idx_ROB_out;
+wire [6:0] next_idx_ROB_out;
 wire mis_pred_ROB_out;
 wire flush_ROB_out; 
 wire [5:0] mis_pred_brnc_idx_ROB_out;
@@ -213,14 +213,14 @@ fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
 	//input	
 	.stall_fetch(stll_ftch_out_to_IF),
 	.loop_start(loop_strt_out_to_AL),
-	.decr_count_brnch(0),
+	.decr_count_brnch(1'b0),
 	.has_mispredict(mis_pred_ROB_out),
 	.jump_base_rdy_from_rf(jump_base_rdy_from_rf),
 	.pc_recovery(rcvr_PC_out_ROB_out),
 	.jump_base_from_rf(alu1_op1_data_rf_out),
 	.exter_pc(extern_pc),
 	.exter_pc_en(extern_pc_en),
-	.mispred_num(0),
+	.mispred_num(1'b0),
 	//output
 	.pc_to_dec(pc_to_dec),
 	.inst_to_dec(inst_to_dec), 
@@ -325,8 +325,8 @@ al al_DUT(.clk(clk), .rst_n(rst_n),
 is is_DUT(.clk(clk), .rst_n(rst_n),
 	// Inputs
 	.inst_frm_al({inst_out_to_SCH3,inst_out_to_SCH2,inst_out_to_SCH1,inst_out_to_SCH0}), 
-	.fls_frm_rob(flush_ROB_out), 
-	.cmt_frm_rob(cmt_brnc_ROB_out), 
+	.fls_frm_rob({flush_ROB_out,mis_pred_brnc_idx_ROB_out}), 
+	.cmt_frm_rob({cmt_brnc_ROB_out,cmt_brnc_idx_ROB_out}), 
 	.fun_rdy_frm_exe({mult_free_ex_is_out,3'b111}),
 	.prg_rdy_frm_exe({reg_wrt_mul_wb_rf,mult_done_idx_ex_wb_out,reg_wrt_alu1_wb_rf,alu1_done_idx_ex_wb_out,reg_wrt_alu2_wb_rf,alu2_done_idx_ex_wb_out,reg_wrt_ld_wb_out,indx_ld_wb_out}), 
 	.lop_sta(loop_strt_to_SCH), 
@@ -353,15 +353,15 @@ IS_RF IS_RF(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 
 reg_file reg_file_DUT(.clk(clk), .rst_n(rst_n),
 	// Inputs
-	.read_mult_op1_pnum(read_mult_op1_pnum),
-	.read_mult_op2_pnum(read_mult_op2_pnum),
-	.read_alu1_op1_pnum(read_alu1_op1_pnum),
-	.read_alu1_op2_pnum(read_alu1_op2_pnum), 
-	.read_alu2_op1_pnum(read_alu2_op1_pnum), 
-	.read_alu2_op2_pnum(read_alu1_op2_pnum), 
-	.read_addr_bas_pnum(read_addr_bas_pnum), 
-	.read_addr_reg_pnum(read_addr_reg_pnum), 
-	.brn(brn), 
+	.read_mult_op1_pnum(mult_inst_pkg_is_rf_out[57:52]),
+	.read_mult_op2_pnum(mult_inst_pkg_is_rf_out[50:45]),
+	.read_alu1_op1_pnum(alu1_inst_pkg_is_rf_out[57:52]),
+	.read_alu1_op2_pnum(alu1_inst_pkg_is_rf_out[50:45]), 
+	.read_alu2_op1_pnum(alu2_inst_pkg_is_rf_out[57:52]),
+	.read_alu2_op2_pnum(alu2_inst_pkg_is_rf_out[50:45]), 
+	.read_addr_bas_pnum(addr_inst_pkg_is_rf_out[57:52]), 
+	.read_addr_reg_pnum(addr_inst_pkg_is_rf_out[44:39]), 
+	.brn(alu1_inst_pkg_is_rf_out[20:19]), 
 
 	// Outputs
 	.read_mult_op1_data(mult_op1_data_rf_out),
@@ -433,10 +433,10 @@ RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 	.alu1_mode_rf_ex_in(alu1_inst_pkg_is_rf_out[13:11]),
 	.alu2_mode_rf_ex_in(alu2_inst_pkg_is_rf_out[13:11]),
 
-	.alu1_done_idx_rf_ex_in(alu1_done_idx_rf_ex_in), // 
-	.alu2_done_idx_rf_ex_in(alu2_done_idx_rf_ex_in), // 
-	.mult_done_idx_rf_ex_in(mult_done_idx_rf_ex_in), //
-	.addr_done_idx_rf_ex_in(addr_done_idx_rf_ex_in), //
+	.alu1_done_idx_rf_ex_in(alu1_inst_pkg_is_rf_out[64:59]), // 
+	.alu2_done_idx_rf_ex_in(alu2_inst_pkg_is_rf_out[64:59]), // 
+	.mult_done_idx_rf_ex_in(mult_inst_pkg_is_rf_out[64:59]), //
+	.addr_done_idx_rf_ex_in(addr_inst_pkg_is_rf_out[64:59]), //
 
 	.phy_addr_alu1_rf_ex_in(alu1_inst_pkg_is_rf_out[44:39]), //
 	.phy_addr_alu2_rf_ex_in(alu2_inst_pkg_is_rf_out[44:39]), //
@@ -444,7 +444,7 @@ RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 	.phy_addr_ld_rf_ex_in(addr_inst_pkg_is_rf_out[44:39]), //
 
 	.reg_wrt_mul_rf_ex_in(mult_inst_pkg_is_rf_out[6]), //
-	.reg_wrt_alu1_rf_ex_mem_wrtin(alu1_inst_pkg_is_rf_out[6]), //
+	.reg_wrt_alu1_rf_ex_in(alu1_inst_pkg_is_rf_out[6]), //
 	.reg_wrt_alu2_rf_ex_in(alu2_inst_pkg_is_rf_out[6]), //
 	.reg_wrt_ld_rf_ex_in(addr_inst_pkg_is_rf_out[6]), //
 

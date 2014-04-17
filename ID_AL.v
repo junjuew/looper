@@ -38,10 +38,10 @@ module ID_AL (
     wire enable;   // ~stall
 
     //data
-    rf_enable inst0        [63:0]    ( .q(inst0_id_al_out), .d(inst0_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
-    rf_enable inst1        [63:0]    ( .q(inst1_id_al_out), .d(inst1_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
-    rf_enable inst2        [63:0]    ( .q(inst2_id_al_out), .d(inst2_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
-    rf_enable inst3        [63:0]    ( .q(inst3_id_al_out), .d(inst3_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
+    rf_enable inst0        [65:0]    ( .q(inst0_id_al_out), .d(inst0_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
+    rf_enable inst1        [65:0]    ( .q(inst1_id_al_out), .d(inst1_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
+    rf_enable inst2        [65:0]    ( .q(inst2_id_al_out), .d(inst2_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
+    rf_enable inst3        [65:0]    ( .q(inst3_id_al_out), .d(inst3_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
     rf_enable lbd_state    [1:0]     ( .q(lbd_state_id_al_out), .d(lbd_state_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
     rf_enable fnsh_unrll             ( .q(fnsh_unrll_id_al_out), .d(fnsh_unrll_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));
     rf_enable lloop_strt             ( .q(loop_strt_id_al_out), .d(loop_strt_id_al_in), .wrt_en(enable), .clk(clk), .rst(rst_n));

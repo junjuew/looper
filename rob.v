@@ -54,7 +54,7 @@ module rob(
     input st_iss, 
 
     // outputs:
-    output [5:0] next_idx,            // to Allocation
+    output [6:0] next_idx,            // to Allocation
     output mis_pred,                  // to IF, ID, AL
     output flush, 
     output [5:0] mis_pred_brnc_idx,   // to AL-freelist and IS-issue_queue
