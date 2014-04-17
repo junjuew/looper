@@ -1,0 +1,4 @@
+          // test of xor
+PC: 0000 Binary: 1100000111101100 Hex: c1ec ldi r1, 0x00ec
+PC: 0001 Binary: 1100001011001110 Hex: c2ce ldi r2, 0x00ce
+PC: 0002 Binary: 0101001100100001 Hex: 5321 xor r3, r2, r1  // expect r3 = 0x22
