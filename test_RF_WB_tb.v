@@ -9,7 +9,7 @@ module test_RF_WB_tb();
     wire        mult_valid_wb_ex_wb_out;
     wire        mult_free_ex_wb_out;
 	
-	test_RF_WB_tb(
+	test_RF_WB DUT121(
 	.clk(clk), 
     .rst_n(rst_n),   
     // read section
@@ -116,3 +116,22 @@ module test_RF_WB_tb();
     //output [5:0]           phy_addr_mult_ex_wb_out,
     //output [5:0]           phy_addr_ld_ex_wb_out
 );
+
+initial begin
+DUT121.RF.reg_file_body[5'd12] <= 16'd10 ;
+DUT121.RF.reg_file_body[5'd13] <= 16'd10 ;
+#2 
+DUT121.RF.reg_file_body[5'd12] <= 16'd11 ;
+DUT121.RF.reg_file_body[5'd13] <= 16'd11 ;
+end
+
+initial begin
+$monitor("reg10: %d", DUT121.RF.reg_file_body[5'd10]);
+    clk=0;
+    forever begin
+        #1 clk= ~clk;
+   end
+end
+
+
+endmodule

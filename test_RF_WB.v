@@ -418,7 +418,7 @@ module test_RF_WB(
 
 
 
-EX_WB (
+EX_WB ex_wb_dut(
     .clk(clk), 
     .rst_n(rst_n),
     
