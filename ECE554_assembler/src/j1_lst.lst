@@ -1,0 +1,10 @@
+          // test for j
+PC: 0000 Binary: 1100000111111011 Hex: c1fb ldi r1, -5
+PC: 0001 Binary: 1100001000001001 Hex: c209 ldi r2, 9
+PC: 0002 Binary: 1111000000001000 Hex: f008 j	.label1
+PC: 0003 Binary: 0001001100100001 Hex: 1321 add r3, r2, r1	// expect r3 = 4
+PC: 0004 Binary: 1111000000000100 Hex: f004 j	.end
+0005      .label1:
+PC: 0005 Binary: 1100001111111100 Hex: c3fc ldi r3, -4
+0006      .end:
+PC: 0006 Binary: 1100001000001001 Hex: c209 ldi r2, 9
