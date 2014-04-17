@@ -1,4 +1,3 @@
-`default_nettype none
 module freeList(/*autoarg*/
    // Outputs
    pr_num_out0, pr_num_out1, pr_num_out2, pr_num_out3, list_empty,

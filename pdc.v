@@ -1,4 +1,4 @@
-`default_nettype none
+//`default_nettype none
 
   //TODO: output all the bits in the tpu_inst?? some may not be needed for next stage. need to strip those bits off
   // added reorder function to solve the problem

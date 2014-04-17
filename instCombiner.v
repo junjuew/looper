@@ -1,4 +1,3 @@
-`default_nettype none
 module instCombiner(/*autoarg*/
    // Outputs
    inst_out0, inst_out1, inst_out2, inst_out3,

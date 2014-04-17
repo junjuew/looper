@@ -1,5 +1,3 @@
-`default_nettype none
-
 module instChecker(/*autoarg*/
    // Outputs
    pr_need_inst_out, rcvr_pc_to_rob, str_en_to_rob, ld_en_to_rob,

@@ -1,4 +1,4 @@
-`default_nettype none
+//`default_nettype none
 
 module isq_lin_tb(/*autoarg*/
    // Outputs

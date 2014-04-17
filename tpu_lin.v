@@ -1,4 +1,4 @@
-`default_nettype none
+//`default_nettype none
 
   //////////////////////////////////////////////////
   // tpu_inst_rdy goes high when the instruction is not valid,

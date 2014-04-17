@@ -1,4 +1,4 @@
-`default_nettype none
+
 module reorderUnit(/*autoarg*/
    // Outputs
    ld_indx_to_lsq, st_indx_to_lsq,
