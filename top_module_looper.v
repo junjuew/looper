@@ -213,14 +213,14 @@ fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
 	//input	
 	.stall_fetch(stll_ftch_out_to_IF),
 	.loop_start(loop_strt_out_to_AL),
-	.decr_count_brnch,
+	.decr_count_brnch(0),
 	.has_mispredict(mis_pred_ROB_out),
 	.jump_base_rdy_from_rf(jump_base_rdy_from_rf),
 	.pc_recovery(rcvr_PC_out_ROB_out),
 	.jump_base_from_rf(alu1_op1_data_rf_out),
 	.exter_pc(extern_pc),
 	.exter_pc_en(extern_pc_en),
-	.mispred_num,
+	.mispred_num(0),
 	//output
 	.pc_to_dec(pc_to_dec),
 	.inst_to_dec(inst_to_dec), 
@@ -228,7 +228,7 @@ fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
 	.pred_result_to_dec(pred_result_to_dec) 
 );
 
-IF_ID IF_ID_DUT(.clk(clk), .rst_n(rst_n),
+IF_ID IF_ID_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 	//input	
 	.pc_if_id_in(pc_to_dec),
 	.inst_if_id_in(inst_to_dec),
@@ -260,7 +260,7 @@ ID_top ID_top_DUT(.clk(clk), .rst(~rst_n),
 	.loop_strt_out_to_AL(loop_strt_out_to_AL)
 );
 
-ID_AL ID_AL_DUT(.clk(clk), .rst_n(rst_n),
+ID_AL ID_AL_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 	// input
 	.inst0_id_al_in(dcd_inst1_out_to_AL),
 	.inst1_id_al_in(dcd_inst2_out_to_AL),
@@ -338,7 +338,7 @@ is is_DUT(.clk(clk), .rst_n(rst_n),
 	.adr_ins_to_rf(adr_ins_to_rf_is_out) 
 );
 
-IS_RF IS_RF(.clk(clk), .rst_n(rst_n),
+IS_RF IS_RF(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 	// Inputs
 	.mult_inst_pkg_in(mul_ins_to_rf_is_out),
 	.alu1_inst_pkg_in(alu1_ins_to_rf_is_out),
@@ -390,7 +390,7 @@ reg_file reg_file_DUT(.clk(clk), .rst_n(rst_n),
 	.wrt_addr_data(data_ld_wb_out)
 );
 
-RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n),
+RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 	// Inputs
 	.alu1_op1_rf_ex_in(alu1_op1_data_rf_out), //
 	.alu1_op2_rf_ex_in(alu1_op2_data_rf_out), //
@@ -401,57 +401,57 @@ RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n),
 	.addr_op1_rf_ex_in(addr_op1_data_rf_out), //
 	.data_str_rf_ex_in(data_str_rf_out), //
 
-	.alu1_imm_rf_ex_in(alu1_imm_rf_ex_in), //
-	.alu2_imm_rf_ex_in(alu2_imm_rf_ex_in), //
-	.mult_imm_rf_ex_in(mult_imm_rf_ex_in), //
-	.addr_imm_rf_ex_in(addr_imm_rf_ex_in), //
-	.alu1_imm_vld_rf_ex_in(alu1_imm_vld_rf_ex_in), //
-	.alu2_imm_vld_rf_ex_in(alu2_imm_vld_rf_ex_in), //
-	.mult_imm_vld_rf_ex_in(mult_imm_vld_rf_ex_in), //
-	.addr_imm_vld_rf_ex_in(addr_imm_vld_rf_ex_in), //
+	.alu1_imm_rf_ex_in(alu1_inst_pkg_is_rf_out[37:22]), //
+	.alu2_imm_rf_ex_in(alu2_inst_pkg_is_rf_out[37:22]), //
+	.mult_imm_rf_ex_in(mult_inst_pkg_is_rf_out[37:22]), //
+	.addr_imm_rf_ex_in(addr_inst_pkg_is_rf_out[37:22]), //
+	.alu1_imm_vld_rf_ex_in(alu1_inst_pkg_is_rf_out[38]), //
+	.alu2_imm_vld_rf_ex_in(alu2_inst_pkg_is_rf_out[38]), //
+	.mult_imm_vld_rf_ex_in(mult_inst_pkg_is_rf_out[38]), //
+	.addr_imm_vld_rf_ex_in(addr_inst_pkg_is_rf_out[38]), //
 
-	.alu1_inst_vld_rf_ex_in(alu1_inst_vld_rf_ex_in), //
-	.alu2_inst_vld_rf_ex_in(alu2_inst_vld_rf_ex_in), //
-	.mult_inst_vld_rf_ex_in(mult_inst_vld_rf_ex_in), //
-	.addr_inst_vld_rf_ex_in(addr_inst_vld_rf_ex_in), //
+	.alu1_inst_vld_rf_ex_in(alu1_inst_pkg_is_rf_out[65]), //
+	.alu2_inst_vld_rf_ex_in(alu2_inst_pkg_is_rf_out[65]), //
+	.mult_inst_vld_rf_ex_in(mult_inst_pkg_is_rf_out[65]), //
+	.addr_inst_vld_rf_ex_in(addr_inst_pkg_is_rf_out[65]), //
 
-	.alu1_mem_wrt_rf_ex_in(alu1_mem_wrt_rf_ex_in), //
-	.alu2_mem_wrt_rf_ex_in(alu2_mem_wrt_rf_ex_in), //
-	.mult_mem_wrt_rf_ex_in(mult_mem_wrt_rf_ex_in), //
-	.addr_mem_wrt_rf_ex_in(addr_mem_wrt_rf_ex_in), //
+	.alu1_mem_wrt_rf_ex_in(alu1_inst_pkg_is_rf_out[14]), //
+	.alu2_mem_wrt_rf_ex_in(alu2_inst_pkg_is_rf_out[14]), //
+	.mult_mem_wrt_rf_ex_in(mult_inst_pkg_is_rf_out[14]), //
+	.addr_mem_wrt_rf_ex_in(addr_inst_pkg_is_rf_out[14]), //
 
-	.alu1_mem_rd_rf_ex_in(alu1_mem_rd_rf_ex_in), //
-	.alu2_mem_rd_rf_ex_in(alu2_mem_rd_rf_ex_in), //
-	.mult_mem_rd_rf_ex_in(mult_mem_rd_rf_ex_in), //
-	.addr_mem_rd_rf_ex_in(addr_mem_rd_rf_ex_in), //
+	.alu1_mem_rd_rf_ex_in(alu1_inst_pkg_is_rf_out[15]), //
+	.alu2_mem_rd_rf_ex_in(alu2_inst_pkg_is_rf_out[15]), //
+	.mult_mem_rd_rf_ex_in(mult_inst_pkg_is_rf_out[15]), //
+	.addr_mem_rd_rf_ex_in(addr_inst_pkg_is_rf_out[15]), //
 
-	.alu1_ldi_rf_ex_in(alu1_ldi_rf_ex_in), // 
-	.alu2_ldi_rf_ex_in(alu2_ldi_rf_ex_in), //
-	.mult_ldi_rf_ex_in(mult_ldi_rf_ex_in), // 
-	.addr_ldi_rf_ex_in(addr_ldi_rf_ex_in), // 
+	.alu1_ldi_rf_ex_in(alu1_inst_pkg_is_rf_out[21]), // 
+	.alu2_ldi_rf_ex_in(alu2_inst_pkg_is_rf_out[21]), //
+	.mult_ldi_rf_ex_in(mult_inst_pkg_is_rf_out[21]), // 
+	.addr_ldi_rf_ex_in(addr_inst_pkg_is_rf_out[21]), // 
 
-	.alu1_mode_rf_ex_in(alu1_mode_rf_ex_in),
-	.alu2_mode_rf_ex_in(alu2_mode_rf_ex_in),
+	.alu1_mode_rf_ex_in(alu1_inst_pkg_is_rf_out[13:11]),
+	.alu2_mode_rf_ex_in(alu2_inst_pkg_is_rf_out[13:11]),
 
 	.alu1_done_idx_rf_ex_in(alu1_done_idx_rf_ex_in), // 
 	.alu2_done_idx_rf_ex_in(alu2_done_idx_rf_ex_in), // 
 	.mult_done_idx_rf_ex_in(mult_done_idx_rf_ex_in), //
 	.addr_done_idx_rf_ex_in(addr_done_idx_rf_ex_in), //
 
-	.phy_addr_alu1_rf_ex_in(phy_addr_alu1_rf_ex_in), //
-	.phy_addr_alu2_rf_ex_in(phy_addr_alu2_rf_ex_in), //
-	.phy_addr_mult_rf_ex_in(phy_addr_mult_rf_ex_in), //
-	.phy_addr_ld_rf_ex_in(phy_addr_ld_rf_ex_in), //
+	.phy_addr_alu1_rf_ex_in(alu1_inst_pkg_is_rf_out[44:39]), //
+	.phy_addr_alu2_rf_ex_in(alu2_inst_pkg_is_rf_out[44:39]), //
+	.phy_addr_mult_rf_ex_in(mult_inst_pkg_is_rf_out[44:39]), //
+	.phy_addr_ld_rf_ex_in(addr_inst_pkg_is_rf_out[44:39]), //
 
-	.reg_wrt_mul_rf_ex_in(reg_wrt_mul_rf_ex_in), //
-	.reg_wrt_alu1_rf_ex_mem_wrtin(reg_wrt_alu1_rf_ex_in), //
-	.reg_wrt_alu2_rf_ex_in(reg_wrt_alu2_rf_ex_in), //
-	.reg_wrt_ld_rf_ex_in(reg_wrt_ld_rf_ex_in), //
+	.reg_wrt_mul_rf_ex_in(mult_inst_pkg_is_rf_out[6]), //
+	.reg_wrt_alu1_rf_ex_mem_wrtin(alu1_inst_pkg_is_rf_out[6]), //
+	.reg_wrt_alu2_rf_ex_in(alu2_inst_pkg_is_rf_out[6]), //
+	.reg_wrt_ld_rf_ex_in(addr_inst_pkg_is_rf_out[6]), //
 
-	.alu1_invtRt_rf_ex_in(alu1_invtRt_rf_ex_in), //
-	.alu2_invtRt_rf_ex_in(alu2_invtRt_rf_ex_in), //
-	.mult_invtRt_rf_ex_in(mult_invtRt_rf_ex_in), //
-	.addr_invtRt_rf_ex_in(addr_invtRt_rf_ex_in), //
+	.alu1_invtRt_rf_ex_in(alu1_inst_pkg_is_rf_out[7]), //
+	.alu2_invtRt_rf_ex_in(alu2_inst_pkg_is_rf_out[7]), //
+	.mult_invtRt_rf_ex_in(mult_inst_pkg_is_rf_out[7]), //
+	.addr_invtRt_rf_ex_in(addr_inst_pkg_is_rf_out[7]), //
 
 	// Outputs
 	.alu1_op1_rf_ex_out(alu1_op1_data_rf_ex_out),
@@ -556,7 +556,7 @@ execution execution_DUT(.clk(clk), .rst(~rst_n),
 
 
 
-EX_WB EX_WB_DUT(.clk(clk), .rst_n(rst_n),
+EX_WB EX_WB_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 	// Inputs
     .mult_out_ex_wb_in(mult_data_ex_out),
     .alu1_out_ex_wb_in(alu1_data_ex_out), 
