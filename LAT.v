@@ -62,6 +62,10 @@ module LAT(
 		    	fnsh_unrll_out <= 1'b0;
 		    	stll_ftch_out <= 1'b0;
 		    	stll_ftch_cnt <= 7'b0;
+		    	//LAT[0][44:0] <= 45'b0;
+		    	//LAT[1] <= 45'b0;
+		    	//LAT[2] <= 45'b0;
+		    	//LAT[3] <= 45'b0;
 		    end
 		else
 	            begin

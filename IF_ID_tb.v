@@ -48,7 +48,7 @@ IF_ID IF_ID_DUT(.clk(clk), .rst_n(rst_n),
 	.inst_if_id_out(inst_if_id_out), 
     .recv_pc_if_id_out(recv_pc_if_id_out), 
 	.pred_result_if_id_out(pred_result_if_id_out),
-	.stall(0)
+	.stall(1'b0)
 );
 
 ID_top ID_top_DUT(.clk(clk), .rst(~rst_n),
