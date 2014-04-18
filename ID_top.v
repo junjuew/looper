@@ -49,6 +49,7 @@ module ID_top(
 	wire	[1:0]	brn_out1, brn_out2, brn_out3, brn_out4, jmp_out1, jmp_out2, jmp_out3, jmp_out4;
 	wire	[2:0]	ALU_ctrl_out1, ALU_ctrl_out2, ALU_ctrl_out3, ALU_ctrl_out4;
 	wire	[3:0]	bck_lp_bus;
+	wire            inst_vld_out1, inst_vld_out2, inst_vld_out3, inst_vld_out4;
 
 	// wires for Interpretor
 	wire		fnsh_unrll_out, bck_lp_out1, bck_lp_out2, bck_lp_out3, bck_lp_out4;
@@ -108,7 +109,9 @@ module ID_top(
 
 				.ALU_to_mult_out(ALU_to_mult_out1),
 
-				.ALU_to_addr_out(ALU_to_addr_out1)
+				.ALU_to_addr_out(ALU_to_addr_out1),
+
+				.inst_vld_out(inst_vld_out1)
 			);
 
 	Control_Unit ctrl_unit_DUT2 (
@@ -149,7 +152,9 @@ module ID_top(
 
 				.ALU_to_mult_out(ALU_to_mult_out2),
 
-				.ALU_to_addr_out(ALU_to_addr_out2)
+				.ALU_to_addr_out(ALU_to_addr_out2),
+
+				.inst_vld_out(inst_vld_out2)
 			);
 
 	Control_Unit ctrl_unit_DUT3 (
@@ -190,7 +195,9 @@ module ID_top(
 
 				.ALU_to_mult_out(ALU_to_mult_out3),
 
-				.ALU_to_addr_out(ALU_to_addr_out3)
+				.ALU_to_addr_out(ALU_to_addr_out3),
+
+				.inst_vld_out(inst_vld_out3)
 			);
 
 	Control_Unit ctrl_unit_DUT4 (
@@ -231,7 +238,9 @@ module ID_top(
 
 				.ALU_to_mult_out(ALU_to_mult_out4),
 
-				.ALU_to_addr_out(ALU_to_addr_out4)
+				.ALU_to_addr_out(ALU_to_addr_out4),
+
+				.inst_vld_out(inst_vld_out4)
 			);
 
 	Interpretor interpretor_DUT1(
@@ -281,7 +290,7 @@ module ID_top(
 
 				.recv_PC_in(recv_pc_in_frm_IF[63:48]),
 
-				.inst_valid_in(inst_valid_in[3]),		// from IF
+				.inst_valid_in(inst_vld_out1),		// from IF
 
 				// output
 
@@ -337,7 +346,7 @@ module ID_top(
 
 				.recv_PC_in(recv_pc_in_frm_IF[47:32]),
 
-				.inst_valid_in(inst_valid_in[2]),		// from IF
+				.inst_valid_in(inst_vld_out2),		// from IF
 
 				// output
 
@@ -393,7 +402,7 @@ module ID_top(
 
 				.recv_PC_in(recv_pc_in_frm_IF[31:16]),
 
-				.inst_valid_in(inst_valid_in[1]),		// from IF
+				.inst_valid_in(inst_vld_out3),		// from IF
 
 				// output
 
@@ -449,7 +458,7 @@ module ID_top(
 
 				.recv_PC_in(recv_pc_in_frm_IF[15:0]),
 
-				.inst_valid_in(inst_valid_in[0]),		// from IF
+				.inst_valid_in(inst_vld_out4),		// from IF
 
 				// output
 

@@ -33,7 +33,9 @@ module branchPredictor(
 ///////////////////////////////////////
 //=======always TAKEN branch=========//
 ///////////////////////////////////////
-assign pred_to_pcsel=(update_bpred)?((loop_start)?2'b11:2'b01):2'b00;
+wire [1:0] numbrnch;
+assign numbrnch=brnch_pc_sel_from_bhndlr[0]+brnch_pc_sel_from_bhndlr[1]+brnch_pc_sel_from_bhndlr[2]+brnch_pc_sel_from_bhndlr[3];
+assign pred_to_pcsel=(update_bpred)?((loop_start)?2'b11:((numbrnch==1)?2'b10:2'b11)):2'b00;
 
 //assign brnch_pc_sel_from_bhndlr=brnch_pc_sel_from_bhndlr;
 

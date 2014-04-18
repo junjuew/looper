@@ -29,8 +29,9 @@ module jumpHandler(input clk,
 	 input jump_base_rdy_from_rf_0,
 	 //input [15:0] jump_base_for_fetch,
 	// input jump_base_rdy_for_fetch,
-    output reg[15:0] jump_addr_pc,
-    output reg jump_for_pcsel,
+    // output reg[15:0] jump_addr_pc, // fan
+    output [15:0] jump_addr_pc,
+    output  jump_for_pcsel,
     output reg stall_for_jump
     );
 
@@ -93,6 +94,8 @@ wire BsJmp3=disable_ins?0:(instruction3[15:12]==4'b1111)&&(instruction3[0]==1);
 //assign jump_for_pcsel=(!rst_n)?0:
  //  (wtJumpAddr?0:(jump_base_rdy_from_rf?1:(preJmp?0:(existImdJmp?1:0))));
  //change to reg
+
+ /* 
  always@(posedge clk or negedge rst_n)begin
     if(!rst_n)begin
        jump_for_pcsel<=0;
@@ -117,6 +120,10 @@ wire BsJmp3=disable_ins?0:(instruction3[15:12]==4'b1111)&&(instruction3[0]==1);
      
  
  end
+ */
+ assign jump_for_pcsel = (jump_base_rdy_from_rf) ? 1'b1 :
+ 						 (preJmp)				 ? 1'b0 :
+ 						 (existImdJmp)           ? 1'b1 : 1'b0;
  
 
 
@@ -131,8 +138,7 @@ assign ImJmp_addr=(ImJmp0?(pc+1+{{6{instruction0[11]}},instruction0[11:2]}):
    (ImJmp1?(pc+2+{{6{instruction1[11]}},instruction1[11:2]}):
    (ImJmp2?(pc+3+{{6{instruction2[11]}},instruction2[11:2]}):
    (ImJmp3?(pc+4+{{6{instruction3[11]}},instruction3[11:2]}):16'b0))));
-always@(posedge clk or negedge rst_n)begin
-   if(!rst_n)
+/*   if(!rst_n)
       jump_addr_pc<=16'b0;
     else if(jump_base_rdy_from_rf_buf)
        jump_addr_pc<=jump_pc+jump_base_from_rf;
@@ -142,7 +148,11 @@ always@(posedge clk or negedge rst_n)begin
        jump_addr_pc<=ImJmp_addr;
     else
        jump_addr_pc<=jump_addr_pc;
-end
+end*/
+assign jump_addr_pc = (jump_base_rdy_from_rf_buf) ? jump_pc+jump_base_from_rf :
+					  (preJmp)                    ? 16'b0 :
+					  (existImdJmp)               ? ImJmp_addr : jump_addr_pc;
+
 
 
    

@@ -21,10 +21,10 @@ module LAT(
 
 
 	output		[1:0]	lbd_state_out;
-	output	reg			fnsh_unrll_out;
-	output	reg			stll_ftch_out;
+	output				fnsh_unrll_out;
+	output				stll_ftch_out;
 	output				loop_strt_out;
-	output reg [3:0]  inst_valid_out;
+	output       [3:0]  inst_valid_out;
 
 	reg			[1:0]	state, nxt_state;
 	reg					tbl_entry_en1, tbl_entry_en2, tbl_entry_en3, tbl_entry_en4;
@@ -45,6 +45,14 @@ module LAT(
 	parameter			TRAIN = 2'b01;
 	parameter			DISPATCH = 2'b10;
 
+
+
+	assign lbd_state_out = IDLE;
+	assign fnsh_unrll_out = 0;
+	assign stll_ftch_out = 0;
+	assign loop_strt_out = 0;
+	assign inst_valid_out = 4'bzzzz;
+/*
 	always @(posedge clk)
 	    begin
 	        if (rst)
@@ -62,14 +70,14 @@ module LAT(
 		    	fnsh_unrll_out <= 1'b0;
 		    	stll_ftch_out <= 1'b0;
 		    	stll_ftch_cnt <= 7'b0;
-		    	//LAT[0][44:0] <= 45'b0;
-		    	//LAT[1] <= 45'b0;
-		    	//LAT[2] <= 45'b0;
-		    	//LAT[3] <= 45'b0;
+		    	LAT[0] <= {45{1'b1}};
+		    	LAT[1] <= {45{1'b1}};
+		    	LAT[2] <= {45{1'b1}};
+		    	LAT[3] <= {45{1'b1}};
 		    end
 		else
-	            begin
-			state <= nxt_state;
+            begin
+				state <= nxt_state;
 		    end				
 	    end
 
@@ -87,10 +95,10 @@ module LAT(
 					if (bck_lp_bus_in & 4'b1111 != 4'b0)
 					    begin
 			    	        casex(bck_lp_bus_in)
-							    4'b1xxx: begin  fallthrough_addr <= pc_in[63:48] + 4; nxt_state <= TRAIN; end
-							    4'bx1xx: begin  fallthrough_addr <= pc_in[47:32] + 4; nxt_state <= TRAIN; end
-							    4'bxx1x: begin  fallthrough_addr <= pc_in[31:16] + 4; nxt_state <= TRAIN; end
-							    4'bxxx1: begin  fallthrough_addr <= pc_in[15:0] + 4; nxt_state <= TRAIN; end
+							    4'b1xxx: begin  fallthrough_addr <= pc_in[63:48] + 1; nxt_state <= TRAIN; end
+							    4'bx1xx: begin  fallthrough_addr <= pc_in[47:32] + 1; nxt_state <= TRAIN; end
+							    4'bxx1x: begin  fallthrough_addr <= pc_in[31:16] + 1; nxt_state <= TRAIN; end
+							    4'bxxx1: begin  fallthrough_addr <= pc_in[15:0] + 1; nxt_state <= TRAIN; end
 					        endcase
 					    end
 					if (loop_strt_out == 1'b1)
@@ -214,16 +222,17 @@ module LAT(
 				end
     	end 
 
-	assign end_lp1 = (pc_in[63:48] - fallthrough_addr + 4 == 16'b0) ? 1 : 0;
-	assign end_lp2 = (pc_in[47:32] - fallthrough_addr + 4 == 16'b0) ? 1 : 0;
-	assign end_lp3 = (pc_in[31:16] - fallthrough_addr + 4 == 16'b0) ? 1 : 0;
-	assign end_lp4 = (pc_in[15:0] - fallthrough_addr + 4 == 16'b0) ? 1 : 0;
+	assign end_lp1 = (pc_in[63:48] - fallthrough_addr + 1 == 16'b0) ? 1 : 0;
+	assign end_lp2 = (pc_in[47:32] - fallthrough_addr + 1 == 16'b0) ? 1 : 0;
+	assign end_lp3 = (pc_in[31:16] - fallthrough_addr + 1 == 16'b0) ? 1 : 0;
+	assign end_lp4 = (pc_in[15:0] - fallthrough_addr + 1 == 16'b0) ? 1 : 0;
 
 	assign dispatch1 = (pc_in[63:48] == LAT[0][45:30]) ? 1 : 0;
 	assign dispatch2 = (pc_in[63:48] == LAT[1][45:30]) ? 1 : 0;
 	assign dispatch3 = (pc_in[63:48] == LAT[2][45:30]) ? 1 : 0;
 	assign dispatch4 = (pc_in[63:48] == LAT[3][45:30]) ? 1 : 0;
 	assign loop_strt_out = dispatch1 || dispatch2 || dispatch3 || dispatch4;
+	*/
 
 
 endmodule

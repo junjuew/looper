@@ -8,7 +8,7 @@ module branchUnit(/*autoarg*/
    input wire [65:0] inst0,inst1, inst2, inst3;
    input wire [6:0] 	nxt_indx;
    input wire [5:0] 	brch_mis_indx;
-   input wire [6:0] 	curr_pos;
+   input wire [5:0] 	curr_pos;
    input wire [3:0] 	pr_need_inst;
    input wire 		mis_pred;
    input wire [5:0] 	cmt_brch_indx;
@@ -19,7 +19,7 @@ module branchUnit(/*autoarg*/
    output wire 		all_nop_from_branchUnit;
    
    
-   wire [5:0]	     indx1,indx2,indx3;
+   wire 	     indx1,indx2,indx3;
    wire [5:0] 	     curr_pos1,curr_pos2,curr_pos3;
    reg [13:0] 	     pos_reg0,pos_reg1; // {free|brch_indx|pointer_pos}
    wire 	     brch0,brch1,brch2,brch3;
@@ -29,9 +29,9 @@ module branchUnit(/*autoarg*/
    reg 		     flush_pos_sel;
    
    
-   assign indx1 = nxt_indx[5:0] + 1;
-   assign indx2 = nxt_indx[5:0] + 2;
-   assign indx3 = nxt_indx[5:0] + 3;
+   assign indx1 = nxt_indx + 1;
+   assign indx2 = nxt_indx + 2;
+   assign indx3 = nxt_indx + 3;
    
    
    assign curr_pos1 = curr_pos + pr_need_inst[0];
@@ -57,12 +57,12 @@ module branchUnit(/*autoarg*/
 	     if(pos_reg0[0])
 	       begin
 		  pos_reg0_en = 1'b1;
-		  pos_reg0_input = {1'b0,nxt_indx[5:0],curr_pos};
+		  pos_reg0_input = {1'b0,nxt_indx,curr_pos};
 	       end
 	     else
 	       begin
 		  pos_reg1_en = 1'b1;
-		  pos_reg1_input = {1'b0,nxt_indx[5:0],curr_pos};
+		  pos_reg1_input = {1'b0,nxt_indx,curr_pos};
 	       end
 	  end
    
