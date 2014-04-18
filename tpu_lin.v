@@ -32,10 +32,10 @@
    
    //bitmap for instructions
    //everything is relative to the inst_width, not isq_lin_width!!
-   parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
-   parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
-   parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
-   parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
+   parameter BIT_INST_VLD = INST_WIDTH  - 1 ; //55
+   parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   //54
+   parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;   //44
+   parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;//49
    
    
    ///////////////////////////////////////
@@ -67,7 +67,7 @@
 
    wire [TPU_MAP_WIDTH-1:0]        pos_map[15:0];
    wire [5:0]                      pdst; //allocated physical register
-   wire [3:0]                      ldst;
+   wire [4:0]                      ldst;
 
    //valid bit | logical reg number 
    wire [4:0]                      lsrc1, lsrc2;
@@ -75,16 +75,11 @@
    //mapping wires separated from prv_map
    wire [6:0]                      idi_map[15:0];
 
-   //async reset signal for destination ready register
-   //bad idea????: right now global rst_n is and with a module signal
-   //that signfies a new instruction is loaded
-   wire                            dst_rdy_rst;
-   
    
    ///////////////////////////////
    //grab ldst from inst
    ////////////////////////////
-   assign ldst = isq_lin[BIT_LDST_VLD -1 :BIT_LDST_VLD -4];
+   assign ldst = isq_lin[BIT_LDST_VLD :BIT_LDST_VLD -4];
    //by default the physical register addr is at the LSB of inst coming in
    assign pdst = isq_lin [5:0];
    assign lsrc1 = isq_lin[BIT_LSRC1_VLD : BIT_LSRC1_VLD - 4];
@@ -183,26 +178,30 @@
    //pos_map is the potential mapping output
    always @(ldst, pos_map[0],pos_map[1],pos_map[2],pos_map[3],pos_map[4],pos_map[5],pos_map[6],pos_map[7],pos_map[8],pos_map[9],pos_map[10],pos_map[11],pos_map[12],pos_map[13],pos_map[14],pos_map[15])
      begin
-        case (ldst)
-          0: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[0];
-          1: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[1];
-          2: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[2];
-          3: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[3];
-          4: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[4];
-          5: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[5];
-          6: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[6];
-          7: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[7];
-          8: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[8];
-          9: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[9];
-          10: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[10];
-          11: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[11];
-          12: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[12];
-          13: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[13];
-          14: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[14];
-          15: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[15];
-          default:
-            cur_map[TPU_MAP_WIDTH-1:0] = {TPU_MAP_WIDTH{1'b0}};
-        endcase // case (ldst)
+        //if inst is not valid or no valid reg dest, then don't affect mapping
+        if (isq_lin[BIT_INST_VLD] && ldst[4])
+          case (ldst[3:0])
+            0: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[0];
+            1: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[1];
+            2: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[2];
+            3: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[3];
+            4: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[4];
+            5: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[5];
+            6: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[6];
+            7: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[7];
+            8: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[8];
+            9: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[9];
+            10: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[10];
+            11: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[11];
+            12: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[12];
+            13: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[13];
+            14: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[14];
+            15: cur_map[TPU_MAP_WIDTH-1:0] = pos_map[15];
+            default:
+              cur_map[TPU_MAP_WIDTH-1:0] = {TPU_MAP_WIDTH{1'b0}};
+          endcase // case (ldst)
+        else
+          cur_map=prv_map;
      end
 
 
@@ -222,7 +221,7 @@
    // if this instruction allocate a new
    // physical register for current ldst
    ////////////////////////////////////
-   assign fre_preg[6:0] = {isq_lin[BIT_LDST_VLD], idi_map[ldst][5:0]};
+   assign fre_preg[6:0] = {isq_lin[BIT_LDST_VLD], idi_map[ldst[3:0]][5:0]};
 
    
    //generate output mapping

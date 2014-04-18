@@ -180,10 +180,12 @@
    /******** take a snapshot of output of issue stage***/
    task snapshot;
       begin
+         $strobe("######################");
          $strobe("%g mul vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, mul_ins_to_rf[65],mul_ins_to_rf[64:59], mul_ins_to_rf[58:52], mul_ins_to_rf[51:45], mul_ins_to_rf[44:39], mul_ins_to_rf[38:6], mul_ins_to_rf[5:0]);
          $strobe("%g alu1 vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, alu1_ins_to_rf[65],alu1_ins_to_rf[64:59], alu1_ins_to_rf[58:52], alu1_ins_to_rf[51:45], alu1_ins_to_rf[44:39], alu1_ins_to_rf[38:6], alu1_ins_to_rf[5:0]);
          $strobe("%g alu2 vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, alu2_ins_to_rf[65],alu2_ins_to_rf[64:59], alu2_ins_to_rf[58:52], alu2_ins_to_rf[51:45], alu2_ins_to_rf[44:39], alu2_ins_to_rf[38:6], alu2_ins_to_rf[5:0]);
          $strobe("%g addr vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, adr_ins_to_rf[65],adr_ins_to_rf[64:59], adr_ins_to_rf[58:52], adr_ins_to_rf[51:45], adr_ins_to_rf[44:39], adr_ins_to_rf[38:6], adr_ins_to_rf[5:0]);
+         $strobe("######################");         
          
 /*         
          tell_single(mul_ins_to_rf);
@@ -304,6 +306,11 @@
    endgenerate
 
 
+   //register snapshot trigger
+   always @(mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf, adr_ins_to_rf, ful_to_al)
+     begin
+        snapshot();
+     end
    
    
 
@@ -326,54 +333,13 @@
         ////////////////////////////////////////////////
         //dump all the signals
         $wlfdumpvars(0, is_tb);
-//        $monitor("%g\n mul_ins_to_rf: %x, alu1_ins_to_rf: %x, alu2_ins_to_rf: %x, adr_add_ins_to_rf: %x\n clr_inst_wat: %x,", $time, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf, adr_add_ins_to_rf, clr_inst_wat);
+//        $monitor("%g mul_ins_to_rf: %x, alu1_ins_to_rf: %x, alu2_ins_to_rf: %x, adr_ins_to_rf: %x ful_to_al: %x,", $time, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf, adr_ins_to_rf, ful_to_al);
+        
 //        $monitor ("%g\n (3)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (2)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (1)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (0)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n top head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, mid head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, arch:%b ",$time, tpu_inst_rdy[3],  inst_idx[3], inst_vld[3], inst_psrc1[3], inst_psrc2[3], inst_pdst[3] , fre_preg[3] ,  tpu_inst_rdy[2],  inst_idx[2], inst_vld[2], inst_psrc1[2], inst_psrc2[2], inst_pdst[2] , fre_preg[2] , tpu_inst_rdy[1],  inst_idx[1], inst_vld[1], inst_psrc1[1], inst_psrc2[1], inst_pdst[1] , fre_preg[1] , tpu_inst_rdy[0],  inst_idx[0], inst_vld[0], inst_psrc1[0], inst_psrc2[0], inst_pdst[0] , fre_preg[0],top_hed[15],  top_hed[14],  top_hed[13],  top_hed[12], top_hed[11],  top_hed[10],  top_hed[9],  top_hed[8],  top_hed[7],  top_hed[6],  top_hed[5],  top_hed[4], top_hed[3],  top_hed[2],  top_hed[1],  top_hed[0],mid_hed[15],  mid_hed[14],  mid_hed[13],  mid_hed[12], mid_hed[11],  mid_hed[10],  mid_hed[9],  mid_hed[8],  mid_hed[7],  mid_hed[6],  mid_hed[5],  mid_hed[4], mid_hed[3],  mid_hed[2],  mid_hed[1],  mid_hed[0], DUT.arch);
 
 
         $monitor("%g inst in:   %x", $time,inst_frm_al);
 
-/*        
-        inst_al[0]={INST_WIDTH{1'b1}};
-        inst_al[1]={INST_WIDTH{1'b1}};
-        inst_al[2]={INST_WIDTH{1'b1}};
-        inst_al[3]={INST_WIDTH{1'b1}};        
-
-        repeat(3) @(posedge clk);
-        
-        inst_al[2]={INST_WIDTH{1'b0}};
-
-        inst_al[0]=inst(inst_valid,Rs_valid_bit,Rs,Rd_valid_bit,Rd,Rt_valid_bit,Rt,imm_valid_bit,imme, LDI,  brn, jmp_valid_bit, jump, MemRd, MemWr, ALU_ctrl,ALU_to_adder, ALU_to_mult,ALU_to_addr,invtRt, RegWr, pr_valid, pr_number);
-        repeat(2) @(posedge clk);
-        
-        Rs_valid_bit=1;
-        Rs=4;
-        load(1);
-        
-        load(2);
-        load(3);        
-        repeat(2) @(posedge clk);        
-        LDI=1;
-
-                
-        repeat(2) @(posedge clk);
-        brn=1;
-
-        
-        repeat(2) @(posedge clk);
-        
-        
-        $finish;
-
-*/
-
-
-
-
-
-
-
-
-        
         clear();
 
         clk=0;
@@ -395,19 +361,25 @@
         //=== use display since we are working on combinational logic
         $display("%g =============begin test. reset==========", $time);
         rst_n=0;
-        snapshot();
+//        snapshot();
         
         @(posedge clk);
         $display("%g  =============reset finished ==========", $time);
         rst_n=1;
-        snapshot();        
+//        snapshot();        
         
         @(posedge clk);
         $display("%g  =============load invalid instruction ==========", $time);
-        snapshot();
-        
+//        snapshot();
+
+        repeat(3) @(posedge clk);
+
+        /********************* single instruction test****************/
         @(posedge clk);
-        $display("%g  ============= input becomes valid inst  ==========", $time);
+        $display("");
+        $display("");        
+        $display("%g  ============= start valid inst test  ==========", $time);        
+        $display("%g  ============= one add1 valid inst comes in   ==========", $time);
         clear();
         //r0 =r1 + r2
         inst_valid=1;
@@ -420,13 +392,45 @@
         ALU_to_adder=1;
         RegWr=1;
         pr_valid=1;
-        pr_number=16;
+        pr_number=63;
         load(0);
+        clear();
+        load(1);
+        load(2);
+        load(3);
 
         @(posedge clk);
-        $display("%g  ============= check output. add1 to rf should have inst  ==========", $time);
-        snapshot();
+        $display("%g  ============= check output. add1 should have inst  ==========", $time);
 
+
+        $display("");
+        $display("%g  ============= one add2  inst comes in   ==========", $time);
+        clear();
+        //r0 =r1 + r2
+        inst_valid=1;
+        Rs_valid_bit=1;
+        Rs=1;
+        Rd_valid_bit=1;
+        Rd=0;
+        Rt_valid_bit=1;
+        Rt=2;
+        ALU_to_adder=1;
+        RegWr=1;
+        pr_valid=1;
+        pr_number=62;
+        load(1);
+        clear();
+        load(0);
+        load(2);
+        load(3);
+
+        @(posedge clk);
+        $display("%g  ============= check output. add2 should have inst  ==========", $time);
+
+
+
+        
+        
 /*        
 
         
