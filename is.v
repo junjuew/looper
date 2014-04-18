@@ -60,7 +60,11 @@
    parameter TPU_BIT_CTRL_ADDR= 9;
    parameter TPU_BIT_CTRL_BR= 21;
    parameter TPU_BIT_CTRL_JMP_VLD= 19;      
-   
+
+   parameter IS_BIT_INST_VLD= IS_INST_WIDTH -1;
+   parameter IS_BIT_IDX= IS_INST_WIDTH -1 -1;
+   parameter IS_BIT_CTRL_BR= 20;
+   parameter IS_BIT_CTRL_JMP_VLD= 18;
 
    /********************** input **********************/
    //global input signals
@@ -228,6 +232,10 @@
          .TPU_BIT_CTRL_BR               (TPU_BIT_CTRL_BR),
          .TPU_BIT_CTRL_JMP_VLD          (TPU_BIT_CTRL_JMP_VLD),
          .IS_INST_WIDTH                 (IS_INST_WIDTH),
+         .IS_BIT_IDX                    (IS_BIT_IDX),
+         .IS_BIT_INST_VLD               (IS_BIT_INST_VLD),
+         .IS_BIT_CTRL_BR                (IS_BIT_CTRL_BR),
+         .IS_BIT_CTRL_JMP_VLD           (IS_BIT_CTRL_JMP_VLD),
          .TPU_INST_WIDTH                (TPU_INST_WIDTH)) 
 
    is_pdc (/*autoinst*/

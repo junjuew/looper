@@ -46,6 +46,12 @@
    parameter TPU_BIT_CTRL_JMP_VLD= 19;      
    //output format
    parameter IS_INST_WIDTH = 66;   
+
+   //clr wat bit
+   parameter IS_BIT_INST_VLD= IS_INST_WIDTH -1;
+   parameter IS_BIT_IDX= IS_INST_WIDTH -1 -1;
+   parameter IS_BIT_CTRL_BR= 20;
+   parameter IS_BIT_CTRL_JMP_VLD= 18;
    
    //psrc1 and psrc2 need two more bits than lsrc1, lsrc2, no ldest
    parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; 
@@ -251,12 +257,12 @@ endfunction
    wire[ISQ_DEPTH -1 :0]  clr_inst_wat_add2;
    wire [ISQ_DEPTH -1 :0] clr_inst_wat_addr;
    
-   assign clr_inst_wat_mult[ISQ_DEPTH -1 :0] = (mul_ins_to_rf[TPU_BIT_INST_VLD])? (1<<mul_ins_to_rf[TPU_BIT_IDX: TPU_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
+   assign clr_inst_wat_mult[ISQ_DEPTH -1 :0] = (mul_ins_to_rf[IS_BIT_INST_VLD])? (1<<mul_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
    // only set the wait bit when it's an add
    // branch and jump instruction doesn't set wait bit immediately.
-   assign clr_inst_wat_add1[ISQ_DEPTH -1 :0] = (alu1_ins_to_rf[TPU_BIT_INST_VLD] && (2'b00 == alu1_ins_to_rf[TPU_BIT_CTRL_BR:TPU_BIT_CTRL_BR-1]) && (~alu1_ins_to_rf[TPU_BIT_CTRL_JMP_VLD]) )? (1<<alu1_ins_to_rf[TPU_BIT_IDX: TPU_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
-   assign clr_inst_wat_add2[ISQ_DEPTH -1 :0] = (alu2_ins_to_rf[TPU_BIT_INST_VLD])? (1<<alu2_ins_to_rf[TPU_BIT_IDX: TPU_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
-   assign clr_inst_wat_addr[ISQ_DEPTH -1 :0] = (adr_ins_to_rf[TPU_BIT_INST_VLD])? (1<<adr_ins_to_rf[TPU_BIT_IDX: TPU_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};   
+   assign clr_inst_wat_add1[ISQ_DEPTH -1 :0] = (alu1_ins_to_rf[IS_BIT_INST_VLD] && (2'b00 == alu1_ins_to_rf[IS_BIT_CTRL_BR:IS_BIT_CTRL_BR-1]) && (~alu1_ins_to_rf[IS_BIT_CTRL_JMP_VLD]) )? (1<<alu1_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
+   assign clr_inst_wat_add2[ISQ_DEPTH -1 :0] = (alu2_ins_to_rf[IS_BIT_INST_VLD])? (1<<alu2_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
+   assign clr_inst_wat_addr[ISQ_DEPTH -1 :0] = (adr_ins_to_rf[IS_BIT_INST_VLD])? (1<<adr_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};   
    //or these signals to get a sum of what instrcutions' wait to set in one time instance
    assign clr_inst_wat[ISQ_DEPTH -1 :0] = clr_inst_wat_mult[ISQ_DEPTH -1:0] |  clr_inst_wat_add1[ISQ_DEPTH -1:0] |  clr_inst_wat_add2[ISQ_DEPTH -1:0] |  clr_inst_wat_addr[ISQ_DEPTH -1:0];
 
