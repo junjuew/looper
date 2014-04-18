@@ -11,7 +11,7 @@ input [5:0] indx_ls;
 input [6:0] indx_fwd;
 output str_req, str_iss, fwd, fwd_rdy, stll;
 output  [15:0] data_ca, addr, data_fwd;
-
+   
 reg str_req, str_iss, finished, loop_mode, pre_loop_strt;
 reg [40:0] str_entry [0:15]; // store queue entries
 reg [15:0] indx_comp, // used to tell whether the corresponding store occurs before the load being executed
@@ -45,12 +45,17 @@ localparam WAIT_TWO=2'b01; // wait for the grant signal
 localparam ISSUED=2'b10;
 localparam WAIT_ONE=2'b11; // wait for the store to be ready
 
+
+   wire[40:0] first_data_entry; // add by ling for test
+   
+   
 assign first_indx=indx_str_al[6:0];
 assign second_indx=indx_str_al[14:8];
 assign third_indx=indx_str_al[22:16];
 assign fourth_indx=indx_str_al[30:24];
 
-
+   assign first_data_entry = str_entry[0];
+   
 always@(posedge clk, negedge rst)
 if (!rst)
    loop_start <= 0;

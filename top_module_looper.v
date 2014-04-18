@@ -212,7 +212,10 @@ assign jump_base_rdy_from_rf = (alu1_inst_pkg_is_rf_out[18:16] == 3'b101) ? 1:0;
 fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
 	//input	
 	.stall_fetch(stll_ftch_out_to_IF),
+/* -----\/----- EXCLUDED -----\/-----
 	.loop_start(loop_strt_out_to_AL),
+ -----/\----- EXCLUDED -----/\----- */
+	.loop_start(1'b0),	
 	.decr_count_brnch(1'b0),
 	.has_mispredict(mis_pred_ROB_out),
 	.jump_base_rdy_from_rf(jump_base_rdy_from_rf),
@@ -640,7 +643,7 @@ EX_WB EX_WB_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
     .phy_addr_ld_ex_wb_out(wrt_addr_dst_pnum)
 );
 
-top_level_wb top_level_WB_DUT(.clk(clk), .rst(~rst_n),
+top_level_wb top_level_WB_DUT(.clk(clk), .rst(rst_n),
 	// Inputs
 	.flsh(flush_ROB_out),
 	.mem_rd(addr_mem_rd_ex_wb_out), 

@@ -41,11 +41,15 @@ wire [6:0] first_indx, second_indx, third_indx, fourth_indx;
 wire [5:0] added_cmmt_ld_ptr, added_loop_end, added_tail;
 wire cmmt_round_up, loop_round_up, flush_round_up, cmmt;
 
+   wire [41:0] first_load_entry; //add by ling for test
+   
 assign first_indx=indx_ld_al[6:0];
 assign second_indx=indx_ld_al[14:8];
 assign third_indx=indx_ld_al[22:16];
 assign fourth_indx=indx_ld_al[30:24];
 assign cmmt= (cmmt_ld_ptr != head);
+   assign first_load_entry = ld_entry[0];
+   
 localparam IDLE=3'b000; // Idle state
 localparam WAIT=3'b001; // Send request to load store arbitrator and wait
 localparam ISSUED=3'b010; // Receive the grant signal and wait for incoming data

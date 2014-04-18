@@ -72,6 +72,7 @@
 		   .spec_brch_to_rob	(spec_to_CMT),
 		   .brch_mode_to_rob	(brch_mode_to_CMT),
 		   .brch_pred_res_to_rob(brch_pred_res_to_CMT),
+		   .reg_write_to_rob    (reg_wrt_to_CMT),
 		   .all_nop_from_instChecker(all_nop_from_instChecker),
 		   // Inputs
 		   .inst0_in		(inst_from_ID0),
@@ -153,6 +154,8 @@
 		      .pr_num_in2	(pr_num2),
 		      .pr_num_in3	(pr_num3),
 		      .pr_need_list_in	(pr_need_inst));
+
+   assign all_nop_to_CMTIS = all_nop_from_instChecker | all_nop_from_branchUnit;
    
 
 endmodule // al
