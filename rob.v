@@ -202,14 +202,14 @@ ROB per entry:
                                        : (sum_8 == 5) ? 7
                                        : 7;
     
-    assign rob_head_cmmt_num_vld = (!rob_vld[rob_head])   ? 0
-                                 : (!rob_vld[rob_head_1]) ? 1
-                                 : (!rob_vld[rob_head_2]) ? 2
-                                 : (!rob_vld[rob_head_3]) ? 3
-                                 : (!rob_vld[rob_head_4]) ? 4
-                                 : (!rob_vld[rob_head_5]) ? 5
-                                 : (!rob_vld[rob_head_6]) ? 6
-                                 : (!rob_vld[rob_head_7]) ? 7
+    assign rob_head_cmmt_num_vld = (!rob_done[rob_head])   ? 0
+                                 : (!rob_done[rob_head_1]) ? 1
+                                 : (!rob_done[rob_head_2]) ? 2
+                                 : (!rob_done[rob_head_3]) ? 3
+                                 : (!rob_done[rob_head_4]) ? 4
+                                 : (!rob_done[rob_head_5]) ? 5
+                                 : (!rob_done[rob_head_6]) ? 6
+                                 : (!rob_done[rob_head_7]) ? 7
                                  : 7;
     assign rob_head_cmmt_num_pair1 = (rob_head_cmmt_num_st <= rob_head_cmmt_num_brnc) ? 
                                       rob_head_cmmt_num_st :  rob_head_cmmt_num_brnc;
