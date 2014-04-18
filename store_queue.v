@@ -47,7 +47,7 @@ localparam WAIT_ONE=2'b11; // wait for the store to be ready
 
 
    wire[40:0] first_data_entry; // add by ling for test
-   
+   wire[40:0] second_data_entry; // add by ling for test
    
 assign first_indx=indx_str_al[6:0];
 assign second_indx=indx_str_al[14:8];
@@ -55,7 +55,7 @@ assign third_indx=indx_str_al[22:16];
 assign fourth_indx=indx_str_al[30:24];
 
    assign first_data_entry = str_entry[0];
-   
+   assign second_data_entry = str_entry[1];
 always@(posedge clk, negedge rst)
 if (!rst)
    loop_start <= 0;
