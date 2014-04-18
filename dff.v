@@ -3,19 +3,19 @@
 /* $Rev: 45 $ */
 // D-flipflop
 
-module dff (q, d, clk, rst);
+module dff (q, d, clk, rst_n);
 
     output         q;
     input          d;
     input          clk;
-    input          rst;
+    input          rst_n;
 
     reg            state;
 
     assign #(1) q = state;
 
     always @(posedge clk) begin
-      state = rst? 0 : d;
+      state = rst_n? d : 0;
     end
 
 endmodule

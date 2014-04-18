@@ -13,18 +13,18 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-module rf_enable ( q, d, wrt_en, clk, rst);
+module rf_enable ( q, d, wrt_en, clk, rst_n);
 
 	input          d;
 	input		   wrt_en;
     input          clk;
-    input          rst;
+    input          rst_n;
 
     output         q;
 
     wire           w1;
 
-    dff    a (.q(q), .d(w1), .clk(clk), .rst(rst));
+    dff    a (.q(q), .d(w1), .clk(clk), .rst_n(rst_n));
 
     assign w1 = wrt_en? d : q;
 

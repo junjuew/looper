@@ -36,11 +36,11 @@ module tb_topmodule();
    
    
    always@(posedge clk)begin
-      #0;
+      #2;
       
       
       $display("%t, instruction0 is %x,instruction1 is %x,instruction2 is %x,instruction3 is %x\n",$time,DUT.inst_to_dec[63:48],DUT.inst_to_dec[47:32],DUT.inst_to_dec[31:16],DUT.inst_to_dec[15:0]);
-      $display("%t, decode inst0 out is %x\n",$time,DUT.dcd_inst1_out_to_AL);
+      $display("%t, decode inst0 out is %b %b %b %b %b\n",$time,DUT.dcd_inst1_out_to_AL[65:64],DUT.dcd_inst1_out_to_AL[63:48],DUT.dcd_inst1_out_to_AL[47:32],DUT.dcd_inst1_out_to_AL[31:16],DUT.dcd_inst1_out_to_AL[15:0]);
       
       $display("%t, pack0 receive is %x,pack1 receive is %x,pack2 receive is %x,pack3 receive is %x\n",$time,DUT.inst0_id_al_out,DUT.inst1_id_al_out,DUT.inst2_id_al_out,DUT.inst3_id_al_out);
 
