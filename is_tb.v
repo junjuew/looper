@@ -34,7 +34,7 @@
    //psrc1 and psrc2 need two more bits than lsrc1, lsrc2, no ldest
    parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5;
    parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
-   parameter BIT_INST_WAT= INST_WIDTH +1;
+   parameter BIT_INST_WAT= INST_WIDTH;
    parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
    parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
    parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
@@ -158,7 +158,6 @@
        .alu1_ins_to_rf                  (alu1_ins_to_rf[IS_INST_WIDTH-1:0]),
        .alu2_ins_to_rf                  (alu2_ins_to_rf[IS_INST_WIDTH-1:0]),
        .adr_ins_to_rf                   (adr_ins_to_rf[IS_INST_WIDTH-1:0]),
-       .fre_prg_to_rob                  (fre_prg_to_rob[4*PRG_SIG_WIDTH-1:0]),
        // Inputs
        .clk                             (clk),
        .rst_n                           (rst_n),
@@ -174,21 +173,26 @@
    task tell_single;
       input [IS_INST_WIDTH:0] is_out;
       begin
-         $display("==%g vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, is_out[65],is_out[64:59], is_out[58:52], is_out[51:45], is_out[44:39], is_out[38:6], is_out[5:0]);
+         $strobe("%g vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, is_out[65],is_out[64:59], is_out[58:52], is_out[51:45], is_out[44:39], is_out[38:6], is_out[5:0]);
       end
    endtask
 
    /******** take a snapshot of output of issue stage***/
    task snapshot;
       begin
-         $display("mult");
+         $strobe("%g mul vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, mul_ins_to_rf[65],mul_ins_to_rf[64:59], mul_ins_to_rf[58:52], mul_ins_to_rf[51:45], mul_ins_to_rf[44:39], mul_ins_to_rf[38:6], mul_ins_to_rf[5:0]);
+         $strobe("%g alu1 vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, alu1_ins_to_rf[65],alu1_ins_to_rf[64:59], alu1_ins_to_rf[58:52], alu1_ins_to_rf[51:45], alu1_ins_to_rf[44:39], alu1_ins_to_rf[38:6], alu1_ins_to_rf[5:0]);
+         $strobe("%g alu2 vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, alu2_ins_to_rf[65],alu2_ins_to_rf[64:59], alu2_ins_to_rf[58:52], alu2_ins_to_rf[51:45], alu2_ins_to_rf[44:39], alu2_ins_to_rf[38:6], alu2_ins_to_rf[5:0]);
+         $strobe("%g addr vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, adr_ins_to_rf[65],adr_ins_to_rf[64:59], adr_ins_to_rf[58:52], adr_ins_to_rf[51:45], adr_ins_to_rf[44:39], adr_ins_to_rf[38:6], adr_ins_to_rf[5:0]);
+         
+/*         
          tell_single(mul_ins_to_rf);
-         $display("alu1");         
          tell_single(alu1_ins_to_rf);
-         $display("alu2");         
+//         $display("alu2:");         
          tell_single(alu2_ins_to_rf);
-         $display("adr");         
+//         $display("adr:");         
          tell_single(adr_ins_to_rf);         
+*/ 
       end
    endtask
    
@@ -282,7 +286,7 @@
 
    /*********** load into certain instruction coming from al ****************/
    task load;
-      input inst_idx;
+      input[1:0] inst_idx;
       begin
         inst_al[inst_idx][INST_WIDTH-1:0]=inst(inst_valid,Rs_valid_bit,Rs,Rd_valid_bit,Rd,Rt_valid_bit,Rt,imm_valid_bit,imme, LDI,  brn, jmp_valid_bit, jump, MemRd, MemWr, ALU_ctrl,ALU_to_adder, ALU_to_mult,ALU_to_addr,invtRt, RegWr, pr_valid, pr_number);
          $display("%g load_inst:%x  === :%x Rs_valid_bit:%x Rs:%x Rd_valid_bit:%x Rd:%x Rt_valid_bit:%x Rt:%x imm_valid_bit:%x imme:%x  LDI:%x   brn:%x  jmp_valid_bit:%x  jump:%x  MemRd:%x  MemWr:%x  ALU_ctrl:%x ALU_to_adder:%x  ALU_to_mult:%x ALU_to_addr:%x invtRt:%x  RegWr:%x  pr_valid:%x  pr_number:%x", $time, inst_idx, inst_valid,Rs_valid_bit,Rs,Rd_valid_bit,Rd,Rt_valid_bit,Rt,imm_valid_bit,imme, LDI,  brn, jmp_valid_bit, jump, MemRd, MemWr, ALU_ctrl,ALU_to_adder, ALU_to_mult,ALU_to_addr,invtRt, RegWr, pr_valid, pr_number);
@@ -324,12 +328,58 @@
         $wlfdumpvars(0, is_tb);
 //        $monitor("%g\n mul_ins_to_rf: %x, alu1_ins_to_rf: %x, alu2_ins_to_rf: %x, adr_add_ins_to_rf: %x\n clr_inst_wat: %x,", $time, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf, adr_add_ins_to_rf, clr_inst_wat);
 //        $monitor ("%g\n (3)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (2)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (1)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (0)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n top head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, mid head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, arch:%b ",$time, tpu_inst_rdy[3],  inst_idx[3], inst_vld[3], inst_psrc1[3], inst_psrc2[3], inst_pdst[3] , fre_preg[3] ,  tpu_inst_rdy[2],  inst_idx[2], inst_vld[2], inst_psrc1[2], inst_psrc2[2], inst_pdst[2] , fre_preg[2] , tpu_inst_rdy[1],  inst_idx[1], inst_vld[1], inst_psrc1[1], inst_psrc2[1], inst_pdst[1] , fre_preg[1] , tpu_inst_rdy[0],  inst_idx[0], inst_vld[0], inst_psrc1[0], inst_psrc2[0], inst_pdst[0] , fre_preg[0],top_hed[15],  top_hed[14],  top_hed[13],  top_hed[12], top_hed[11],  top_hed[10],  top_hed[9],  top_hed[8],  top_hed[7],  top_hed[6],  top_hed[5],  top_hed[4], top_hed[3],  top_hed[2],  top_hed[1],  top_hed[0],mid_hed[15],  mid_hed[14],  mid_hed[13],  mid_hed[12], mid_hed[11],  mid_hed[10],  mid_hed[9],  mid_hed[8],  mid_hed[7],  mid_hed[6],  mid_hed[5],  mid_hed[4], mid_hed[3],  mid_hed[2],  mid_hed[1],  mid_hed[0], DUT.arch);
+
+
+        $monitor("%g inst in:   %x", $time,inst_frm_al);
+
+/*        
+        inst_al[0]={INST_WIDTH{1'b1}};
+        inst_al[1]={INST_WIDTH{1'b1}};
+        inst_al[2]={INST_WIDTH{1'b1}};
+        inst_al[3]={INST_WIDTH{1'b1}};        
+
+        repeat(3) @(posedge clk);
+        
+        inst_al[2]={INST_WIDTH{1'b0}};
+
+        inst_al[0]=inst(inst_valid,Rs_valid_bit,Rs,Rd_valid_bit,Rd,Rt_valid_bit,Rt,imm_valid_bit,imme, LDI,  brn, jmp_valid_bit, jump, MemRd, MemWr, ALU_ctrl,ALU_to_adder, ALU_to_mult,ALU_to_addr,invtRt, RegWr, pr_valid, pr_number);
+        repeat(2) @(posedge clk);
+        
+        Rs_valid_bit=1;
+        Rs=4;
+        load(1);
+        
+        load(2);
+        load(3);        
+        repeat(2) @(posedge clk);        
+        LDI=1;
+
+                
+        repeat(2) @(posedge clk);
+        brn=1;
+
+        
+        repeat(2) @(posedge clk);
+        
+        
+        $finish;
+
+*/
+
+
+
+
+
+
+
+
         
         clear();
 
         clk=0;
         rst_n=1;
-
+        lop_sta =0;
+        
         load(0);
         load(1);
         load(2);
@@ -357,7 +407,7 @@
         snapshot();
         
         @(posedge clk);
-        $display("%g  ============= start valid inst test  ==========", $time);
+        $display("%g  ============= input becomes valid inst  ==========", $time);
         clear();
         //r0 =r1 + r2
         inst_valid=1;
@@ -371,12 +421,15 @@
         RegWr=1;
         pr_valid=1;
         pr_number=16;
-        snapshot();        
+        load(0);
 
+        @(posedge clk);
+        $display("%g  ============= check output. add1 to rf should have inst  ==========", $time);
+        snapshot();
+
+/*        
 
         
-        @(posedge clk);
-        $display("%g  ============= valid inst. no dependency  ==========", $time);
         $display("%g  ===inst: idx:01, vld:1, src1:1,0011, src2:1,0100, ldst:1,0101, pdst:010001", $time);
         $display ("%g ==== add ======", $time);        
         //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001
@@ -478,7 +531,10 @@
         @(posedge clk);
 
         @(posedge clk);
-        
+
+*/ 
+ 
+         
         
         repeat(20)@(posedge clk);        
         $finish;
@@ -537,7 +593,7 @@ endmodule // tpu_tb
 
    //================== separate each field for easy debuggin
    //generate output mapping
-   generate
+p   generate
       genvar                                      map_i;
       //16 logical registers to physical mappings
       for (map_i=0; map_i<16; map_i=map_i+1) 

@@ -34,7 +34,7 @@
    //bitmap for instructions
    //everything is relative to the inst_width, not isq_lin_width, by default!!
    parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
-   parameter BIT_INST_WAT = INST_WIDTH  + 1 ;   
+   parameter BIT_INST_WAT = INST_WIDTH ;   
    parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
    parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
    parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;

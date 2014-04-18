@@ -17,6 +17,8 @@
    parameter INST_PORT=4;
    parameter INST_WIDTH=56;
    parameter ISQ_LINE_WIDTH=INST_WIDTH +1 + ISQ_IDX_BITS_NUM;
+   parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
+
    localparam ISQ_LINE_NO_IDX_WIDTH = ISQ_LINE_WIDTH - ISQ_IDX_BITS_NUM;
 
    input wire[INST_WIDTH * INST_PORT-1:0] inst_in_flat;
@@ -28,7 +30,6 @@
 
    
    output wire [ISQ_LINE_WIDTH * ISQ_DEPTH -1 :0 ] isq_out_flat;
-   wire [ISQ_LINE_WIDTH-1:0]                       isq_out[0:ISQ_DEPTH-1];
 
    //////////////////////////////
    //wires that clears out some contents in the isssue queue
@@ -70,7 +71,7 @@
       genvar                                      prefix_i;
       for (prefix_i=0; prefix_i<ISQ_DEPTH; prefix_i=prefix_i+1) 
         begin
-           assign isq_lin_in[prefix_i] = {1'b1,1'b1, inst_in[prefix_i%INST_PORT]};
+           assign isq_lin_in[prefix_i] = {inst_in[prefix_i%INST_PORT][BIT_INST_VLD], inst_in[prefix_i%INST_PORT]};
         end
    endgenerate
    

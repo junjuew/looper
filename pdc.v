@@ -82,7 +82,8 @@ function[IS_INST_WIDTH-1:0]  reorder;
       // idx | wat |  inst vld | vld, psrc1 | vld, psrc2 |  other control signals ... | pdest
       // is stage out format:
       // inst vld | idx | psrc1 | psrc2 | pdest | other control signals ...(to RegWrite) | freepreg
-      reorder = {tpu_out_packet[TPU_BIT_INST_VLD], tpu_out_packet[TPU_BIT_IDX: TPU_BIT_CTRL_START+1], tpu_out_packet[TPU_BIT_PDEST:0] , tpu_out_packet[TPU_BIT_CTRL_START: TPU_BIT_CTRL_END], preg};
+      //the valid bit for preg and pdest is RegWrite
+      reorder = {tpu_out_packet[TPU_BIT_INST_VLD], tpu_out_packet[TPU_BIT_IDX: TPU_BIT_INST_WAT+1], tpu_out_packet[TPU_BIT_INST_VLD-1:TPU_BIT_CTRL_START+1], tpu_out_packet[TPU_BIT_PDEST-1:0] , tpu_out_packet[TPU_BIT_CTRL_START: TPU_BIT_CTRL_END], preg[5:0]};
    end
 endfunction
    
@@ -125,9 +126,9 @@ endfunction
       for (mult_pdc_i=0; mult_pdc_i<ISQ_DEPTH; mult_pdc_i=mult_pdc_i+1) 
         begin
            if (mult_pdc_i < ISQ_DEPTH -1 )
-             assign mult_out[mult_pdc_i][IS_INST_WIDTH-1:0] = ( mult_rdy[mult_pdc_i] )? reorder(tpu_out[mult_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[mult_pdc_i]) : mult_out[mult_pdc_i +1][IS_INST_WIDTH-1:0];
+             assign mult_out[mult_pdc_i][IS_INST_WIDTH-1:0] = ( mult_rdy[mult_pdc_i] )? reorder(tpu_out[mult_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[mult_pdc_i][6:0]) : mult_out[mult_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line mult_pdc_i == ISQ_DEPTH -1
-             assign mult_out[mult_pdc_i][IS_INST_WIDTH-1:0] = ( mult_rdy[mult_pdc_i] )? reorder(tpu_out[mult_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[mult_pdc_i]) : { (IS_INST_WIDTH) {1'b0} };
+             assign mult_out[mult_pdc_i][IS_INST_WIDTH-1:0] = ( mult_rdy[mult_pdc_i] )? reorder(tpu_out[mult_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[mult_pdc_i][6:0]) : { (IS_INST_WIDTH) {1'b0} };
         end
    endgenerate
    // the final output value is output from 0
@@ -162,9 +163,9 @@ endfunction
       for (add1_pdc_i=0; add1_pdc_i<ISQ_DEPTH; add1_pdc_i=add1_pdc_i+1) 
         begin
            if (add1_pdc_i < ISQ_DEPTH -1 )
-             assign add1_out[add1_pdc_i][IS_INST_WIDTH-1:0] = ( add1_rdy[add1_pdc_i] )? reorder(tpu_out[add1_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add1_pdc_i]) : add1_out[add1_pdc_i +1][IS_INST_WIDTH-1:0];
+             assign add1_out[add1_pdc_i][IS_INST_WIDTH-1:0] = ( add1_rdy[add1_pdc_i] )? reorder(tpu_out[add1_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add1_pdc_i][6:0]) : add1_out[add1_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line add1_pdc_i == ISQ_DEPTH -1
-             assign add1_out[add1_pdc_i][IS_INST_WIDTH-1:0] = ( add1_rdy[add1_pdc_i] )? reorder(tpu_out[add1_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add1_pdc_i]) :  { (IS_INST_WIDTH) {1'b0} };
+             assign add1_out[add1_pdc_i][IS_INST_WIDTH-1:0] = ( add1_rdy[add1_pdc_i] )? reorder(tpu_out[add1_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add1_pdc_i][6:0]) :  { (IS_INST_WIDTH) {1'b0} };
         end
    endgenerate
    // the final output value is output from 0
@@ -200,9 +201,9 @@ endfunction
       for (add2_pdc_i=0; add2_pdc_i<ISQ_DEPTH; add2_pdc_i=add2_pdc_i+1) 
         begin
            if (add2_pdc_i < ISQ_DEPTH -1 )
-             assign add2_out[add2_pdc_i][IS_INST_WIDTH-1:0] = ( add2_rdy[add2_pdc_i] )? reorder(tpu_out[add2_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add2_pdc_i]) : add2_out[add2_pdc_i +1][IS_INST_WIDTH-1:0];
+             assign add2_out[add2_pdc_i][IS_INST_WIDTH-1:0] = ( add2_rdy[add2_pdc_i] )? reorder(tpu_out[add2_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add2_pdc_i][6:0]) : add2_out[add2_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line add2_pdc_i == ISQ_DEPTH -1
-             assign add2_out[add2_pdc_i][IS_INST_WIDTH-1:0] = ( add2_rdy[add2_pdc_i] )? reorder(tpu_out[add2_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add2_pdc_i]) :  { (IS_INST_WIDTH) {1'b0} };
+             assign add2_out[add2_pdc_i][IS_INST_WIDTH-1:0] = ( add2_rdy[add2_pdc_i] )? reorder(tpu_out[add2_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add2_pdc_i][6:0]) :  { (IS_INST_WIDTH) {1'b0} };
         end
    endgenerate
    // the final output value is output from 0
@@ -234,9 +235,9 @@ endfunction
       for (addr_pdc_i=0; addr_pdc_i<ISQ_DEPTH; addr_pdc_i=addr_pdc_i+1) 
         begin
            if (addr_pdc_i < ISQ_DEPTH -1 )
-             assign addr_out[addr_pdc_i][IS_INST_WIDTH-1:0] = ( addr_rdy[addr_pdc_i] )? reorder(tpu_out[addr_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[addr_pdc_i]) : addr_out[addr_pdc_i +1][IS_INST_WIDTH-1:0];
+             assign addr_out[addr_pdc_i][IS_INST_WIDTH-1:0] = ( addr_rdy[addr_pdc_i] )? reorder(tpu_out[addr_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[addr_pdc_i][6:0]) : addr_out[addr_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line addr_pdc_i == ISQ_DEPTH -1
-             assign addr_out[addr_pdc_i][IS_INST_WIDTH-1:0] = ( addr_rdy[addr_pdc_i] )? reorder(tpu_out[addr_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[addr_pdc_i]) :  { (IS_INST_WIDTH) {1'b0} };
+             assign addr_out[addr_pdc_i][IS_INST_WIDTH-1:0] = ( addr_rdy[addr_pdc_i] )? reorder(tpu_out[addr_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[addr_pdc_i][6:0]) :  { (IS_INST_WIDTH) {1'b0} };
         end
    endgenerate
    // the final output value is output from 0

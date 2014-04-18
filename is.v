@@ -35,7 +35,7 @@
    //psrc1 and psrc2 need two more bits than lsrc1, lsrc2, no ldest
    parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5;
    parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
-   parameter BIT_INST_WAT= INST_WIDTH + 1;
+   parameter BIT_INST_WAT= INST_WIDTH;
    parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
    parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
    parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
@@ -96,6 +96,7 @@
    wire [4 * INST_WIDTH-1:0] inst_in_flat;
    assign inst_in_flat=inst_frm_al;
    wire                                        isq_en;
+
    
    wire [ISQ_LINE_WIDTH*ISQ_DEPTH-1:0]          isq_out_flat;
    
@@ -113,6 +114,8 @@
    assign inst_vld[3] = inst_frm_al[4*INST_WIDTH -1];   
    
    wire                                        isq_ful;
+   assign isq_en=~isq_ful;
+   assign ful_to_al = isq_ful;
    
    wire[ISQ_DEPTH-1:0]                         isq_lin_en;
    
@@ -137,7 +140,8 @@
          .ISQ_IDX_BITS_NUM              (ISQ_IDX_BITS_NUM),
          .INST_PORT                     (INST_PORT),
          .INST_WIDTH                    (INST_WIDTH),
-         .ISQ_LINE_WIDTH                (ISQ_LINE_WIDTH)) 
+         .ISQ_LINE_WIDTH                (ISQ_LINE_WIDTH),
+         .BIT_INST_VLD                  (BIT_INST_VLD)) 
 
    is_isq (/*autoinst*/
            // Outputs
