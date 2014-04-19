@@ -58,6 +58,9 @@
    output wire                      tpu_inst_rdy;
    
    reg                             dst_rdy;
+   wire                            dst_rdy_in_map;
+   assign dst_rdy_in_map = (isq_lin[BIT_INST_VLD] && isq_lin[BIT_LDST_VLD]) ? dst_rdy : 1'b1;
+                          
    // rdy bit + since we have 64 registers (6 bits)
    wire [6:0]                      psrc1;
    wire [6:0]                      psrc2;   
@@ -156,11 +159,13 @@
         else if (dst_rdy_reg_en)
           begin
              //when loading, the value should be dst should be invalid
-             if (isq_lin[BIT_INST_VLD] && isq_lin[BIT_LDST_VLD])
-               dst_rdy <= dst_reg_rdy;
+//             if (isq_lin[BIT_INST_VLD] && isq_lin[BIT_LDST_VLD])
+             dst_rdy <= dst_reg_rdy;
+/*             
              //if such instruciton is not valid, or doesn't write to register file
              else
                dst_rdy<=1;
+*/ 
           end
         else
           dst_rdy <= dst_rdy;
@@ -232,11 +237,11 @@
         begin
            //possible mapping
            if (map_i ==0)
-             assign pos_map[map_i]= {prv_map[TPU_MAP_WIDTH-1:(map_i+1)*7], dst_rdy, pdst};
+             assign pos_map[map_i]= {prv_map[TPU_MAP_WIDTH-1:(map_i+1)*7], dst_rdy_in_map, pdst};
            else if (map_i == 15)
-             assign pos_map[map_i]= {dst_rdy, pdst, prv_map[map_i *7 -1: 0]};
+             assign pos_map[map_i]= {dst_rdy_in_map, pdst, prv_map[map_i *7 -1: 0]};
            else
-             assign pos_map[map_i]= {prv_map[TPU_MAP_WIDTH-1:(map_i+1)*7], dst_rdy, pdst, prv_map[map_i *7 -1: 0]};             
+             assign pos_map[map_i]= {prv_map[TPU_MAP_WIDTH-1:(map_i+1)*7], dst_rdy_in_map, pdst, prv_map[map_i *7 -1: 0]};             
         end
    endgenerate
 

@@ -2,6 +2,9 @@
 
   ///////////////////////////
   // issue stage top module
+  //
+  // when the prg_rdy_frm_exe goes high, issue stage will clear
+  // the dependency in next cycle
   ////////////////////////
   module is(/*autoarg*/
    // Outputs
@@ -126,6 +129,7 @@
    //tpu
    wire[ISQ_DEPTH-1:0]                                        dst_reg_rdy;
    wire[ISQ_DEPTH-1:0]                                        dst_rdy_reg_en;
+   
    wire                                                       arch_swt;
    
    wire[ISQ_DEPTH-1:0]                                        tpu_inst_rdy;
@@ -136,6 +140,33 @@
    wire [ISQ_DEPTH-1:0]                                       clr_inst_wat;
 
 
+   /*************** handle physical register ready *************/
+   //unflat first
+   wire[PRG_SIG_WIDTH-1:0]                                                       prg_rdy[3:0];
+   // dst_rdy_en decoded from signal from execution stage
+   wire[ISQ_DEPTH-1:0]                                                       prg_dst_rdy_en[3:0];   
+   generate
+      genvar                                                                     prg_i;
+      begin
+         for (prg_i=0; prg_i<4; prg_i=prg_i+1)
+           begin
+              assign prg_rdy[prg_i][PRG_SIG_WIDTH-1:0] = prg_rdy_frm_exe[PRG_SIG_WIDTH*(prg_i+1)-1:PRG_SIG_WIDTH*prg_i];
+              //if valid, decode; otherwise set 0
+              assign prg_dst_rdy_en[prg_i][ISQ_DEPTH-1:0] = ( prg_rdy[prg_i][PRG_SIG_WIDTH-1] )? (1<<prg_rdy[prg_i][PRG_SIG_WIDTH-2:0]) : {ISQ_DEPTH{1'b0}};
+           end
+      end 
+   endgenerate
+   //for dst_rdy_reg
+   // enable when first loading inst or prg_rdy_frm_exe is valid
+   assign dst_rdy_reg_en[ISQ_DEPTH -1: 0] = isq_lin_en[ISQ_DEPTH-1:0] | prg_dst_rdy_en[3][ISQ_DEPTH-1:0] | prg_dst_rdy_en[2][ISQ_DEPTH-1:0] | prg_dst_rdy_en[1][ISQ_DEPTH-1:0] | prg_dst_rdy_en[0][ISQ_DEPTH-1:0];
+   //assign dst_reg_rdy
+   //when first loading, dst_reg_rdy is 0; for prg_rdy_frm_exe, dst_reg_rdy is one
+   // prg_dst_rdy_en have the same behavior as dst_reg_rdy
+   assign dst_reg_rdy= prg_dst_rdy_en[3][ISQ_DEPTH-1:0] | prg_dst_rdy_en[2][ISQ_DEPTH-1:0] | prg_dst_rdy_en[1][ISQ_DEPTH-1:0] | prg_dst_rdy_en[0][ISQ_DEPTH-1:0];
+
+
+   
+   
    /**************** module instatiation **********************/
    
    isq #(/*AUTOINSTPARAM*/
