@@ -166,7 +166,9 @@
 
    /*********** handle branch cmt *********/
    wire [ISQ_DEPTH-1:0] br_clr_inst_wat;
-   br_clr_inst_wat = (cmt_frm_rob[])?
+   // if valid
+//   br_clr_inst_wat = (cmt_frm_rob[BRN_WIDTH-1])? (1<<br_clr_inst_wat[BRN_WIDTH-2:0]):{ISQ_DEPTH{1'b0}};
+   
    
    
    /**************** module instatiation **********************/
