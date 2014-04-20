@@ -62,7 +62,7 @@ module Control_Unit(
 				// LDI
 				6'b 1100_xx: begin LDI_out <= 1'b1; brn_out <= 2'b00; jmp_out <= 2'b00; MemRd_out <= 1'b0; MemWr_out <= 1'b0; ALU_ctrl_out <= 3'b000; invRt_out <= 1'b0; Rs_v_out <= 1'b0; Rd_v_out <= 1'b1; Rt_v_out <= 1'b0; im_v_out <= 1'b1; RegWr_out <= 1'b1; jmp_v_out <= 1'b0; ALU_to_add_out <= 1'b1; ALU_to_mult_out <= 1'b0; ALU_to_addr_out <= 1'b0; inst_vld_out <= 1'b1; end
 				// STR
-				6'b 1101_xx: begin LDI_out <= 1'b0; brn_out <= 2'b00; jmp_out <= 2'b00; MemRd_out <= 1'b0; MemWr_out <= 1'b1; ALU_ctrl_out <= 3'b000; invRt_out <= 1'b0; Rs_v_out <= 1'b1; Rd_v_out <= 1'b1; Rt_v_out <= 1'b0; im_v_out <= 1'b1; RegWr_out <= 1'b0; jmp_v_out <= 1'b0; ALU_to_add_out <= 1'b0; ALU_to_mult_out <= 1'b0; ALU_to_addr_out <= 1'b1; inst_vld_out <= 1'b1; end
+				6'b 1101_xx: begin LDI_out <= 1'b0; brn_out <= 2'b00; jmp_out <= 2'b00; MemRd_out <= 1'b0; MemWr_out <= 1'b1; ALU_ctrl_out <= 3'b000; invRt_out <= 1'b0; Rs_v_out <= 1'b1; Rd_v_out <= 1'b0; Rt_v_out <= 1'b1; im_v_out <= 1'b1; RegWr_out <= 1'b0; jmp_v_out <= 1'b0; ALU_to_add_out <= 1'b0; ALU_to_mult_out <= 1'b0; ALU_to_addr_out <= 1'b1; inst_vld_out <= 1'b1; end
 				// LDR
 				6'b 1110_xx: begin LDI_out <= 1'b0; brn_out <= 2'b00; jmp_out <= 2'b00; MemRd_out <= 1'b1; MemWr_out <= 1'b0; ALU_ctrl_out <= 3'b000; invRt_out <= 1'b0; Rs_v_out <= 1'b1; Rd_v_out <= 1'b1; Rt_v_out <= 1'b0; im_v_out <= 1'b1; RegWr_out <= 1'b1; jmp_v_out <= 1'b0; ALU_to_add_out <= 1'b0; ALU_to_mult_out <= 1'b0; ALU_to_addr_out <= 1'b1; inst_vld_out <= 1'b1; end
 				// J
@@ -72,6 +72,8 @@ module Control_Unit(
 				// JAL changed to LDI
 				6'b 1111_10: begin LDI_out <= 1'b1; brn_out <= 2'b00; jmp_out <= 2'b10; MemRd_out <= 1'b0; MemWr_out <= 1'b0; ALU_ctrl_out <= 3'b000; invRt_out <= 1'b0; Rs_v_out <= 1'b0; Rd_v_out <= 1'b1; Rt_v_out <= 1'b0; im_v_out <= 1'b1; RegWr_out <= 1'b1; jmp_v_out <= 1'b1; ALU_to_add_out <= 1'b1; ALU_to_mult_out <= 1'b0; ALU_to_addr_out <= 1'b0; inst_vld_out <= 1'b1; end
 				// JALR
+				
+
 				//6'b 1111_11: begin LDI_out <= 1'b0; brn_out <= 2'b00; jmp_out <= 2'b11; MemRd_out <= 1'b0; MemWr_out <= 1'b0; ALU_ctrl_out <= 3'b000; invRt_out <= 1'b0; Rs_v_out <= 1'b1; Rd_v_out <= 1'b0; Rt_v_out <= 1'b0; im_v_out <= 1'b1; RegWr_out <= 1'b0; jmp_v_out <= 1'b1; ALU_to_add_out <= 1'b0; ALU_to_mult_out <= 1'b0; ALU_to_addr_out <= 1'b0; end
 			endcase
 
