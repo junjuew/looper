@@ -59,7 +59,7 @@ module reg_file (
         begin
             always@(posedge clk or negedge rst_n) begin
                 if(!rst_n) begin
-                    reg_file_body[reg_idx] <= 1;
+                    reg_file_body[reg_idx] <= 0;
                     reg_file_brn_log[reg_idx] <= 0;
                 end
                 else begin
