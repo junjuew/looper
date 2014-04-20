@@ -400,16 +400,16 @@
 
         //add in test suit 1
         /********************* single instruction test****************/        
-//        `include "is_tb_1.v"        
+        `include "is_tb_1.task"        
 
         /****************** test if clr wait when succesful send***************/
-//        `include "is_tb_2.v"                
+        `include "is_tb_2.task"                
 
         /******************* test architecture switch ****************/
-//        `include "is_tb_3.v"                
+        `include "is_tb_3.task"                
 
         /**************** test inst send but not resolved + architecture switch ************/
-//        `include "is_tb_4.v"                        
+        `include "is_tb_4.task"                        
 
 
         /**  branch instruction. make sure branch doesn't clr wait immediately after send ****/
