@@ -95,7 +95,7 @@ ROB per entry:
     reg [4:0]  rob_ld_ptr    [63:0];
     reg [63:0] rob_reg_wrt;
     reg [5:0]  rob_free_preg_num [63:0];
-
+	
 	// other counters
     reg [6:0] rob_head; // one extra big ahead to enable overflow comparison
     wire [2:0] rob_head_cmmt_num; //
@@ -148,7 +148,7 @@ ROB per entry:
     assign mis_pred_ld_ptr_num = (mis_pred) ? rob_ld_ptr[mis_pred_brnc_idx] : 0;
     assign mis_pred_st_ptr_num = (mis_pred) ? rob_st_ptr[mis_pred_brnc_idx] : 0;
 
-    assign cmmt_ld_ptr_num = rob_ld_ptr[rob_head];
+    assign cmmt_ld_ptr_num = (rob_done[rob_head]) ? rob_ld_ptr[rob_head] : ((rob_head!=0) ? rob_ld_ptr[rob_head-1] : rob_ld_ptr[63]);
 
     // rob_head_cmmt_number
     wire [5:0] rob_head_1, rob_head_2, rob_head_3, rob_head_4, rob_head_5, rob_head_6, rob_head_7;
@@ -202,14 +202,14 @@ ROB per entry:
                                        : (sum_8 == 5) ? 7
                                        : 7;
     
-    assign rob_head_cmmt_num_vld = (!rob_done[rob_head])   ? 0
-                                 : (!rob_done[rob_head_1]) ? 1
-                                 : (!rob_done[rob_head_2]) ? 2
-                                 : (!rob_done[rob_head_3]) ? 3
-                                 : (!rob_done[rob_head_4]) ? 4
-                                 : (!rob_done[rob_head_5]) ? 5
-                                 : (!rob_done[rob_head_6]) ? 6
-                                 : (!rob_done[rob_head_7]) ? 7
+    assign rob_head_cmmt_num_vld = ((rob_reg_wrt[rob_head]   || rob_brnc[rob_head])   && (!rob_done[rob_head])   || (!rob_vld[rob_head]))   ? 0
+                                 : ((rob_reg_wrt[rob_head_1] || rob_brnc[rob_head_1]) && (!rob_done[rob_head_1]) || (!rob_vld[rob_head_1])) ? 1
+                                 : ((rob_reg_wrt[rob_head_2] || rob_brnc[rob_head_2]) && (!rob_done[rob_head_2]) || (!rob_vld[rob_head_2])) ? 2
+                                 : ((rob_reg_wrt[rob_head_3] || rob_brnc[rob_head_3]) && (!rob_done[rob_head_3]) || (!rob_vld[rob_head_3])) ? 3
+                                 : ((rob_reg_wrt[rob_head_4] || rob_brnc[rob_head_4]) && (!rob_done[rob_head_4]) || (!rob_vld[rob_head_4])) ? 4
+                                 : ((rob_reg_wrt[rob_head_5] || rob_brnc[rob_head_5]) && (!rob_done[rob_head_5]) || (!rob_vld[rob_head_5])) ? 5
+                                 : ((rob_reg_wrt[rob_head_6] || rob_brnc[rob_head_6]) && (!rob_done[rob_head_6]) || (!rob_vld[rob_head_6])) ? 6
+                                 : ((rob_reg_wrt[rob_head_7] || rob_brnc[rob_head_7]) && (!rob_done[rob_head_7]) || (!rob_vld[rob_head_7])) ? 7
                                  : 7;
     assign rob_head_cmmt_num_pair1 = (rob_head_cmmt_num_st <= rob_head_cmmt_num_brnc) ? 
                                       rob_head_cmmt_num_st :  rob_head_cmmt_num_brnc;
@@ -430,17 +430,6 @@ ROB per entry:
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n)
                 rob_done[rob_done_idx] <= 0;
-            // clear the done bit by the head
-            else if (rob_head_cmmt_num) begin
-                if(rob_done_idx >= rob_head && rob_done_idx < (rob_head + rob_head_cmmt_num)) 
-                    rob_done[rob_done_idx] <= 0;
-                else if((rob_head + rob_head_cmmt_num) >= 64 && 
-                        rob_done_idx < (rob_head + rob_head_cmmt_num - 64))
-                    rob_done[rob_done_idx] <= 0;
-                else begin
-                    rob_done[rob_done_idx] <= rob_done[rob_done_idx];
-                end
-            end
             // set the done bit by all valid FU finish, and branch result
             else if((mult_done_vld && (rob_done_idx == mult_done_idx)) || 
                     (alu1_done_vld && (rob_done_idx == alu1_done_idx)) || 
@@ -452,6 +441,17 @@ ROB per entry:
                     (rob_brnc_pred[rob_done_idx] == ((rob_brnc_cond[rob_done_idx] ^ brnc_cmp_rslt) == 0)))
                     // and the predicted behavior is correct
                 rob_done[rob_done_idx] <= 1;
+            // clear the done bit by the head
+            else if (rob_head_cmmt_num) begin
+                if(rob_done_idx >= rob_head && rob_done_idx < (rob_head + rob_head_cmmt_num)) 
+                    rob_done[rob_done_idx] <= 0;
+                else if((rob_head + rob_head_cmmt_num) >= 64 && 
+                        rob_done_idx < (rob_head + rob_head_cmmt_num - 64))
+                    rob_done[rob_done_idx] <= 0;
+                else begin
+                    rob_done[rob_done_idx] <= rob_done[rob_done_idx];
+                end
+            end
             else begin
                 rob_done[rob_done_idx] <= rob_done[rob_done_idx];
             end
