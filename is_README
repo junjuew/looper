@@ -57,3 +57,7 @@ Current implementation scheme:
    Same happens, when arch=1, and counter becomes 7, no data is loaded into isq 28-31
 
 2. Such scheme for freezing counter's value when issue queue is full makes sure that arch_swt signal in tpu is working correctly
+
+3. Arch swt in TPU will only happen until all instructions in the active region resolved, not only sent. 
+   reason: for example, idx 31 is sent but not resolved. At this time, arch swt cannot happen, since if happened (assume , top segment is the current header), middle segment will clock in idx 31's dest register as invalid. When we resolve it, we can only update idx 31's pdest instead of updating middle segment.
+

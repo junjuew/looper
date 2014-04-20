@@ -207,11 +207,33 @@
            assign inst_done[inst_vld_i]= (inst_vld[inst_vld_i])? (~inst_wat[inst_vld_i]):1'b1;
         end
    endgenerate
+
+
+   ///////////////////////////////////////////////
+   // grab cur mapping from idx 31 line and idx 63 line
+   /////////////////////////////////////////////////
+   wire[15:0] bf_mid_map_rdy;
+   wire[15:0] bf_top_map_rdy;   
+   generate
+      genvar bf_i;
+      for (bf_i=0; bf_i<16; bf_i= bf_i +1)
+        begin
+           //before middle segment is idx 31
+           assign bf_mid_map_rdy[bf_i]  = cur_map[ISQ_DEPTH/2-1][7*(bf_i+1)-1];
+           //before top segment is idx 63
+           assign bf_top_map_rdy[bf_i]  = cur_map[ISQ_DEPTH-1][7*(bf_i+1)-1];           
+        end
+   endgenerate
+   wire bf_mid_map_all_rdy;
+   wire bf_top_map_all_rdy;   
+   assign bf_mid_map_all_rdy = (&bf_mid_map_rdy[15:0]);
+   assign bf_top_map_all_rdy = (&bf_top_map_rdy[15:0]);   
    
    // architecture switch happens when all following criteria is satisfied
    // 1. region below current header wat=0 for all valid insts ( invalid insts may exist )
    // 2. counter's value is outside of region below current header
-   assign arch_swt= ((~arch) && (counter > ((ISQ_DEPTH/2)/4-1) ) && ( &(inst_done[ISQ_DEPTH/2-1:0]) )) || ((arch) && (counter < (ISQ_DEPTH/2)/4 ) && ( &(inst_done[(ISQ_DEPTH-1):(ISQ_DEPTH/2)]) ));
+   // 3. region below current header needs to be all resolved (no pdest is invalid)
+   assign arch_swt= (  (~arch) && (counter > ((ISQ_DEPTH/2)/4-1) ) && ( &(inst_done[ISQ_DEPTH/2-1:0])) && bf_mid_map_all_rdy ) || (  (arch) && (counter < (ISQ_DEPTH/2)/4 ) && ( &(inst_done[(ISQ_DEPTH-1):(ISQ_DEPTH/2)])) && bf_top_map_all_rdy );
    assign isq_ful = ((~arch) && (counter == ((ISQ_DEPTH)/4)-1) ) || ((arch) && (counter == (ISQ_DEPTH/2)/4 -1)); 
 
    //architecture recorder

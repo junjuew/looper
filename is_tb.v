@@ -210,7 +210,19 @@
 */ 
       end
    endtask
+
+   /************** print out current logical to physical mapping ********/
+   task print_cur_map;
+      input [TPU_MAP_WIDTH-1:0]  cur_map;
+      begin
+         $display("%g cur mapping of %x", $time, cur_map);
+         for (j=0;j<16;j=j+1)
+           $display("%g %x => %b,%x", $time, j, cur_map[7*(j+1)-1], cur_map[7*j+5 -: 6]);
+      end
+   endtask // print_cur_map
    
+      
+           
    
 
 
@@ -351,7 +363,7 @@
 //        $monitor ("%g\n (3)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (2)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (1)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (0)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n top head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, mid head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, arch:%b ",$time, tpu_inst_rdy[3],  inst_idx[3], inst_vld[3], inst_psrc1[3], inst_psrc2[3], inst_pdst[3] , fre_preg[3] ,  tpu_inst_rdy[2],  inst_idx[2], inst_vld[2], inst_psrc1[2], inst_psrc2[2], inst_pdst[2] , fre_preg[2] , tpu_inst_rdy[1],  inst_idx[1], inst_vld[1], inst_psrc1[1], inst_psrc2[1], inst_pdst[1] , fre_preg[1] , tpu_inst_rdy[0],  inst_idx[0], inst_vld[0], inst_psrc1[0], inst_psrc2[0], inst_pdst[0] , fre_preg[0],top_hed[15],  top_hed[14],  top_hed[13],  top_hed[12], top_hed[11],  top_hed[10],  top_hed[9],  top_hed[8],  top_hed[7],  top_hed[6],  top_hed[5],  top_hed[4], top_hed[3],  top_hed[2],  top_hed[1],  top_hed[0],mid_hed[15],  mid_hed[14],  mid_hed[13],  mid_hed[12], mid_hed[11],  mid_hed[10],  mid_hed[9],  mid_hed[8],  mid_hed[7],  mid_hed[6],  mid_hed[5],  mid_hed[4], mid_hed[3],  mid_hed[2],  mid_hed[1],  mid_hed[0], DUT.arch);
 
 
-        $monitor("%g inst in:   %x,  arch_swt: %b", $time,inst_frm_al, DUT.is_tpu.arch_swt);
+        $monitor("%g inst in:   %x,  arch_swt: %b, arch: %b", $time,inst_frm_al, DUT.is_tpu.arch_swt, DUT.is_tpu.arch);
 
 
         clear();
@@ -385,443 +397,72 @@
 
         repeat(3) @(posedge clk);
 
-        /********************* single instruction test****************/
-        @(posedge clk);
-        $display("");
-        $display("");        
-        $display("%g  ============= start valid inst test  ==========", $time);        
-        $display("%g  ============= one add1 valid inst comes in   ==========", $time);
-        clear();
-        //r0 =r1 + r2
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        ALU_to_adder=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=63;
-        load(0);
-        clear();
-        load(1);
-        load(2);
-        load(3);
 
-        @(posedge clk);
-        $display("%g  ============= check output. add1 should have inst  ==========", $time);
-
-        $display("");
-        $display("%g  ============= one add2  inst comes in   ==========", $time);
-        clear();
-        //r0 =r1 + r2
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        ALU_to_adder=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=62;
-        load(1);
-        clear();
-        load(0);
-        load(2);
-        load(3);
-
-        @(posedge clk);
-        $display("\n");        
-        $display("%g  ============= check output. add2 should have inst  ==========", $time);
-        clear();
-        //r0 =r1 * r2
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        ALU_to_mult=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=61;
-        load(2);
-        clear();
-        load(0);
-        load(1);
-        load(3);
-
-
-        @(posedge clk);
-        $display("\n");                
-        $display("%g  ============= check output. mul should have inst  ==========", $time);
-        clear();
-        //r0 =r1 + r2 but use address adder
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        ALU_to_addr=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=60;
-        load(3);
-        clear();
-        load(0);
-        load(1);
-        load(2);
-
-
-        @(posedge clk);
-        $display("%g  ============= check output. addr should have inst  ==========", $time);
-
-        @(posedge clk);
-        rst_n=0;        
-        
-        @(posedge clk);
-        rst_n=1;        
-        $display("\n");                
-        clear();
-        //r0 =r1 + r2 but use address adder
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=0;
-        Rd=0;
-        Rt_valid_bit=0;
-        Rt=2;
-        ALU_to_adder=0;
-        RegWr=0;
-        brn=1;
-        pr_valid=0;
-        load(0);
-        clear();
-        load(1);
-        load(2);
-        load(3);
-
-
-        @(posedge clk);
-        $display("%g  ============= check output. add1 should have inst  ==========", $time);
-        
-
-        @(posedge clk);
-        rst_n=0;        
-        
-        @(posedge clk);
-        rst_n=1;        
-        $display("\n");                
-        clear();
-        //r0 =r1 + r2 but use address adder
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=0;
-        Rd=0;
-        Rt_valid_bit=0;
-        Rt=2;
-        RegWr=0;
-        jmp_valid_bit=1;
-        pr_valid=0;
-        load(0);
-        clear();
-        load(1);
-        load(2);
-        load(3);
-
-
-        @(posedge clk);
-        $display("%g  ============= check output. add1 should have inst  ==========", $time);
-        rst_n=0;
-
-        
+        //add in test suit 1
+        /********************* single instruction test****************/        
+//        `include "is_tb_1.v"        
 
         /****************** test if clr wait when succesful send***************/
-        @(posedge clk);
-        $display("");
-        $display("");
-        rst_n=1;
-        $display("%g  ============= test if clr wait is successful after send  ==========", $time);        
-        clear();
-        //r0 =r1 + r2
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        ALU_to_adder=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=63;
-        load(0);
-        pr_number=62;
-        load(1);
-        
-        clear();
-        //r0 =r1 * r2
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        ALU_to_mult=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=61;
-        load(2);
-        
-        //r0 =r1 + r2 but use address adder
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        ALU_to_addr=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=60;
-        load(3);
-
-        @(posedge clk);
-        $display("%g  ============= should have outputs  ==========", $time);
-        clear();
-        load(0);
-        load(1);
-        load(2);
-        load(3);        
-        
-        
-        @(posedge clk);
-        $display("%g  ============= all outputs should die  ==========", $time);
-
-        @(posedge clk);
-        rst_n=0;
-        
-        /************** load instructions with dependency ***********/
-        @(posedge clk);
-        rst_n=1;
-        $display("%g  ============= load instructions with dependency  ==========", $time);
-        
-        clear();
-        //r2 =r0 + r1
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=0;
-        Rd_valid_bit=1;
-        Rd=2;
-        Rt_valid_bit=1;
-        Rt=1;
-        ALU_to_adder=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=63;
-        load(0);
-
-        //r4 =r2 + r3
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=2;
-        Rd_valid_bit=1;
-        Rd=4;
-        Rt_valid_bit=1;
-        Rt=3;
-        ALU_to_adder=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=62;
-        load(1);
-
-        //r6 =r4 + r5
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=4;
-        Rd_valid_bit=1;
-        Rd=6;
-        Rt_valid_bit=1;
-        Rt=5;
-        ALU_to_adder=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=61;
-        load(2);
-
-        //r8 =r6 + r7
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=6;
-        Rd_valid_bit=1;
-        Rd=8;
-        Rt_valid_bit=1;
-        Rt=7;
-        ALU_to_adder=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=60;
-        load(3);
-
-
-        @(posedge clk);
-        $display("%g  ============ output. only inst 0 should be available  ==========", $time);
-        clear();
-        load(0);
-        load(1);
-        load(2);        
-        load(3);                
-
-        @(posedge clk);
-        //now start to resolve the instructions
-        prg_rdy_frm_exe={ 1'b1, 6'h00, {3{7'h00}} };
-        $display("%g  ============ inst 0 resolved  ==========", $time);        
-        
-        @(posedge clk);
-        prg_rdy_frm_exe={ 1'b1, 6'h01, 1'b1, 6'h02, {2{7'h00}} };
-        $display("%g  ============ output.  inst 1 should be available  ==========", $time);      
-        $display("%g  ============ inst 1,2 resolved  ==========", $time);
-
-        @(posedge clk);
-        $display("%g  ============ output.  inst 2 should be available  ==========", $time);  
-
+//        `include "is_tb_2.v"                
 
         /******************* test architecture switch ****************/
-        @(posedge clk);
-        $display("");        
-        $display("%g complex test No.1", $time);
-        
-        rst_n=0;
-        prg_rdy_frm_exe=0;
-        
-        /************** load instructions with dependency ***********/
-        @(posedge clk);
-        rst_n=1;
-        $display("%g  ============= start loading in next cycle  ==========", $time);
-        clear();
-        load(0);
-        load(1);
-        load(2);
-        load(3);        
-        pr_number=64;
-        k=pr_number;
-        
-        for (i=0; i<20; i=i+1)
-          begin
-             $display("%g iteration: %d", $time, i);
-             @(posedge clk);
-             if (i!=0)
-               begin
+        `include "is_tb_3.v"                
 
-                  j=(i-1);
-/*                  
-                  k=4*(i-1)+1;
-                  l=4*(i-1)+2;
-                  m=4*(i-1)+3;                  
-*/                  
-                  //resolve last instructions first
-                  prg_rdy_frm_exe={ 1'b1, j[5:0], {3{1'b0, 6'h0}} };
-                  $display("%g prg_rdy_frm_exe: %b", $time, prg_rdy_frm_exe);
-//                  $display("%g test: %b", $time, { (4*i)[5:0], 4*i[5:0] });
-               end
-
-             clear();
-             pr_number=k;
-             //r2 =r0 + r1
-             inst_valid=1;
-             Rs_valid_bit=1;
-             Rs=0;
-             Rd_valid_bit=1;
-             Rd=2;
-             Rt_valid_bit=1;
-             Rt=1;
-             ALU_to_adder=1;
-             RegWr=1;
-             pr_valid=1;
-             pr_number=pr_number-1;
-             load(0);
-
-             //r4 =r2 + r3
-             inst_valid=1;
-             Rs_valid_bit=1;
-             Rs=2;
-             Rd_valid_bit=1;
-             Rd=4;
-             Rt_valid_bit=1;
-             Rt=3;
-             ALU_to_adder=1;
-             RegWr=1;
-             pr_valid=1;
-             pr_number=pr_number-1;
-             load(1);
-
-             //r6 =r4 + r5
-             inst_valid=1;
-             Rs_valid_bit=1;
-             Rs=4;
-             Rd_valid_bit=1;
-             Rd=6;
-             Rt_valid_bit=1;
-             Rt=5;
-             ALU_to_adder=1;
-             RegWr=1;
-             pr_valid=1;
-             pr_number=pr_number-1;             
-             load(2);
-
-             //r0 =r6 + r7
-             inst_valid=1;
-             Rs_valid_bit=1;
-             Rs=6;
-             Rd_valid_bit=1;
-             Rd=0;
-             Rt_valid_bit=1;
-             Rt=7;
-             ALU_to_adder=1;
-             RegWr=1;
-             pr_valid=1;
-             pr_number=pr_number-1;                          
-             load(3);
-
-             k=pr_number;
-          end
-   
+        /**************** test inst send but not resolved + architecture switch ************/
+//        `include "is_tb_4.v"                        
 
 
-        for (i=20; i<=64; i=i+1)
-          begin
-             $display("%g iteration: %d", $time, i);
-             @(posedge clk);
-
-             j=(i-1);
-             //resolve last instructions first
-             prg_rdy_frm_exe={ 1'b1, j[5:0], {3{1'b0, 6'h0}} };
-             $display("%g prg_rdy_frm_exe: %b", $time, prg_rdy_frm_exe);
-          end
 
 
-        repeat(10) @(posedge clk);        
 
-        for (i=0; i<=32; i=i+1)
-          begin
-             $display("%g iteration: %d", $time, i);
-             @(posedge clk);
 
-             j=(i-1);
-             //resolve last instructions first
-             prg_rdy_frm_exe={ 1'b1, j[5:0], {3{1'b0, 6'h0}} };
-             $display("%g prg_rdy_frm_exe: %b", $time, prg_rdy_frm_exe);
-          end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         
