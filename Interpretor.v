@@ -41,7 +41,7 @@ module Interpretor(
 
 	
 	assign Rs = (brn_in == 2'b00 && LDI_in == 1'b0 && jmp_v_in == 1'b0) ? bits7_4_in : bits11_8_in; 
-	assign Rt = (MemWr_in == 1'b1) ? bits11_8 : bits3_0_in;
+	assign Rt = (MemWr_in == 1'b1) ? bits11_8_in : bits3_0_in;
 	//changed from  assign Rd = bits11_8_in; to:
 	assign Rd = (jmp_in[1] == 1'b1) ? 5'd15 : bits11_8_in;
 	assign immediate = (brn_in != 2'b00 || LDI_in == 1'b1) ? {{8{bits7_4_in[3]}}, bits7_4_in, bits3_0_in} : 
