@@ -90,17 +90,19 @@ assign brnch_pc_sel_from_bhndlr[2]=(inst1[15:14]==2'b10) && (!(inst1[13:12]==2'b
 assign brnch_pc_sel_from_bhndlr[1]=(inst2[15:14]==2'b10) && (!(inst2[13:12]==2'b00));
 assign brnch_pc_sel_from_bhndlr[0]=(inst3[15:14]==2'b10) && (!(inst3[13:12]==2'b00));
 
-//if there is branch enable branch predictor
-assign update_bpred=isJump[3]?0:
+/*//if there is branch enable branch predictor
+assign update_bpred=hold_for_brnch?0:(isJump[3]?0:
    (brnch_pc_sel_from_bhndlr[3]?1:(isJump[2]?0:
    (brnch_pc_sel_from_bhndlr[2]?1:(isJump[1]?0:
-   ((|brnch_pc_sel_from_bhndlr[1:0])?1:0)))));
+   ((|brnch_pc_sel_from_bhndlr[1:0])?1:0))))));
+  */ 
+
 //|brnch_pc_sel_from_bhndlr
 
 
 //if branch instruction is taken and not flushed, increase counter
 //calculate number of instructions before current branch instruction
-wire [1:0] incr_cnt;
+reg [1:0] incr_cnt;
 wire [1:0] brnch_before_inst0,brnch_before_inst1,brnch_before_inst2,brnch_before_inst3;
 assign brnch_before_inst0=brnch_cnt;
 assign brnch_before_inst1=brnch_before_inst0+brnch_pc_sel_from_bhndlr[3];
@@ -109,7 +111,23 @@ assign brnch_before_inst3=brnch_before_inst2+brnch_pc_sel_from_bhndlr[1];
 wire [3:0] exd_cnt;
 assign exd_cnt={(brnch_before_inst0>=2'b10),(brnch_before_inst1>=2'b10),
                   (brnch_before_inst2>=2'b10),(brnch_before_inst3>=2'b10)};
+wire [3:0] third_brnch;
+assign third_brnch[3]=exd_cnt[3]&&brnch_pc_sel_from_bhndlr[3];
+assign third_brnch[2]=(exd_cnt[2]&&brnch_pc_sel_from_bhndlr[2])||third_brnch[3];
+assign third_brnch[1]=(exd_cnt[1]&&brnch_pc_sel_from_bhndlr[1])||third_brnch[2];
+assign third_brnch[0]=(exd_cnt[0]&&brnch_pc_sel_from_bhndlr[0])||third_brnch[1] ;
 
+reg hold_for_brnch;
+always@(posedge clk or negedge rst_n)begin
+  if(!rst_n)
+    hold_for_brnch<=0;
+  else if(|third_brnch==1'b1)
+    hold_for_brnch<=1;
+  else if(&exd_cnt==0)
+    hold_for_brnch<=0;
+  else
+    hold_for_brnch<=hold_for_brnch;
+end
 /*///limit number of brnches
 assign inst0_b=exd_cnt[3]?16'b0:inst0;
 assign inst1_b=exd_cnt[3]?16'b0:inst1;
@@ -117,7 +135,18 @@ assign inst2_b=exd_cnt[3]?16'b0:inst2;
 assign inst3_b=exd_cnt[3]?16'b0:inst3;
 */
 
+//if there is branch enable branch predictor
+assign update_bpred=hold_for_brnch?0:((isJump[3]||third_brnch[3])?0:
+   (brnch_pc_sel_from_bhndlr[3]?1:((isJump[2]||third_brnch[2])?0:
+   (brnch_pc_sel_from_bhndlr[2]?1:((isJump[1]||third_brnch[1])?0:
+   ((brnch_pc_sel_from_bhndlr[1])?1:((isJump[0]||third_brnch[0])?0:
+   ((brnch_pc_sel_from_bhndlr[0])?1:0))))))));
+
+
+
+
 //update counter
+/*
 assign incr_cnt=all_nop[3]?2'b00:(all_nop[2]?
    (brnch_pc_sel_from_bhndlr[3]?2'b01:2'b00):
 (      all_nop[1]?(   (&brnch_pc_sel_from_bhndlr[3:2])?2'b10:
@@ -125,7 +154,41 @@ assign incr_cnt=all_nop[3]?2'b00:(all_nop[2]?
 (   all_nop[0]?(   (|brnch_pc_sel_from_bhndlr[3:1]==0)?2'b00:
 (   (^brnch_pc_sel_from_bhndlr[3:1]==1)?2'b01:2'b10)):
 (   ((brnch_before_inst3-brnch_cnt)==2'b10)?2'b10:
-(   ((brnch_before_inst3-brnch_cnt)==2'b01)?2'b01:2'b00)))   ));//nothing flushed
+(   ((brnch_before_inst3-brnch_cnt)==2'b01)?2'b01:
+//nothing flushed, check last instruction
+((brnch_before_inst3-brnch_cnt+brnch_pc_sel_from_bhndlr[0])==2'b10)?2'b10:
+(((brnch_before_inst3-brnch_cnt+brnch_pc_sel_from_bhndlr[0])==2'b01)?2'b01:2'b00))))   ));//nothing flushed
+*/
+
+always@(*)begin
+    if(all_nop[3]==1)
+        incr_cnt=2'b00;
+    else if(all_nop[2]==1)begin
+        if(brnch_pc_sel_from_bhndlr[3]==1)
+            incr_cnt=2'b01;
+        else
+            incr_cnt=2'b00;
+    end else if(all_nop[1]==1)begin
+        if(&brnch_pc_sel_from_bhndlr[3:2]==1)
+            incr_cnt=2'b10;
+        else if(|brnch_pc_sel_from_bhndlr[3:2]==1)
+            incr_cnt=2'b01;
+        else
+            incr_cnt=2'b00;
+  end else if(all_nop[0]==1)begin
+        if(|brnch_pc_sel_from_bhndlr[3:1]==0)
+            incr_cnt=2'b00;
+        else if(^brnch_pc_sel_from_bhndlr[3:1]==1)
+            incr_cnt=2'b01;
+        else
+            incr_cnt=2'b10;
+  end else//no flush
+        incr_cnt=brnch_pc_sel_from_bhndlr[3]+brnch_pc_sel_from_bhndlr[2]
+            +brnch_pc_sel_from_bhndlr[1]+brnch_pc_sel_from_bhndlr[0];
+  
+end
+
+
 
 //(brnch_before_inst3>=2'b10)?2'b10:(
  //  ((brnch_before_inst3-brnch_cnt)==2'b01)?2'b01:2'b00);
@@ -171,21 +234,21 @@ assign tkn_brnch[0]=(exd_cnt[3])?0:((|brnch_pc_sel_from_bhndlr[3:1])?
 //stall signal, plus tkn, exceed count,jump, if immdediate jump flush at dataout module
 //if previous instruction got flushed, latter ones all get flushed
 //all_nop=1-->flush
-assign all_nop[3]=(stall_for_jump|| stall_fetch)?1:(exd_cnt[3]?1:0);
-assign all_nop[2]=(stall_for_jump|| stall_fetch)?1:(all_nop[3]?1:(isJump[3]?1:(exd_cnt[2]?1:(tkn_brnch[3]?1:0))));
-assign all_nop[1]=(stall_for_jump|| stall_fetch)?1:(all_nop[2]?1:(isJump[2]?1:(exd_cnt[1]?1:(tkn_brnch[2]?1:0))));
-assign all_nop[0]=(stall_for_jump|| stall_fetch)?1:(all_nop[1]?1:(isJump[1]?1:(exd_cnt[0]?1:(tkn_brnch[1]?1:0))));
+assign all_nop[3]=(stall_for_jump|| stall_fetch||hold_for_brnch)?1:(third_brnch[3]?1:0);
+assign all_nop[2]=(stall_for_jump|| stall_fetch||hold_for_brnch)?1:(all_nop[3]?1:(isJump[3]?1:(third_brnch[2]?1:(tkn_brnch[3]?1:0))));
+assign all_nop[1]=(stall_for_jump|| stall_fetch||hold_for_brnch)?1:(all_nop[2]?1:(isJump[2]?1:(third_brnch[1]?1:(tkn_brnch[2]?1:0))));
+assign all_nop[0]=(stall_for_jump|| stall_fetch||hold_for_brnch)?1:(all_nop[1]?1:(isJump[1]?1:(third_brnch[0]?1:(tkn_brnch[1]?1:0))));
 
 
 ///////////////////////
 //Output signals    //
-/////////////////////
+////////////////////
    //for next PC
-   assign pcsel_from_bhndlr=(stall_for_jump||stall_fetch||isJump[3])||(|exd_cnt);
+   assign pcsel_from_bhndlr=(stall_for_jump||stall_fetch||isJump[3])||(|third_brnch)||hold_for_brnch;
    //reg [15:0] pc_bhndlr;//if more than two branches, third got flushed
    
-   assign pc_bhndlr=(stall_for_jump||stall_fetch||exd_cnt[3]||isJump[3])?pc:
-        (exd_cnt[2]?(pc+1):(exd_cnt[1]?(pc+2):(exd_cnt[0]?(pc+3):pc+4)));
+   assign pc_bhndlr=(stall_for_jump||stall_fetch||third_brnch[3]||isJump[3]||hold_for_brnch)?pc:
+        (third_brnch[2]?(pc+1):(third_brnch[1]?(pc+2):(third_brnch[0]?(pc+3):pc+4)));
 
    
    //instructions
