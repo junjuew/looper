@@ -330,7 +330,7 @@ is is_DUT(.clk(clk), .rst_n(rst_n),
 	.inst_frm_al({inst_out_to_SCH3,inst_out_to_SCH2,inst_out_to_SCH1,inst_out_to_SCH0}), 
 	.fls_frm_rob({flush_ROB_out,mis_pred_brnc_idx_ROB_out}), 
 	.cmt_frm_rob({cmt_brnc_ROB_out,cmt_brnc_idx_ROB_out}), 
-	.fun_rdy_frm_exe({mult_free_ex_is_out,3'b111}),
+	.fun_rdy_frm_exe({3'b111,mult_free_ex_is_out}),
 	.prg_rdy_frm_exe({reg_wrt_mul_wb_rf,mult_done_idx_ex_wb_out,reg_wrt_alu1_wb_rf,alu1_done_idx_ex_wb_out,reg_wrt_alu2_wb_rf,alu2_done_idx_ex_wb_out,reg_wrt_ld_wb_out,indx_ld_wb_out}), 
 	.lop_sta(loop_strt_to_SCH), 
 	// Outputs

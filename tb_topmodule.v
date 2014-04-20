@@ -104,7 +104,7 @@ module tb_topmodule();
  -----/\----- EXCLUDED -----/\----- */
 
    initial begin
-      #200;
+      #400;
       $finish;
       
    end
