@@ -71,6 +71,7 @@ module tb_topmodule();
    
 
 
+/* -----\/----- EXCLUDED -----\/-----
 
    always@(posedge clk)
      begin
@@ -83,6 +84,7 @@ module tb_topmodule();
 	$display("///////////////////////////////////////////////////////////////////////////////////\n");
      end
 
+ -----/\----- EXCLUDED -----/\----- */
    
 	   
 /* -----\/----- EXCLUDED -----\/-----
@@ -122,6 +124,7 @@ module tb_topmodule();
    
  -----/\----- EXCLUDED -----/\----- */
 
+/* -----\/----- EXCLUDED -----\/-----
 
    initial begin
       #195;
@@ -136,10 +139,11 @@ module tb_topmodule();
       $display("///////////////////////////////reg file//////////////////////////");
 
    end // initial begin
+ -----/\----- EXCLUDED -----/\----- */
    
    
    initial begin
-      #200;
+      #400;
       $finish;
       
    end

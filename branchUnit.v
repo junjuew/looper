@@ -19,7 +19,7 @@ module branchUnit(/*autoarg*/
    output wire 		all_nop_from_branchUnit;
    
    
-   wire 	     indx1,indx2,indx3;
+   wire [5:0]	     indx1,indx2,indx3;
    wire [6:0] 	     curr_pos1,curr_pos2,curr_pos3;
    reg [13:0] 	     pos_reg0,pos_reg1; // {free|brch_indx|pointer_pos}
    wire 	     brch0,brch1,brch2,brch3;
@@ -54,7 +54,7 @@ module branchUnit(/*autoarg*/
 	
 	if(brch0) 
 	  begin
-	     if(pos_reg0[0])
+	     if(pos_reg0[13])
 	       begin
 		  pos_reg0_en = 1'b1;
 		  pos_reg0_input = {1'b0,nxt_indx,curr_pos};
@@ -68,7 +68,7 @@ module branchUnit(/*autoarg*/
    
 	if(brch1)
 	  begin
-	     if(!pos_reg0[0] ||  pos_reg0_en)
+	     if(!pos_reg0[13] ||  pos_reg0_en)
 	       begin
 		  pos_reg1_en = 1'b1;
 		  pos_reg1_input = {1'b0,indx1,curr_pos1};
@@ -82,7 +82,7 @@ module branchUnit(/*autoarg*/
 
 	if(brch2)
 	  begin
-	     if(!pos_reg0[0] ||  pos_reg0_en)
+	     if(!pos_reg0[13] ||  pos_reg0_en)
 	       begin
 		  pos_reg1_en = 1'b1;
 		  pos_reg1_input = {1'b0,indx2,curr_pos2};
@@ -96,7 +96,7 @@ module branchUnit(/*autoarg*/
 	
 	if(brch3)
 	  begin
-	     if(!pos_reg0[0] ||  pos_reg0_en)
+	     if(!pos_reg0[13] ||  pos_reg0_en)
 	       begin
 		  pos_reg1_en = 1'b1;
 		  pos_reg1_input = {1'b0,indx3,curr_pos3};
@@ -117,9 +117,9 @@ module branchUnit(/*autoarg*/
  
 	if(cmt_brch)
 	  begin
-	     if(cmt_brch_indx == pos_reg0[11:6])
+	     if(cmt_brch_indx == pos_reg0[12:7])
 	       pos_reg0_clr = 1'b1;
-	     else if(cmt_brch_indx == pos_reg1[11:6])
+	     else if(cmt_brch_indx == pos_reg1[12:7])
 	       pos_reg1_clr = 1'b1;
 	     else
 	       begin
@@ -134,13 +134,15 @@ module branchUnit(/*autoarg*/
    always@(/*autosense*/brch_mis_indx or mis_pred or pos_reg0
 	   or pos_reg1)
      begin
+	flush_pos_sel = 1'b0;
 	flush = 1'b0;
+	
 	if(mis_pred)
 	  begin
 	     flush = 1'b1;
-	     if(brch_mis_indx == pos_reg0[11:6])
+	     if(brch_mis_indx == pos_reg0[12:7])
 	       flush_pos_sel = 1'b0;
-	     else if(brch_mis_indx == pos_reg1[11:6])
+	     else if(brch_mis_indx == pos_reg1[12:7])
 	       flush_pos_sel = 1'b1;
 	     else
 	       flush_pos_sel = 1'b0;
@@ -153,7 +155,7 @@ module branchUnit(/*autoarg*/
    always@(posedge clk,negedge rst_n)
      begin
 	if(!rst_n)
-	  pos_reg0 <= 13'b0;
+	  pos_reg0 <= {1'b1,13'b0};
 	else if (pos_reg0_clr)
 	  pos_reg0 <= {1'b1,13'b0};
 	else if (pos_reg0_en)
@@ -166,7 +168,7 @@ module branchUnit(/*autoarg*/
    always@(posedge clk,negedge rst_n)
      begin
 	if(!rst_n)
-	  pos_reg1 <= 13'b0;
+	  pos_reg1 <= {1'b1,13'b0};
 	else if (pos_reg1_clr)
 	  pos_reg1 <= {1'b1,13'b0};
 	else if (pos_reg1_en)
