@@ -49,3 +49,11 @@ is stage tb input inst components:
         RegWr=0;
         pr_valid=0;
         pr_number=0;     
+
+Current implementation scheme:
+1. when the issue queue is full: when arch=0, when counter becomes f, isq queue immediately signals full and disable, leaving counter pointing to f and no data is loaded in isq line 60-63. 
+                                 When issue queue full is resolved, isq line 60-63 loads in data and start working again. 
+
+   Same happens, when arch=1, and counter becomes 7, no data is loaded into isq 28-31
+
+2. Such scheme for freezing counter's value when issue queue is full makes sure that arch_swt signal in tpu is working correctly

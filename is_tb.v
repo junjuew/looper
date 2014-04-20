@@ -122,7 +122,9 @@
    reg                          pr_valid;
    reg [5:0]                    pr_number;
 
-
+   //for-loop iterator
+   integer                      i,j,k,l,m,n,o,p,q,r,s,t;
+   
    is #(/*AUTOINSTPARAM*/
         // Parameters
         .BRN_WIDTH                      (BRN_WIDTH),
@@ -195,6 +197,7 @@
          $strobe("%g alu1 vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, alu1_ins_to_rf[65],alu1_ins_to_rf[64:59], alu1_ins_to_rf[58:52], alu1_ins_to_rf[51:45], alu1_ins_to_rf[44:39], alu1_ins_to_rf[38:6], alu1_ins_to_rf[5:0]);
          $strobe("%g alu2 vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, alu2_ins_to_rf[65],alu2_ins_to_rf[64:59], alu2_ins_to_rf[58:52], alu2_ins_to_rf[51:45], alu2_ins_to_rf[44:39], alu2_ins_to_rf[38:6], alu2_ins_to_rf[5:0]);
          $strobe("%g addr vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, adr_ins_to_rf[65],adr_ins_to_rf[64:59], adr_ins_to_rf[58:52], adr_ins_to_rf[51:45], adr_ins_to_rf[44:39], adr_ins_to_rf[38:6], adr_ins_to_rf[5:0]);
+         $strobe("%g ful_to_al:%x", $time, ful_to_al);
          $strobe("######################");         
          
 /*         
@@ -348,7 +351,8 @@
 //        $monitor ("%g\n (3)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (2)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (1)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (0)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n top head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, mid head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, arch:%b ",$time, tpu_inst_rdy[3],  inst_idx[3], inst_vld[3], inst_psrc1[3], inst_psrc2[3], inst_pdst[3] , fre_preg[3] ,  tpu_inst_rdy[2],  inst_idx[2], inst_vld[2], inst_psrc1[2], inst_psrc2[2], inst_pdst[2] , fre_preg[2] , tpu_inst_rdy[1],  inst_idx[1], inst_vld[1], inst_psrc1[1], inst_psrc2[1], inst_pdst[1] , fre_preg[1] , tpu_inst_rdy[0],  inst_idx[0], inst_vld[0], inst_psrc1[0], inst_psrc2[0], inst_pdst[0] , fre_preg[0],top_hed[15],  top_hed[14],  top_hed[13],  top_hed[12], top_hed[11],  top_hed[10],  top_hed[9],  top_hed[8],  top_hed[7],  top_hed[6],  top_hed[5],  top_hed[4], top_hed[3],  top_hed[2],  top_hed[1],  top_hed[0],mid_hed[15],  mid_hed[14],  mid_hed[13],  mid_hed[12], mid_hed[11],  mid_hed[10],  mid_hed[9],  mid_hed[8],  mid_hed[7],  mid_hed[6],  mid_hed[5],  mid_hed[4], mid_hed[3],  mid_hed[2],  mid_hed[1],  mid_hed[0], DUT.arch);
 
 
-        $monitor("%g inst in:   %x", $time,inst_frm_al);
+        $monitor("%g inst in:   %x,  arch_swt: %b", $time,inst_frm_al, DUT.is_tpu.arch_swt);
+
 
         clear();
 
@@ -691,6 +695,133 @@
         @(posedge clk);
         $display("%g  ============ output.  inst 2 should be available  ==========", $time);  
 
+
+        /******************* test architecture switch ****************/
+        @(posedge clk);
+        $display("");        
+        $display("%g complex test No.1", $time);
+        
+        rst_n=0;
+        prg_rdy_frm_exe=0;
+        
+        /************** load instructions with dependency ***********/
+        @(posedge clk);
+        rst_n=1;
+        $display("%g  ============= start loading in next cycle  ==========", $time);
+        clear();
+        load(0);
+        load(1);
+        load(2);
+        load(3);        
+        pr_number=64;
+        k=pr_number;
+        
+        for (i=0; i<20; i=i+1)
+          begin
+             $display("%g iteration: %d", $time, i);
+             @(posedge clk);
+             if (i!=0)
+               begin
+
+                  j=(i-1);
+/*                  
+                  k=4*(i-1)+1;
+                  l=4*(i-1)+2;
+                  m=4*(i-1)+3;                  
+*/                  
+                  //resolve last instructions first
+                  prg_rdy_frm_exe={ 1'b1, j[5:0], {3{1'b0, 6'h0}} };
+                  $display("%g prg_rdy_frm_exe: %b", $time, prg_rdy_frm_exe);
+//                  $display("%g test: %b", $time, { (4*i)[5:0], 4*i[5:0] });
+               end
+
+             clear();
+             pr_number=k;
+             //r2 =r0 + r1
+             inst_valid=1;
+             Rs_valid_bit=1;
+             Rs=0;
+             Rd_valid_bit=1;
+             Rd=2;
+             Rt_valid_bit=1;
+             Rt=1;
+             ALU_to_adder=1;
+             RegWr=1;
+             pr_valid=1;
+             pr_number=pr_number-1;
+             load(0);
+
+             //r4 =r2 + r3
+             inst_valid=1;
+             Rs_valid_bit=1;
+             Rs=2;
+             Rd_valid_bit=1;
+             Rd=4;
+             Rt_valid_bit=1;
+             Rt=3;
+             ALU_to_adder=1;
+             RegWr=1;
+             pr_valid=1;
+             pr_number=pr_number-1;
+             load(1);
+
+             //r6 =r4 + r5
+             inst_valid=1;
+             Rs_valid_bit=1;
+             Rs=4;
+             Rd_valid_bit=1;
+             Rd=6;
+             Rt_valid_bit=1;
+             Rt=5;
+             ALU_to_adder=1;
+             RegWr=1;
+             pr_valid=1;
+             pr_number=pr_number-1;             
+             load(2);
+
+             //r0 =r6 + r7
+             inst_valid=1;
+             Rs_valid_bit=1;
+             Rs=6;
+             Rd_valid_bit=1;
+             Rd=0;
+             Rt_valid_bit=1;
+             Rt=7;
+             ALU_to_adder=1;
+             RegWr=1;
+             pr_valid=1;
+             pr_number=pr_number-1;                          
+             load(3);
+
+             k=pr_number;
+          end
+   
+
+
+        for (i=20; i<=64; i=i+1)
+          begin
+             $display("%g iteration: %d", $time, i);
+             @(posedge clk);
+
+             j=(i-1);
+             //resolve last instructions first
+             prg_rdy_frm_exe={ 1'b1, j[5:0], {3{1'b0, 6'h0}} };
+             $display("%g prg_rdy_frm_exe: %b", $time, prg_rdy_frm_exe);
+          end
+
+
+        repeat(10) @(posedge clk);        
+
+        for (i=0; i<=32; i=i+1)
+          begin
+             $display("%g iteration: %d", $time, i);
+             @(posedge clk);
+
+             j=(i-1);
+             //resolve last instructions first
+             prg_rdy_frm_exe={ 1'b1, j[5:0], {3{1'b0, 6'h0}} };
+             $display("%g prg_rdy_frm_exe: %b", $time, prg_rdy_frm_exe);
+          end
 
 
         

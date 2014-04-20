@@ -211,8 +211,8 @@
    // architecture switch happens when all following criteria is satisfied
    // 1. region below current header wat=0 for all valid insts ( invalid insts may exist )
    // 2. counter's value is outside of region below current header
-   assign arch_swt= ((~arch) && (counter > (ISQ_DEPTH/2-1) ) && ( &(inst_done[ISQ_DEPTH/2-1:0]) )) || ((arch) && (counter < ISQ_DEPTH/2) && ( &(inst_done[(ISQ_DEPTH-1):(ISQ_DEPTH/2)]) ));
-   assign isq_ful = ((~arch) && (counter == (ISQ_DEPTH-4) )) || ((arch) && (counter == (ISQ_DEPTH/2 -4) )); 
+   assign arch_swt= ((~arch) && (counter > ((ISQ_DEPTH/2)/4-1) ) && ( &(inst_done[ISQ_DEPTH/2-1:0]) )) || ((arch) && (counter < (ISQ_DEPTH/2)/4 ) && ( &(inst_done[(ISQ_DEPTH-1):(ISQ_DEPTH/2)]) ));
+   assign isq_ful = ((~arch) && (counter == ((ISQ_DEPTH)/4)-1) ) || ((arch) && (counter == (ISQ_DEPTH/2)/4 -1)); 
 
    //architecture recorder
    always @(posedge clk, negedge rst_n)

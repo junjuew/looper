@@ -130,8 +130,6 @@
    wire[ISQ_DEPTH-1:0]                                        dst_reg_rdy;
    wire[ISQ_DEPTH-1:0]                                        dst_rdy_reg_en;
    
-   wire                                                       arch_swt;
-   
    wire[ISQ_DEPTH-1:0]                                        tpu_inst_rdy;
    wire [TPU_INST_WIDTH*ISQ_DEPTH-1:0]                        tpu_out_reo_flat;
    wire [7*ISQ_DEPTH-1:0]                                     fre_preg_out_flat;
