@@ -8,7 +8,7 @@ module branchUnit(/*autoarg*/
    input wire [65:0] inst0,inst1, inst2, inst3;
    input wire [6:0] 	nxt_indx;
    input wire [5:0] 	brch_mis_indx;
-   input wire [5:0] 	curr_pos;
+   input wire [6:0] 	curr_pos;
    input wire [3:0] 	pr_need_inst;
    input wire 		mis_pred;
    input wire [5:0] 	cmt_brch_indx;
@@ -20,7 +20,7 @@ module branchUnit(/*autoarg*/
    
    
    wire 	     indx1,indx2,indx3;
-   wire [5:0] 	     curr_pos1,curr_pos2,curr_pos3;
+   wire [6:0] 	     curr_pos1,curr_pos2,curr_pos3;
    reg [13:0] 	     pos_reg0,pos_reg1; // {free|brch_indx|pointer_pos}
    wire 	     brch0,brch1,brch2,brch3;
    reg 		     pos_reg0_en,pos_reg1_en;

@@ -67,7 +67,25 @@ module tb_topmodule();
       
       $display("///////////////////////////////////////////////////////////////////////////////////\n");
 
+   end // always@ (posedge clk)
+   
 
+
+
+   always@(posedge clk)
+     begin
+	//#2;
+	$display("///////////////////////////////////////////////////////////////////////////////////\n");
+	$display("%t, rf:read_alu1_op1_pnum is %d, read_alu1_op2_pnum is %d,read_alu2_op1_pnum is %d,read_alu2_op2_pnum is %d\n",$time,DUT.reg_file_DUT.read_alu1_op1_pnum,DUT.reg_file_DUT.read_alu1_op2_pnum,DUT.reg_file_DUT.read_alu2_op1_pnum,DUT.reg_file_DUT.read_alu2_op2_pnum);
+	$display("%t, rf:wrt_alu1_dst_pnum is %d, wrt_alu2_vld is %d, wrt_alu2_dst_pnum is %d, wrt_alu2_vld is %d\n",$time,DUT.reg_file_DUT.wrt_alu1_dst_pnum,DUT.reg_file_DUT.wrt_alu1_vld,DUT.reg_file_DUT.wrt_alu2_dst_pnum,DUT.reg_file_DUT.wrt_alu2_vld);
+	$display("%t, rf:read_alu1_op1_data is %x, read_alu1_op2_data is %x, read_alu2_op1_data is %x, read_alu2_op2_data is %x\n",$time,DUT.reg_file_DUT.read_alu1_op1_data,DUT.reg_file_DUT.read_alu1_op2_data,DUT.reg_file_DUT.read_alu2_op1_data,DUT.reg_file_DUT.read_alu2_op2_data);
+	$display("%t, rf:wrt_alu1_data is %x, wrt_alu2_data is %x\n",$time,DUT.reg_file_DUT.wrt_alu1_data,DUT.reg_file_DUT.wrt_alu2_data);
+	$display("///////////////////////////////////////////////////////////////////////////////////\n");
+     end
+
+   
+	   
+/* -----\/----- EXCLUDED -----\/-----
    end // always@ (posedge clk)
    
    always@(posedge clk) begin
@@ -83,6 +101,7 @@ module tb_topmodule();
       $display("%t, ROB:tail is %b\n",$time,DUT.rob_DUT.rob_tail);
       $display("//////////////////////////////////////////////////////////////////////////////////////////\n");
    end // always@ (posedge clk)
+ -----/\----- EXCLUDED -----/\----- */
    
 /* -----\/----- EXCLUDED -----\/-----
 
@@ -103,8 +122,24 @@ module tb_topmodule();
    
  -----/\----- EXCLUDED -----/\----- */
 
+
    initial begin
-      #400;
+      #195;
+      $display("///////////////////////////////reg file//////////////////////////");
+      
+      for(i = 0; i < 64; i = i + 1)
+	begin
+	   $display("reg %d, value is reg_file_body is %x\n",i,DUT.reg_file_DUT.reg_file_body[i]);
+	   
+	end
+
+      $display("///////////////////////////////reg file//////////////////////////");
+
+   end // initial begin
+   
+   
+   initial begin
+      #200;
       $finish;
       
    end
