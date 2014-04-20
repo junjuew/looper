@@ -363,7 +363,7 @@ reg_file reg_file_DUT(.clk(clk), .rst_n(rst_n),
 	.read_alu2_op1_pnum(alu2_inst_pkg_is_rf_out[57:52]),
 	.read_alu2_op2_pnum(alu2_inst_pkg_is_rf_out[50:45]), 
 	.read_addr_bas_pnum(addr_inst_pkg_is_rf_out[57:52]), 
-	.read_addr_reg_pnum(addr_inst_pkg_is_rf_out[44:39]), 
+	.read_addr_reg_pnum(addr_inst_pkg_is_rf_out[50:45]), 
 	.brn(alu1_inst_pkg_is_rf_out[20:19]), 
 
 	// Outputs
