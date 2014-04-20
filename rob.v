@@ -431,7 +431,7 @@ ROB per entry:
             if(!rst_n)
                 rob_done[rob_done_idx] <= 0;
             // clear the done bit by the head
-            else if (!rob_head_cmmt_num) begin
+            else if (rob_head_cmmt_num) begin
                 if(rob_done_idx >= rob_head && rob_done_idx < (rob_head + rob_head_cmmt_num)) 
                     rob_done[rob_done_idx] <= 0;
                 else if((rob_head + rob_head_cmmt_num) >= 64 && 

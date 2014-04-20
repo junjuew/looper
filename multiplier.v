@@ -63,7 +63,7 @@ wire done;
 //-----------------------------------------------------------------------------
 //  Implement state register
 //-----------------------------------------------------------------------------
-  always @(posedge clk, negedge rst)
+  always @(posedge clk, posedge rst)
 	if (rst)
 		state <= 1'b0;
 	else
@@ -72,10 +72,12 @@ wire done;
 //-----------------------------------------------------------------------------
 //  Cycle counter
 //-----------------------------------------------------------------------------
-  always @(posedge clk)
-	if (rst_cnt)
+  always @(posedge clk, posedge rst)
+	if (rst)
 		counter <= 4'b0;
-        else if(cnt_en)
+	else if (rst_cnt)
+		counter <= 4'b0;
+    else if(cnt_en)
 		counter <= counter + 1;
 
 //-----------------------------------------------------------------------------

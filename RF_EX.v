@@ -77,6 +77,10 @@ module RF_EX (
     input 	  mult_invtRt_rf_ex_in, //
     input 	  addr_invtRt_rf_ex_in, //
 
+    input 	  alu1_en_rf_ex_in,
+    input 	  alu2_en_rf_ex_in,
+    input 	  mult_en_rf_ex_in, 
+    input 	  addr_en_rf_ex_in,
 
 
     output [15:0] alu1_op1_rf_ex_out,
@@ -208,10 +212,10 @@ module RF_EX (
 
     //alu mode
     rf_enable alu1_mode     [2:0]    ( .q(alu1_mode_rf_ex_out), .d(alu1_mode_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable alu2_en       [2:0]    ( .q(alu2_mode_rf_ex_out), .d(alu2_mode_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable alu2_mode     [2:0]    ( .q(alu2_mode_rf_ex_out), .d(alu2_mode_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     //index
     rf_enable alu1_idx      [5:0]    ( .q(alu1_done_idx_rf_ex_out), .d(alu1_done_idx_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable alu2_idx      [5:0]    ( .q(alu1_done_idx_rf_ex_out), .d(alu2_done_idx_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable alu2_idx      [5:0]    ( .q(alu2_done_idx_rf_ex_out), .d(alu2_done_idx_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable mult_idx      [5:0]    ( .q(mult_done_idx_rf_ex_out), .d(mult_done_idx_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable addr_idx      [5:0]    ( .q(addr_done_idx_rf_ex_out), .d(addr_done_idx_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
 
@@ -226,6 +230,12 @@ module RF_EX (
     rf_enable alu2_invtRt            ( .q(alu2_invtRt_rf_ex_out), .d(alu2_invtRt_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable mult_invtRt            ( .q(mult_invtRt_rf_ex_out), .d(mult_invtRt_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable addr_invtRt            ( .q(addr_invtRt_rf_ex_out), .d(addr_invtRt_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+
+    // FU enable
+    rf_enable alu1_en            ( .q(alu1_en_rf_ex_out), .d(alu1_en_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable alu2_en            ( .q(alu2_en_rf_ex_out), .d(alu2_en_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable mult_en            ( .q(mult_en_rf_ex_out), .d(mult_en_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable addr_en            ( .q(addr_en_rf_ex_out), .d(addr_en_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
 
 endmodule
     

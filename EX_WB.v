@@ -136,11 +136,11 @@ module EX_WB (
     rf_enable alu1_done_vld      ( .q(alu1_done_vld_ex_wb_out), .d(alu1_done_vld_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable alu2_done_vld      ( .q(alu2_done_vld_ex_wb_out), .d(alu2_done_vld_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable mult_done_vld      ( .q(mult_done_vld_ex_wb_out), .d(mult_done_vld_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable addr_done_vld      ( .q(mult_done_vld_ex_wb_out), .d(mult_done_vld_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable addr_done_vld      ( .q(addr_done_vld_ex_wb_out), .d(addr_done_vld_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable alu1_done_idx[5:0] ( .q(alu1_done_idx_ex_wb_out), .d(alu1_done_idx_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable alu2_done_idx[5:0] ( .q(alu2_done_idx_ex_wb_out), .d(alu2_done_idx_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable mult_done_idx[5:0] ( .q(mult_done_vld_ex_wb_out), .d(mult_done_vld_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable addr_done_idx[5:0] ( .q(mult_done_vld_ex_wb_out), .d(mult_done_vld_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable mult_done_idx[5:0] ( .q(mult_done_idx_ex_wb_out), .d(mult_done_idx_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable addr_done_idx[5:0] ( .q(addr_done_idx_ex_wb_out), .d(addr_done_idx_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
 
     //phy_addr
     rf_enable phy_addr_alu1 [5:0]( .q(phy_addr_alu1_ex_wb_out), .d(phy_addr_alu1_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));

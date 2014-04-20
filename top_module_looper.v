@@ -456,6 +456,11 @@ RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 	.mult_invtRt_rf_ex_in(mult_inst_pkg_is_rf_out[7]), //
 	.addr_invtRt_rf_ex_in(addr_inst_pkg_is_rf_out[7]), //
 
+    .alu1_en_rf_ex_in(alu1_inst_pkg_is_rf_out[10]),
+    .alu2_en_rf_ex_in(alu2_inst_pkg_is_rf_out[10]),
+    .mult_en_rf_ex_in(mult_inst_pkg_is_rf_out[9]), 
+    .addr_en_rf_ex_in(addr_inst_pkg_is_rf_out[8]),
+
 	// Outputs
 	.alu1_op1_rf_ex_out(alu1_op1_data_rf_ex_out),
 	.alu1_op2_rf_ex_out(alu1_op2_data_rf_ex_out),

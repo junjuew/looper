@@ -23,7 +23,7 @@ module IS_RF (
     //data
     rf_enable mult_inst_pkg           [65:0]    ( .q(mult_inst_pkg_out), .d(mult_inst_pkg_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable alu1_inst_pkg         [65:0]    ( .q(alu1_inst_pkg_out), .d(alu1_inst_pkg_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable alu2_inst_pkg      [65:0]    ( .q(ralu2_inst_pkg_out), .d(alu2_inst_pkg_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable alu2_inst_pkg      [65:0]    ( .q(alu2_inst_pkg_out), .d(alu2_inst_pkg_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable addr_inst_pkg  [65:0]    ( .q(addr_inst_pkg_out), .d(addr_inst_pkg_in), .wrt_en(enable), .clk(clk), .rst_n(grst_n));
 
 
