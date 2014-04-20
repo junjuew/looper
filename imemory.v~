@@ -17,8 +17,14 @@ module imemory(
 	 assign doutb=mem[addrb];
 	
 	
+<<<<<<< HEAD
+   initial begin
+
+      $readmemb("/filespace/people/l/lei/mydoc_lei/looper/IM.mif", mem); // IM.mif is memory file
+=======
 	initial begin
       $readmemb("./ECE554_assembler/src/simple_lp_mif.mif", mem); // IM.mif is memory file
+>>>>>>> modified LAT (not final version)
    end
    
 	
