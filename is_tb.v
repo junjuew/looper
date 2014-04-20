@@ -406,172 +406,83 @@
 //        `include "is_tb_2.v"                
 
         /******************* test architecture switch ****************/
-        `include "is_tb_3.v"                
+//        `include "is_tb_3.v"                
 
         /**************** test inst send but not resolved + architecture switch ************/
 //        `include "is_tb_4.v"                        
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        /**  branch instruction. make sure branch doesn't clr wait immediately after send ****/
+        @(posedge clk);
+        $display("");        
+        $display("%g complex test No.3. check if wait of branch is cleared immediately ", $time);
+        rst_n=0;
+        prg_rdy_frm_exe=0;
         
-/*        
-
-        
-        $display("%g  ===inst: idx:01, vld:1, src1:1,0011, src2:1,0100, ldst:1,0101, pdst:010001", $time);
-        $display ("%g ==== add ======", $time);        
-        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001
+        /************** load instructions with dependency ***********/
+        @(posedge clk);
+        rst_n=1;
+        $display("%g  ============= start loading in next cycle  ==========", $time);
         clear();
+        load(1);
+        load(2);
+        load(3);        
+        pr_number=64;
+        k=pr_number;
 
+        inst_valid=1;
+        Rs_valid_bit=1;
+        Rs=1;
+        Rd_valid_bit=1;
+        Rd=0;
+        Rt_valid_bit=1;
+        Rt=2;
+        brn=2'b01;
+        pr_valid=1;
+        pr_number=63;
+        load(0);
 
-        @(posedge clk);
-        snapshot();                
-        $display("%g  ============= valid inst. no dependency  ==========", $time);
-        $display("%g  ===inst: idx:10, vld:1, src1:1,0011, src2:1,0100, ldst:1,0101, pdst:010010", $time);
-        $display ("%g ==== add ======", $time);                
-        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001          
-
-
-        //test dependency        
-        @(posedge clk);
-        snapshot();                
-        $display("%g  ============= valid inst. src1 has dependency  ==========", $time);
-        $display("%g  ===inst: idx:11, vld:1, src1:1,0101, src2:1,0100, ldst:1,0110, pdst:010011", $time);
-        $display ("%g ==== add addr======", $time);                        
-        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001          
-
-
-
-        @(posedge clk);
-        snapshot();                
-        $display("%g  ============= after sending, inst0 is no longer waiting  ==========", $time);
-        $display("%g  ===inst: idx:00, vld:1, src1:1,0000, src2:1,0001, ldst:1,0010, pdst:010000", $time);
-        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
-
-
-
-        //test physical register becomes rdy
-        @(posedge clk);
-        snapshot();        
-        $display("%g  ============= physical register of ldst 0101 becomes rdy ==========", $time);
-        $display("%g  ===inst[3] should become ready", $time);
-
-
-        @(posedge clk);
 
         
-        //test arch switch
         @(posedge clk);
-        $display("%g  ============= arch swch  ==========", $time);
+        //branch inst clocks in and send out by pdc. clr_inst_wat should not go high for branch
+        clear();
+        load(0);
+        load(1);
+        load(2);
+        load(3);
+        snapshot();
+        
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);        
+
+        @(posedge clk);
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);                
         
         @(posedge clk);
-
-        @(posedge clk);
-
-        
-
-        $display("%g  ============= test suit 2  ==========", $time);
-        $display("%g  ===inst 2: idx:00, vld:1, src1:1,2, src2:1,3, ldst:1,0, pdst:20", $time);
-        $display("%g  ===inst 2: branch ", $time);        
-        
-        $display("%g  ===inst 3: idx:01, vld:1, src1:1,0, src2:1,1, ldst:1,0, pdst:21", $time);
-        $display("%g  ===inst 3: add, should go to 2 ", $time);                
-        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
-
-        
-        $display("%g  ===inst 0: idx:10, vld:1, src1:1,0, src2:1,0, ldst:1,1, pdst:22", $time);
-        $display ("%g ==== jmp ======", $time);                        
-        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
-
-
-        $display("%g  ===inst 1: idx:11, vld:1, src1:1,0, src2:1,1, ldst:1,3, pdst:23", $time);
-        $display ("%g ==== add, should got to 1 ======", $time);                                
-        //idx, vld, wat, br, jmp, mult, add, addr,  src1, ldst (0010) valid, src2, physical 000001        
-
-
-        @(posedge clk);
-        
-
-        @(posedge clk);
-        $display("%g  ============= 02 inst dest solved  ==========", $time);                
-
-
-        @(posedge clk);
-        $display("%g  ============= 03 inst dest solved  ==========", $time);                        
-
-
-        @(posedge clk);
-        $display("%g  ============= 00 inst dest solved  ==========", $time);                        
-        
-
-        @(posedge clk);
-
-
-
-        @(posedge clk);
-
-
-        @(posedge clk);
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);                
         
         @(posedge clk);
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);
+
+        /****************try to cmt such branch ********/
         
 
-        @(posedge clk);
 
-        @(posedge clk);
 
-*/ 
+
+
+
+
+
+
+
+
+
+        
  
          
         

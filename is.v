@@ -163,6 +163,10 @@
    assign dst_reg_rdy= prg_dst_rdy_en[3][ISQ_DEPTH-1:0] | prg_dst_rdy_en[2][ISQ_DEPTH-1:0] | prg_dst_rdy_en[1][ISQ_DEPTH-1:0] | prg_dst_rdy_en[0][ISQ_DEPTH-1:0];
 
 
+
+   /*********** handle branch cmt *********/
+   wire [ISQ_DEPTH-1:0] br_clr_inst_wat;
+   br_clr_inst_wat = (cmt_frm_rob[])?
    
    
    /**************** module instatiation **********************/
