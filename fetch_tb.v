@@ -38,6 +38,10 @@ wire [1:0] brnch_before_inst3=DUT.branchjumpHandler.brnch_before_inst3;
 wire decr_cnt_in_bh=DUT.branchjumpHandler.decr_count_from_rob;
 
 initial begin
+        $wlfdumpvars(0, fetch_tb);
+    end
+
+initial begin
    
 rst_n=1;
 stall_fetch=0;
@@ -59,11 +63,12 @@ jump_base_from_rf=16'b0;
 
 #2
 jump_base_rdy_from_rf=0;
-decr_count_brnch=1;
-mispred_num=1;
+//decr_count_brnch=1;
+//mispred_num=1;
 #2
 decr_count_brnch=0;
 mispred_num=0;
+#40 $finish;
 end
 
 initial begin
