@@ -1,4 +1,4 @@
-//`default_nettype none
+`default_nettype none
 
 //////////////////////////////////////////////////
 // represent each line of valid bit
@@ -10,19 +10,20 @@ module isq_lin(/*autoarg*/
    // Outputs
    isq_lin_out,
    // Inputs
-   clk, rst_n, en, clr_wat, set_wat, clr_val, /*set_val,*/ fls_inst,
-   isq_lin_in
+   clk, rst_n, en, clr_wat, set_wat, clr_val, fls_inst,
+   clr_inst_brn_wat, isq_lin_in
    );
    parameter INST_WIDTH=56;
-   parameter ISQ_LINE_NO_IDX_WIDTH=INST_WIDTH +1;
+   parameter ISQ_LINE_NO_IDX_WIDTH=INST_WIDTH +1+1;
    localparam ISQ_LINE_NO_IDX_BIT_WAT=INST_WIDTH;
+   localparam ISQ_LINE_NO_IDX_BIT_BRN_WAT=INST_WIDTH+1;   
    
    input wire clk, rst_n, en;
-   input wire clr_wat, set_wat,clr_val, /*set_val,*/ fls_inst;
+   input wire clr_wat, set_wat,clr_val, fls_inst, clr_inst_brn_wat;
    input wire [ISQ_LINE_NO_IDX_WIDTH-1:0] isq_lin_in;
    output wire [ISQ_LINE_NO_IDX_WIDTH-1:0] isq_lin_out;
 
-   reg                          val, wat;
+   reg                          val, wat, brn_wat;
    reg [INST_WIDTH-1:0]             inst;
          
              
@@ -58,6 +59,21 @@ module isq_lin(/*autoarg*/
         else if (en)
           wat<=isq_lin_in[ISQ_LINE_NO_IDX_BIT_WAT];
      end
+
+   /////////////////////////////////////
+   //brn_wat bit
+   //0 means this is not a branch or branch has been committed
+   //1 means this is a branch which has not been resolved
+   /////////////////////////////////////
+   always @(posedge clk, negedge rst_n)
+     begin
+        if (~rst_n)
+          brn_wat<=1'b0;
+        else if (clr_inst_brn_wat)
+          brn_wat<=1'b0;
+        else if (en)
+          brn_wat<=isq_lin_in[ISQ_LINE_NO_IDX_BIT_BRN_WAT];
+     end
      
 
    /////////////////////////////////////
@@ -77,6 +93,6 @@ module isq_lin(/*autoarg*/
    ///////////////////////////
    //output
    ///////////////////////////
-   assign isq_lin_out = {/*val,*/wat, inst};
+   assign isq_lin_out = {brn_wat, wat, inst};
    
 endmodule // isq_lin

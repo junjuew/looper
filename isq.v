@@ -10,15 +10,16 @@
    isq_out_flat,
    // Inputs
    inst_in_flat, isq_en, rst_n, clk, isq_lin_en, clr_inst_wat,
-   fls_inst
+   clr_inst_brn_wat, fls_inst
    );
 
    parameter ISQ_DEPTH=64;
    parameter ISQ_IDX_BITS_NUM=6;   
    parameter INST_PORT=4;
    parameter INST_WIDTH=56;
-   parameter ISQ_LINE_WIDTH=INST_WIDTH +1 + ISQ_IDX_BITS_NUM;
+   parameter ISQ_LINE_WIDTH=INST_WIDTH +2 + ISQ_IDX_BITS_NUM;
    parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
+   parameter BIT_INST_BRN = 21 ;   
 
    localparam ISQ_LINE_NO_IDX_WIDTH = ISQ_LINE_WIDTH - ISQ_IDX_BITS_NUM;
 
@@ -28,6 +29,7 @@
    input wire                             isq_en, rst_n, clk;
    input wire [ISQ_DEPTH -1 :0]           isq_lin_en;
    input wire [ISQ_DEPTH -1 :0]           clr_inst_wat;
+   input wire [ISQ_DEPTH -1 :0]           clr_inst_brn_wat;   
    input wire [ISQ_DEPTH -1 :0]           fls_inst;      
 
    
@@ -64,15 +66,17 @@
 
 
    ////////////////////////////////////
-   //prefix valid. wait bit
-   //right now everything is always 1
-   //TODO: need to check if it's nop later
+   //prefix brn_wat and wait bit
    //////////////////////////////////
+   //check if current instruction is a branch inst
+   wire[ISQ_DEPTH-1:0] brn_inst;
+
    generate
       genvar                                      prefix_i;
       for (prefix_i=0; prefix_i<ISQ_DEPTH; prefix_i=prefix_i+1) 
         begin
-           assign isq_lin_in[prefix_i] = {inst_in[prefix_i%INST_PORT][BIT_INST_VLD], inst_in[prefix_i%INST_PORT]};
+           assign brn_inst[prefix_i] = (inst_in[prefix_i%INST_PORT][BIT_INST_BRN:BIT_INST_BRN-1]!=2'b00)?1'b1:1'b0;           
+           assign isq_lin_in[prefix_i] = { brn_inst[prefix_i], inst_in[prefix_i%INST_PORT][BIT_INST_VLD], inst_in[prefix_i%INST_PORT]};
         end
    endgenerate
    
@@ -115,7 +119,7 @@
                            .clr_wat         (clr_inst_wat[i]),
                            .set_wat         (set_wat[i]),
                            .clr_val         (clr_val[i]),
-//                           .set_val         (set_val[i]),
+                           .clr_inst_brn_wat     (clr_inst_brn_wat[i]),
                            .fls_inst             (fls_inst[i]),
                            .isq_lin_in      (isq_lin_in[i]));
         end

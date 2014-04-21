@@ -3,16 +3,16 @@ allocation instruction packet format:
           55         54-50    49-45   44-40      39 --------------- 7      6-0
 
 isq_lin: output format
-         wat | inst 
-         56    55-0
+       brn_wat | wat | inst 
+         57      56    55-0
 
 isq: isq will add idx to the output of isq_lin so the output becomes ( input to tpu )
-         idx | wat | inst
-        62-57  56    55-0
+         idx | brn _wat  | wat | inst
+        63-58    57        56    55-0
         
 tpu: output format (input to pdc)
-idx | wat |  inst_valid | psrc1 | psrc2 | imm_valid| imm | LDI | brn | jmp_valid_bit | jump |... |add| mult |addr| invtRt | RegWrite| pr_valid | pr_number
-61-56  55       54         53-47   46-40     39     38-23  22   21-20   19            18-17 ------11   10     9     8         7         6          5-0
+idx | brn_wat | wat |  inst_valid | psrc1 | psrc2 | imm_valid| imm | LDI | brn | jmp_valid_bit | jump |... |add| mult |addr| invtRt | RegWrite| pr_valid | pr_number
+62-57  56       55       54         53-47   46-40     39     38-23  22   21-20   19            18-17 ------11   10     9     8         7         6          5-0
         
         physical register to be freed is output in a separate fre_preg signal
 

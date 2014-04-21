@@ -28,7 +28,8 @@
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
    parameter INST_PORT=4;
-   parameter ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 1;
+   parameter ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
+   parameter BIT_INST_BRN =21;
    
    //counter
    parameter BITS_IN_COUNT = 4;//=log2(ISQ_DEPTH/INST_PORT)
@@ -42,6 +43,8 @@
    parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
    parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
    parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
+   parameter BIT_INST_BRN_WAT = INST_WIDTH +1;   
+   
 
    //pdc
    // which bit is representing each function unit
@@ -52,7 +55,7 @@
    parameter BIT_IDX= ISQ_LINE_WIDTH-1;
    
    //tpu bit
-   parameter TPU_BIT_IDX= 61;
+   parameter TPU_BIT_IDX= 62;
    parameter TPU_BIT_INST_VLD= 54;
    parameter TPU_BIT_INST_WAT= 55;
    parameter TPU_BIT_PDEST= 6;         
@@ -104,7 +107,7 @@
    assign inst_in_flat=inst_frm_al;
    wire                                        isq_en;
    wire [ISQ_DEPTH-1:0]                        clr_inst_wat;
-   
+   wire [ISQ_DEPTH-1:0]                        clr_inst_brn_wat;   
    
    wire [ISQ_LINE_WIDTH*ISQ_DEPTH-1:0]          isq_out_flat;
    
@@ -168,10 +171,10 @@
 
 
    /*********** handle branch cmt *********/
-   wire [ISQ_DEPTH-1:0] br_clr_inst_wat;
+
    // if valid
-   assign br_clr_inst_wat[ISQ_DEPTH-1:0] = (cmt_frm_rob[BRN_WIDTH-1])? (1<<cmt_frm_rob[BRN_WIDTH-2:0]):{ISQ_DEPTH{1'b0}};
-   assign clr_inst_wat[ISQ_DEPTH-1:0] = (pdc_clr_inst_wat[ISQ_DEPTH-1:0] | br_clr_inst_wat[ISQ_DEPTH-1:0]);
+   assign clr_inst_brn_wat[ISQ_DEPTH-1:0] = (cmt_frm_rob[BRN_WIDTH-1])? (1<<cmt_frm_rob[BRN_WIDTH-2:0]):{ISQ_DEPTH{1'b0}};
+   assign clr_inst_wat[ISQ_DEPTH-1:0] = pdc_clr_inst_wat[ISQ_DEPTH-1:0];
 
 
    /*********** handle mis-branch *********/
@@ -207,7 +210,8 @@
          .INST_PORT                     (INST_PORT),
          .INST_WIDTH                    (INST_WIDTH),
          .ISQ_LINE_WIDTH                (ISQ_LINE_WIDTH),
-         .BIT_INST_VLD                  (BIT_INST_VLD)) 
+         .BIT_INST_VLD                  (BIT_INST_VLD),
+         .BIT_INST_BRN                  (BIT_INST_BRN)) 
 
    is_isq (/*autoinst*/
            // Outputs
@@ -219,6 +223,7 @@
            .clk                         (clk),
            .isq_lin_en                  (isq_lin_en[ISQ_DEPTH-1:0]),
            .clr_inst_wat                (clr_inst_wat[ISQ_DEPTH-1:0]),
+           .clr_inst_brn_wat            (clr_inst_brn_wat[ISQ_DEPTH-1:0]),
            .fls_inst                    (fls_inst[ISQ_DEPTH-1:0]));
 
    
@@ -252,6 +257,7 @@
          .TPU_INST_WIDTH                (TPU_INST_WIDTH),
          .BIT_INST_VLD                  (BIT_INST_VLD),
          .BIT_INST_WAT                  (BIT_INST_WAT),
+         .BIT_INST_BRN_WAT              (BIT_INST_BRN_WAT),
          .BIT_LSRC1_VLD                 (BIT_LSRC1_VLD),
          .BIT_LSRC2_VLD                 (BIT_LSRC2_VLD),
          .BIT_LDST_VLD                  (BIT_LDST_VLD),

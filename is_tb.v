@@ -24,7 +24,9 @@
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
    parameter INST_PORT=4;
-   parameter ISQ_LINE_WIDTH= INST_WIDTH + ISQ_IDX_BITS_NUM + 1;
+   parameter ISQ_LINE_WIDTH= INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
+   parameter BIT_INST_BRN_WAT = INST_WIDTH +1;   
+   parameter BIT_INST_BRN =21;
    
    //counter
    parameter BITS_IN_COUNT = 4;//=log2(ISQ_DEPTH/INST_PORT)
@@ -47,7 +49,7 @@
    parameter FUN_ADDR_BIT= 3;
    parameter BIT_IDX= ISQ_LINE_WIDTH-1;
 
-   parameter TPU_BIT_IDX= 61;
+   parameter TPU_BIT_IDX= 62;
    parameter TPU_BIT_INST_VLD= 54;
    parameter TPU_BIT_INST_WAT= 55;
    parameter TPU_BIT_PDEST= 6;         
@@ -135,6 +137,7 @@
         .ISQ_IDX_BITS_NUM               (ISQ_IDX_BITS_NUM),
         .INST_PORT                      (INST_PORT),
         .ISQ_LINE_WIDTH                 (ISQ_LINE_WIDTH),
+        .BIT_INST_BRN                   (BIT_INST_BRN),
         .BITS_IN_COUNT                  (BITS_IN_COUNT),
         .TPU_MAP_WIDTH                  (TPU_MAP_WIDTH),
         .TPU_INST_WIDTH                 (TPU_INST_WIDTH),
@@ -159,8 +162,8 @@
         .TPU_BIT_CTRL_ADDR              (TPU_BIT_CTRL_ADDR),
         .TPU_BIT_CTRL_BR                (TPU_BIT_CTRL_BR),
         .TPU_BIT_CTRL_JMP_VLD           (TPU_BIT_CTRL_JMP_VLD),
-        .IS_BIT_IDX                     (IS_BIT_IDX),
         .IS_BIT_INST_VLD                (IS_BIT_INST_VLD),
+        .IS_BIT_IDX                     (IS_BIT_IDX),
         .IS_BIT_CTRL_BR                 (IS_BIT_CTRL_BR),
         .IS_BIT_CTRL_JMP_VLD            (IS_BIT_CTRL_JMP_VLD))
    DUT(/*autoinst*/
@@ -416,114 +419,11 @@
 //        `include "is_tb_5.task"
 
         /** branch instruction, test mis prediction **/
-        @(posedge clk);
-        $display("");        
-        $display("%g complex test No.4. check if mis prediction will flush ", $time);
-        rst_n=0;
-        prg_rdy_frm_exe=0;
-        cmt_frm_rob=0;
-        fls_frm_rob=0;
-        pr_number=64;
-        
-        /************** load instructions with dependency ***********/
-        @(posedge clk);
-        rst_n=1;
-        $display("%g  ============= start loading in next cycle  ==========", $time);
-
-
-        // first need to load some alu instructions
-        //r0 = r1 + r2
-        clear();
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        ALU_to_adder=1;
-        RegWr=1;
-        pr_valid=1;
-        pr_number=pr_number-1;
-        load(0);
-
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        ALU_to_adder=1;
-        pr_valid=1;
-        pr_number=pr_number-1;        
-        load(1);
-
-        // load branch inst
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        brn=2'b01;
-        ALU_to_adder=0;        
-        pr_valid=1;
-        pr_number=pr_number-1;
-        load(2);
-
-        // load more alu insts
-        inst_valid=1;
-        Rs_valid_bit=1;
-        Rs=1;
-        Rd_valid_bit=1;
-        Rd=0;
-        Rt_valid_bit=1;
-        Rt=2;
-        ALU_to_adder=1;                
-        pr_valid=1;
-        pr_number=pr_number-1;        
-        load(3);
-        
-        // flsh such branch
-
-        @(posedge clk);
-        //branch inst clocks in and send out by pdc. clr_inst_wat should not go high for branch
-        clear();
-        load(0);
-        load(1);
-        load(2);
-        load(3);
-        snapshot();
-
-
-        for (k=0;k<5;k=k+1)
-          begin
-             @(posedge clk);
-             snapshot();
-          end
-        
-        
-        /****************try to flush such branch ********/
-        @(posedge clk);
-        $display("%g ===try to flush such branch", $time);
-        fls_frm_rob = {1'b1, 6'h2};
-        print_cur_map(DUT.is_tpu.prv_map[4][TPU_MAP_WIDTH-1:0]);
-        
-        @(posedge clk);
-        fls_frm_rob=0;
-        print_cur_map(DUT.is_tpu.prv_map[4][TPU_MAP_WIDTH-1:0]);        
-
-        @(posedge clk);
-        print_cur_map(DUT.is_tpu.prv_map[4][TPU_MAP_WIDTH-1:0]);        
-        
+        `include "is_tb_6.task"        
         
         repeat(20) @(posedge clk);        
         $finish;
-     end
-   
-
+     end // initial begin
    
 endmodule // tpu_tb
 

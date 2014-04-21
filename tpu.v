@@ -1,4 +1,4 @@
-//`default_nettype none
+`default_nettype none
 
   //////////////////////////////////////////////////
   //
@@ -28,16 +28,18 @@
    parameter TPU_MAP_WIDTH= 7 * 16; //7 bit for each logical register
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
-   parameter ISQ_LINE_WIDTH= INST_WIDTH + ISQ_IDX_BITS_NUM + 1; //62
+   parameter ISQ_LINE_WIDTH= INST_WIDTH + ISQ_IDX_BITS_NUM + 2; //63
    //psrc1 and psrc2 need two more bits than lsrc1, lsrc2, ldst is not outputed
-   parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; //61
+   parameter TPU_INST_WIDTH= ISQ_LINE_WIDTH + 2 + 2 -5; //62
    //bitmap for instructions
    //everything is relative to the inst_width, not isq_lin_width, by default!!
    parameter BIT_INST_VLD = INST_WIDTH  - 1 ;
-   parameter BIT_INST_WAT = INST_WIDTH ;   
+   parameter BIT_INST_WAT = INST_WIDTH ;
+   parameter BIT_INST_BRN_WAT = INST_WIDTH +1;   
    parameter BIT_LSRC1_VLD = INST_WIDTH   -1 -1  ;   
    parameter BIT_LSRC2_VLD = INST_WIDTH  - 1 - 11;      
    parameter BIT_LDST_VLD = INST_WIDTH  - 1 - 6;
+
    parameter BITS_IN_COUNT = 4;//=log2(ISQ_DEPTH/INST_PORT)
 
    input wire clk, rst_n;
@@ -83,10 +85,13 @@
    wire [ISQ_DEPTH-1:0] inst_vld;
    //inst wait
    wire [ISQ_DEPTH-1:0] inst_wat;
+   //inst brn_wat
+   wire [ISQ_DEPTH-1:0] inst_brn_wat;
    //inst done: 1. inst not valid 
    //           or
    //           1. inst valid
    //           2. inst not wait
+   //           3. inst not branch wait
    wire [ISQ_DEPTH-1:0] inst_done;                         
 
 
@@ -205,7 +210,8 @@
         begin
            assign inst_vld[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_VLD];
            assign inst_wat[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_WAT];
-           assign inst_done[inst_vld_i]= (inst_vld[inst_vld_i])? (~inst_wat[inst_vld_i]):1'b1;
+           assign inst_brn_wat[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_BRN_WAT];
+           assign inst_done[inst_vld_i]= (inst_vld[inst_vld_i])? ( (~inst_wat[inst_vld_i]) && (~inst_brn_wat) ):1'b1;
         end
    endgenerate
 

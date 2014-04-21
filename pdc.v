@@ -26,14 +26,14 @@
    // 6 is just an arbitrary value for widths of idx bit   
    parameter ISQ_IDX_BITS_NUM= 6;
    // +2 : 1 for vld, 1 for wat
-   parameter ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 1;
+   parameter ISQ_LINE_WIDTH=INST_WIDTH + ISQ_IDX_BITS_NUM + 2;
    // which bit is representing each function unit
    parameter FUN_MULT_BIT= 0;
    parameter FUN_ADD1_BIT= 1;
    parameter FUN_ADD2_BIT= 2;
    parameter FUN_ADDR_BIT= 3;
    //tpu bit
-   parameter TPU_BIT_IDX= 61;
+   parameter TPU_BIT_IDX= 62;
    parameter TPU_BIT_INST_VLD= 54;
    parameter TPU_BIT_INST_WAT= 55;
    parameter TPU_BIT_PDEST= 6;         
@@ -85,11 +85,11 @@ function[IS_INST_WIDTH-1:0]  reorder;
    input [6:0]                            preg;
    begin
       // tpu line out format:
-      // idx | wat |  inst vld | vld, psrc1 | vld, psrc2 |  other control signals ... | pdest
+      // idx | brn_wat | wat |  inst vld | vld, psrc1 | vld, psrc2 |  other control signals ... | pdest
       // is stage out format:
       // inst vld | idx | psrc1 | psrc2 | pdest | other control signals ...(to RegWrite) | freepreg
       //the valid bit for preg and pdest is RegWrite
-      reorder = {tpu_out_packet[TPU_BIT_INST_VLD], tpu_out_packet[TPU_BIT_IDX: TPU_BIT_INST_WAT+1], tpu_out_packet[TPU_BIT_INST_VLD-1:TPU_BIT_CTRL_START+1], tpu_out_packet[TPU_BIT_PDEST-1:0] , tpu_out_packet[TPU_BIT_CTRL_START: TPU_BIT_CTRL_END], preg[5:0]};
+      reorder = {tpu_out_packet[TPU_BIT_INST_VLD], tpu_out_packet[TPU_BIT_IDX: TPU_BIT_INST_WAT+2], tpu_out_packet[TPU_BIT_INST_VLD-1:TPU_BIT_CTRL_START+1], tpu_out_packet[TPU_BIT_PDEST-1:0] , tpu_out_packet[TPU_BIT_CTRL_START: TPU_BIT_CTRL_END], preg[5:0]};
    end
 endfunction
    
@@ -258,9 +258,7 @@ endfunction
    wire [ISQ_DEPTH -1 :0] clr_inst_wat_addr;
    
    assign clr_inst_wat_mult[ISQ_DEPTH -1 :0] = (mul_ins_to_rf[IS_BIT_INST_VLD])? (1<<mul_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
-   // only set the wait bit when it's an add
-   // branch and jump instruction doesn't set wait bit immediately.
-   assign clr_inst_wat_add1[ISQ_DEPTH -1 :0] = (alu1_ins_to_rf[IS_BIT_INST_VLD] && (2'b00 == alu1_ins_to_rf[IS_BIT_CTRL_BR:IS_BIT_CTRL_BR-1]) && (~alu1_ins_to_rf[IS_BIT_CTRL_JMP_VLD]) )? (1<<alu1_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
+   assign clr_inst_wat_add1[ISQ_DEPTH -1 :0] = (alu1_ins_to_rf[IS_BIT_INST_VLD])? (1<<alu1_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
    assign clr_inst_wat_add2[ISQ_DEPTH -1 :0] = (alu2_ins_to_rf[IS_BIT_INST_VLD])? (1<<alu2_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
    assign clr_inst_wat_addr[ISQ_DEPTH -1 :0] = (adr_ins_to_rf[IS_BIT_INST_VLD])? (1<<adr_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};   
    //or these signals to get a sum of what instrcutions' wait to set in one time instance
