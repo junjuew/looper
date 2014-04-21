@@ -211,7 +211,7 @@
            assign inst_vld[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_VLD];
            assign inst_wat[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_WAT];
            assign inst_brn_wat[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_BRN_WAT];
-           assign inst_done[inst_vld_i]= (inst_vld[inst_vld_i])? ( (~inst_wat[inst_vld_i]) && (~inst_brn_wat) ):1'b1;
+           assign inst_done[inst_vld_i]= (inst_vld[inst_vld_i])? ( (~inst_wat[inst_vld_i]) && (~inst_brn_wat[inst_vld_i]) ):1'b1;
         end
    endgenerate
 

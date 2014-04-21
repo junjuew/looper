@@ -419,7 +419,160 @@
 //        `include "is_tb_5.task"
 
         /** branch instruction, test mis prediction **/
-        `include "is_tb_6.task"        
+//        `include "is_tb_6.task"
+
+
+        /** branch instruction complicated, test mis prediction **/
+        @(posedge clk);
+        $display("");        
+        $display("%g complex test No.5. check if mis prediction will flush ", $time);
+        rst_n=0;
+        prg_rdy_frm_exe=0;
+        cmt_frm_rob=0;
+        fls_frm_rob=0;
+        pr_number=64;
+
+        @(posedge clk);
+        rst_n=1;
+        clear();
+        $display("%g  ============= start loading in next cycle  ==========", $time);
+
+        for (i=0;i<9; i=i+1)
+          begin
+             @(posedge clk);
+             // first need to load some alu instructions
+             //r0 = r1 + r2
+             inst_valid=1;
+             Rs_valid_bit=1;
+             Rs=1;
+             Rd_valid_bit=1;
+             Rd=0;
+             Rt_valid_bit=1;
+             Rt=2;
+             ALU_to_adder=1;
+             RegWr=1;
+             pr_valid=1;
+             pr_number=pr_number-1;
+             load(0);
+             pr_number=pr_number-1;             
+             load(1);
+             pr_number=pr_number-1;             
+             load(2);
+             pr_number=pr_number-1;             
+             load(3);             
+          end
+
+        @(posedge clk);
+        $strobe("%g load branch inst. counter value:%x", $time, DUT.counter);
+        //should be 0x18
+        k=DUT.counter+1;
+        clear();
+        // load branch inst
+        inst_valid=1;
+        Rs_valid_bit=1;
+        Rs=1;
+        Rd_valid_bit=0;
+        Rd=0;
+        Rt_valid_bit=1;
+        Rt=2;
+        brn=2'b01;
+        ALU_to_adder=0;        
+        pr_valid=1;
+        pr_number=pr_number-1;
+        load(0);
+        clear();
+        load(1);
+        load(2);
+        load(3);        
+        
+        for (i=0;i<3; i=i+1)
+          begin
+             @(posedge clk);
+             // first need to load some alu instructions
+             //r0 = r1 + r2
+             inst_valid=1;
+             Rs_valid_bit=1;
+             Rs=1;
+             Rd_valid_bit=1;
+             Rd=0;
+             Rt_valid_bit=1;
+             Rt=2;
+             ALU_to_adder=1;
+             RegWr=1;
+             pr_valid=1;
+             pr_number=pr_number-1;
+             load(0);
+             pr_number=pr_number-1;             
+             load(1);
+             pr_number=pr_number-1;             
+             load(2);
+             pr_number=pr_number-1;             
+             load(3);             
+          end
+
+        @(posedge clk);
+        clear();
+        load(0);
+        load(1);
+        load(2);
+        load(3);             
+        
+        repeat(20) @(posedge clk);
+
+        @(posedge clk);
+        //resolve r0
+        $display("%g resolve pdest of idx 0x33 and idx 31",$time);
+        $display("%g inst_done:%x arch:%x", $time, DUT.is_tpu.inst_done, DUT.arch);
+        $display("%g cur map of idx 63",$time);        
+        print_cur_map(DUT.is_tpu.prv_map[63][TPU_MAP_WIDTH-1:0]);
+        prg_rdy_frm_exe={1'b1,6'h33, 1'b1,6'd31, {2{7'h0}}};
+
+        @(posedge clk);
+        prg_rdy_frm_exe=0;
+        $display("%g inst_done:%x arch:%x", $time, DUT.is_tpu.inst_done, DUT.arch);
+        $display("%g cur map of idx 63",$time);        
+        print_cur_map(DUT.is_tpu.prv_map[63][TPU_MAP_WIDTH-1:0]);
+
+        @(posedge clk);
+        $display("%g inst_done:%x arch:%x", $time, DUT.is_tpu.inst_done, DUT.arch);
+        $display("%g cur map of idx 63",$time);        
+        print_cur_map(DUT.is_tpu.prv_map[63][TPU_MAP_WIDTH-1:0]);
+        
+        repeat(20) @(posedge clk);        
+        @(posedge clk);
+        $display("%g inst_done:%x arch:%x", $time, DUT.is_tpu.inst_done, DUT.arch);
+
+        /****************try to flush such branch ********/
+        @(posedge clk);
+        $display("%g ===try to flush such branch, branch idx: %x", $time, k*4);
+        j=k*4;
+        fls_frm_rob = {1'b1, j[5:0]};
+        $display("0x18 prv map:");
+        print_cur_map(DUT.is_tpu.prv_map[j][TPU_MAP_WIDTH-1:0]);
+        $display("%g cur map of idx 63",$time);        
+        print_cur_map(DUT.is_tpu.prv_map[63][TPU_MAP_WIDTH-1:0]);
+        $display("3 prv map:");
+        print_cur_map(DUT.is_tpu.prv_map[3][TPU_MAP_WIDTH-1:0]);
+        
+        @(posedge clk);
+        fls_frm_rob=0;
+        $display("0x18 prv map:");
+        print_cur_map(DUT.is_tpu.prv_map[j][TPU_MAP_WIDTH-1:0]);
+        $display("%g cur map of idx 63",$time);        
+        print_cur_map(DUT.is_tpu.prv_map[63][TPU_MAP_WIDTH-1:0]);
+        $display("3 map:");
+        print_cur_map(DUT.is_tpu.prv_map[3][TPU_MAP_WIDTH-1:0]);
+
+        @(posedge clk);
+        fls_frm_rob=0;
+        $display("0x18 prv map:");
+        print_cur_map(DUT.is_tpu.prv_map[j][TPU_MAP_WIDTH-1:0]);
+        $display("%g cur map of idx 63",$time);        
+        print_cur_map(DUT.is_tpu.prv_map[63][TPU_MAP_WIDTH-1:0]);
+        $display("3 map:");
+        print_cur_map(DUT.is_tpu.prv_map[3][TPU_MAP_WIDTH-1:0]);
+
+        
         
         repeat(20) @(posedge clk);        
         $finish;
