@@ -25,7 +25,9 @@ module branch_fifo(/*autoarg*/
 
    reg 	       fifo_enable[0:1];
    
-
+   reg 	       decr_brnc_num;
+   
+   
    wire [1:0]  brnc_count;
 
    wire [5:0]  indx1,indx2,indx3;
@@ -86,12 +88,15 @@ module branch_fifo(/*autoarg*/
 	increment_head = 1'b0;
 	fifo_enable[0] = 1'b0;
 	fifo_enable[1] = 1'b0;
-
+	decr_brnc_num = 1'b0;
+	
 	if(mis_pred)
 	  begin
 	     if(mis_pred_brnc_indx == fifo[head])
 	       begin
 		  clear_head = 1'b1;
+		  decr_brnc_num = 1'b1;
+		  
 	       end
 	     else
 	       begin
@@ -135,6 +140,8 @@ module branch_fifo(/*autoarg*/
 	   always@(posedge clk,negedge rst_n)
 	     begin
 		if(!rst_n)
+		  fifo[i] <= 6'b0;
+		else if(clear_head)
 		  fifo[i] <= 6'b0;
 		else if(fifo_enable[i])
 		  fifo[i] <= fifo_update_val[i];
