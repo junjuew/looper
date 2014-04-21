@@ -1,4 +1,4 @@
-//`default_nettype none
+`default_nettype none
 
   //TODO: output all the bits in the tpu_inst?? some may not be needed for next stage. need to strip those bits off
   // added reorder function to solve the problem
@@ -7,14 +7,14 @@
    // instruction format used for testing:
    // inst idx | inst vld | inst wat | BR | JMP | MULT| ADD | ADDR | lsrc1 | ldst | lsrc2 | pdest
    //     2         1           1      2     1     1     1     1       5       5      5       6
-   ///////////////////////////
+  ///////////////////////////
   
   ///////////////////////////
   // priority decoder
   ////////////////////////
   module pdc(/*autoarg*/
    // Outputs
-   clr_inst_wat, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf,
+   pdc_clr_inst_wat, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf,
    adr_ins_to_rf,
    // Inputs
    fun_rdy_frm_exe, tpu_out_reo_flat, tpu_inst_rdy, fre_preg_out_flat
@@ -63,7 +63,7 @@
    input wire [ISQ_DEPTH-1:0]                  tpu_inst_rdy;
    input wire [7 * ISQ_DEPTH-1:0] fre_preg_out_flat;
 
-   output wire [ISQ_DEPTH-1:0]                 clr_inst_wat;
+   output wire [ISQ_DEPTH-1:0]                 pdc_clr_inst_wat;
 
    //output instruction to rf stage
    output wire [IS_INST_WIDTH -1 :0]          mul_ins_to_rf;
@@ -264,7 +264,7 @@ endfunction
    assign clr_inst_wat_add2[ISQ_DEPTH -1 :0] = (alu2_ins_to_rf[IS_BIT_INST_VLD])? (1<<alu2_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
    assign clr_inst_wat_addr[ISQ_DEPTH -1 :0] = (adr_ins_to_rf[IS_BIT_INST_VLD])? (1<<adr_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};   
    //or these signals to get a sum of what instrcutions' wait to set in one time instance
-   assign clr_inst_wat[ISQ_DEPTH -1 :0] = clr_inst_wat_mult[ISQ_DEPTH -1:0] |  clr_inst_wat_add1[ISQ_DEPTH -1:0] |  clr_inst_wat_add2[ISQ_DEPTH -1:0] |  clr_inst_wat_addr[ISQ_DEPTH -1:0];
+   assign pdc_clr_inst_wat[ISQ_DEPTH -1 :0] = clr_inst_wat_mult[ISQ_DEPTH -1:0] |  clr_inst_wat_add1[ISQ_DEPTH -1:0] |  clr_inst_wat_add2[ISQ_DEPTH -1:0] |  clr_inst_wat_addr[ISQ_DEPTH -1:0];
 
 
 

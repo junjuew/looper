@@ -1,4 +1,4 @@
-//`default_nettype none
+`default_nettype none
 
   /////////////////
   //test problem: when load in a new instruction, need to reset dst_rdy_reg
@@ -400,35 +400,52 @@
 
         //add in test suit 1
         /********************* single instruction test****************/        
-        `include "is_tb_1.task"        
+//        `include "is_tb_1.task"        
 
         /****************** test if clr wait when succesful send***************/
-        `include "is_tb_2.task"                
+//        `include "is_tb_2.task"                
 
         /******************* test architecture switch ****************/
-        `include "is_tb_3.task"                
+//        `include "is_tb_3.task"                
 
         /**************** test inst send but not resolved + architecture switch ************/
-        `include "is_tb_4.task"                        
+//        `include "is_tb_4.task"                        
 
 
         /**  branch instruction. make sure branch doesn't clr wait immediately after send ****/
+//        `include "is_tb_5.task"
+
+        /** branch instruction, test mis prediction **/
         @(posedge clk);
         $display("");        
-        $display("%g complex test No.3. check if wait of branch is cleared immediately ", $time);
+        $display("%g complex test No.4. check if mis prediction will flush ", $time);
         rst_n=0;
         prg_rdy_frm_exe=0;
+        cmt_frm_rob=0;
+        fls_frm_rob=0;
+        pr_number=64;
         
         /************** load instructions with dependency ***********/
         @(posedge clk);
         rst_n=1;
         $display("%g  ============= start loading in next cycle  ==========", $time);
+
+
+        // first need to load some alu instructions
+        //r0 = r1 + r2
         clear();
-        load(1);
-        load(2);
-        load(3);        
-        pr_number=64;
-        k=pr_number;
+        inst_valid=1;
+        Rs_valid_bit=1;
+        Rs=1;
+        Rd_valid_bit=1;
+        Rd=0;
+        Rt_valid_bit=1;
+        Rt=2;
+        ALU_to_adder=1;
+        RegWr=1;
+        pr_valid=1;
+        pr_number=pr_number-1;
+        load(0);
 
         inst_valid=1;
         Rs_valid_bit=1;
@@ -437,13 +454,40 @@
         Rd=0;
         Rt_valid_bit=1;
         Rt=2;
-        brn=2'b01;
+        ALU_to_adder=1;
         pr_valid=1;
-        pr_number=63;
-        load(0);
+        pr_number=pr_number-1;        
+        load(1);
 
+        // load branch inst
+        inst_valid=1;
+        Rs_valid_bit=1;
+        Rs=1;
+        Rd_valid_bit=1;
+        Rd=0;
+        Rt_valid_bit=1;
+        Rt=2;
+        brn=2'b01;
+        ALU_to_adder=0;        
+        pr_valid=1;
+        pr_number=pr_number-1;
+        load(2);
 
+        // load more alu insts
+        inst_valid=1;
+        Rs_valid_bit=1;
+        Rs=1;
+        Rd_valid_bit=1;
+        Rd=0;
+        Rt_valid_bit=1;
+        Rt=2;
+        ALU_to_adder=1;                
+        pr_valid=1;
+        pr_number=pr_number-1;        
+        load(3);
         
+        // flsh such branch
+
         @(posedge clk);
         //branch inst clocks in and send out by pdc. clr_inst_wat should not go high for branch
         clear();
@@ -452,41 +496,30 @@
         load(2);
         load(3);
         snapshot();
+
+
+        for (k=0;k<5;k=k+1)
+          begin
+             @(posedge clk);
+             snapshot();
+          end
         
-        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
-        $display("%g isq inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);        
+        
+        /****************try to flush such branch ********/
+        @(posedge clk);
+        $display("%g ===try to flush such branch", $time);
+        fls_frm_rob = {1'b1, 6'h2};
+        print_cur_map(DUT.is_tpu.prv_map[4][TPU_MAP_WIDTH-1:0]);
+        
+        @(posedge clk);
+        fls_frm_rob=0;
+        print_cur_map(DUT.is_tpu.prv_map[4][TPU_MAP_WIDTH-1:0]);        
 
         @(posedge clk);
-        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
-        $display("%g isq inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);                
+        print_cur_map(DUT.is_tpu.prv_map[4][TPU_MAP_WIDTH-1:0]);        
         
-        @(posedge clk);
-        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
-        $display("%g isq inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);                
         
-        @(posedge clk);
-        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
-        $display("%g isq inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);
-
-        /****************try to cmt such branch ********/
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
- 
-         
-        
-        repeat(20)@(posedge clk);        
+        repeat(20) @(posedge clk);        
         $finish;
      end
    

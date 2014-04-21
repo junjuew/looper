@@ -1,4 +1,4 @@
-//`default_nettype none
+`default_nettype none
 
   ///////////////////////////
   // issue stage top module
@@ -103,7 +103,8 @@
    wire [4 * INST_WIDTH-1:0] inst_in_flat;
    assign inst_in_flat=inst_frm_al;
    wire                                        isq_en;
-
+   wire [ISQ_DEPTH-1:0]                        clr_inst_wat;
+   
    
    wire [ISQ_LINE_WIDTH*ISQ_DEPTH-1:0]          isq_out_flat;
    
@@ -133,9 +134,11 @@
    wire[ISQ_DEPTH-1:0]                                        tpu_inst_rdy;
    wire [TPU_INST_WIDTH*ISQ_DEPTH-1:0]                        tpu_out_reo_flat;
    wire [7*ISQ_DEPTH-1:0]                                     fre_preg_out_flat;
+   wire                                                       arch;
+   
    
    //pdc
-   wire [ISQ_DEPTH-1:0]                                       clr_inst_wat;
+   wire [ISQ_DEPTH-1:0]                                       pdc_clr_inst_wat;
 
 
    /*************** handle physical register ready *************/
@@ -167,8 +170,32 @@
    /*********** handle branch cmt *********/
    wire [ISQ_DEPTH-1:0] br_clr_inst_wat;
    // if valid
-//   br_clr_inst_wat = (cmt_frm_rob[BRN_WIDTH-1])? (1<<br_clr_inst_wat[BRN_WIDTH-2:0]):{ISQ_DEPTH{1'b0}};
+   assign br_clr_inst_wat[ISQ_DEPTH-1:0] = (cmt_frm_rob[BRN_WIDTH-1])? (1<<cmt_frm_rob[BRN_WIDTH-2:0]):{ISQ_DEPTH{1'b0}};
+   assign clr_inst_wat[ISQ_DEPTH-1:0] = (pdc_clr_inst_wat[ISQ_DEPTH-1:0] | br_clr_inst_wat[ISQ_DEPTH-1:0]);
+
+
+   /*********** handle mis-branch *********/
+   wire [ISQ_DEPTH-1:0] fls_inst;
+   wire [ISQ_DEPTH-1:0] fls_inst_below;
+   generate
+      genvar            fls_inst_i;
+      begin
+         for (fls_inst_i=0; fls_inst_i<ISQ_DEPTH;fls_inst_i=fls_inst_i+1)
+           begin
+              //arch=0, flsh all inst >= fls_inst
+              //arch=1, if fls_inst<=31, keep inst 32-63 and inst < fls_inst, flsh (inst<=31 and inst>=fls_inst)
+              //arch=1, if fls_inst > 31, fls inst 0-31 and inst>=fls_inst
+              assign fls_inst_below[fls_inst_i] = (~arch)? (fls_inst_i >= fls_frm_rob[BRN_WIDTH-2:0])? 1'b1:1'b0
+                                                          : (fls_frm_rob[BRN_WIDTH-2:0] <=31)? 
+                                                             (fls_inst_i<=31 && fls_inst_i>=fls_frm_rob[BRN_WIDTH-2:0])? 1'b1: 1'b0
+                                                             : (fls_inst_i<31 || fls_inst_i>=fls_frm_rob[BRN_WIDTH-2:0])? 1'b1:1'b0;
+           end
+      end 
+   endgenerate
    
+   // if valid, then flsh the branch inst and all insts below
+   assign fls_inst[ISQ_DEPTH-1:0] = (fls_frm_rob[BRN_WIDTH-1])? fls_inst_below:{ISQ_DEPTH{1'b0}};
+
    
    
    /**************** module instatiation **********************/
@@ -191,7 +218,8 @@
            .rst_n                       (rst_n),
            .clk                         (clk),
            .isq_lin_en                  (isq_lin_en[ISQ_DEPTH-1:0]),
-           .clr_inst_wat                (clr_inst_wat[ISQ_DEPTH-1:0]));
+           .clr_inst_wat                (clr_inst_wat[ISQ_DEPTH-1:0]),
+           .fls_inst                    (fls_inst[ISQ_DEPTH-1:0]));
 
    
    counter #(/*AUTOINSTPARAM*/
@@ -235,6 +263,7 @@
            .tpu_out_reo_flat            (tpu_out_reo_flat[TPU_INST_WIDTH*ISQ_DEPTH-1:0]),
            .fre_preg_out_flat           (fre_preg_out_flat[7*ISQ_DEPTH-1:0]),
            .isq_ful                     (isq_ful),
+           .arch                        (arch),
            // Inputs
            .clk                         (clk),
            .rst_n                       (rst_n),
@@ -267,15 +296,15 @@
          .TPU_BIT_CTRL_BR               (TPU_BIT_CTRL_BR),
          .TPU_BIT_CTRL_JMP_VLD          (TPU_BIT_CTRL_JMP_VLD),
          .IS_INST_WIDTH                 (IS_INST_WIDTH),
-         .IS_BIT_IDX                    (IS_BIT_IDX),
          .IS_BIT_INST_VLD               (IS_BIT_INST_VLD),
+         .IS_BIT_IDX                    (IS_BIT_IDX),
          .IS_BIT_CTRL_BR                (IS_BIT_CTRL_BR),
          .IS_BIT_CTRL_JMP_VLD           (IS_BIT_CTRL_JMP_VLD),
          .TPU_INST_WIDTH                (TPU_INST_WIDTH)) 
 
    is_pdc (/*autoinst*/
            // Outputs
-           .clr_inst_wat                (clr_inst_wat[ISQ_DEPTH-1:0]),
+           .pdc_clr_inst_wat            (pdc_clr_inst_wat[ISQ_DEPTH-1:0]),
            .mul_ins_to_rf               (mul_ins_to_rf[IS_INST_WIDTH-1:0]),
            .alu1_ins_to_rf              (alu1_ins_to_rf[IS_INST_WIDTH-1:0]),
            .alu2_ins_to_rf              (alu2_ins_to_rf[IS_INST_WIDTH-1:0]),

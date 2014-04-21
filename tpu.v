@@ -18,7 +18,7 @@
 
   module tpu(/*autoarg*/
    // Outputs
-   tpu_inst_rdy, tpu_out_reo_flat, fre_preg_out_flat, isq_ful,
+   tpu_inst_rdy, tpu_out_reo_flat, fre_preg_out_flat, isq_ful, arch,
    // Inputs
    clk, rst_n, isq_out_flat, dst_reg_rdy, dst_rdy_reg_en, counter
    );
@@ -58,7 +58,8 @@
    output wire [TPU_INST_WIDTH * ISQ_DEPTH-1:0] tpu_out_reo_flat;   
    output wire [7 * ISQ_DEPTH-1:0] fre_preg_out_flat;
    output wire                            isq_ful;
-
+   output reg                       arch;
+   
    // get the tpu_inst_rdy before reordered
    wire [ISQ_DEPTH-1:0]            tpu_inst_rdy_raw;      
    // output from tpu lines
@@ -74,7 +75,7 @@
    wire [ISQ_LINE_WIDTH-1:0] isq_lin[ISQ_DEPTH-1:0];   
    //////////////////////////////
 
-   reg                       arch;
+
    reg[TPU_MAP_WIDTH-1:0]    top_hed_map, mid_hed_map;
    wire                      top_hed_map_en,mid_hed_map_en;
 

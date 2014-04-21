@@ -1,0 +1,71 @@
+        /**  branch instruction. make sure branch doesn't clr wait immediately after send ****/
+        @(posedge clk);
+        $display("");        
+        $display("%g complex test No.3. check if wait of branch is cleared immediately ", $time);
+        rst_n=0;
+        prg_rdy_frm_exe=0;
+        
+        /************** load instructions with dependency ***********/
+        @(posedge clk);
+        rst_n=1;
+        $display("%g  ============= start loading in next cycle  ==========", $time);
+        clear();
+        load(1);
+        load(2);
+        load(3);        
+        pr_number=64;
+        k=pr_number;
+
+        inst_valid=1;
+        Rs_valid_bit=1;
+        Rs=1;
+        Rd_valid_bit=1;
+        Rd=0;
+        Rt_valid_bit=1;
+        Rt=2;
+        brn=2'b01;
+        pr_valid=1;
+        pr_number=63;
+        load(0);
+
+
+        
+        @(posedge clk);
+        //branch inst clocks in and send out by pdc. clr_inst_wat should not go high for branch
+        clear();
+        load(0);
+        load(1);
+        load(2);
+        load(3);
+        snapshot();
+        
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq idx 0 inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);        
+
+        @(posedge clk);
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq idx 0 inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);                
+        
+        @(posedge clk);
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq idx 0 inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);                
+        
+        @(posedge clk);
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq idx 0 inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);
+
+        /****************try to cmt such branch ********/
+        @(posedge clk);
+        $display("%g ===try to commit such branch", $time);
+        cmt_frm_rob = {1'b1, 6'h0};
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq idx 0 inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);
+        
+        @(posedge clk);
+        cmt_frm_rob=0;
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq idx 0 inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);
+
+        @(posedge clk);
+        $display("%g clr_inst_wat: %x", $time, DUT.clr_inst_wat);
+        $display("%g isq idx 0 inst_wat bit: %x", $time, DUT.is_isq.isq_lin_out[0][56]);

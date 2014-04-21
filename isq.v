@@ -9,7 +9,8 @@
    // Outputs
    isq_out_flat,
    // Inputs
-   inst_in_flat, isq_en, rst_n, clk, isq_lin_en, clr_inst_wat
+   inst_in_flat, isq_en, rst_n, clk, isq_lin_en, clr_inst_wat,
+   fls_inst
    );
 
    parameter ISQ_DEPTH=64;
@@ -26,7 +27,8 @@
 
    input wire                             isq_en, rst_n, clk;
    input wire [ISQ_DEPTH -1 :0]           isq_lin_en;
-   input wire [ISQ_DEPTH -1 :0]           clr_inst_wat;   
+   input wire [ISQ_DEPTH -1 :0]           clr_inst_wat;
+   input wire [ISQ_DEPTH -1 :0]           fls_inst;      
 
    
    output wire [ISQ_LINE_WIDTH * ISQ_DEPTH -1 :0 ] isq_out_flat;
@@ -38,7 +40,6 @@
 //   wire                                           set_val[0:ISQ_DEPTH-1];   
    wire                                           clr_wat[0:ISQ_DEPTH-1];
    wire                                           set_wat[0:ISQ_DEPTH-1];
-   wire                                           fls[0:ISQ_DEPTH-1];
 
    wire [ISQ_LINE_NO_IDX_WIDTH-1:0]                      isq_lin_out[0:ISQ_DEPTH-1];   
    wire [ISQ_LINE_NO_IDX_WIDTH-1:0]                      isq_lin_in[0:ISQ_DEPTH-1];
@@ -86,7 +87,7 @@
            assign clr_val[clr_i] = 1'b0;
 //           assign set_val[clr_i] = 1'b0;
            assign set_wat[clr_i] = 1'b0;
-           assign fls[clr_i] = 1'b0;           
+//           assign fls[clr_i] = 1'b0;           
         end
    endgenerate
 
@@ -115,7 +116,7 @@
                            .set_wat         (set_wat[i]),
                            .clr_val         (clr_val[i]),
 //                           .set_val         (set_val[i]),
-                           .fls             (fls[i]),
+                           .fls_inst             (fls_inst[i]),
                            .isq_lin_in      (isq_lin_in[i]));
         end
    endgenerate
