@@ -56,44 +56,56 @@ always@(*)begin
 		if(brnch_pc_sel_from_bhndlr==4'b1100)
 		begin
 			pred_result_to_dec[3:2]=pred_to_pcsel;
-			recv_pc_to_dec[63:32]={(pred_to_pcsel[1])?brnch_addr_pc0:pc_plus1,(pred_to_pcsel[0])?brnch_addr_pc1:pc_plus2};
+			recv_pc_to_dec[63:32]={(!pred_to_pcsel[1])?brnch_addr_pc0:pc_plus1,(!pred_to_pcsel[0])?brnch_addr_pc1:pc_plus2};
 		end
 		else if(brnch_pc_sel_from_bhndlr==4'b1010)
 		begin
 			pred_result_to_dec[3]=pred_to_pcsel[1];
 			pred_result_to_dec[1]=pred_to_pcsel[0];
-			recv_pc_to_dec[63:48]=(pred_to_pcsel[1])?brnch_addr_pc0:pc_plus1;
-			recv_pc_to_dec[31:16]=(pred_to_pcsel[0])?brnch_addr_pc1:pc_plus3;
+			recv_pc_to_dec[63:48]=(!pred_to_pcsel[1])?brnch_addr_pc0:pc_plus1;
+			recv_pc_to_dec[31:16]=(!pred_to_pcsel[0])?brnch_addr_pc1:pc_plus3;
 		end
 		else if(brnch_pc_sel_from_bhndlr==4'b1001)
 		begin
 			pred_result_to_dec[3]=pred_to_pcsel[1];
 			pred_result_to_dec[0]=pred_to_pcsel[0];
-			recv_pc_to_dec[63:48]=(pred_to_pcsel[1])?brnch_addr_pc0:pc_plus1;
-			recv_pc_to_dec[15:0]=(pred_to_pcsel[0])?brnch_addr_pc1:(pc_plus3+1);
+			recv_pc_to_dec[63:48]=(!pred_to_pcsel[1])?brnch_addr_pc0:pc_plus1;
+			recv_pc_to_dec[15:0]=(!pred_to_pcsel[0])?brnch_addr_pc1:(pc_plus3+1);
 		end
 		else if(brnch_pc_sel_from_bhndlr==4'b0110)
 		begin
 			pred_result_to_dec[2]=pred_to_pcsel[1];
 			pred_result_to_dec[1]=pred_to_pcsel[0];
-			recv_pc_to_dec[47:16]={(pred_to_pcsel[1])?brnch_addr_pc0:pc_plus2,
-				(pred_to_pcsel[0])?brnch_addr_pc1:pc_plus3};
+			recv_pc_to_dec[47:16]={(!pred_to_pcsel[1])?brnch_addr_pc0:pc_plus2,
+				(!pred_to_pcsel[0])?brnch_addr_pc1:pc_plus3};
 		end
 		else if(brnch_pc_sel_from_bhndlr==4'b0101)
 		begin
 			pred_result_to_dec[2]=pred_to_pcsel[1];
 			pred_result_to_dec[0]=pred_to_pcsel[0];
-			recv_pc_to_dec[47:32]=(pred_to_pcsel[1])?brnch_addr_pc0:pc_plus2;
-			recv_pc_to_dec[15:0]=(pred_to_pcsel[0])?brnch_addr_pc1:(pc_plus3+1);
+			recv_pc_to_dec[47:32]=(!pred_to_pcsel[1])?brnch_addr_pc0:pc_plus2;
+			recv_pc_to_dec[15:0]=(!pred_to_pcsel[0])?brnch_addr_pc1:(pc_plus3+1);
 		end
 		else if(brnch_pc_sel_from_bhndlr==4'b0011)
 		begin
 			pred_result_to_dec[1]=pred_to_pcsel[1];
 			pred_result_to_dec[0]=pred_to_pcsel[0];
-			recv_pc_to_dec[31:0]={(pred_to_pcsel[1])?brnch_addr_pc0:pc_plus3,(pred_to_pcsel[0])?brnch_addr_pc1:(pc_plus3+1)};
+			recv_pc_to_dec[31:0]={(!pred_to_pcsel[1])?brnch_addr_pc0:pc_plus3,(!pred_to_pcsel[0])?brnch_addr_pc1:(pc_plus3+1)};
 		end
 	end else //one branch
+	begin
 		if((pred_to_pcsel[1])==1)begin
+			if(brnch_pc_sel_from_bhndlr[3]==1)
+				recv_pc_to_dec[63:48]=pc_plus1;
+			else if(brnch_pc_sel_from_bhndlr[2]==1)
+				recv_pc_to_dec[47:32]=pc_plus2;	
+			else if(brnch_pc_sel_from_bhndlr[1]==1)
+				recv_pc_to_dec[31:16]=pc_plus3;
+			else if(brnch_pc_sel_from_bhndlr[0]==1)
+				recv_pc_to_dec[15:0]=pc_plus3+1;
+		end
+		else
+		begin
 			if(brnch_pc_sel_from_bhndlr[3]==1)
 				recv_pc_to_dec[63:48]=brnch_addr_pc0;
 			else if(brnch_pc_sel_from_bhndlr[2]==1)
@@ -103,6 +115,7 @@ always@(*)begin
 			else if(brnch_pc_sel_from_bhndlr[0]==1)
 				recv_pc_to_dec[15:0]=brnch_addr_pc0;
 		end
+	end
 end
 
 //if the instruction is jump, the recovery address is the jump address for that instruction

@@ -191,6 +191,7 @@ wire flush_ROB_out;
 wire [5:0] mis_pred_brnc_idx_ROB_out;
 wire cmt_brnc_ROB_out;
 wire [5:0] cmt_brnc_idx_ROB_out;
+wire decr_brnc_num_ROB_out;
 wire [15:0] rcvr_PC_out_ROB_out;
 wire rob_full_stll_ROB_out;
 wire rob_empt_ROB_out;
@@ -216,14 +217,14 @@ fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
 	.loop_start(loop_strt_out_to_AL),
  -----/\----- EXCLUDED -----/\----- */
 	.loop_start(1'b0),	
-	.decr_count_brnch(1'b0),
+	.decr_count_brnch(cmt_brnc_ROB_out),
 	.has_mispredict(mis_pred_ROB_out),
 	.jump_base_rdy_from_rf(jump_base_rdy_from_rf),
 	.pc_recovery(rcvr_PC_out_ROB_out),
 	.jump_base_from_rf(alu1_op1_data_rf_out),
 	.exter_pc(extern_pc),
 	.exter_pc_en(extern_pc_en),
-	.mispred_num(1'b0),
+	.mispred_num(decr_brnc_num_ROB_out),
 	//output
 	.pc_to_dec(pc_to_dec),
 	.inst_to_dec(inst_to_dec), 
@@ -730,9 +731,10 @@ rob rob_DUT(.clk(clk), .rst_n(rst_n),
     .flush(flush_ROB_out), 
     .mis_pred_brnc_idx(mis_pred_brnc_idx_ROB_out),
 	// to AL-freelist and IS-issue_queue
-    .cmt_brnc(cmt_brnc_ROB_out),// to AL-freelist and IS-issue_queue
+    .cmt_brnc(cmt_brnc_ROB_out),// to IF, AL-freelist and IS-issue_queue
     .cmt_brnc_idx(cmt_brnc_idx_ROB_out),
 	// to AL-freelist and IS-issue_queue
+	.decr_brnc_num(decr_brnc_num_ROB_out),
     .rcvr_PC_out(rcvr_PC_out_ROB_out),// to IF 
     .rob_full_stll(rob_full_stll_ROB_out),// to IF, ID, AL
     .rob_empt(rob_empt_ROB_out),// to IS for final reg-map outputting
