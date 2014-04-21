@@ -45,6 +45,8 @@ input [PC_WIDTH-1:0] pc_recovery,//from ROB, recovery pc address on mispredictio
 input [15:0]exter_pc;//input pc from external device, for testing
 input exter_pc_en;
 input mispred_num;//From ROB, if misprediction occurs tell predictor and counter which to flush
+//input brnch_commit;//enable signal from ROB, to inform fetch that a branch is commited
+
 /////////////////////
 //output parameters//
 /////////////////////

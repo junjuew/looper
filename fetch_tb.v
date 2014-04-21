@@ -58,7 +58,7 @@ mispred_num=0;
 #2 rst_n=0;
 #2 rst_n=1;
 #25
-jump_base_rdy_from_rf=0;
+jump_base_rdy_from_rf=1;
 jump_base_from_rf=16'b0;
 
 #2
