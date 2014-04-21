@@ -62,6 +62,7 @@ module rob(
     output [5:0] cmt_brnc_idx,        // to AL-freelist and IS-issue_queue
 	output decr_brnc_num,             // to IF, num of brnc to decrease
     output [15:0] rcvr_PC_out,        // to IF 
+    output brnc_pred,                 // to IF, the brnc was preded as T/N 
     output rob_full_stll,             // to IF, ID, AL
     output rob_empt,				  // to IS for final reg-map outputting
     output cmmt_st,                   // to Store Queue
@@ -141,6 +142,11 @@ ROB per entry:
                       (rob_brnc_pred[brnc_idx] == (rob_brnc_cond[brnc_idx] == brnc_cmp_rslt)));
                       // and the predicted behavior is incorrect
     assign cmt_brnc_idx = brnc_idx;
+
+    // brnc pred for IF
+    assign brnc_pred = (mis_pred) ? rob_brnc_pred[mis_pred_brnc_idx] 
+                     : (cmt_brnc) ? rob_brnc_pred[cmt_brnc_idx]
+                     : 1'b0;
     
     // head is pointing to a store instruction
     assign cmmt_st = (rob_st[rob_head]) ? 1:0;
@@ -735,32 +741,6 @@ ROB per entry:
         end
     end
     endgenerate
-
-	// fifo for detecting which branch is handled. 
-	reg [5:0] rob_brnc_reg_old;
-	reg [5:0] rob_brnc_reg_new;
-	always@(posedge clk, negedge rst_n)begin
-		if(!rst_n)begin
-			rob_brnc_reg_old <= 0;
-			rob_brnc_reg_new <= 0;
-		end
-		// allocating in
-		else if(brnc_in == 4'b0001)begin 
-			rob_brnc_reg_old <= 0;
-			rob_brnc_reg_new <= 0;
-		end
-		else if(brnc_in == 4'b0010)begin 
-			rob_brnc_reg_old <= 0;
-			rob_brnc_reg_new <= 0;
-		end
-		else if(brnc_in == 4'b0100)begin 
-			rob_brnc_reg_old <= 0;
-			rob_brnc_reg_new <= 0;
-		end
-		else if(brnc_in == 4'b1000)begin 
-			rob_brnc_reg_old <= 0;
-			rob_brnc_reg_new <= 0;
-		end
 
 
 endmodule

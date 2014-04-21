@@ -193,6 +193,7 @@ wire cmt_brnc_ROB_out;
 wire [5:0] cmt_brnc_idx_ROB_out;
 wire decr_brnc_num_ROB_out;
 wire [15:0] rcvr_PC_out_ROB_out;
+wire brnc_pred_ROB_out;
 wire rob_full_stll_ROB_out;
 wire rob_empt_ROB_out;
 wire cmmt_st_ROB_out;
@@ -225,6 +226,7 @@ fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
 	.exter_pc(extern_pc),
 	.exter_pc_en(extern_pc_en),
 	.mispred_num(decr_brnc_num_ROB_out),
+    .brnc_pred_log(brnc_pred_ROB_out),
 	//output
 	.pc_to_dec(pc_to_dec),
 	.inst_to_dec(inst_to_dec), 
@@ -736,6 +738,7 @@ rob rob_DUT(.clk(clk), .rst_n(rst_n),
 	// to AL-freelist and IS-issue_queue
 	.decr_brnc_num(decr_brnc_num_ROB_out),
     .rcvr_PC_out(rcvr_PC_out_ROB_out),// to IF 
+    .brnc_pred(brnc_pred_ROB_out),// to IF, the brnc was preded as T/N 
     .rob_full_stll(rob_full_stll_ROB_out),// to IF, ID, AL
     .rob_empt(rob_empt_ROB_out),// to IS for final reg-map outputting
     .cmmt_st(cmmt_st_ROB_out),// to Store Queue

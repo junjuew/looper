@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 module fetch(clk,rst_n,stall_fetch,loop_start,decr_count_brnch,has_mispredict,
 	jump_base_rdy_from_rf, pc_recovery,jump_base_from_rf,
-	exter_pc,exter_pc_en,mispred_num,
+	exter_pc,exter_pc_en,mispred_num,brnc_pred_log,
 	pc_to_dec,inst_to_dec, recv_pc_to_dec,pred_result_to_dec);
 
 ////////////////////
@@ -45,7 +45,7 @@ input [PC_WIDTH-1:0] pc_recovery,//from ROB, recovery pc address on mispredictio
 input [15:0]exter_pc;//input pc from external device, for testing
 input exter_pc_en;
 input mispred_num;//From ROB, if misprediction occurs tell predictor and counter which to flush
-//input brnch_commit;//enable signal from ROB, to inform fetch that a branch is commited
+input brnc_pred_log;//prediction value from ROB, when committed 
 
 /////////////////////
 //output parameters//
@@ -92,7 +92,7 @@ instrMemModule IMM(clk, pc,inst0,inst1, inst2, inst3, pc_plus1, pc_plus2, pc_plu
 
 //branch prediction
 branchHandler branchjumpHandler(clk,rst_n,pc,inst0,inst1,inst2,inst3, stall_for_jump,//from jump
-	pred_to_pcsel, decr_count_brnch,stall_fetch,mispred_num,
+	pred_to_pcsel, decr_count_brnch,stall_fetch,mispred_num,brnc_pred_log,
    update_bpred, brnch_pc_sel_from_bhndlr, pcsel_from_bhndlr, pc_bhndlr,
 	instruction0, instruction1, instruction2,instruction3,//to output
    brnch_inst0,brnch_inst1,isImJmp);//to calculator
