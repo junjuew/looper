@@ -1,0 +1,14 @@
+          // 
+PC: 0000 Binary: 1100000100000010 Hex: c102 ldi r1, 2      	// load 2 to r1
+PC: 0001 Binary: 1100001000000001 Hex: c201 ldi r2, 1      	// load 1 to r2
+PC: 0002 Binary: 0001001100010010 Hex: 1312 add r3, r1, r2  // expect r3 = 3
+PC: 0003 Binary: 0001001000010011 Hex: 1213 add r2, r1, r3  // expect r2 = 5
+PC: 0004 Binary: 0001010000110010 Hex: 1432 add r4, r3, r2  // expect r4 = 8
+PC: 0005 Binary: 0010001101000011 Hex: 2343 sub r3, r4, r3	// expect r3 = r4 - r3 = 5
+PC: 0006 Binary: 0001001000110001 Hex: 1231 add r2, r3, r1	// expect r2 = r3 + r1 = 7
+PC: 0007 Binary: 1000010100100001 Hex: 8521 mult r5, r2, r1	// expect r5 = r2 * r1 = 14
+PC: 0008 Binary: 0001010101010001 Hex: 1551 add r5, r5, r1	// expect r5 = r5 + r1 = 16
+PC: 0009 Binary: 1000010101010001 Hex: 8551 mult r5, r5, r1	// expect r5 = r5 * r1 = 32
+PC: 000a Binary: 1000010101010001 Hex: 8551 mult r5, r5, r1	// expect r5 = r5 * r1 = 64
+PC: 000b Binary: 0001000100010010 Hex: 1112 add r1, r1, r2	// expect r1 = r1 + r2 = 3
+PC: 000c Binary: 1000010101010001 Hex: 8551 mult r5, r5, r1	// expect r5 = r5 * r1 = 192
