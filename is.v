@@ -1,4 +1,4 @@
-`default_nettype none
+//`default_nettype none
 
   ///////////////////////////
   // issue stage top module

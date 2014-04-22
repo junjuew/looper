@@ -738,7 +738,7 @@ rob rob_DUT(.clk(clk), .rst_n(rst_n),
 	// to AL-freelist and IS-issue_queue
 	.decr_brnc_num(decr_brnc_num_ROB_out),
     .rcvr_PC_out(rcvr_PC_out_ROB_out),// to IF 
-    .brnc_pred(brnc_pred_ROB_out),// to IF, the brnc was preded as T/N 
+    .brnc_pred_log(brnc_pred_ROB_out),// to IF, the brnc was preded as T/N 
     .rob_full_stll(rob_full_stll_ROB_out),// to IF, ID, AL
     .rob_empt(rob_empt_ROB_out),// to IS for final reg-map outputting
     .cmmt_st(cmmt_st_ROB_out),// to Store Queue

@@ -62,7 +62,7 @@ module rob(
     output [5:0] cmt_brnc_idx,        // to AL-freelist and IS-issue_queue
 	output decr_brnc_num,             // to IF, num of brnc to decrease
     output [15:0] rcvr_PC_out,        // to IF 
-    output brnc_pred,                 // to IF, the brnc was preded as T/N 
+    output brnc_pred_log,             // to IF, the brnc was preded as T/N 
     output rob_full_stll,             // to IF, ID, AL
     output rob_empt,				  // to IS for final reg-map outputting
     output cmmt_st,                   // to Store Queue
@@ -144,9 +144,9 @@ ROB per entry:
     assign cmt_brnc_idx = brnc_idx;
 
     // brnc pred for IF
-    assign brnc_pred = (mis_pred) ? rob_brnc_pred[mis_pred_brnc_idx] 
-                     : (cmt_brnc) ? rob_brnc_pred[cmt_brnc_idx]
-                     : 1'b0;
+    assign brnc_pred_log = (mis_pred) ? rob_brnc_pred[mis_pred_brnc_idx] 
+                         : (cmt_brnc) ? rob_brnc_pred[cmt_brnc_idx]
+                         : 1'b0;
     
     // head is pointing to a store instruction
     assign cmmt_st = (rob_st[rob_head]) ? 1:0;
@@ -742,5 +742,18 @@ ROB per entry:
     end
     endgenerate
 
+	branch_fifo branch_fifo_DUT(
+	// Outputs
+	.decr_brnc_num(decr_brnc_num),
+	// Inputs
+	.brnc_in(brnc_in), 
+	.rob_tail(rob_tail[5:0]), 
+	.mis_pred(mis_pred), 
+	.cmt_brnc(cmt_brnc), 
+	.mis_pred_brnc_indx(mis_pred_brnc_idx),
+	.cmt_brnc_indx(cmt_brnc_idx), 
+	.clk(clk), 
+	.rst_n(rst_n)
+	);
 
 endmodule

@@ -1,4 +1,4 @@
-`default_nettype none
+//`default_nettype none
 
   /////////////////
   //test problem: when load in a new instruction, need to reset dst_rdy_reg
