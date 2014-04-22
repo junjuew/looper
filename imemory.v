@@ -17,10 +17,11 @@ module imemory(
 	 assign doutb=mem[addrb];
 	
 	
-	initial begin
+   initial begin
+	   
+	   $readmemb("./ECE554_assembler/src/beqz1_mif.mif", mem); // IM.mif is memory file
 
-	$readmemb("./ECE554_assembler/src/beqz2_mif.mif", mem); // IM.mif is memory file
-   end
+	end
 	
 	
 	endmodule

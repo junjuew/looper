@@ -141,6 +141,20 @@ module tb_topmodule();
    end // initial begin
  -----/\----- EXCLUDED -----/\----- */
    
+
+
+   initial begin
+      #150;
+
+      $display("///////////////////////////////freelist//////////////////////////");
+      $display("alloc pointer position is %d \n",DUT.al_DUT.f0.alloc_ptr);
+      $display("cmt pointer position is %d \n",DUT.al_DUT.f0.cmt_ptr);
+      for(i = 0; i < 64; i = i + 1)
+	begin
+	   $display("free lis %d, value is %d \n",i, DUT.al_DUT.f0.list[i]);
+	end
+      $display("///////////////////////////////freelist//////////////////////////");
+   end
    
    initial begin
       #400;
