@@ -33,7 +33,11 @@ input clk,
     // output reg[15:0] jump_addr_pc, // fan
     output [15:0] jump_addr_pc,
     output  jump_for_pcsel,
-    output reg stall_for_jump
+    output reg stall_for_jump,
+    output [15:0]instruction0_j,
+    output [15:0]instruction1_j,
+    output [15:0]instruction2_j,
+    output [15:0]instruction3_j
     );
 
 //internal signal
@@ -44,6 +48,9 @@ reg [15:0]jump_base_from_rf;
 reg jump_base_rdy_from_rf,jump_base_rdy_from_rf_buf; 
 reg disable_ins;
 //assign disable_ins=0;
+   
+wire stall_for_jump1;
+   
    
 always@(posedge clk or negedge rst_n) begin
     if(!rst_n)begin
@@ -123,11 +130,12 @@ wire BsJmp3=disable_ins?0:(instruction3[15:12]==4'b1111)&&(instruction3[0]==1);
  end
  */
  assign jump_for_pcsel = (jump_base_rdy_from_rf) ? 1'b1 :
+              (stall_for_jump1) ?   1'b1:
  						 (preJmp)				 ? 1'b0 :
  						 (existImdJmp)           ? 1'b1 : 1'b0;
  
 
-
+assign stall_for_jump1=BsJmp0|BsJmp1|BsJmp2|BsJmp3|stall_for_jump;
 /*assign jump_addr_pc=(!rst_n)?16'b0:(wtJumpAddr?16'b0://not sure if we want wtJmpAddr
    (jump_base_rdy_from_rf?(jump_pc+jump_base_from_rf):(preJmp?16'b0:
    (ImJmp0?(pc+1+{{6{instruction0[11]}},instruction0[11:2]}):
@@ -150,7 +158,8 @@ assign ImJmp_addr=(ImJmp0?(pc+1+{{6{instruction0[11]}},instruction0[11:2]}):
     else
        jump_addr_pc<=jump_addr_pc;
 end*/
-assign jump_addr_pc = (jump_base_rdy_from_rf_buf) ? jump_pc+jump_base_from_rf :
+assign jump_addr_pc = (jump_base_rdy_from_rf) ? jump_pc+jump_base_from_rf :
+            (stall_for_jump1)? (BsJmp0?pc:(BsJmp1?(pc+1):(BsJmp2?(pc+2):(pc+3)))):
 					  (preJmp)                    ? 16'b0 :
 					  (existImdJmp)               ? ImJmp_addr : 16'b0;
 
@@ -179,7 +188,7 @@ always@(posedge clk or negedge rst_n) begin
 		   jump_pc<=jump_pc;
 		   //disable_ins<=1;
 	      //while waiting addr, keep checking rdy signal
-	      if(jump_base_rdy_from_rf)begin//once rdy, clear stall,wt
+	      if(jump_base_rdy_from_rf_0)begin//once rdy, clear stall,wt
 		   stall_for_jump<=0;
 		   wtJumpAddr<=0;
 		   //jump_pc<=16'b0;//clear internal reg
@@ -231,4 +240,8 @@ always@(posedge clk or negedge rst_n) begin
 
 end//always
 
+assign instruction0_j=stall_for_jump?16'b0:(BsJmp0?16'b0:instruction0);
+assign instruction1_j=stall_for_jump?16'b0:(BsJmp1?16'b0:instruction1);
+assign instruction2_j=stall_for_jump?16'b0:(BsJmp2?16'b0:instruction2);
+assign instruction3_j=stall_for_jump?16'b0:(BsJmp3?16'b0:instruction3);
 endmodule

@@ -60,6 +60,7 @@ output [3:0]pred_result_to_dec;
 wire [15:0] brnch_addr_pc0, brnch_addr_pc1, jump_addr_pc,pc_plus4, pc_bhndlr,
 		pc,pc_plus1,pc_plus2,pc_plus3,inst0,inst1, inst2, inst3,
 		instruction0, instruction1, instruction2,instruction3,
+		instruction0j,instruction1j,instruction2j,instruction3j,
 		brnch_inst0,brnch_inst1;
 wire [3:0] brnch_pc_sel_from_bhndlr,isImJmp;
 wire [2:0] PC_select;
@@ -117,7 +118,8 @@ branchAddrCalculator branchAddrCalculator(brnch_pc_sel_from_bhndlr, brnch_inst0,
 
 //jump
 jumpHandler jumpHandler(has_mispredict,clk,rst_n,pc,instruction0,instruction1,instruction2,instruction3,
-    jump_base_from_rf,jump_base_rdy_from_rf,jump_addr_pc,jump_for_pcsel,stall_for_jump);
+    jump_base_from_rf,jump_base_rdy_from_rf,jump_addr_pc,jump_for_pcsel,stall_for_jump,
+    instruction0j,instruction1j,instruction2j,instruction3j);
 
 
 //next PC selector
@@ -126,7 +128,7 @@ nextPCSel next_PC_selector(clk,rst_n,stall_fetch, has_mispredict,
 
 //output to DECODE stage
 dataout_pack dataout(pc,pc_plus1,pc_plus2,pc_plus3,
-	instruction0,instruction1,instruction2,instruction3,
+	instruction0j,instruction1j,instruction2j,instruction3j,
 	 brnch_addr_pc0,brnch_addr_pc1,jump_addr_pc,
 	 brnch_addr_pc0,brnch_addr_pc1,
 	 pred_to_pcsel,brnch_pc_sel_from_bhndlr,isImJmp,

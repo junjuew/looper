@@ -19,7 +19,7 @@ module imemory(
 	
    initial begin
 
-      $readmemb("./ECE554_assembler/src/beqz1_mif.mif", mem); // IM.mif is memory file
+      $readmemb("/filespace/people/l/lei/mydoc_lei/looper/IM.mif", mem); // IM.mif is memory file
    end
    
 	

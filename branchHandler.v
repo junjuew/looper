@@ -235,10 +235,10 @@ assign tkn_brnch[0]=(exd_cnt[3])?0:((|brnch_pc_sel_from_bhndlr[3:1])?
 //stall signal, plus tkn, exceed count,jump, if immdediate jump flush at dataout module
 //if previous instruction got flushed, latter ones all get flushed
 //all_nop=1-->flush
-assign all_nop[3]=(stall_for_jump||stall_fetch||hold_for_brnch)?1:(third_brnch[3]?1:0);
-assign all_nop[2]=(stall_for_jump||stall_fetch||hold_for_brnch)?1:(all_nop[3]?1:(isJump[3]?1:(third_brnch[2]?1:(tkn_brnch[3]?1:0))));
-assign all_nop[1]=(stall_for_jump||stall_fetch||hold_for_brnch)?1:(all_nop[2]?1:(isJump[2]?1:(third_brnch[1]?1:(tkn_brnch[2]?1:0))));
-assign all_nop[0]=(stall_for_jump||stall_fetch||hold_for_brnch)?1:(all_nop[1]?1:(isJump[1]?1:(third_brnch[0]?1:(tkn_brnch[1]?1:0))));
+assign all_nop[3]=(stall_fetch||hold_for_brnch)?1:(third_brnch[3]?1:0);
+assign all_nop[2]=(stall_fetch||hold_for_brnch)?1:(all_nop[3]?1:(isJump[3]?1:(third_brnch[2]?1:(tkn_brnch[3]?1:0))));
+assign all_nop[1]=(stall_fetch||hold_for_brnch)?1:(all_nop[2]?1:(isJump[2]?1:(third_brnch[1]?1:(tkn_brnch[2]?1:0))));
+assign all_nop[0]=(stall_fetch||hold_for_brnch)?1:(all_nop[1]?1:(isJump[1]?1:(third_brnch[0]?1:(tkn_brnch[1]?1:0))));
 
 
 ///////////////////////
@@ -248,15 +248,16 @@ assign all_nop[0]=(stall_for_jump||stall_fetch||hold_for_brnch)?1:(all_nop[1]?1:
    assign pcsel_from_bhndlr=(stall_for_jump||stall_fetch||isJump[3])||(|third_brnch)||hold_for_brnch;
    //reg [15:0] pc_bhndlr;//if more than two branches, third got flushed
    
+   //remove stall_for_jump from the first condiction because we need to stall from the BsJmp
    assign pc_bhndlr=(stall_for_jump||stall_fetch||third_brnch[3]||isJump[3]||hold_for_brnch)?pc:
         (third_brnch[2]?(pc+1):(third_brnch[1]?(pc+2):(third_brnch[0]?(pc+3):pc+4)));
 
    
    //instructions
-   assign instruction0=(all_nop[3])?16'b0:inst0;
-   assign instruction1=(all_nop[2])?16'b0:inst1;
-   assign instruction2=(all_nop[1])?16'b0:inst2;
-   assign instruction3=(all_nop[0])?16'b0:inst3;	
+   assign instruction0=((all_nop[3])?16'b0:inst0);
+   assign instruction1=((all_nop[2])?16'b0:inst1);
+   assign instruction2=((all_nop[1])?16'b0:inst2);
+   assign instruction3=((all_nop[0])?16'b0:inst3);	
    
    //output branch target address
 	assign brnch_inst0=tkn_brnch[3]?inst0:(tkn_brnch[2]?inst1:(tkn_brnch[1]?inst2:(tkn_brnch[0]?inst3:16'b0)));
