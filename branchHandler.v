@@ -235,10 +235,10 @@ assign tkn_brnch[0]=(exd_cnt[3])?0:((|brnch_pc_sel_from_bhndlr[3:1])?
 //stall signal, plus tkn, exceed count,jump, if immdediate jump flush at dataout module
 //if previous instruction got flushed, latter ones all get flushed
 //all_nop=1-->flush
-assign all_nop[3]=(stall_for_jump|| stall_fetch||hold_for_brnch)?1:(third_brnch[3]?1:0);
-assign all_nop[2]=(stall_for_jump|| stall_fetch||hold_for_brnch)?1:(all_nop[3]?1:(isJump[3]?1:(third_brnch[2]?1:(tkn_brnch[3]?1:0))));
-assign all_nop[1]=(stall_for_jump|| stall_fetch||hold_for_brnch)?1:(all_nop[2]?1:(isJump[2]?1:(third_brnch[1]?1:(tkn_brnch[2]?1:0))));
-assign all_nop[0]=(stall_for_jump|| stall_fetch||hold_for_brnch)?1:(all_nop[1]?1:(isJump[1]?1:(third_brnch[0]?1:(tkn_brnch[1]?1:0))));
+assign all_nop[3]=(stall_for_jump||stall_fetch||hold_for_brnch)?1:(third_brnch[3]?1:0);
+assign all_nop[2]=(stall_for_jump||stall_fetch||hold_for_brnch)?1:(all_nop[3]?1:(isJump[3]?1:(third_brnch[2]?1:(tkn_brnch[3]?1:0))));
+assign all_nop[1]=(stall_for_jump||stall_fetch||hold_for_brnch)?1:(all_nop[2]?1:(isJump[2]?1:(third_brnch[1]?1:(tkn_brnch[2]?1:0))));
+assign all_nop[0]=(stall_for_jump||stall_fetch||hold_for_brnch)?1:(all_nop[1]?1:(isJump[1]?1:(third_brnch[0]?1:(tkn_brnch[1]?1:0))));
 
 
 ///////////////////////
