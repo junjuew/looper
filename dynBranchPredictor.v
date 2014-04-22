@@ -27,7 +27,7 @@ input clk,rst_n,decr_count_brnch,mispredict,mispred_num,brnc_pred_log;
 input [3:0]brnch_pc_sel_from_bhndlr;
 input update_bpred,loop_start;
 input [15:0]pc, pc_plus1, pc_plus2, pc_plus3;
-output pred_to_pcsel;
+output [1:0] pred_to_pcsel;
 
 /*
 ///////////////////////////////////////
@@ -97,22 +97,22 @@ always@(posedge clk or negedge rst_n)begin
                     SN:predCounter<=WT;
                     WN:predCounter<=ST;
                     WT:predCounter<=ST;
-                    ST:predCOunter<=ST;
+                    ST:predCounter<=ST;
                 endcase
         end else begin
             if(brnc_pred_log==1)
                case(predCounter)
                    SN:predCounter<=SN;
                    WN:predCounter<=SN;
-                   WT:predCoutner<=WN;
-                   ST:predCOutner<=WT;
+                   WT:predCounter<=WN;
+                   ST:predCounter<=WT;
                 endcase
            else
                case(predCounter)
                    SN:predCounter<=WN;
                    WN:predCounter<=WT;
-                   WT:predCoutner<=ST;
-                   ST:predCOutner<=ST;
+                   WT:predCounter<=ST;
+                   ST:predCounter<=ST;
                 endcase
             
         end
@@ -126,7 +126,7 @@ reg [1:0] tmp;
 
 wire [1:0] numbrnch;
 assign numbrnch=brnch_pc_sel_from_bhndlr[0]+brnch_pc_sel_from_bhndlr[1]+brnch_pc_sel_from_bhndlr[2]+brnch_pc_sel_from_bhndlr[3];
-assign pred_to_pcsel=(update_bpred)?((loop_start)?2'b11:((numbrnch==1)?{predCounter[1],0}:{2{predCounter[1]}))):2'b00;
+assign pred_to_pcsel=(update_bpred)?((loop_start)?2'b11:((numbrnch==1)?{predCounter[1],1'b0}:{predCounter[1],predCounter[1]})):2'b00;
 
 
 

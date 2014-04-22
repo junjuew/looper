@@ -2,13 +2,13 @@
 module fetch_tb();
 reg clk,rst_n,stall_fetch,loop_start,decr_count_brnch,has_mispredict,jump_base_rdy_from_rf;
 reg [15:0] pc_recovery,jump_base_from_rf,exter_pc;
-reg exter_pc_en,mispred_num;
+reg exter_pc_en,mispred_num,brnc_pred_log;
 wire [63:0] pc_to_dec,inst_to_dec, recv_pc_to_dec;
 wire [3:0] pred_result_to_dec;
 
 fetch DUT(clk,rst_n,stall_fetch,loop_start,decr_count_brnch,has_mispredict,
 	jump_base_rdy_from_rf, pc_recovery,jump_base_from_rf,
-	exter_pc,exter_pc_en,mispred_num,
+	exter_pc,exter_pc_en,mispred_num,brnc_pred_log,
 	pc_to_dec,inst_to_dec, recv_pc_to_dec,pred_result_to_dec);
     
 wire [15:0] pc=DUT.PC_MUX0.pc;
@@ -22,7 +22,7 @@ wire jump_for_pcsel=DUT.jumpHandler.jump_for_pcsel;
 wire wtJumpAddr=DUT.jumpHandler.wtJumpAddr;
 wire [15:0]jump_pc=DUT.jumpHandler.jump_pc;
 wire stall_for_jump=DUT.jumpHandler.stall_for_jump;
-wire [1:0] pred_to_pcsel=DUT.bpred.pred_to_pcsel;
+wire [1:0] pred_to_pcsel=DUT.bpred0.pred_to_pcsel;
 
 
 
@@ -54,7 +54,9 @@ jump_base_from_rf=16'b0;
 exter_pc=16'b0;
 exter_pc_en=0;
 mispred_num=0;
- 
+brnc_pred_log=1;
+
+
 #2 rst_n=0;
 #2 rst_n=1;
 #25
@@ -63,11 +65,16 @@ jump_base_from_rf=16'b0;
 
 #2
 jump_base_rdy_from_rf=0;
-//decr_count_brnch=1;
+decr_count_brnch=1;
 //mispred_num=1;
 #2
 decr_count_brnch=0;
 mispred_num=0;
+
+
+
+
+
 #40 $finish;
 end
 

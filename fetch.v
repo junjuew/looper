@@ -92,14 +92,20 @@ instrMemModule IMM(clk, pc,inst0,inst1, inst2, inst3, pc_plus1, pc_plus2, pc_plu
 
 //branch prediction
 branchHandler branchjumpHandler(clk,rst_n,pc,inst0,inst1,inst2,inst3, stall_for_jump,//from jump
-	pred_to_pcsel, decr_count_brnch,stall_fetch,mispred_num,brnc_pred_log,
+	pred_to_pcsel, decr_count_brnch,stall_fetch,mispred_num,//brnc_pred_log,
    update_bpred, brnch_pc_sel_from_bhndlr, pcsel_from_bhndlr, pc_bhndlr,
 	instruction0, instruction1, instruction2,instruction3,//to output
    brnch_inst0,brnch_inst1,isImJmp);//to calculator
-	
+
+
+/*
 branchPredictor bpred( brnch_pc_sel_from_bhndlr,update_bpred,loop_start,
 pc,	pc_plus1, pc_plus2, pc_plus3, pred_to_pcsel);
-
+*/
+dynBranchPredictor bpred0(clk,rst_n,decr_count_brnch,
+   mispredict,mispred_num,brnc_pred_log,
+   brnch_pc_sel_from_bhndlr,update_bpred,
+   loop_start,pc,pc_plus1,pc_plus2,pc_plus3,pred_to_pcsel);
 /*GshareBranchPredictor bpred1(clk,rst_n,decr_count_brnch,
    mispredict,mispred_num,brnch_pc_sel_from_bhndlr,update_bpred,
    loop_start,pc,pc_plus1,pc_plus2,pc_plus3,pred_to_pcsel);
