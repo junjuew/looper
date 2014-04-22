@@ -52,6 +52,9 @@ module branchUnit(/*autoarg*/
 
    assign brnc_count = brch0 + brch1 + brch2 + brch3;
 
+
+
+   //new part!!!! may have bug, need to take care once there is freelist problme
    always@(/*autosense*/brch0 or brch1 or brch2 or brch3 or brnc_count
 	   or curr_pos or curr_pos1 or curr_pos2 or curr_pos3 or indx1
 	   or indx2 or indx3 or nxt_indx or tail)

@@ -155,6 +155,18 @@ module tb_topmodule();
 	end
       $display("///////////////////////////////freelist//////////////////////////");
    end
+
+
+   always@(posedge DUT.mis_pred_ROB_out)
+     begin
+	#10;
+	$display("///////////////////////////////mispredict//////////////////////////");
+	$display("alloc pointer position is %d \n",DUT.al_DUT.f0.alloc_ptr);
+	$display("cmt pointer position is %d \n",DUT.al_DUT.f0.cmt_ptr);
+	$display("in the fifo: fifo 0  is %x, fifo1 is %x \n",DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
+	$display("///////////////////////////////mispredict//////////////////////////");
+
+     end
    
    initial begin
       #400;
