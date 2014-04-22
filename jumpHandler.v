@@ -18,7 +18,8 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module jumpHandler(input clk,
+module jumpHandler(input has_mispredict,
+input clk,
 	input rst_n,
 	input [15:0] pc,
     input [15:0] instruction0,
@@ -163,7 +164,14 @@ always@(posedge clk or negedge rst_n) begin
         jump_pc<=16'b0;
         wtJumpAddr<=0;
         preJmp<=0;
-   end else begin
+   end else if(has_mispredict)begin
+        stall_for_jump<=0;
+        jump_pc<=16'b0;
+        wtJumpAddr<=0;
+        preJmp<=0;    
+    
+    end
+      else begin
 	
 	//if already waiting for a jump instruction
 	   if(wtJumpAddr==1)begin

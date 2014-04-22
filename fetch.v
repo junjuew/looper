@@ -116,7 +116,7 @@ branchAddrCalculator branchAddrCalculator(brnch_pc_sel_from_bhndlr, brnch_inst0,
 
 
 //jump
-jumpHandler jumpHandler(clk,rst_n,pc,instruction0,instruction1,instruction2,instruction3,
+jumpHandler jumpHandler(has_mispredict,clk,rst_n,pc,instruction0,instruction1,instruction2,instruction3,
     jump_base_from_rf,jump_base_rdy_from_rf,jump_addr_pc,jump_for_pcsel,stall_for_jump);
 
 
