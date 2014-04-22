@@ -10,9 +10,9 @@
 // Target Devices: 
 // Tool versions: 
 // Description: Branch Handler is in charge of NOPing instructions 
-//						when branch is predicted taken or jump instructions occur;
-//						when jump address is not ready it stalls fetching by nop 4 
-//						instructions
+//                        when branch is predicted taken or jump instructions occur;
+//                        when jump address is not ready it stalls fetching by nop 4 
+//                        instructions
 //               1:if misprediction occurs, look if need to decrease counter value
 //
 // Dependencies: 
@@ -23,8 +23,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module branchHandler(input clk,
-	input rst_n,
-	input [15:0] pc,
+    input rst_n,
+    input [15:0] pc,
     input [15:0] inst0,
     input [15:0] inst1,
     input [15:0] inst2,
@@ -32,9 +32,9 @@ module branchHandler(input clk,
     input stall_for_jump,
     input [1:0] pred_to_pcsel,
     input decr_count_from_rob,
-	input stall_fetch,
-	input mispred_num,
-	input brnc_pred_log,
+    input stall_fetch,
+    input mispred_num,
+    input brnc_pred_log,
     output update_bpred,
     output [3:0] brnch_pc_sel_from_bhndlr,
     output pcsel_from_bhndlr,
@@ -47,14 +47,14 @@ module branchHandler(input clk,
     output [15:0] brnch_inst1,
     output [3:0] isImJmp
     );
-	 
+     
 //internal signals
 wire [3:0] all_nop;
 wire [3:0] isJump,tkn_brnch;
-reg [1:0] brnch_cnt;
+reg  [1:0] brnch_cnt;
 
 //wire [15:0] inst0_b,inst1_b,inst2_b,inst3_b;
-	 
+     
 //////////////////////////////////////////////////////////
 ///////============code starts here=============//////////
 //////////////////////////////////////////////////////////
@@ -137,7 +137,7 @@ assign inst3_b=exd_cnt[3]?16'b0:inst3;
 */
 
 //if there is branch enable branch predictor
-assign update_bpred=hold_for_brnch?0:((isJump[3]||third_brnch[3])?0:
+assign update_bpred = hold_for_brnch?0:((isJump[3]||third_brnch[3])?0:
    (brnch_pc_sel_from_bhndlr[3]?1:((isJump[2]||third_brnch[2])?0:
    (brnch_pc_sel_from_bhndlr[2]?1:((isJump[1]||third_brnch[1])?0:
    ((brnch_pc_sel_from_bhndlr[1])?1:((isJump[0]||third_brnch[0])?0:
@@ -199,22 +199,22 @@ end
 //counter to keep track of number of branches
 //counter need to be decreased if misperdiction takes place
 always@(posedge clk or negedge rst_n)begin
-	if(rst_n==0)
-		brnch_cnt<=2'b00;
-	else if(decr_count_from_rob==1 && brnch_cnt>2'b00)begin
-	//expected if normal brnch commit,decrease one
-	   if(mispred_num==1)
-		   brnch_cnt<=brnch_cnt-2'b10;
-	//if mispredict rob output decr_count also, if mispred_num==1, we decrease two
-	   else
-	      brnch_cnt<=brnch_cnt-1;
-	end
-	else if((|incr_cnt)&& (brnch_cnt<2'b10))
-	   brnch_cnt<=brnch_cnt+incr_cnt;
-	else if(brnch_cnt>=2'b10)
-		brnch_cnt<=2'b10;
-	else
-	   brnch_cnt<=brnch_cnt;
+    if(rst_n==0)
+        brnch_cnt<=2'b00;
+    else if(decr_count_from_rob==1 && brnch_cnt>2'b00)begin
+    //expected if normal brnch commit,decrease one
+        if(mispred_num==1)
+            brnch_cnt<=brnch_cnt-2'b10;
+    //if mispredict rob output decr_count also, if mispred_num==1, we decrease two
+        else
+            brnch_cnt<=brnch_cnt-1;
+    end
+    else if((|incr_cnt)&& (brnch_cnt<2'b10))
+        brnch_cnt<=brnch_cnt+incr_cnt;
+    else if(brnch_cnt>=2'b10)
+        brnch_cnt<=2'b10;
+    else
+        brnch_cnt<=brnch_cnt;
 end
 
 //<3>
@@ -244,24 +244,23 @@ assign all_nop[0]=(stall_fetch||hold_for_brnch)?1:(all_nop[1]?1:(isJump[1]?1:(th
 ///////////////////////
 //Output signals    //
 ////////////////////
-   //for next PC
-   assign pcsel_from_bhndlr=(stall_for_jump||stall_fetch||isJump[3])||(|third_brnch)||hold_for_brnch;
-   //reg [15:0] pc_bhndlr;//if more than two branches, third got flushed
-   
-   //remove stall_for_jump from the first condiction because we need to stall from the BsJmp
-   assign pc_bhndlr=(stall_for_jump||stall_fetch||third_brnch[3]||isJump[3]||hold_for_brnch)?pc:
-        (third_brnch[2]?(pc+1):(third_brnch[1]?(pc+2):(third_brnch[0]?(pc+3):pc+4)));
+//for next PC
+assign pcsel_from_bhndlr=(stall_for_jump||stall_fetch||isJump[3])||(|third_brnch)||hold_for_brnch;
+//reg [15:0] pc_bhndlr;//if more than two branches, third got flushed
 
-   
-   //instructions
-   assign instruction0=((all_nop[3])?16'b0:inst0);
-   assign instruction1=((all_nop[2])?16'b0:inst1);
-   assign instruction2=((all_nop[1])?16'b0:inst2);
-   assign instruction3=((all_nop[0])?16'b0:inst3);	
-   
-   //output branch target address
-	assign brnch_inst0=tkn_brnch[3]?inst0:(tkn_brnch[2]?inst1:(tkn_brnch[1]?inst2:(tkn_brnch[0]?inst3:16'b0)));
-	assign brnch_inst1=(&tkn_brnch[3:2])?inst1:(((tkn_brnch[3]&tkn_brnch[1])||(&tkn_brnch[2:1]))?inst2:
-	(((tkn_brnch[3]&tkn_brnch[0])||(tkn_brnch[2]&tkn_brnch[0])||(&tkn_brnch[1:0]))?inst3:16'b0));
+assign pc_bhndlr= (stall_for_jump||stall_fetch||third_brnch[3]||isJump[3]||hold_for_brnch)?pc
+                : (third_brnch[2]?(pc+1):(third_brnch[1]?(pc+2):(third_brnch[0]?(pc+3):pc+4)));
+
+
+//instructions
+assign instruction0=(all_nop[3])?16'b0:inst0;
+assign instruction1=(all_nop[2])?16'b0:inst1;
+assign instruction2=(all_nop[1])?16'b0:inst2;
+assign instruction3=(all_nop[0])?16'b0:inst3;
+
+//output branch target address
+assign brnch_inst0=tkn_brnch[3]?inst0:(tkn_brnch[2]?inst1:(tkn_brnch[1]?inst2:(tkn_brnch[0]?inst3:16'b0)));
+assign brnch_inst1=(&tkn_brnch[3:2])?inst1:(((tkn_brnch[3]&tkn_brnch[1])||(&tkn_brnch[2:1]))?inst2:
+(((tkn_brnch[3]&tkn_brnch[0])||(tkn_brnch[2]&tkn_brnch[0])||(&tkn_brnch[1:0]))?inst3:16'b0));
 
 endmodule

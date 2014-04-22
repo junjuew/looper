@@ -18,15 +18,17 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module nextPCSel(input clk,input rst_n,
+module nextPCSel(
+    input clk,
+    input rst_n,
     input stall_fetch,
     input has_mispredict,
     input [1:0] pred_to_pcsel,
     input jump_for_pcsel,
     input pcsel_from_bhndlr,
-	 input stall_for_jump,
+    input stall_for_jump,
     output reg [2:0] PC_select
-    );
+);
 
 wire stall;
 assign stall=(stall_fetch==1) || (stall_for_jump==1);
@@ -40,27 +42,25 @@ assign stall=(stall_fetch==1) || (stall_for_jump==1);
 
 
 always @(*)begin
-if(!rst_n)
-   PC_select=3'd7;
-else if(has_mispredict==1)
-	PC_select=3'd3;//pc_recovery
-else if(stall==1'b1)
-	PC_select=3'd6;
-
-else if(jump_for_pcsel==1)
-	PC_select=3'd2;
-else if(|pred_to_pcsel==1)
-	begin
-		if(pred_to_pcsel[1]==1)
-			PC_select=3'd0;
-		else
-			PC_select=3'd1;
-	end
-else if(pcsel_from_bhndlr==1)//if more than two branches, third got flushed
-	PC_select=3'd4;//pc_new=pc_bhndlr;
-else 
-	PC_select=3'd5;
-
+    if(!rst_n)
+        PC_select=3'd7;
+    else if(has_mispredict==1)
+        PC_select=3'd3;//pc_recovery
+    else if(stall==1'b1)
+        PC_select=3'd6;
+    else if(jump_for_pcsel==1)
+        PC_select=3'd2;
+    else if(|pred_to_pcsel==1)
+        begin
+            if(pred_to_pcsel[1]==1)
+                PC_select=3'd0;
+            else
+                PC_select=3'd1;
+        end
+    else if(pcsel_from_bhndlr==1)//if more than two branches, third got flushed
+        PC_select=3'd4;//pc_new=pc_bhndlr;
+    else 
+        PC_select=3'd5;
 end
 
 endmodule

@@ -21,26 +21,25 @@
 //////////////////////////////////////////////////////////////////////////////////
 module dataout_pack(
     input [15:0] pc,
-	 input [15:0] pc_plus1,
-	 input [15:0] pc_plus2,
-	 input [15:0] pc_plus3,
+    input [15:0] pc_plus1,
+    input [15:0] pc_plus2,
+    input [15:0] pc_plus3,
     input [15:0] instruction0,
-	 input [15:0] instruction1,
-	 input [15:0] instruction2,
-	 input [15:0] instruction3,
-	 input [15:0] brnch_addr_0,
-	 input [15:0] brnch_addr_1,
-	 input [15:0] jump_addr_pc,
-	 input [15:0] brnch_addr_pc0,
-	 input [15:0] brnch_addr_pc1,
-	 input [1:0] pred_to_pcsel,
-	 input [3:0] brnch_pc_sel_from_bhndlr,
-	 input [3:0] isImJmp,//from branch handler, nop immdiate jump at output
-	 output [63:0] pc_to_dec,
-	 output [63:0] inst_to_dec,
-	 output reg[63:0] recv_pc_to_dec,
-	 output reg[3:0] pred_result_to_dec
-    );
+    input [15:0] instruction1,
+    input [15:0] instruction2,
+    input [15:0] instruction3,
+    input [15:0] jump_addr_pc,
+    input [15:0] brnch_addr_pc0,
+    input [15:0] brnch_addr_pc1,
+    input [1:0] pred_to_pcsel,
+    input [3:0] brnch_pc_sel_from_bhndlr,
+    input [3:0] isImJmp,//from branch handler, nop immdiate jump at output
+
+    output [63:0] pc_to_dec,
+    output [63:0] inst_to_dec,
+    output reg[63:0] recv_pc_to_dec,
+    output reg[3:0] pred_result_to_dec
+);
 
 //internal signal
 reg [3:0]taken;

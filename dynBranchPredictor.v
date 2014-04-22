@@ -18,10 +18,22 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module dynBranchPredictor(clk,rst_n,decr_count_brnch,
-   mispredict,mispred_num,brnc_pred_log,
-   brnch_pc_sel_from_bhndlr,update_bpred,
-   loop_start,pc,pc_plus1,pc_plus2,pc_plus3,pred_to_pcsel);
+module dynBranchPredictor(
+    clk,
+    rst_n,
+    decr_count_brnch,
+    mispredict,
+    mispred_num,
+    brnc_pred_log,
+    brnch_pc_sel_from_bhndlr,
+    update_bpred,
+    loop_start,
+    pc,
+    pc_plus1,
+    pc_plus2,
+    pc_plus3,
+    pred_to_pcsel
+);
 
 input clk,rst_n,decr_count_brnch,mispredict,mispred_num,brnc_pred_log;
 input [3:0]brnch_pc_sel_from_bhndlr;
@@ -54,34 +66,33 @@ always@(posedge clk or negedge rst_n)begin
     if(!rst_n)
         predCounter<=ST;
     else if(decr_count_brnch==1)//a branch is committed
-	begin
-    case(predCounter)
-        SN:begin
-        if(brnc_pred_log==1)
-            predCounter<=WN;
-        else
-            predCounter<=SN;
-        end
-        WN:begin
+    begin
+        case(predCounter)
+            SN:begin
             if(brnc_pred_log==1)
-            predCounter<=WT;
-        else
-            predCounter<=SN;
-        end
-        WT:begin
-            if(brnc_pred_log==1)
-            predCounter<=ST;
-        else
-            predCounter<=WN;
-        end
-        ST:begin
-            if(brnc_pred_log==1)
-            predCounter<=ST;
-        else
-            predCounter<=WT;
-        end
-
-    endcase
+                predCounter<=WN;
+            else
+                predCounter<=SN;
+            end
+            WN:begin
+                if(brnc_pred_log==1)
+                predCounter<=WT;
+            else
+                predCounter<=SN;
+            end
+            WT:begin
+                if(brnc_pred_log==1)
+                predCounter<=ST;
+            else
+                predCounter<=WN;
+            end
+            ST:begin
+                if(brnc_pred_log==1)
+                predCounter<=ST;
+            else
+                predCounter<=WT;
+            end
+        endcase
     end
     else if(mispredict==1)
         if(mispred_num==1)begin
@@ -114,7 +125,6 @@ always@(posedge clk or negedge rst_n)begin
                    WT:predCounter<=ST;
                    ST:predCounter<=ST;
                 endcase
-            
         end
     else
         predCounter<=predCounter;
