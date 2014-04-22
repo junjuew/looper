@@ -42,10 +42,11 @@ assign stall=(stall_fetch==1) || (stall_for_jump==1);
 always @(*)begin
 if(!rst_n)
    PC_select=3'd7;
-else if(stall==1'b1)
-	PC_select=3'd6;
 else if(has_mispredict==1)
 	PC_select=3'd3;//pc_recovery
+else if(stall==1'b1)
+	PC_select=3'd6;
+
 else if(jump_for_pcsel==1)
 	PC_select=3'd2;
 else if(|pred_to_pcsel==1)
