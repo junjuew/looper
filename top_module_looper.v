@@ -719,7 +719,7 @@ rob rob_DUT(.clk(clk), .rst_n(rst_n),
     .alu2_done_vld(alu2_done_vld_ex_wb_out),
 
     // from RF
-    .brnc_idx(alu1_ins_to_rf_is_out[64:59]),
+    .brnc_idx(alu1_inst_pkg_is_rf_out[64:59]),
     .brnc_cmp_rslt(brn_cmp_rslt_rf_out),
 
     // from WB

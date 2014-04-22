@@ -103,7 +103,7 @@ branchPredictor bpred( brnch_pc_sel_from_bhndlr,update_bpred,loop_start,
 pc,	pc_plus1, pc_plus2, pc_plus3, pred_to_pcsel);
 */
 dynBranchPredictor bpred0(clk,rst_n,decr_count_brnch,
-   mispredict,mispred_num,brnc_pred_log,
+   has_mispredict,mispred_num,brnc_pred_log,
    brnch_pc_sel_from_bhndlr,update_bpred,
    loop_start,pc,pc_plus1,pc_plus2,pc_plus3,pred_to_pcsel);
 /*GshareBranchPredictor bpred1(clk,rst_n,decr_count_brnch,
