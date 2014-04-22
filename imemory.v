@@ -18,7 +18,7 @@ module imemory(
 	
 	
 	initial begin
-      $readmemb("./ECE554_assembler/src/simple_lp_mif.mif", mem); // IM.mif is memory file
+      $readmemb("simple_lp_mif.mif", mem); // IM.mif is memory file
    end
    
 	

@@ -55,7 +55,7 @@ ID_top ID_top_DUT(.clk(clk), .rst(~rst_n),
 	// input
 	.inst_in_frm_IF(inst_if_id_out),
 	.pc_in_frm_IF(pc_if_id_out),
-	.mis_pred_in_frm_ROB(),
+	.mis_pred_in_frm_ROB(1'b0),
 	.recv_pc_in_frm_IF(recv_pc_if_id_out),
 	.pred_result_frm_IF(pred_result_if_id_out),
 
