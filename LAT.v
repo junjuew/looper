@@ -60,7 +60,6 @@ module LAT(
 	assign loop_strt_out = 0;
 	assign inst_valid_out = 4'bzzzz;
 	//*/
-/*
 	always @(posedge clk)
 	    begin
 	    	// on reset
