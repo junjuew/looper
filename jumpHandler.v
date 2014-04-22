@@ -151,7 +151,7 @@ assign ImJmp_addr=(ImJmp0?(pc+1+{{6{instruction0[11]}},instruction0[11:2]}):
 end*/
 assign jump_addr_pc = (jump_base_rdy_from_rf_buf) ? jump_pc+jump_base_from_rf :
 					  (preJmp)                    ? 16'b0 :
-					  (existImdJmp)               ? ImJmp_addr : jump_addr_pc;
+					  (existImdJmp)               ? ImJmp_addr : 16'b0;
 
 
 
