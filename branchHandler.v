@@ -61,7 +61,7 @@ wire [1:0] pred_to_pcsel;
 ///////============code starts here=============//////////
 //////////////////////////////////////////////////////////
 
-assign pred_to_pcsel=loop_start?2'b11;pred_to_pcsel0;//move from bpred to bhndlr,
+assign pred_to_pcsel=loop_start?2'b11:pred_to_pcsel0;//move from bpred to bhndlr,
                                         //if loop start,no need consider brnch_cnt 
 
 
