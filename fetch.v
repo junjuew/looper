@@ -77,6 +77,7 @@ output [3:0]  pred_result_to_dec;
 wire [15:0] brnch_addr_pc0, brnch_addr_pc1, jump_addr_pc,pc_plus4, pc_bhndlr,
             pc,pc_plus1,pc_plus2,pc_plus3,inst0,inst1, inst2, inst3,
             instruction0, instruction1, instruction2,instruction3,
+            instruction0_j,instruction1_j,instruction2_j,instruction3_j,
             brnch_inst0,brnch_inst1;
 wire [3:0]  brnch_pc_sel_from_bhndlr,isImJmp;
 wire [2:0]  PC_select;
@@ -202,19 +203,20 @@ jumpHandler jumpHandler(
     .clk(clk),
     .rst_n(rst_n),
     .pc(pc),
+    .has_mispredict(has_mispredict),
     .instruction0(instruction0),
     .instruction1(instruction1),
     .instruction2(instruction2),
     .instruction3(instruction3),
-    .jump_base_from_rf(jump_base_from_rf),
-    .jump_base_rdy_from_rf(jump_base_rdy_from_rf),
+    .jump_base_from_rf_0(jump_base_from_rf),
+    .jump_base_rdy_from_rf_0(jump_base_rdy_from_rf),
     .jump_addr_pc(jump_addr_pc),
     .jump_for_pcsel(jump_for_pcsel),
-    .stall_for_jump(stall_for_jump)
-    .instruction0j(instruction0j),
-    .instruction1j(instruction1j),
-    .instruction2j(instruction2j),
-    .instruction3j(instruction3j),
+    .stall_for_jump(stall_for_jump),
+    .instruction0_j(instruction0_j),
+    .instruction1_j(instruction1_j),
+    .instruction2_j(instruction2_j),
+    .instruction3_j(instruction3_j)
 );
 
 
@@ -237,10 +239,10 @@ dataout_pack dataout(
     .pc_plus1(pc_plus1),
     .pc_plus2(pc_plus2),
     .pc_plus3(pc_plus3),
-    .instruction0(instruction0j),
-    .instruction1(instruction1j),
-    .instruction2(instruction2j),
-    .instruction3(instruction3j),
+    .instruction0(instruction0_j),
+    .instruction1(instruction1_j),
+    .instruction2(instruction2_j),
+    .instruction3(instruction3_j),
     .jump_addr_pc(jump_addr_pc),
     .brnch_addr_pc0(brnch_addr_pc0),
     .brnch_addr_pc1(brnch_addr_pc1),

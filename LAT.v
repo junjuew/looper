@@ -55,8 +55,8 @@ module LAT(
 
 	//*
 	assign lbd_state_out = IDLE;
-	assign fnsh_unrll_out = 0;
-	assign stll_ftch_out = 0;
+	//assign fnsh_unrll_out = 0;
+	//assign stll_ftch_out = 0;
 	assign loop_strt_out = 0;
 	assign inst_valid_out = 4'bzzzz;
 	//*/

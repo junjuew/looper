@@ -532,7 +532,7 @@ RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 	.addr_invtRt_rf_ex_out(addr_invtRt_rf_ex_out)
 );
 
-execution execution_DUT(.clk(clk), .rst(~rst_n),
+execution execution_DUT(.clk(clk), .rst_n(rst_n),
 	// Inputs
 	.mult_op1(mult_op1_data_rf_ex_out), 
 	.mult_op2(mult_op2_data_rf_ex_out), 
