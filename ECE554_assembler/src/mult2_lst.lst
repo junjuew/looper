@@ -1,0 +1,8 @@
+          
+PC: 0000 Binary: 1100000100000010 Hex: c102 ldi r1,2   //load 2 to r1
+PC: 0001 Binary: 1100001000000100 Hex: c204 ldi r2,4   //load 4 to r2
+PC: 0002 Binary: 1100001100000100 Hex: c304 ldi r3,4   //load 4 to r3
+PC: 0003 Binary: 1100010000000110 Hex: c406 ldi r4,6   //load 6 to r4
+PC: 0004 Binary: 1000010100010010 Hex: 8512 mult r5,r1,r2   // expect r5 = 8
+PC: 0005 Binary: 1000011000110100 Hex: 8634 mult r6,r3,r4   // expect r6 = 24
+              
