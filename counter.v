@@ -35,16 +35,20 @@ module counter(/*autoarg*/
    //if set signal is high, override counter
    //TODO: what is the inst is full
    ///////////////////////////////////////
+   wire[ISQ_IDX_BITS_NUM -1 -2:0] fls_val_div_4; // flsh idx divided by 4
+   assign fls_val_div_4 = (val[1:0] == 2'b00)? val[ISQ_IDX_BITS_NUM-1:ISQ_IDX_BITS_NUM-BITS_IN_COUNT]
+                          :  val[ISQ_IDX_BITS_NUM-1:ISQ_IDX_BITS_NUM-BITS_IN_COUNT] +1;
+   
    always @(posedge clk, negedge rst_n)
      begin
         if (!rst_n)
           counter <= 0;
-        else if (!cnt_en)
-          counter <= counter;
         else if (set)
           //only take the highest BITS_IN_COUNT number of bits
           // up round to the neareast multiple of 4
-          counter <= val[ISQ_IDX_BITS_NUM -1 : ISQ_IDX_BITS_NUM - BITS_IN_COUNT ] +1 ; 
+          counter <= fls_val_div_4; //*val[ISQ_IDX_BITS_NUM -1 : ISQ_IDX_BITS_NUM - BITS_IN_COUNT ] +1 ; 
+        else if (!cnt_en)
+          counter <= counter;
         else
           counter <=counter +1;
      end

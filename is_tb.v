@@ -368,7 +368,7 @@
 //        $monitor ("%g\n (3)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (2)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (1)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (0)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n top head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, mid head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, arch:%b ",$time, tpu_inst_rdy[3],  inst_idx[3], inst_vld[3], inst_psrc1[3], inst_psrc2[3], inst_pdst[3] , fre_preg[3] ,  tpu_inst_rdy[2],  inst_idx[2], inst_vld[2], inst_psrc1[2], inst_psrc2[2], inst_pdst[2] , fre_preg[2] , tpu_inst_rdy[1],  inst_idx[1], inst_vld[1], inst_psrc1[1], inst_psrc2[1], inst_pdst[1] , fre_preg[1] , tpu_inst_rdy[0],  inst_idx[0], inst_vld[0], inst_psrc1[0], inst_psrc2[0], inst_pdst[0] , fre_preg[0],top_hed[15],  top_hed[14],  top_hed[13],  top_hed[12], top_hed[11],  top_hed[10],  top_hed[9],  top_hed[8],  top_hed[7],  top_hed[6],  top_hed[5],  top_hed[4], top_hed[3],  top_hed[2],  top_hed[1],  top_hed[0],mid_hed[15],  mid_hed[14],  mid_hed[13],  mid_hed[12], mid_hed[11],  mid_hed[10],  mid_hed[9],  mid_hed[8],  mid_hed[7],  mid_hed[6],  mid_hed[5],  mid_hed[4], mid_hed[3],  mid_hed[2],  mid_hed[1],  mid_hed[0], DUT.arch);
 
 
-        $monitor("%g inst in:   %x,  arch_swt: %b, arch: %b", $time,inst_frm_al, DUT.is_tpu.arch_swt, DUT.is_tpu.arch);
+        $monitor("%g inst in:   %x,  arch_swt: %b, arch: %b  counter:%x  counter_set:%x   counter_val:%x", $time,inst_frm_al, DUT.is_tpu.arch_swt, DUT.is_tpu.arch, DUT.counter, DUT.set, DUT.val);
 
 
         clear();
@@ -405,7 +405,7 @@
 
         //add in test suit 1
         /********************* single instruction test****************/        
-        `include "is_tb_1.task"        
+//        `include "is_tb_1.task"        
 
         /****************** test if clr wait when succesful send***************/
 //        `include "is_tb_2.task"                
@@ -421,7 +421,7 @@
 //        `include "is_tb_5.task"
 
         /** branch instruction, test mis prediction **/
-//        `include "is_tb_6.task"
+        `include "is_tb_6.task"
 
 
         /** branch instruction complicated, test mis prediction **/
