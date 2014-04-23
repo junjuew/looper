@@ -124,10 +124,10 @@ module tb_topmodule();
    
  -----/\----- EXCLUDED -----/\----- */
 
-/* -----\/----- EXCLUDED -----\/-----
+
 
    initial begin
-      #195;
+      #395;
       $display("///////////////////////////////reg file//////////////////////////");
       
       for(i = 0; i < 64; i = i + 1)
@@ -139,7 +139,7 @@ module tb_topmodule();
       $display("///////////////////////////////reg file//////////////////////////");
 
    end // initial begin
- -----/\----- EXCLUDED -----/\----- */
+
    
 
 

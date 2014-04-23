@@ -346,6 +346,7 @@ is is_DUT(.clk(clk), .rst_n(rst_n),
 
 IS_RF IS_RF(.clk(clk), .rst_n(rst_n), .stall(1'b0),
 	// Inputs
+	.mult_done(mult_valid_ex_out),
 	.mult_inst_pkg_in(mul_ins_to_rf_is_out),
 	.alu1_inst_pkg_in(alu1_ins_to_rf_is_out),
 	.alu2_inst_pkg_in(alu2_ins_to_rf_is_out),

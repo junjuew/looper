@@ -24,7 +24,6 @@ module EX_WB (
 
     input 	  mult_valid_wb_ex_wb_in, //for WB stage
     input 	  mult_free_ex_wb_in, //for issue stage
-
     input 	  alu1_mem_wrt_ex_wb_in, //
     input 	  alu2_mem_wrt_ex_wb_in, //
     input 	  mult_mem_wrt_ex_wb_in, //
@@ -101,7 +100,9 @@ module EX_WB (
 
    assign enable = ~stall;
    
-    assign mult_rf_en = enable & mult_valid_wb_ex_wb_in;
+   assign mult_rf_en = enable & mult_valid_wb_ex_wb_in;
+   
+   assign mult_free_ex_wb_in = mult_free_ex_wb_out;
    
     //data
     rf_enable mult     [15:0]    ( .q(mult_out_ex_wb_out), .d(mult_out_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
@@ -131,7 +132,7 @@ module EX_WB (
 
     //multiplier vaild signal 
     rf_enable free_wb            ( .q(mult_valid_wb_ex_wb_out), .d(mult_valid_wb_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable free_is            ( .q(mult_free_ex_wb_out), .d(mult_free_ex_wb_in), .wrt_en(mult_rf_en), .clk(clk), .rst_n(rst_n));
+    //rf_enable free_is            ( .q(mult_free_ex_wb_out), .d(mult_free_ex_wb_in), .wrt_en(mult_rf_en), .clk(clk), .rst_n(rst_n));
 
     rf_enable alu1_done_vld      ( .q(alu1_done_vld_ex_wb_out), .d(alu1_done_vld_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable alu2_done_vld      ( .q(alu2_done_vld_ex_wb_out), .d(alu2_done_vld_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
