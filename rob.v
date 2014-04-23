@@ -112,12 +112,17 @@ ROB per entry:
     reg [3:0] rob_st_cntr;
     reg [4:0] rob_ld_cntr;
 
+    wire [5:0] rob_tail_when_mis_pred;
+
+    wire inverting_bit;
+    /*!!!*/ assign inverting_bit = 0;
+
     /********************************************/
     /*********** Combinational Blocks ***********/
     /********************************************/
 
     // next_idx to Allocation stage is tail
-    assign next_idx = rob_tail;
+    assign next_idx = (mis_pred) ? brnc_idx : rob_tail;
 
     // when tail catch up with head, and that one's vld is 1, that means ROB is full
     assign rob_full_stll = ((rob_tail < rob_head) && (!all_nop) && (rob_tail + 4 >= rob_head)) ? 1
@@ -135,6 +140,8 @@ ROB per entry:
     assign flush = mis_pred;
     assign mis_pred_brnc_idx = brnc_idx;
     assign rcvr_PC_out = rob_rcvr_PC[brnc_idx];
+
+	assign rob_tail_when_mis_pred = (|mis_pred_brnc_idx[1:0]) ? {{mis_pred_brnc_idx[5:2]+1},2'b00} : {mis_pred_brnc_idx[5:2],2'b00};
     
     // commit a correct prediction
     assign cmt_brnc = ((brnc_cmp_rslt != 0) && rob_brnc[brnc_idx] && 
@@ -297,7 +304,7 @@ ROB per entry:
         if(!rst_n)
             rob_tail <= 0;
         else if(mis_pred)
-            rob_tail <= mis_pred_brnc_idx;
+            rob_tail <= {inverting_bit,rob_tail_when_mis_pred};
         else if(!all_nop)
             rob_tail <= (rob_tail < 60) ? rob_tail+4
                       : rob_tail - 60;
@@ -412,11 +419,11 @@ ROB per entry:
                     (rob_vld_idx < (rob_head + rob_head_cmmt_num - 64)))
                 rob_vld[rob_vld_idx] <= 0;
             // misprediction
-            else if (mis_pred && (mis_pred_brnc_idx < rob_tail) && 
-                    (rob_vld_idx >= mis_pred_brnc_idx) && (rob_vld_idx < rob_tail))
+            else if (mis_pred && (rob_tail_when_mis_pred < rob_tail) && 
+                    (rob_vld_idx >= rob_tail_when_mis_pred) && (rob_vld_idx < rob_tail))
                 rob_vld[rob_vld_idx] <= 0;
-            else if (mis_pred && (mis_pred_brnc_idx > rob_tail) && 
-                    ((rob_vld_idx >= mis_pred_brnc_idx) || (rob_vld_idx < rob_tail)))
+            else if (mis_pred && (rob_tail_when_mis_pred > rob_tail) && 
+                    ((rob_vld_idx >= rob_tail_when_mis_pred) || (rob_vld_idx < rob_tail)))
                 rob_vld[rob_vld_idx] <= 0;
             // default
             else begin
@@ -481,6 +488,13 @@ ROB per entry:
                 rob_brnc_cond[rob_brnc_idx] <= 0;
                 rob_rcvr_PC  [rob_brnc_idx] <= 0;
             end
+            // misprediction
+            else if (mis_pred && (mis_pred_brnc_idx <= rob_tail_when_mis_pred) && 
+                    (rob_brnc_idx >= mis_pred_brnc_idx) && (rob_brnc_idx < rob_tail_when_mis_pred))
+                rob_brnc[rob_brnc_idx] <= 0;
+            else if (mis_pred && (mis_pred_brnc_idx > rob_tail_when_mis_pred) && 
+                    ((rob_brnc_idx >= mis_pred_brnc_idx)))
+                rob_brnc[rob_brnc_idx] <= 0;
             // adding into ROB
             else if ((!all_nop) && (rob_brnc_idx == rob_tail)) begin 
                 if(brnc_in[0])begin
@@ -551,21 +565,40 @@ ROB per entry:
             if(!rst_n) begin
                 rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             end
+            // misprediction
+            else if (mis_pred && (mis_pred_brnc_idx <= rob_tail_when_mis_pred) && 
+                    (rob_reg_wrt_idx >= mis_pred_brnc_idx) && (rob_reg_wrt_idx < rob_tail_when_mis_pred))
+                rob_reg_wrt[rob_reg_wrt_idx] <= 0;
+            else if (mis_pred && (mis_pred_brnc_idx > rob_tail_when_mis_pred) && 
+                    ((rob_reg_wrt_idx >= mis_pred_brnc_idx)))
+                rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             // adding into ROB
-            else if ((!all_nop) && reg_wrt_in[0] && (rob_reg_wrt_idx == rob_tail)) begin 
-                rob_reg_wrt[rob_reg_wrt_idx] <= 1;
+            else if ((!all_nop) && (rob_reg_wrt_idx == rob_tail)) begin 
+				if(reg_wrt_in[0])
+					rob_reg_wrt[rob_reg_wrt_idx] <= 1;
+				else
+					rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             end
-            else if ((!all_nop) && reg_wrt_in[1] && 
+            else if ((!all_nop) && 
                     ((rob_reg_wrt_idx == rob_tail + 1) || (rob_reg_wrt_idx == (rob_tail-63)))) begin
-                rob_reg_wrt[rob_reg_wrt_idx] <= 1;
+				if(reg_wrt_in[1])
+					rob_reg_wrt[rob_reg_wrt_idx] <= 1;
+				else
+					rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             end
-            else if ((!all_nop) && reg_wrt_in[2] && 
+            else if ((!all_nop) && 
                     ((rob_reg_wrt_idx == rob_tail + 2) || (rob_reg_wrt_idx == (rob_tail-62)))) begin
-                rob_reg_wrt[rob_reg_wrt_idx] <= 1;
+				if(reg_wrt_in[2])
+					rob_reg_wrt[rob_reg_wrt_idx] <= 1;
+				else
+					rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             end
-            else if ((!all_nop) && reg_wrt_in[3] && 
+            else if ((!all_nop) && 
                     ((rob_reg_wrt_idx == rob_tail + 3) || (rob_reg_wrt_idx == (rob_tail-61)))) begin
-                rob_reg_wrt[rob_reg_wrt_idx] <= 1;
+				if(reg_wrt_in[3])
+					rob_reg_wrt[rob_reg_wrt_idx] <= 1;
+				else
+					rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             end
             else begin
                 rob_reg_wrt[rob_reg_wrt_idx] <= rob_reg_wrt[rob_reg_wrt_idx];
@@ -619,6 +652,17 @@ ROB per entry:
                 rob_st    [rob_st_idx] <= 0;
                 rob_st_ptr[rob_st_idx] <= 0;
             end
+            // misprediction
+            else if (mis_pred && (mis_pred_brnc_idx <= rob_tail_when_mis_pred) && 
+				    (rob_st_idx >= mis_pred_brnc_idx) && (rob_st_idx < rob_tail_when_mis_pred)) begin
+				rob_st[rob_st_idx] <= 0;
+                rob_st_ptr[rob_st_idx] <= rob_st_ptr[mis_pred_brnc_idx];
+			end
+            else if (mis_pred && (mis_pred_brnc_idx > rob_tail_when_mis_pred) && 
+				    ((rob_st_idx >= mis_pred_brnc_idx))) begin
+                rob_st[rob_st_idx] <= 0;
+                rob_st_ptr[rob_st_idx] <= rob_st_ptr[mis_pred_brnc_idx];
+			end
             // adding into ROB
             else if ((!all_nop) && (rob_st_idx == rob_tail)) begin 
                 rob_st    [rob_st_idx] <= (st_in[0]) ? 1:0;
@@ -689,6 +733,13 @@ ROB per entry:
             if(!rst_n) begin
                 rob_ld_ptr[rob_ld_idx] <= 0;
             end
+            // misprediction
+            else if (mis_pred && (mis_pred_brnc_idx <= rob_tail_when_mis_pred) && 
+				    (rob_ld_idx >= mis_pred_brnc_idx) && (rob_ld_idx < rob_tail_when_mis_pred))
+                rob_ld_ptr[rob_ld_idx] <= rob_ld_ptr[mis_pred_brnc_idx];
+            else if (mis_pred && (mis_pred_brnc_idx > rob_tail_when_mis_pred) && 
+				    ((rob_ld_idx >= mis_pred_brnc_idx)))
+                rob_ld_ptr[rob_ld_idx] <= rob_ld_ptr[mis_pred_brnc_idx];
             // adding into ROB
             else if ((!all_nop) && (rob_ld_idx == rob_tail)) begin 
                 rob_ld_ptr[rob_ld_idx] <= (ld_in[0]) ? rob_ld_cntr + 1
