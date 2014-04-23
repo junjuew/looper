@@ -54,14 +54,15 @@ module branchHandler(input clk,
 wire [3:0] all_nop;
 wire [3:0] isJump;//tkn_brnch;
 reg  [1:0] brnch_cnt;
-
+wire [1:0] pred_to_pcsel;
 //wire [15:0] inst0_b,inst1_b,inst2_b,inst3_b;
      
 //////////////////////////////////////////////////////////
 ///////============code starts here=============//////////
 //////////////////////////////////////////////////////////
 
-
+assign pred_to_pcsel=loop_start?2'b11;pred_to_pcsel0;//move from bpred to bhndlr,
+                                        //if loop start,no need consider brnch_cnt 
 
 
 //////////////////////////////////////
@@ -107,7 +108,7 @@ assign update_bpred=hold_for_brnch?0:(isJump[3]?0:
 //calculate number of instructions before current branch instruction
 reg [1:0] incr_cnt;
 wire [1:0] brnch_before_inst0,brnch_before_inst1,brnch_before_inst2,brnch_before_inst3;
-assign brnch_before_inst0=brnch_cnt;
+assign brnch_before_inst0=loop_start?2'b00:brnch_cnt;
 assign brnch_before_inst1=brnch_before_inst0+brnch_pc_sel_from_bhndlr[3];
 assign brnch_before_inst2=brnch_before_inst1+brnch_pc_sel_from_bhndlr[2];
 assign brnch_before_inst3=brnch_before_inst2+brnch_pc_sel_from_bhndlr[1];
@@ -185,6 +186,8 @@ assign incr_cnt=all_nop[3]?2'b00:(all_nop[2]?
 always@(*)begin
     if(all_nop[3]==1)
         incr_cnt=2'b00;
+    else if(loop_start)
+            incr_cnt=2'b00;
     else if(all_nop[2]==1)begin
         if(brnch_pc_sel_from_bhndlr[3]==1)
             incr_cnt=2'b01;

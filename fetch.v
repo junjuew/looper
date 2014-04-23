@@ -149,6 +149,7 @@ branchHandler branchjumpHandler(
     .stall_fetch(stall_fetch),
     .mispred_num(mispred_num),
     .brnc_pred_log(brnc_pred_log),
+    .loop_start(loop_start),
     .update_bpred(update_bpred),
     .brnch_pc_sel_from_bhndlr(brnch_pc_sel_from_bhndlr),
     .pcsel_from_bhndlr(pcsel_from_bhndlr), 

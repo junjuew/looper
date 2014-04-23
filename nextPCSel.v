@@ -28,6 +28,7 @@ module nextPCSel(
     input 	     pcsel_from_bhndlr,
     input 	     stall_for_jump,
     input            brch_full,	     
+   // input loop_start,
     output reg [2:0] PC_select
 );
 
