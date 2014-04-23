@@ -9,6 +9,11 @@ module tb_topmodule();
 
    
 
+
+`include "is_dump_map.task"
+`include "is_dump_inst.task"
+
+   
    
    top_module_looper DUT(/*autoinst*/
                          // Inputs

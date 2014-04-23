@@ -1,14 +1,14 @@
 //`default_nettype none
 
-  /////////////////
-  //test problem: when load in a new instruction, need to reset dst_rdy_reg
-  // to 0, but if synchronous, only can be resetted next cycle
-  // need to add async reset to dst_rdy register in tpu_lin
-  //
-  // TODO: inst_al is not simulated as actual registers. needs to use
-  // generate to assign values to it
-  //////////////////////////////////////////////
-  module is_tb();
+/////////////////
+//test problem: when load in a new instruction, need to reset dst_rdy_reg
+// to 0, but if synchronous, only can be resetted next cycle
+// need to add async reset to dst_rdy register in tpu_lin
+//
+// TODO: inst_al is not simulated as actual registers. needs to use
+// generate to assign values to it
+//////////////////////////////////////////////
+module is_tb();
 
    /*********** param for stage inputs ***************/
    //vld + 6 bit idx
@@ -71,61 +71,61 @@
 
    /********** input **********/
    //input from allocation stage   
-   reg [INST_WIDTH-1:0]                      inst_al[3:0];
+   reg [INST_WIDTH-1:0] inst_al[3:0];
    wire [4 * INST_WIDTH-1:0] inst_frm_al;
 
    //input from ROB
-   reg  [BRN_WIDTH-1:0]         fls_frm_rob;
-   reg  [BRN_WIDTH-1:0]         cmt_frm_rob; //commit signal for branch
+   reg [BRN_WIDTH-1:0]       fls_frm_rob;
+   reg [BRN_WIDTH-1:0]       cmt_frm_rob; //commit signal for branch
 
-   reg                          lop_sta;
+   reg                       lop_sta;
    
    //input from execution
    //function rdy
-   reg  [3:0]                   fun_rdy_frm_exe;
+   reg [3:0]                 fun_rdy_frm_exe;
    //physcial register rdy
-   reg  [4 * PRG_SIG_WIDTH-1:0] prg_rdy_frm_exe;
+   reg [4 * PRG_SIG_WIDTH-1:0] prg_rdy_frm_exe;
 
    /********** output **********/
    //to al
-    wire                        ful_to_al;
+   wire                        ful_to_al;
    //to rf
-    wire [IS_INST_WIDTH-1:0]    mul_ins_to_rf;
-    wire [IS_INST_WIDTH-1:0]    alu1_ins_to_rf;
-    wire [IS_INST_WIDTH-1:0]    alu2_ins_to_rf;
-    wire [IS_INST_WIDTH-1:0]    adr_ins_to_rf;   
+   wire [IS_INST_WIDTH-1:0]    mul_ins_to_rf;
+   wire [IS_INST_WIDTH-1:0]    alu1_ins_to_rf;
+   wire [IS_INST_WIDTH-1:0]    alu2_ins_to_rf;
+   wire [IS_INST_WIDTH-1:0]    adr_ins_to_rf;   
    //to rob
-    wire [4* PRG_SIG_WIDTH -1 :0] fre_prg_to_rob;
+   wire [4* PRG_SIG_WIDTH -1 :0] fre_prg_to_rob;
 
 
 
 
-   reg                          inst_valid;
-   reg                          Rs_valid_bit;
-   reg [3:0]                    Rs;
-   reg                          Rd_valid_bit;
-   reg [3:0]                    Rd;
-   reg                          Rt_valid_bit;
-   reg [3:0]                    Rt;
-   reg                          imm_valid_bit;
-   reg [15:0]                   imme;
-   reg                          LDI;
-   reg [1:0]                    brn;
-   reg                          jmp_valid_bit;
-   reg [1:0]                    jump;
-   reg                          MemRd;
-   reg                          MemWr;
-   reg [2:0]                    ALU_ctrl;
-   reg                          ALU_to_adder;
-   reg                          ALU_to_mult;
-   reg                          ALU_to_addr;
-   reg                          invtRt;
-   reg                          RegWr;
-   reg                          pr_valid;
-   reg [5:0]                    pr_number;
+   reg                           inst_valid;
+   reg                           Rs_valid_bit;
+   reg [3:0]                     Rs;
+   reg                           Rd_valid_bit;
+   reg [3:0]                     Rd;
+   reg                           Rt_valid_bit;
+   reg [3:0]                     Rt;
+   reg                           imm_valid_bit;
+   reg [15:0]                    imme;
+   reg                           LDI;
+   reg [1:0]                     brn;
+   reg                           jmp_valid_bit;
+   reg [1:0]                     jump;
+   reg                           MemRd;
+   reg                           MemWr;
+   reg [2:0]                     ALU_ctrl;
+   reg                           ALU_to_adder;
+   reg                           ALU_to_mult;
+   reg                           ALU_to_addr;
+   reg                           invtRt;
+   reg                           RegWr;
+   reg                           pr_valid;
+   reg [5:0]                     pr_number;
 
    //for-loop iterator
-   integer                      i,j,k,l,m,n,o,p,q,r,s,t;
+   integer                       i,j,k,l,m,n,o,p,q,r,s,t;
    
    is #(/*AUTOINSTPARAM*/
         // Parameters
@@ -203,14 +203,14 @@
          $strobe("%g ful_to_al:%x", $time, ful_to_al);
          $strobe("######################");         
          
-/*         
-         tell_single(mul_ins_to_rf);
-         tell_single(alu1_ins_to_rf);
-//         $display("alu2:");         
-         tell_single(alu2_ins_to_rf);
-//         $display("adr:");         
-         tell_single(adr_ins_to_rf);         
-*/ 
+         /*         
+          tell_single(mul_ins_to_rf);
+          tell_single(alu1_ins_to_rf);
+          //         $display("alu2:");         
+          tell_single(alu2_ins_to_rf);
+          //         $display("adr:");         
+          tell_single(adr_ins_to_rf);         
+          */ 
       end
    endtask
 
@@ -224,10 +224,13 @@
       end
    endtask // print_cur_map
    
-      
+   
 
-   `include "is_dump.task"
+`include "is_dump_map.task"
 
+
+
+`include "is_dump_inst.task"
    
 
 
@@ -235,52 +238,52 @@
    function[INST_WIDTH-1:0] inst;
       input inst_valid;
       input Rs_valid_bit;
-      input[3:0] Rs;
-      input Rd_valid_bit;
-      input[3:0] Rd;
-      input Rt_valid_bit;
-      input[3:0] Rt;
-      input imm_valid_bit;
-      input[15:0] imme;
-      input LDI;
-      input[1:0] brn;
-      input jmp_valid_bit;
-      input[1:0] jump;
-      input MemRd;
-      input MemWr;
-      input[2:0] ALU_ctrl;
-      input ALU_to_adder;
-      input ALU_to_mult;
-      input ALU_to_addr;
-      input invtRt;
-      input RegWr;
-      input pr_valid;
-      input[5:0] pr_number;
+      input [3:0] Rs;
+      input       Rd_valid_bit;
+      input [3:0] Rd;
+      input       Rt_valid_bit;
+      input [3:0] Rt;
+      input       imm_valid_bit;
+      input [15:0] imme;
+      input        LDI;
+      input [1:0]  brn;
+      input        jmp_valid_bit;
+      input [1:0]  jump;
+      input        MemRd;
+      input        MemWr;
+      input [2:0]  ALU_ctrl;
+      input        ALU_to_adder;
+      input        ALU_to_mult;
+      input        ALU_to_addr;
+      input        invtRt;
+      input        RegWr;
+      input        pr_valid;
+      input [5:0]  pr_number;
       
       inst = {
-       inst_valid,
-        Rs_valid_bit,
-        Rs,
-        Rd_valid_bit,
-        Rd,
-        Rt_valid_bit,
-        Rt,
-        imm_valid_bit,
-        imme,
-        LDI,
-        brn,
-        jmp_valid_bit,
-        jump,
-        MemRd,
-        MemWr,
-        ALU_ctrl,
-        ALU_to_adder,
-        ALU_to_mult,
-        ALU_to_addr,
-        invtRt,
-        RegWr,
-        pr_valid,
-        pr_number
+              inst_valid,
+              Rs_valid_bit,
+              Rs,
+              Rd_valid_bit,
+              Rd,
+              Rt_valid_bit,
+              Rt,
+              imm_valid_bit,
+              imme,
+              LDI,
+              brn,
+              jmp_valid_bit,
+              jump,
+              MemRd,
+              MemWr,
+              ALU_ctrl,
+              ALU_to_adder,
+              ALU_to_mult,
+              ALU_to_addr,
+              invtRt,
+              RegWr,
+              pr_valid,
+              pr_number
 
               };
    endfunction
@@ -290,29 +293,29 @@
    /************** clear variables used for constructing instructions **********************/
    task clear;
       begin
-        inst_valid =0;
-        Rs_valid_bit=0;
-        Rs=0;
-        Rd_valid_bit=0;
-        Rd=0;
-        Rt_valid_bit=0;
-        Rt=0;
-        imm_valid_bit=0;
-        imme=0;
-        LDI=0;
-        brn=0;
-        jmp_valid_bit=0;
-        jump=0;
-        MemRd=0;
-        MemWr=0;
-        ALU_ctrl=0;
-        ALU_to_adder=0;
-        ALU_to_mult=0;
-        ALU_to_addr=0;
-        invtRt=0;
-        RegWr=0;
-        pr_valid=0;
-        pr_number=0;
+         inst_valid =0;
+         Rs_valid_bit=0;
+         Rs=0;
+         Rd_valid_bit=0;
+         Rd=0;
+         Rt_valid_bit=0;
+         Rt=0;
+         imm_valid_bit=0;
+         imme=0;
+         LDI=0;
+         brn=0;
+         jmp_valid_bit=0;
+         jump=0;
+         MemRd=0;
+         MemWr=0;
+         ALU_ctrl=0;
+         ALU_to_adder=0;
+         ALU_to_mult=0;
+         ALU_to_addr=0;
+         invtRt=0;
+         RegWr=0;
+         pr_valid=0;
+         pr_number=0;
       end
    endtask
 
@@ -320,7 +323,7 @@
    task load;
       input[1:0] inst_idx;
       begin
-        inst_al[inst_idx][INST_WIDTH-1:0]=inst(inst_valid,Rs_valid_bit,Rs,Rd_valid_bit,Rd,Rt_valid_bit,Rt,imm_valid_bit,imme, LDI,  brn, jmp_valid_bit, jump, MemRd, MemWr, ALU_ctrl,ALU_to_adder, ALU_to_mult,ALU_to_addr,invtRt, RegWr, pr_valid, pr_number);
+         inst_al[inst_idx][INST_WIDTH-1:0]=inst(inst_valid,Rs_valid_bit,Rs,Rd_valid_bit,Rd,Rt_valid_bit,Rt,imm_valid_bit,imme, LDI,  brn, jmp_valid_bit, jump, MemRd, MemWr, ALU_ctrl,ALU_to_adder, ALU_to_mult,ALU_to_addr,invtRt, RegWr, pr_valid, pr_number);
          $display("%g load_inst:%x  === :%x Rs_valid_bit:%x Rs:%x Rd_valid_bit:%x Rd:%x Rt_valid_bit:%x Rt:%x imm_valid_bit:%x imme:%x  LDI:%x   brn:%x  jmp_valid_bit:%x  jump:%x  MemRd:%x  MemWr:%x  ALU_ctrl:%x ALU_to_adder:%x  ALU_to_mult:%x ALU_to_addr:%x invtRt:%x  RegWr:%x  pr_valid:%x  pr_number:%x", $time, inst_idx, inst_valid,Rs_valid_bit,Rs,Rd_valid_bit,Rd,Rt_valid_bit,Rt,imm_valid_bit,imme, LDI,  brn, jmp_valid_bit, jump, MemRd, MemWr, ALU_ctrl,ALU_to_adder, ALU_to_mult,ALU_to_addr,invtRt, RegWr, pr_valid, pr_number);
       end           
    endtask
@@ -346,12 +349,12 @@
 
 
    //monitor inst_out and inst_out_reo
-/* -----\/----- EXCLUDED -----\/-----
-   always @(inst_out[0],inst_out[1],inst_out[2],inst_out[3], inst_out_reo[0], inst_out_reo[1], inst_out_reo[2], inst_out_reo[3])
-     begin
-        $strobe("inst_out_reo[0]: %x\ninst_out_reo[1]: %x\ninst_out_reo[2]: %x\ninst_out_reo[3]: %x\n", inst_out_reo[0], inst_out_reo[1], inst_out_reo[2], inst_out_reo[3]);
+   /* -----\/----- EXCLUDED -----\/-----
+    always @(inst_out[0],inst_out[1],inst_out[2],inst_out[3], inst_out_reo[0], inst_out_reo[1], inst_out_reo[2], inst_out_reo[3])
+    begin
+    $strobe("inst_out_reo[0]: %x\ninst_out_reo[1]: %x\ninst_out_reo[2]: %x\ninst_out_reo[3]: %x\n", inst_out_reo[0], inst_out_reo[1], inst_out_reo[2], inst_out_reo[3]);
      end
- -----/\----- EXCLUDED -----/\----- */
+    -----/\----- EXCLUDED -----/\----- */
    
    initial
      forever #5 clk=~clk;
@@ -363,9 +366,9 @@
         ////////////////////////////////////////////////
         //dump all the signals
         $wlfdumpvars(0, is_tb);
-//        $monitor("%g mul_ins_to_rf: %x, alu1_ins_to_rf: %x, alu2_ins_to_rf: %x, adr_ins_to_rf: %x ful_to_al: %x,", $time, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf, adr_ins_to_rf, ful_to_al);
+        //        $monitor("%g mul_ins_to_rf: %x, alu1_ins_to_rf: %x, alu2_ins_to_rf: %x, adr_ins_to_rf: %x ful_to_al: %x,", $time, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf, adr_ins_to_rf, ful_to_al);
         
-//        $monitor ("%g\n (3)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (2)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (1)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (0)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n top head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, mid head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, arch:%b ",$time, tpu_inst_rdy[3],  inst_idx[3], inst_vld[3], inst_psrc1[3], inst_psrc2[3], inst_pdst[3] , fre_preg[3] ,  tpu_inst_rdy[2],  inst_idx[2], inst_vld[2], inst_psrc1[2], inst_psrc2[2], inst_pdst[2] , fre_preg[2] , tpu_inst_rdy[1],  inst_idx[1], inst_vld[1], inst_psrc1[1], inst_psrc2[1], inst_pdst[1] , fre_preg[1] , tpu_inst_rdy[0],  inst_idx[0], inst_vld[0], inst_psrc1[0], inst_psrc2[0], inst_pdst[0] , fre_preg[0],top_hed[15],  top_hed[14],  top_hed[13],  top_hed[12], top_hed[11],  top_hed[10],  top_hed[9],  top_hed[8],  top_hed[7],  top_hed[6],  top_hed[5],  top_hed[4], top_hed[3],  top_hed[2],  top_hed[1],  top_hed[0],mid_hed[15],  mid_hed[14],  mid_hed[13],  mid_hed[12], mid_hed[11],  mid_hed[10],  mid_hed[9],  mid_hed[8],  mid_hed[7],  mid_hed[6],  mid_hed[5],  mid_hed[4], mid_hed[3],  mid_hed[2],  mid_hed[1],  mid_hed[0], DUT.arch);
+        //        $monitor ("%g\n (3)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (2)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (1)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n (0)tpu_inst_rdy: %b, tpu out: idx: %x, vld: %x, psrc1: %x, psrc2: %x, pdst: %x free_preg:%x \n top head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, mid head map: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x, arch:%b ",$time, tpu_inst_rdy[3],  inst_idx[3], inst_vld[3], inst_psrc1[3], inst_psrc2[3], inst_pdst[3] , fre_preg[3] ,  tpu_inst_rdy[2],  inst_idx[2], inst_vld[2], inst_psrc1[2], inst_psrc2[2], inst_pdst[2] , fre_preg[2] , tpu_inst_rdy[1],  inst_idx[1], inst_vld[1], inst_psrc1[1], inst_psrc2[1], inst_pdst[1] , fre_preg[1] , tpu_inst_rdy[0],  inst_idx[0], inst_vld[0], inst_psrc1[0], inst_psrc2[0], inst_pdst[0] , fre_preg[0],top_hed[15],  top_hed[14],  top_hed[13],  top_hed[12], top_hed[11],  top_hed[10],  top_hed[9],  top_hed[8],  top_hed[7],  top_hed[6],  top_hed[5],  top_hed[4], top_hed[3],  top_hed[2],  top_hed[1],  top_hed[0],mid_hed[15],  mid_hed[14],  mid_hed[13],  mid_hed[12], mid_hed[11],  mid_hed[10],  mid_hed[9],  mid_hed[8],  mid_hed[7],  mid_hed[6],  mid_hed[5],  mid_hed[4], mid_hed[3],  mid_hed[2],  mid_hed[1],  mid_hed[0], DUT.arch);
 
 
         $monitor("%g inst in:   %x,  arch_swt: %b, arch: %b  counter:%x  counter_set:%x   counter_val:%x", $time,inst_frm_al, DUT.is_tpu.arch_swt, DUT.is_tpu.arch, DUT.counter, DUT.set, DUT.val);
@@ -405,23 +408,23 @@
 
         //add in test suit 1
         /********************* single instruction test****************/        
-//        `include "is_tb_1.task"        
+        //        `include "is_tb_1.task"        
 
         /****************** test if clr wait when succesful send***************/
-//        `include "is_tb_2.task"                
+        //        `include "is_tb_2.task"                
 
         /******************* test architecture switch ****************/
-//        `include "is_tb_3.task"                
+        //        `include "is_tb_3.task"                
 
         /**************** test inst send but not resolved + architecture switch ************/
-//        `include "is_tb_4.task"                        
+        //        `include "is_tb_4.task"                        
 
 
         /**  branch instruction. make sure branch doesn't clr wait immediately after send ****/
-//        `include "is_tb_5.task"
+        //        `include "is_tb_5.task"
 
         /** branch instruction, test mis prediction **/
-        `include "is_tb_6.task"
+`include "is_tb_6.task"
 
 
         /** branch instruction complicated, test mis prediction **/
@@ -587,58 +590,58 @@ endmodule // tpu_tb
 
 
 /* -----\/----- EXCLUDED -----\/-----
-   //================== separate each  output ===============
-   generate
-      genvar                                      inst_out_i;
-      //16 logical registers to physical mappings
-      for (inst_out_i=0; inst_out_i<ISQ_DEPTH; inst_out_i=inst_out_i+1) 
-        begin
-           //possible mapping
-           assign inst_out[inst_out_i][TPU_INST_WIDTH-1:0] = tpu_out_flat[TPU_INST_WIDTH*(inst_out_i+1)-1:TPU_INST_WIDTH*inst_out_i];
-           assign inst_out_reo[inst_out_i][TPU_INST_WIDTH-1:0] = tpu_out_reo_flat[TPU_INST_WIDTH*(inst_out_i+1)-1:TPU_INST_WIDTH*inst_out_i];
-           
-           assign inst_idx[inst_out_i] = inst_out[inst_out_i][TPU_INST_WIDTH-1:TPU_INST_WIDTH-2];
-           assign inst_vld[inst_out_i] = inst_out[inst_out_i][TPU_INST_WIDTH-3];
-           assign inst_psrc1[inst_out_i] = inst_out[inst_out_i][TPU_INST_WIDTH-4:TPU_INST_WIDTH-10];           
-           assign inst_psrc2[inst_out_i] = inst_out[inst_out_i][TPU_INST_WIDTH-11:TPU_INST_WIDTH-17];
-           assign inst_pdst[inst_out_i] = inst_out[inst_out_i][TPU_INST_WIDTH-18:TPU_INST_WIDTH-23];                                 
+ //================== separate each  output ===============
+ generate
+ genvar                                      inst_out_i;
+ //16 logical registers to physical mappings
+ for (inst_out_i=0; inst_out_i<ISQ_DEPTH; inst_out_i=inst_out_i+1) 
+ begin
+ //possible mapping
+ assign inst_out[inst_out_i][TPU_INST_WIDTH-1:0] = tpu_out_flat[TPU_INST_WIDTH*(inst_out_i+1)-1:TPU_INST_WIDTH*inst_out_i];
+ assign inst_out_reo[inst_out_i][TPU_INST_WIDTH-1:0] = tpu_out_reo_flat[TPU_INST_WIDTH*(inst_out_i+1)-1:TPU_INST_WIDTH*inst_out_i];
+ 
+ assign inst_idx[inst_out_i] = inst_out[inst_out_i][TPU_INST_WIDTH-1:TPU_INST_WIDTH-2];
+ assign inst_vld[inst_out_i] = inst_out[inst_out_i][TPU_INST_WIDTH-3];
+ assign inst_psrc1[inst_out_i] = inst_out[inst_out_i][TPU_INST_WIDTH-4:TPU_INST_WIDTH-10];           
+ assign inst_psrc2[inst_out_i] = inst_out[inst_out_i][TPU_INST_WIDTH-11:TPU_INST_WIDTH-17];
+ assign inst_pdst[inst_out_i] = inst_out[inst_out_i][TPU_INST_WIDTH-18:TPU_INST_WIDTH-23];                                 
 
         end
    endgenerate
 
-   //================== separate each free physical registers output =====
-   generate
-      genvar                                      preg_i;
-      //16 logical registers to physical mappings
-      for (preg_i=0; preg_i<ISQ_DEPTH; preg_i=preg_i+1) 
-        begin
-           //possible mapping
-           assign fre_preg[preg_i][6:0] = fre_preg_out_flat[7*(preg_i+1)-1:7*preg_i];
+ //================== separate each free physical registers output =====
+ generate
+ genvar                                      preg_i;
+ //16 logical registers to physical mappings
+ for (preg_i=0; preg_i<ISQ_DEPTH; preg_i=preg_i+1) 
+ begin
+ //possible mapping
+ assign fre_preg[preg_i][6:0] = fre_preg_out_flat[7*(preg_i+1)-1:7*preg_i];
         end
    endgenerate
 
 
-   //================== group instruction together =====
-   generate
-      genvar                                      inst_in_i;
-      //16 logical registers to physical mappings
-      for (inst_in_i=0; inst_in_i<ISQ_DEPTH; inst_in_i=inst_in_i+1) 
-        begin
-           assign isq_lin_flat[ISQ_LINE_WIDTH*(inst_in_i+1)-1:ISQ_LINE_WIDTH*inst_in_i]= isq_lin[inst_in_i][ISQ_LINE_WIDTH-1:0];
+ //================== group instruction together =====
+ generate
+ genvar                                      inst_in_i;
+ //16 logical registers to physical mappings
+ for (inst_in_i=0; inst_in_i<ISQ_DEPTH; inst_in_i=inst_in_i+1) 
+ begin
+ assign isq_lin_flat[ISQ_LINE_WIDTH*(inst_in_i+1)-1:ISQ_LINE_WIDTH*inst_in_i]= isq_lin[inst_in_i][ISQ_LINE_WIDTH-1:0];
         end
    endgenerate
-   
+ 
 
-   //================== separate each field for easy debuggin
-   //generate output mapping
-p   generate
-      genvar                                      map_i;
-      //16 logical registers to physical mappings
-      for (map_i=0; map_i<16; map_i=map_i+1) 
-        begin
-           //possible mapping
-           assign top_hed[map_i][7:0] = DUT.top_hed_map[7*(map_i+1)-1:7*map_i];
-           assign mid_hed[map_i][7:0] = DUT.mid_hed_map[7*(map_i+1)-1:7*map_i];           
+ //================== separate each field for easy debuggin
+ //generate output mapping
+ p   generate
+ genvar                                      map_i;
+ //16 logical registers to physical mappings
+ for (map_i=0; map_i<16; map_i=map_i+1) 
+ begin
+ //possible mapping
+ assign top_hed[map_i][7:0] = DUT.top_hed_map[7*(map_i+1)-1:7*map_i];
+ assign mid_hed[map_i][7:0] = DUT.mid_hed_map[7*(map_i+1)-1:7*map_i];           
         end
    endgenerate
  -----/\----- EXCLUDED -----/\----- */
