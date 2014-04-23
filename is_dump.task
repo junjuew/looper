@@ -1,0 +1,48 @@
+   /******** dump logical -> physical mappings from tpu ***********/
+   `ifdef IS_DUMP_MAP
+   `define TPU_MOD DUT.is_tpu
+   `define DUMP_FILE "map.dump"
+   integer dumpfile;
+   initial
+     begin
+        dumpfile=$fopen(`DUMP_FILE, "w+");
+     end
+   
+   generate
+      genvar dump_i;
+      for (dump_i=0;dump_i<64;dump_i=dump_i+1)
+        begin
+           reg [7*16-1:0] prv_mapping;
+           always@(posedge clk, negedge rst_n)
+             begin
+                if (~rst_n)
+                  begin
+                     prv_mapping <= `TPU_MOD.cur_map[dump_i];
+                  end
+                else if (`TPU_MOD.cur_map[dump_i] != prv_mapping )
+                  begin
+                     $fstrobe(dumpfile, "%g: %x %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x)", $time, dump_i[5:0],
+`TPU_MOD.cur_map[dump_i][7*16-1], `TPU_MOD.cur_map[dump_i][7*16-2: 7*15], 4'hf, 
+`TPU_MOD.cur_map[dump_i][7*15-1], `TPU_MOD.cur_map[dump_i][7*15-2: 7*14], 4'he,  
+`TPU_MOD.cur_map[dump_i][7*14-1], `TPU_MOD.cur_map[dump_i][7*14-2: 7*13], 4'hd,  
+`TPU_MOD.cur_map[dump_i][7*13-1], `TPU_MOD.cur_map[dump_i][7*13-2: 7*12], 4'hc,  
+`TPU_MOD.cur_map[dump_i][7*12-1], `TPU_MOD.cur_map[dump_i][7*12-2: 7*11], 4'hb,  
+`TPU_MOD.cur_map[dump_i][7*11-1], `TPU_MOD.cur_map[dump_i][7*11-2: 7*10], 4'ha,   
+`TPU_MOD.cur_map[dump_i][7*10-1], `TPU_MOD.cur_map[dump_i][7*10-2: 7*9], 4'h9,
+`TPU_MOD.cur_map[dump_i][7*9-1], `TPU_MOD.cur_map[dump_i][7*9-2: 7*8], 4'h8,
+`TPU_MOD.cur_map[dump_i][7*8-1], `TPU_MOD.cur_map[dump_i][7*8-2: 7*7], 4'h7,
+`TPU_MOD.cur_map[dump_i][7*7-1], `TPU_MOD.cur_map[dump_i][7*7-2: 7*6], 4'h6,
+`TPU_MOD.cur_map[dump_i][7*6-1], `TPU_MOD.cur_map[dump_i][7*6-2: 7*5], 4'h5,
+`TPU_MOD.cur_map[dump_i][7*5-1], `TPU_MOD.cur_map[dump_i][7*5-2: 7*4], 4'h4,
+`TPU_MOD.cur_map[dump_i][7*4-1], `TPU_MOD.cur_map[dump_i][7*4-2: 7*3], 4'h3,
+`TPU_MOD.cur_map[dump_i][7*3-1], `TPU_MOD.cur_map[dump_i][7*3-2: 7*2], 4'h2,
+`TPU_MOD.cur_map[dump_i][7*2-1], `TPU_MOD.cur_map[dump_i][7*2-2: 7*1], 4'h1,
+`TPU_MOD.cur_map[dump_i][7*1-1], `TPU_MOD.cur_map[dump_i][7*1-2: 7*0], 4'h0);
+                     prv_mapping <= `TPU_MOD.cur_map[dump_i];
+                  end // if (`TPU_MOD.cur_map[dump_i] != prv_mapping )
+//                else
+//                  $strobe("%g prv_map:%x, cur_map:%x", $time, prv_mapping, `TPU_MOD.cur_map[dump_i]);
+             end
+        end
+   endgenerate
+   `endif

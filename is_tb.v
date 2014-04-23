@@ -214,7 +214,7 @@
       end
    endtask
 
-   /************** print out current logical to physical mapping ********/
+   /************** print out current logical to physical mapping *******/
    task print_cur_map;
       input [TPU_MAP_WIDTH-1:0]  cur_map;
       begin
@@ -225,7 +225,9 @@
    endtask // print_cur_map
    
       
-           
+
+   `include "is_dump.task"
+
    
 
 
@@ -403,7 +405,7 @@
 
         //add in test suit 1
         /********************* single instruction test****************/        
-//        `include "is_tb_1.task"        
+        `include "is_tb_1.task"        
 
         /****************** test if clr wait when succesful send***************/
 //        `include "is_tb_2.task"                
