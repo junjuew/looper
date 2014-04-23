@@ -466,6 +466,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                    .alu2_en_rf_ex_in(alu2_inst_pkg_is_rf_out[10]),
                    .mult_en_rf_ex_in(mult_inst_pkg_is_rf_out[9]), 
                    .addr_en_rf_ex_in(addr_inst_pkg_is_rf_out[8]),
+                   .mult_valid_wb(mult_valid_ex_out),
 
                    // Outputs
                    .alu1_op1_rf_ex_out(alu1_op1_data_rf_ex_out),
@@ -594,7 +595,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                    // be careful here
                    .alu1_done_vld_ex_wb_in(alu1_en_rf_ex_out),
                    .alu2_done_vld_ex_wb_in(alu2_en_rf_ex_out),
-                   .mult_done_vld_ex_wb_in(mult_valid_ex_out),
+                   .mult_done_vld_ex_wb_in(mult_en_rf_ex_out),
                    .addr_done_vld_ex_wb_in(addr_en_rf_ex_out),
       
                    .alu1_done_idx_ex_wb_in(alu1_done_idx_rf_ex_out),
@@ -608,7 +609,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                    .phy_addr_mult_ex_wb_in(phy_addr_mult_rf_ex_out),
                    .phy_addr_ld_ex_wb_in(phy_addr_ld_rf_ex_out),
 
-                   .reg_wrt_mul_ex_wb_in(reg_wrt_mul_rf_ex_out),
+                   .reg_wrt_mul_ex_wb_in(mult_valid_ex_out),
                    .reg_wrt_alu1_ex_wb_in(reg_wrt_alu1_rf_ex_out),
                    .reg_wrt_alu2_ex_wb_in(reg_wrt_alu2_rf_ex_out),
                    .reg_wrt_ld_ex_wb_in(reg_wrt_ld_rf_ex_out),

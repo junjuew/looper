@@ -81,6 +81,7 @@ module RF_EX (
     input 	  alu2_en_rf_ex_in,
     input 	  mult_en_rf_ex_in, 
     input 	  addr_en_rf_ex_in,
+    input     mult_valid_wb,
 
 
     output [15:0] alu1_op1_rf_ex_out,
@@ -234,7 +235,7 @@ module RF_EX (
     // FU enable
     rf_enable alu1_en            ( .q(alu1_en_rf_ex_out), .d(alu1_en_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable alu2_en            ( .q(alu2_en_rf_ex_out), .d(alu2_en_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable mult_en            ( .q(mult_en_rf_ex_out), .d(mult_en_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable mult_en            ( .q(mult_en_rf_ex_out), .d(mult_en_rf_ex_in && ~mult_valid_wb), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
     rf_enable addr_en            ( .q(addr_en_rf_ex_out), .d(addr_en_rf_ex_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
 
 endmodule

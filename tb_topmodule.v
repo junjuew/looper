@@ -4,18 +4,18 @@ module tb_topmodule();
    reg clk;
    reg rst_n;
    reg [15:0] extern_pc;
-   reg 	      extern_pc_en;
+   reg        extern_pc_en;
    integer    i;
 
    
 
    
    top_module_looper DUT(/*autoinst*/
-			 // Inputs
-			 .clk			(clk),
-			 .rst_n			(rst_n),
-			 .extern_pc		(extern_pc[15:0]),
-			 .extern_pc_en		(extern_pc_en));
+                         // Inputs
+                         .clk                   (clk),
+                         .rst_n                 (rst_n),
+                         .extern_pc             (extern_pc[15:0]),
+                         .extern_pc_en          (extern_pc_en));
 
 
    initial begin
@@ -75,18 +75,18 @@ module tb_topmodule();
 
    always@(posedge clk)
      begin
-	//#2;
-	$display("///////////////////////////////////////////////////////////////////////////////////\n");
-	$display("%t, rf:read_alu1_op1_pnum is %d, read_alu1_op2_pnum is %d,read_alu2_op1_pnum is %d,read_alu2_op2_pnum is %d\n",$time,DUT.reg_file_DUT.read_alu1_op1_pnum,DUT.reg_file_DUT.read_alu1_op2_pnum,DUT.reg_file_DUT.read_alu2_op1_pnum,DUT.reg_file_DUT.read_alu2_op2_pnum);
-	$display("%t, rf:wrt_alu1_dst_pnum is %d, wrt_alu2_vld is %d, wrt_alu2_dst_pnum is %d, wrt_alu2_vld is %d\n",$time,DUT.reg_file_DUT.wrt_alu1_dst_pnum,DUT.reg_file_DUT.wrt_alu1_vld,DUT.reg_file_DUT.wrt_alu2_dst_pnum,DUT.reg_file_DUT.wrt_alu2_vld);
-	$display("%t, rf:read_alu1_op1_data is %x, read_alu1_op2_data is %x, read_alu2_op1_data is %x, read_alu2_op2_data is %x\n",$time,DUT.reg_file_DUT.read_alu1_op1_data,DUT.reg_file_DUT.read_alu1_op2_data,DUT.reg_file_DUT.read_alu2_op1_data,DUT.reg_file_DUT.read_alu2_op2_data);
-	$display("%t, rf:wrt_alu1_data is %x, wrt_alu2_data is %x\n",$time,DUT.reg_file_DUT.wrt_alu1_data,DUT.reg_file_DUT.wrt_alu2_data);
-	$display("///////////////////////////////////////////////////////////////////////////////////\n");
+        //#2;
+        $display("///////////////////////////////////////////////////////////////////////////////////\n");
+        $display("%t, rf:read_alu1_op1_pnum is %d, read_alu1_op2_pnum is %d,read_alu2_op1_pnum is %d,read_alu2_op2_pnum is %d\n",$time,DUT.reg_file_DUT.read_alu1_op1_pnum,DUT.reg_file_DUT.read_alu1_op2_pnum,DUT.reg_file_DUT.read_alu2_op1_pnum,DUT.reg_file_DUT.read_alu2_op2_pnum);
+        $display("%t, rf:wrt_alu1_dst_pnum is %d, wrt_alu2_vld is %d, wrt_alu2_dst_pnum is %d, wrt_alu2_vld is %d\n",$time,DUT.reg_file_DUT.wrt_alu1_dst_pnum,DUT.reg_file_DUT.wrt_alu1_vld,DUT.reg_file_DUT.wrt_alu2_dst_pnum,DUT.reg_file_DUT.wrt_alu2_vld);
+        $display("%t, rf:read_alu1_op1_data is %x, read_alu1_op2_data is %x, read_alu2_op1_data is %x, read_alu2_op2_data is %x\n",$time,DUT.reg_file_DUT.read_alu1_op1_data,DUT.reg_file_DUT.read_alu1_op2_data,DUT.reg_file_DUT.read_alu2_op1_data,DUT.reg_file_DUT.read_alu2_op2_data);
+        $display("%t, rf:wrt_alu1_data is %x, wrt_alu2_data is %x\n",$time,DUT.reg_file_DUT.wrt_alu1_data,DUT.reg_file_DUT.wrt_alu2_data);
+        $display("///////////////////////////////////////////////////////////////////////////////////\n");
      end
 
  -----/\----- EXCLUDED -----/\----- */
    
-	   
+           
 /* -----\/----- EXCLUDED -----\/-----
    end // always@ (posedge clk)
    
@@ -109,17 +109,17 @@ module tb_topmodule();
 
    always@(posedge clk)
      begin
-	if(DUT.top_level_WB_DUT.sq.insert)
-	  begin
-	     for(i = 0; i < 24; i = i + 1)
-	       begin
-		  $display("SQ:first i is %b", DUT.top_level_WB_DUT.sq.first[i]);		  
-		  $display("SQ:first idx is %b", DUT.top_level_WB_DUT.sq.first_indx);
-		  
-		  $display("SQ:the %d entry is %x\n",i,DUT.top_level_WB_DUT.sq.str_entry[i][40:0]);
-		  
-	       end
-	  end
+        if(DUT.top_level_WB_DUT.sq.insert)
+          begin
+             for(i = 0; i < 24; i = i + 1)
+               begin
+                  $display("SQ:first i is %b", DUT.top_level_WB_DUT.sq.first[i]);                 
+                  $display("SQ:first idx is %b", DUT.top_level_WB_DUT.sq.first_indx);
+                  
+                  $display("SQ:the %d entry is %x\n",i,DUT.top_level_WB_DUT.sq.str_entry[i][40:0]);
+                  
+               end
+          end
      end // always@ (posedge )
    
  -----/\----- EXCLUDED -----/\----- */
@@ -127,14 +127,14 @@ module tb_topmodule();
 
 
    initial begin
-      #395;
+      #995;
       $display("///////////////////////////////reg file//////////////////////////");
       
       for(i = 0; i < 64; i = i + 1)
-	begin
-	   $display("reg %d, value is reg_file_body is %x\n",i,DUT.reg_file_DUT.reg_file_body[i]);
-	   
-	end
+        begin
+           $display("reg %d, value is reg_file_body is %x\n",i,DUT.reg_file_DUT.reg_file_body[i]);
+           
+        end
 
       $display("///////////////////////////////reg file//////////////////////////");
 
@@ -142,7 +142,7 @@ module tb_topmodule();
 
    
 
-
+/*
    initial begin
       #150;
 
@@ -150,29 +150,54 @@ module tb_topmodule();
       $display("alloc pointer position is %d \n",DUT.al_DUT.f0.alloc_ptr);
       $display("cmt pointer position is %d \n",DUT.al_DUT.f0.cmt_ptr);
       for(i = 0; i < 64; i = i + 1)
-	begin
-	   $display("free lis %d, value is %d \n",i, DUT.al_DUT.f0.list[i]);
-	end
+        begin
+           $display("free lis %d, value is %d \n",i, DUT.al_DUT.f0.list[i]);
+        end
       $display("///////////////////////////////freelist//////////////////////////");
    end
 
 
    always@(posedge DUT.mis_pred_ROB_out)
      begin
-	#10;
-	$display("///////////////////////////////mispredict//////////////////////////");
-	$display("alloc pointer position is %d \n",DUT.al_DUT.f0.alloc_ptr);
-	$display("cmt pointer position is %d \n",DUT.al_DUT.f0.cmt_ptr);
-	$display("in the fifo: fifo 0  is %x, fifo1 is %x \n",DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
-	$display("///////////////////////////////mispredict//////////////////////////");
+        #10;
+        $display("///////////////////////////////mispredict//////////////////////////");
+        $display("alloc pointer position is %d \n",DUT.al_DUT.f0.alloc_ptr);
+        $display("cmt pointer position is %d \n",DUT.al_DUT.f0.cmt_ptr);
+        $display("in the fifo: fifo 0  is %x, fifo1 is %x \n",DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
+        $display("///////////////////////////////mispredict//////////////////////////");
 
      end
-   
+*/
+ 
+    
    initial begin
-      #400;
+      #1000;
+      $monitor ("mult_enable_to_is:%b mult_done: %b mult_value:%x", DUT.mult_rdy_is_rf, DUT.mult_valid_ex_out, DUT.mult_data_ex_out);
       $finish;
       
    end
+
+
+   //snapshot functions for issue stage output   
+   task snapshot;
+      begin
+         $strobe("######## issue output ##############");
+         $strobe("%g mul vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, DUT.is_DUT.mul_ins_to_rf[65],DUT.is_DUT.mul_ins_to_rf[64:59], DUT.is_DUT.mul_ins_to_rf[58:52], DUT.is_DUT.mul_ins_to_rf[51:45], DUT.is_DUT.mul_ins_to_rf[44:39], DUT.is_DUT.mul_ins_to_rf[38:6], DUT.is_DUT.mul_ins_to_rf[5:0]);
+         $strobe("%g alu1 vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, DUT.is_DUT.alu1_ins_to_rf[65],DUT.is_DUT.alu1_ins_to_rf[64:59], DUT.is_DUT.alu1_ins_to_rf[58:52], DUT.is_DUT.alu1_ins_to_rf[51:45], DUT.is_DUT.alu1_ins_to_rf[44:39], DUT.is_DUT.alu1_ins_to_rf[38:6], DUT.is_DUT.alu1_ins_to_rf[5:0]);
+         $strobe("%g alu2 vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, DUT.is_DUT.alu2_ins_to_rf[65],DUT.is_DUT.alu2_ins_to_rf[64:59], DUT.is_DUT.alu2_ins_to_rf[58:52], DUT.is_DUT.alu2_ins_to_rf[51:45], DUT.is_DUT.alu2_ins_to_rf[44:39], DUT.is_DUT.alu2_ins_to_rf[38:6], DUT.is_DUT.alu2_ins_to_rf[5:0]);
+         $strobe("%g addr vld:%x, idx:%x, psrc1:%x, psrc2:%x, pdest:%x, ctrl:%x, free_preg:%x",$time, DUT.is_DUT.adr_ins_to_rf[65],DUT.is_DUT.adr_ins_to_rf[64:59], DUT.is_DUT.adr_ins_to_rf[58:52], DUT.is_DUT.adr_ins_to_rf[51:45], DUT.is_DUT.adr_ins_to_rf[44:39], DUT.is_DUT.adr_ins_to_rf[38:6], DUT.is_DUT.adr_ins_to_rf[5:0]);
+         $strobe("%g ful_to_al:%x", $time, DUT.is_DUT.ful_to_al);
+         $strobe("######################");         
+      end
+   endtask
+
+   
+
+   always@(DUT.is_DUT.mul_ins_to_rf, DUT.is_DUT.alu1_ins_to_rf, DUT.is_DUT.alu2_ins_to_rf, DUT.is_DUT.adr_ins_to_rf)
+     begin
+        snapshot();
+     end
+   
    
    
 endmodule // tb_topmodule
