@@ -154,11 +154,8 @@ module multiplier( mult_op1, mult_op2, mult_out, mult_en, mult_valid_wb, /*mult_
    
    assign mult_out = Product[16:1];
    assign mult_valid_wb = done;
-<<<<<<< HEAD
+
 //   assign mult_free = (~state) || ( (~counter[3]) & counter[2] & counter[1] & (counter[0])) || mult_valid_wb;
-=======
-   assign mult_free = (~state);
- // || ((~counter[3]) & counter[2] & counter[1] & (counter[0]) ) || mult_valid_wb;
->>>>>>> change several pipeline enable port
+
 endmodule
 

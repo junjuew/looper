@@ -13,31 +13,31 @@
 //                      situations such as ldst queue full needed to be considered
 //////////////////////////////////////////////////////////////////////////////////
 module EX_WB (
-    input 	  clk, 
-    input 	  rst_n,
-    input 	  stall,
+    input         clk, 
+    input         rst_n,
+    input         stall,
     input [15:0]  mult_out_ex_wb_in,
     input [15:0]  alu1_out_ex_wb_in, 
     input [15:0]  alu2_out_ex_wb_in,
     input [15:0]  addr_out_ex_wb_in,
     input [15:0]  data_str_ex_wb_in,
 
-    input 	  mult_valid_wb_ex_wb_in, //for WB stage
-    input 	  mult_free_ex_wb_in, //for issue stage
-    input 	  alu1_mem_wrt_ex_wb_in, //
-    input 	  alu2_mem_wrt_ex_wb_in, //
-    input 	  mult_mem_wrt_ex_wb_in, //
-    input 	  addr_mem_wrt_ex_wb_in, //
+    input         mult_valid_wb_ex_wb_in, //for WB stage
+/*    input       mult_free_ex_wb_in, //for issue stage*/
+    input         alu1_mem_wrt_ex_wb_in, //
+    input         alu2_mem_wrt_ex_wb_in, //
+    input         mult_mem_wrt_ex_wb_in, //
+    input         addr_mem_wrt_ex_wb_in, //
 
-    input 	  alu1_mem_rd_ex_wb_in, //
-    input 	  alu2_mem_rd_ex_wb_in, //
-    input 	  mult_mem_rd_ex_wb_in, //
-    input 	  addr_mem_rd_ex_wb_in, //
+    input         alu1_mem_rd_ex_wb_in, //
+    input         alu2_mem_rd_ex_wb_in, //
+    input         mult_mem_rd_ex_wb_in, //
+    input         addr_mem_rd_ex_wb_in, //
 
-    input 	  alu1_done_vld_ex_wb_in,
-    input 	  alu2_done_vld_ex_wb_in,
-    input 	  mult_done_vld_ex_wb_in,
-    input 	  addr_done_vld_ex_wb_in,
+    input         alu1_done_vld_ex_wb_in,
+    input         alu2_done_vld_ex_wb_in,
+    input         mult_done_vld_ex_wb_in,
+    input         addr_done_vld_ex_wb_in,
  
     input [5:0]   alu1_done_idx_ex_wb_in,
     input [5:0]   alu2_done_idx_ex_wb_in,
@@ -50,10 +50,10 @@ module EX_WB (
     input [5:0]   phy_addr_mult_ex_wb_in,
     input [5:0]   phy_addr_ld_ex_wb_in,
 
-    input 	  reg_wrt_mul_ex_wb_in,
-    input 	  reg_wrt_alu1_ex_wb_in,
-    input 	  reg_wrt_alu2_ex_wb_in,
-    input 	  reg_wrt_ld_ex_wb_in,
+    input         reg_wrt_mul_ex_wb_in,
+    input         reg_wrt_alu1_ex_wb_in,
+    input         reg_wrt_alu2_ex_wb_in,
+    input         reg_wrt_ld_ex_wb_in,
 
     output [15:0] alu1_out_ex_wb_out,
     output [15:0] alu2_out_ex_wb_out,
@@ -61,28 +61,28 @@ module EX_WB (
     output [15:0] addr_out_ex_wb_out,
     output [15:0] data_str_ex_wb_out, 
 
-    output 	  reg_wrt_mul_ex_wb_out,
-    output 	  reg_wrt_alu1_ex_wb_out,
-    output 	  reg_wrt_alu2_ex_wb_out,
-    output 	  reg_wrt_ld_ex_wb_out,
+    output        reg_wrt_mul_ex_wb_out,
+    output        reg_wrt_alu1_ex_wb_out,
+    output        reg_wrt_alu2_ex_wb_out,
+    output        reg_wrt_ld_ex_wb_out,
 
-    output 	  mult_valid_wb_ex_wb_out,
-    output 	  mult_free_ex_wb_out,
+    output        mult_valid_wb_ex_wb_out,
+/*    output        mult_free_ex_wb_out,*/
 
-    output 	  alu1_mem_wrt_ex_wb_out, //
-    output 	  alu2_mem_wrt_ex_wb_out, //
-    output 	  mult_mem_wrt_ex_wb_out, //
-    output 	  addr_mem_wrt_ex_wb_out, //
+    output        alu1_mem_wrt_ex_wb_out, //
+    output        alu2_mem_wrt_ex_wb_out, //
+    output        mult_mem_wrt_ex_wb_out, //
+    output        addr_mem_wrt_ex_wb_out, //
 
-    output 	  alu1_mem_rd_ex_wb_out, //
-    output 	  alu2_mem_rd_ex_wb_out, //
-    output 	  mult_mem_rd_ex_wb_out, //
-    output 	  addr_mem_rd_ex_wb_out, //
+    output        alu1_mem_rd_ex_wb_out, //
+    output        alu2_mem_rd_ex_wb_out, //
+    output        mult_mem_rd_ex_wb_out, //
+    output        addr_mem_rd_ex_wb_out, //
 
-    output 	  alu1_done_vld_ex_wb_out,
-    output 	  alu2_done_vld_ex_wb_out,
-    output 	  mult_done_vld_ex_wb_out,
-    output 	  addr_done_vld_ex_wb_out,
+    output        alu1_done_vld_ex_wb_out,
+    output        alu2_done_vld_ex_wb_out,
+    output        mult_done_vld_ex_wb_out,
+    output        addr_done_vld_ex_wb_out,
  
     output [5:0]  alu1_done_idx_ex_wb_out,
     output [5:0]  alu2_done_idx_ex_wb_out,
@@ -102,7 +102,7 @@ module EX_WB (
    
    assign mult_rf_en = enable & mult_valid_wb_ex_wb_in;
    
-   assign mult_free_ex_wb_in = mult_free_ex_wb_out;
+//   assign mult_free_ex_wb_in = mult_free_ex_wb_out;
    
     //data
     rf_enable mult     [15:0]    ( .q(mult_out_ex_wb_out), .d(mult_out_ex_wb_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
