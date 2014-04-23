@@ -21,12 +21,12 @@
 // instruction is the cycle after mult_valid_wb goes high
 ///////////////////////////////////////////////////
 
-module multiplier( mult_op1, mult_op2, mult_out, mult_en, mult_valid_wb, mult_free,clk, rst_n);
+module multiplier( mult_op1, mult_op2, mult_out, mult_en, mult_valid_wb, /*mult_free,*/ clk, rst_n);
 
    input mult_en, clk, rst_n;
    input [15:0] mult_op1, mult_op2;
    output [15:0] mult_out;
-   output        mult_valid_wb, mult_free;
+   output        mult_valid_wb /*, mult_free*/;
    reg [32:0]    Product;
    reg [15:0]    Mand1,Mand2,sum;
    reg [3:0]     counter;
@@ -154,6 +154,6 @@ module multiplier( mult_op1, mult_op2, mult_out, mult_en, mult_valid_wb, mult_fr
    
    assign mult_out = Product[16:1];
    assign mult_valid_wb = done;
-   assign mult_free = (~counter[3]) & counter[2] & counter[1] & (counter[0]);
+//   assign mult_free = (~state) || ( (~counter[3]) & counter[2] & counter[1] & (counter[0])) || mult_valid_wb;
 endmodule
 
