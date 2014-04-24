@@ -79,6 +79,8 @@ always@(posedge clk or negedge rst_n)
     disable_ins<=1;
    else if(jump_for_pcsel==1)
       disable_ins<=1;
+	else if(jump_for_pcsel==0)
+		disable_ins<=0;
 
 
 
