@@ -63,6 +63,7 @@ always@(posedge clk or negedge rst_n) begin
 	    
 	  end  
 end
+/*//delete because not used
 always@(posedge clk or negedge rst_n)begin
     if(!rst_n)begin
     jump_base_rdy_from_rf<=0;
@@ -70,18 +71,20 @@ always@(posedge clk or negedge rst_n)begin
    end else
    jump_base_rdy_from_rf<=jump_base_rdy_from_rf_buf;
 end
-
+*/
 
 always@(posedge clk or negedge rst_n)
    if(!rst_n)
     disable_ins<=0;
+//if mispredict no need
+	else if(has_mispredict)
+		disable_ins<=0;
    else if(jump_base_rdy_from_rf_0)
     disable_ins<=1;
    else if(jump_for_pcsel==1)
       disable_ins<=1;
 	else if(jump_for_pcsel==0)
-		disable_ins<=0;
-
+	disable_ins<=0;
 
 
 
@@ -99,7 +102,10 @@ wire BsJmp2=disable_ins?0:(instruction2[15:12]==4'b1111)&&(instruction2[0]==1);
 wire BsJmp3=disable_ins?0:(instruction3[15:12]==4'b1111)&&(instruction3[0]==1);
 
 
-
+/*//add signal to clear disable_ins signal
+wire no_jmp;
+assign no_jmp=~(ImJmp0||ImJmp1||ImJmp2||ImJmp3||BsJmp0||BsJmp1||BsJmp2||BsJmp3);
+*/
 
 //assign jump_for_pcsel=(!rst_n)?0:
  //  (wtJumpAddr?0:(jump_base_rdy_from_rf?1:(preJmp?0:(existImdJmp?1:0))));
@@ -131,7 +137,7 @@ wire BsJmp3=disable_ins?0:(instruction3[15:12]==4'b1111)&&(instruction3[0]==1);
  
  end
  */
- assign jump_for_pcsel = (jump_base_rdy_from_rf) ? 1'b1 :
+ assign jump_for_pcsel = (jump_base_rdy_from_rf_buf) ? 1'b1 :
               (stall_for_jump1) ?   1'b1:
  						 (preJmp)				 ? 1'b0 :
  						 (existImdJmp)           ? 1'b1 : 1'b0;
@@ -160,7 +166,7 @@ assign ImJmp_addr=(ImJmp0?(pc+1+{{6{instruction0[11]}},instruction0[11:2]}):
     else
        jump_addr_pc<=jump_addr_pc;
 end*/
-assign jump_addr_pc = (jump_base_rdy_from_rf) ? jump_pc+jump_base_from_rf :
+assign jump_addr_pc = (jump_base_rdy_from_rf_buf) ? jump_pc+jump_base_from_rf :
             (stall_for_jump1)? (BsJmp0?pc:(BsJmp1?(pc+1):(BsJmp2?(pc+2):(pc+3)))):
 					  (preJmp)                    ? 16'b0 :
 					  (existImdJmp)               ? ImJmp_addr : 16'b0;
@@ -242,8 +248,17 @@ always@(posedge clk or negedge rst_n) begin
 
 end//always
 
+
+assign instruction0_j=stall_for_jump?16'b0:(instruction0);
+assign instruction1_j=stall_for_jump?16'b0:(instruction1);
+assign instruction2_j=stall_for_jump?16'b0:(instruction2);
+assign instruction3_j=stall_for_jump?16'b0:(instruction3);
+
+
+/*//delete BsJmp,so that jump can be issued to next stage
 assign instruction0_j=stall_for_jump?16'b0:(BsJmp0?16'b0:instruction0);
 assign instruction1_j=stall_for_jump?16'b0:(BsJmp1?16'b0:instruction1);
 assign instruction2_j=stall_for_jump?16'b0:(BsJmp2?16'b0:instruction2);
 assign instruction3_j=stall_for_jump?16'b0:(BsJmp3?16'b0:instruction3);
+*/
 endmodule

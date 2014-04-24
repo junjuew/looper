@@ -43,14 +43,15 @@ module branchHandler(input clk,
     output [15:0] instruction1,
     output [15:0] instruction2,
     output [15:0] instruction3,
-    output [15:0] brnch_inst0,
-    output [15:0] brnch_inst1,
+    //output [15:0] brnch_inst0,
+   // output [15:0] brnch_inst1,
+   output [3:0] tkn_brnch,
     output [3:0] isImJmp
     );
      
 //internal signals
 wire [3:0] all_nop;
-wire [3:0] isJump,tkn_brnch;
+wire [3:0] isJump;//tkn_brnch;
 reg  [1:0] brnch_cnt;
 
 //wire [15:0] inst0_b,inst1_b,inst2_b,inst3_b;
@@ -214,11 +215,19 @@ always@(posedge clk or negedge rst_n)begin
         brnch_cnt<=2'b00;
     else if(decr_count_from_rob==1 && brnch_cnt>2'b00)begin
     //expected if normal brnch commit,decrease one
-        if(mispred_num==1)
-            brnch_cnt<=brnch_cnt-2'b10;
+		if(mispred_num==1)begin
+           if(brnch_cnt>=2'b10)
+			brnch_cnt<=brnch_cnt-2'b10;
+			else
+			brnch_cnt<=2'b00;
+		end
     //if mispredict rob output decr_count also, if mispred_num==1, we decrease two
-        else
+		else begin
+			if(brnch_cnt>=2'b01)
             brnch_cnt<=brnch_cnt-1;
+			else
+			brnch_cnt<=2'b00;
+		end
     end
     else if((|incr_cnt)&& (brnch_cnt<2'b10))
         brnch_cnt<=brnch_cnt+incr_cnt;
@@ -269,9 +278,11 @@ assign instruction1=(all_nop[2])?16'b0:inst1;
 assign instruction2=(all_nop[1])?16'b0:inst2;
 assign instruction3=(all_nop[0])?16'b0:inst3;
 
+//move this all to branch addr calculator
+/*
 //output branch target address
 assign brnch_inst0=tkn_brnch[3]?inst0:(tkn_brnch[2]?inst1:(tkn_brnch[1]?inst2:(tkn_brnch[0]?inst3:16'b0)));
 assign brnch_inst1=(&tkn_brnch[3:2])?inst1:(((tkn_brnch[3]&tkn_brnch[1])||(&tkn_brnch[2:1]))?inst2:
 (((tkn_brnch[3]&tkn_brnch[0])||(tkn_brnch[2]&tkn_brnch[0])||(&tkn_brnch[1:0]))?inst3:16'b0));
-
+*/
 endmodule

@@ -78,8 +78,9 @@ wire [15:0] brnch_addr_pc0, brnch_addr_pc1, jump_addr_pc,pc_plus4, pc_bhndlr,
             pc,pc_plus1,pc_plus2,pc_plus3,inst0,inst1, inst2, inst3,
             instruction0, instruction1, instruction2,instruction3,
             instruction0_j,instruction1_j,instruction2_j,instruction3_j,
-            brnch_inst0,brnch_inst1;
-wire [3:0]  brnch_pc_sel_from_bhndlr,isImJmp;
+            //brnch_inst0,brnch_inst1;
+			recv_pc0,recv_pc1;
+wire [3:0]  brnch_pc_sel_from_bhndlr,isImJmp,tkn_brnch;
 wire [2:0]  PC_select;
 wire [1:0]  pred_to_pcsel;
 wire [15:0] pc_from_mux;
@@ -154,8 +155,9 @@ branchHandler branchjumpHandler(
     .instruction1(instruction1), 
     .instruction2(instruction2), 
     .instruction3(instruction3),//to output
-    .brnch_inst0(brnch_inst0),
-    .brnch_inst1(brnch_inst1),
+    //.brnch_inst0(brnch_inst0),
+    //.brnch_inst1(brnch_inst1),
+	.tkn_brnch(tkn_brnch),
     .isImJmp(isImJmp)
 );//to calculator
 
@@ -190,11 +192,18 @@ dynBranchPredictor bpred0(
 
 branchAddrCalculator branchAddrCalculator(
     .brnch_pc_sel_from_bhndlr(brnch_pc_sel_from_bhndlr), 
-    .brnch_inst0(brnch_inst0), 
-    .brnch_inst1(brnch_inst1), 
+    //.brnch_inst0(brnch_inst0), 
+    //.brnch_inst1(brnch_inst1), 
+	.inst0(inst0),
+	.inst1(inst1),
+	.inst2(inst2),
+	.inst3(inst3),
+	.tkn_brnch(tkn_brnch),
     .pc(pc),
     .brnch_addr_pc0(brnch_addr_pc0), 
-    .brnch_addr_pc1(brnch_addr_pc1)
+    .brnch_addr_pc1(brnch_addr_pc1),
+	.recv_pc0(recv_pc0),
+	.recv_pc1(recv_pc1)
 );
 
 
@@ -244,8 +253,8 @@ dataout_pack dataout(
     .instruction2(instruction2_j),
     .instruction3(instruction3_j),
     .jump_addr_pc(jump_addr_pc),
-    .brnch_addr_pc0(brnch_addr_pc0),
-    .brnch_addr_pc1(brnch_addr_pc1),
+    .brnch_addr_pc0(recv_pc0),//modified input from brnch addr calculator recv_pc port
+    .brnch_addr_pc1(recv_pc1),
     .pred_to_pcsel(pred_to_pcsel),
     .brnch_pc_sel_from_bhndlr(brnch_pc_sel_from_bhndlr),
     .isImJmp(isImJmp),

@@ -64,7 +64,7 @@ localparam ST=2'b11;
 reg [1:0] predCounter;
 always@(posedge clk or negedge rst_n)begin
     if(!rst_n)
-        predCounter<=ST;
+        predCounter<=WT;
     else if(decr_count_brnch==1)//a branch is committed
     begin
         case(predCounter)
@@ -95,7 +95,7 @@ always@(posedge clk or negedge rst_n)begin
         endcase
     end
     else if(mispredict==1)
-        if(mispred_num==1)begin
+/*       if(mispred_num==1)begin
            if(brnc_pred_log==1)
                case(predCounter)
                    SN:predCounter<=SN;
@@ -110,8 +110,11 @@ always@(posedge clk or negedge rst_n)begin
                     WT:predCounter<=ST;
                     ST:predCounter<=ST;
                 endcase
-        end else begin
-            if(brnc_pred_log==1)
+        end else
+		*/
+		begin
+ 
+		if(brnc_pred_log==1)
                case(predCounter)
                    SN:predCounter<=SN;
                    WN:predCounter<=SN;
