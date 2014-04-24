@@ -52,7 +52,7 @@ module freeList(/*autoarg*/
    generate
       genvar 	     i;
       for(i = 0; i < 64; i = i + 1)
-	begin
+	begin : fi_gen
 	   assign update[i] = (cmt_pos[5:0] > cmt_ptr[5:0]) ? (((i >= cmt_ptr[5:0]) && (i < cmt_pos[5:0])) ? free_pr_value[i-cmt_ptr[5:0]]:6'b0):
 			      (cmt_pos[5:0] < cmt_ptr[5:0]) ? (((i >= cmt_ptr[5:0]) || (i < cmt_pos[5:0])) ? ((i >= cmt_ptr[5:0]) ? free_pr_value[i-cmt_ptr[5:0]]:
 															      free_pr_value[i + 64 - cmt_ptr[5:0]]):6'b0):
@@ -75,7 +75,7 @@ module freeList(/*autoarg*/
    generate
       genvar 	     fifo_en_i;
       for(fifo_en_i = 0; fifo_en_i < 64; fifo_en_i = fifo_en_i + 1)
-      begin
+      begin : fifo_en_gen
 	assign list_commit_en[fifo_en_i] = (cmt_pos[5:0] > cmt_ptr[5:0]) ? (((fifo_en_i >= cmt_ptr[5:0]) && (fifo_en_i < cmt_pos[5:0])) ? 1:0):
 					   (cmt_pos[5:0] < cmt_ptr[5:0]) ? (((fifo_en_i >= cmt_ptr[5:0]) || (fifo_en_i < cmt_pos[5:0])) ? 1:0):
 					   0;
@@ -88,7 +88,7 @@ module freeList(/*autoarg*/
    generate
       genvar 	     fifo_i;
       for(fifo_i = 0; fifo_i < 64; fifo_i = fifo_i + 1)
-	begin
+	begin : fifo_gen
 	   always@(posedge clk, negedge rst_n)
 	     begin
 		if(!rst_n)

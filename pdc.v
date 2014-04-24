@@ -101,7 +101,7 @@ endfunction
    generate
       genvar                                      tpu_lin_i;
       for (tpu_lin_i=0; tpu_lin_i<ISQ_DEPTH; tpu_lin_i=tpu_lin_i+1) 
-        begin
+        begin : tpu_lin_gen
            assign tpu_out[tpu_lin_i][TPU_INST_WIDTH-1:0] = tpu_out_reo_flat[TPU_INST_WIDTH*(tpu_lin_i+1)-1 : TPU_INST_WIDTH*tpu_lin_i];
            assign free_preg[tpu_lin_i][6:0] = fre_preg_out_flat[7*(tpu_lin_i+1)-1 : 7*tpu_lin_i];
         end
@@ -122,7 +122,7 @@ endfunction
    generate
       genvar                                      mult_rdy_i;
       for (mult_rdy_i=0; mult_rdy_i<ISQ_DEPTH; mult_rdy_i=mult_rdy_i+1) 
-        begin
+        begin : mult_rdy_gen
            assign mult_rdy[mult_rdy_i] = fun_rdy_frm_exe[FUN_MULT_BIT] && tpu_out[mult_rdy_i][TPU_BIT_CTRL_MULT] && tpu_out[mult_rdy_i][TPU_BIT_INST_VLD] && tpu_inst_rdy[mult_rdy_i] && tpu_out[mult_rdy_i][TPU_BIT_INST_WAT];
         end
    endgenerate
@@ -130,7 +130,7 @@ endfunction
    generate
       genvar                                      mult_pdc_i;
       for (mult_pdc_i=0; mult_pdc_i<ISQ_DEPTH; mult_pdc_i=mult_pdc_i+1) 
-        begin
+        begin : mult_pdc_gen
            if (mult_pdc_i < ISQ_DEPTH -1 )
              assign mult_out[mult_pdc_i][IS_INST_WIDTH-1:0] = ( mult_rdy[mult_pdc_i] )? reorder(tpu_out[mult_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[mult_pdc_i][6:0]) : mult_out[mult_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line mult_pdc_i == ISQ_DEPTH -1
@@ -159,7 +159,7 @@ endfunction
    generate
       genvar                                      add1_rdy_i;
       for (add1_rdy_i=0; add1_rdy_i<ISQ_DEPTH; add1_rdy_i=add1_rdy_i+1) 
-        begin
+        begin : add1_rdy_gen
            assign add1_rdy[add1_rdy_i] = fun_rdy_frm_exe[FUN_ADD1_BIT] && ( (tpu_out[add1_rdy_i][TPU_BIT_CTRL_ADD] && (add1_rdy_i % 3 == 0)) ||  (tpu_out[add1_rdy_i][TPU_BIT_CTRL_BR:TPU_BIT_CTRL_BR-1] != 2'b00) || tpu_out[add1_rdy_i][TPU_BIT_CTRL_JMP_VLD] ) && tpu_out[add1_rdy_i][TPU_BIT_INST_VLD] && tpu_inst_rdy[add1_rdy_i] && tpu_out[add1_rdy_i][TPU_BIT_INST_WAT];
         end
    endgenerate
@@ -167,7 +167,7 @@ endfunction
    generate
       genvar                                      add1_pdc_i;
       for (add1_pdc_i=0; add1_pdc_i<ISQ_DEPTH; add1_pdc_i=add1_pdc_i+1) 
-        begin
+        begin : add1_pdc_gen
            if (add1_pdc_i < ISQ_DEPTH -1 )
              assign add1_out[add1_pdc_i][IS_INST_WIDTH-1:0] = ( add1_rdy[add1_pdc_i] )? reorder(tpu_out[add1_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add1_pdc_i][6:0]) : add1_out[add1_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line add1_pdc_i == ISQ_DEPTH -1
@@ -197,7 +197,7 @@ endfunction
    generate
       genvar                                      add2_rdy_i;
       for (add2_rdy_i=0; add2_rdy_i<ISQ_DEPTH; add2_rdy_i=add2_rdy_i+1) 
-        begin
+        begin : add2_rdy_gen
            assign add2_rdy[add2_rdy_i] = fun_rdy_frm_exe[FUN_ADD2_BIT] && ( tpu_out[add2_rdy_i][TPU_BIT_CTRL_ADD] && (add2_rdy_i % 3 != 0) ) && tpu_out[add2_rdy_i][TPU_BIT_INST_VLD] && tpu_inst_rdy[add2_rdy_i] && tpu_out[add2_rdy_i][TPU_BIT_INST_WAT];
         end
    endgenerate
@@ -205,7 +205,7 @@ endfunction
    generate
       genvar                                      add2_pdc_i;
       for (add2_pdc_i=0; add2_pdc_i<ISQ_DEPTH; add2_pdc_i=add2_pdc_i+1) 
-        begin
+        begin : add2_pdc_gen
            if (add2_pdc_i < ISQ_DEPTH -1 )
              assign add2_out[add2_pdc_i][IS_INST_WIDTH-1:0] = ( add2_rdy[add2_pdc_i] )? reorder(tpu_out[add2_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[add2_pdc_i][6:0]) : add2_out[add2_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line add2_pdc_i == ISQ_DEPTH -1
@@ -231,7 +231,7 @@ endfunction
    generate
       genvar                                      addr_rdy_i;
       for (addr_rdy_i=0; addr_rdy_i<ISQ_DEPTH; addr_rdy_i=addr_rdy_i+1) 
-        begin
+        begin : addr_rdy_gen
            assign addr_rdy[addr_rdy_i] = fun_rdy_frm_exe[FUN_ADDR_BIT] && tpu_out[addr_rdy_i][TPU_BIT_CTRL_ADDR] && tpu_out[addr_rdy_i][TPU_BIT_INST_VLD] && tpu_inst_rdy[addr_rdy_i] && tpu_out[addr_rdy_i][TPU_BIT_INST_WAT];
         end
    endgenerate
@@ -239,7 +239,7 @@ endfunction
    generate
       genvar                                      addr_pdc_i;
       for (addr_pdc_i=0; addr_pdc_i<ISQ_DEPTH; addr_pdc_i=addr_pdc_i+1) 
-        begin
+        begin : addr_pdc_gen
            if (addr_pdc_i < ISQ_DEPTH -1 )
              assign addr_out[addr_pdc_i][IS_INST_WIDTH-1:0] = ( addr_rdy[addr_pdc_i] )? reorder(tpu_out[addr_pdc_i][TPU_INST_WIDTH -1 : 0], free_preg[addr_pdc_i][6:0]) : addr_out[addr_pdc_i +1][IS_INST_WIDTH-1:0];
            else // the last line addr_pdc_i == ISQ_DEPTH -1

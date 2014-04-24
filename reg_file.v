@@ -56,7 +56,7 @@ module reg_file (
     generate
     genvar reg_idx;
         for(reg_idx = 0; reg_idx < 64; reg_idx = reg_idx + 1)
-        begin
+        begin : reg_idx_gen
             always@(posedge clk or negedge rst_n) begin
                 if(!rst_n) begin
                     reg_file_body[reg_idx] <= 0;

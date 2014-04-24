@@ -59,7 +59,7 @@
    generate
       genvar                                      input_i;
       for (input_i=0; input_i<INST_PORT; input_i=input_i+1) 
-        begin
+        begin : input_gen
            assign inst_in[input_i][INST_WIDTH-1:0] = inst_in_flat[INST_WIDTH*(input_i+1)-1 : INST_WIDTH*input_i];
         end
    endgenerate
@@ -74,7 +74,7 @@
    generate
       genvar                                      prefix_i;
       for (prefix_i=0; prefix_i<ISQ_DEPTH; prefix_i=prefix_i+1) 
-        begin
+        begin : prefix_gen
            assign brn_inst[prefix_i] = (inst_in[prefix_i%INST_PORT][BIT_INST_BRN:BIT_INST_BRN-1]!=2'b00)?1'b1:1'b0;           
            assign isq_lin_in[prefix_i] = { brn_inst[prefix_i], inst_in[prefix_i%INST_PORT][BIT_INST_VLD], inst_in[prefix_i%INST_PORT]};
         end
@@ -87,7 +87,7 @@
    generate
       genvar                                      clr_i;
       for (clr_i=0; clr_i<ISQ_DEPTH; clr_i=clr_i+1) 
-        begin
+        begin : clr_gen
            assign clr_val[clr_i] = 1'b0;
 //           assign set_val[clr_i] = 1'b0;
            assign set_wat[clr_i] = 1'b0;
@@ -103,7 +103,7 @@
    generate
       genvar                                      i;
       for (i=0; i<ISQ_DEPTH; i=i+1) 
-        begin
+        begin : i_gen
            isq_lin #(/*autoinstparam*/
                      // Parameters
                      .INST_WIDTH        (INST_WIDTH),
@@ -132,7 +132,7 @@
    generate
       genvar                                      idx_i;
       for (idx_i=0; idx_i<ISQ_DEPTH; idx_i=idx_i+1) 
-        begin
+        begin : idx_gen
            always @(posedge clk, negedge rst_n)
              begin
                 if (!rst_n)
@@ -151,7 +151,7 @@
    generate
       genvar                                      out_i;
       for (out_i=0; out_i<ISQ_DEPTH; out_i=out_i+1) 
-        begin
+        begin : out_gen
            //append indices at the beginning of inst line!!
            //tpu rely on this property to parse the bus
            assign isq_out_flat[ISQ_LINE_WIDTH*(out_i+1)-1 : ISQ_LINE_WIDTH*out_i] =  { indices[out_i], isq_lin_out[out_i]};

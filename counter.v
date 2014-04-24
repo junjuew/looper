@@ -66,7 +66,7 @@ module counter(/*autoarg*/
    generate
       genvar                                      dec_i;
       for (dec_i=0; dec_i<ISQ_DEPTH / INST_PORT; dec_i=dec_i+1) 
-        begin
+        begin : dec_gen
            assign isq_lin_en[(dec_i+1)* INST_PORT -1 : dec_i * INST_PORT] = {(INST_PORT){cnt_dec[dec_i]}};
         end
    endgenerate

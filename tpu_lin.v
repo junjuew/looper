@@ -216,7 +216,7 @@
    generate
       genvar prv_map_i;
       for (prv_map_i =0 ; prv_map_i<16; prv_map_i=prv_map_i+1)
-      begin
+      begin : prv_map_gen
         assign idi_map[prv_map_i][6:0]=prv_map[7 * (prv_map_i+1)-1: 7*prv_map_i];
     end
    endgenerate
@@ -234,7 +234,7 @@
       genvar                                      map_i;
       //16 logical registers to physical mappings
       for (map_i=0; map_i<16; map_i=map_i+1) 
-        begin
+        begin : map_i_gen
            //possible mapping
            if (map_i ==0)
              assign pos_map[map_i]= {prv_map[TPU_MAP_WIDTH-1:(map_i+1)*7], dst_rdy_in_map, pdst};

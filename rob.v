@@ -399,7 +399,7 @@ ROB per entry:
     generate
     genvar rob_vld_idx;
     for(rob_vld_idx = 0; rob_vld_idx < 64; rob_vld_idx = rob_vld_idx + 1)
-    begin
+    begin : rob_vld_idx_gen
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n)
                 rob_vld[rob_vld_idx] <= 0;
@@ -440,7 +440,7 @@ ROB per entry:
     generate
     genvar rob_done_idx;
     for(rob_done_idx = 0; rob_done_idx < 64; rob_done_idx = rob_done_idx + 1)
-    begin
+    begin : rob_done_idx_gen
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n)
                 rob_done[rob_done_idx] <= 0;
@@ -480,7 +480,7 @@ ROB per entry:
     generate
     genvar rob_brnc_idx;
     for(rob_brnc_idx = 0; rob_brnc_idx < 64; rob_brnc_idx = rob_brnc_idx + 1)
-    begin
+    begin : rob_brnc_idx_gen
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n) begin
                 rob_brnc     [rob_brnc_idx] <= 0;
@@ -560,7 +560,7 @@ ROB per entry:
     generate
     genvar rob_reg_wrt_idx;
     for(rob_reg_wrt_idx = 0; rob_reg_wrt_idx < 64; rob_reg_wrt_idx = rob_reg_wrt_idx + 1)
-    begin
+    begin : rob_reg_wrt_idx_gen
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n) begin
                 rob_reg_wrt[rob_reg_wrt_idx] <= 0;
@@ -614,7 +614,7 @@ ROB per entry:
     generate
     genvar rob_free_preg_idx;
     for(rob_free_preg_idx = 0; rob_free_preg_idx < 64; rob_free_preg_idx = rob_free_preg_idx + 1)
-    begin
+    begin : rob_free_preg_idx_gen
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n) begin
                 rob_free_preg_num[rob_free_preg_idx] <= 0;
@@ -646,7 +646,7 @@ ROB per entry:
     generate
     genvar rob_st_idx;
     for(rob_st_idx = 0; rob_st_idx < 64; rob_st_idx = rob_st_idx + 1)
-    begin
+    begin : rob_st_idx_gen
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n) begin
                 rob_st    [rob_st_idx] <= 0;
@@ -728,7 +728,7 @@ ROB per entry:
     generate
     genvar rob_ld_idx;
     for(rob_ld_idx = 0; rob_ld_idx < 64; rob_ld_idx = rob_ld_idx + 1)
-    begin
+    begin : rob_ld_idx_gen
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n) begin
                 rob_ld_ptr[rob_ld_idx] <= 0;

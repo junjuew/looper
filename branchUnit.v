@@ -139,7 +139,7 @@ module branchUnit(/*autoarg*/
    generate
       genvar i;
       for(i = 0; i < 2; i = i + 1)
-	begin
+	begin : i2_gen
 	   always@(posedge clk,negedge rst_n)
 	     begin
 		if(!rst_n)

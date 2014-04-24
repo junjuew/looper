@@ -131,24 +131,24 @@ module multiplier( mult_op1, mult_op2, mult_out, mult_en, mult_valid_wb, /*mult_
              Mand1 <= 16'h0000;
              Mand2 <= 16'h0000;
           end
-        
-        case (state)
-          1'b0:
-            begin
-               Product[32:17] <= 16'b0;
-               Product[16:1] <= mult_op1;
-               Product[0] <= 1'b0;
-               Mand1 <= mult_op2;
-               Mand2 <= mult_op2 <<1;
-            end        
+        else
+          case (state)
+            1'b0:
+              begin
+                 Product[32:17] <= 16'b0;
+                 Product[16:1] <= mult_op1;
+                 Product[0] <= 1'b0;
+                 Mand1 <= mult_op2;
+                 Mand2 <= mult_op2 <<1;
+              end        
 
-          1'b1:
-            begin
-               Product <= {sum[15],sum[15],sum, Product[16:2]};
-               Mand1<=Mand1;
-               Mand2<=Mand2;
-            end
-        endcase 
+            1'b1:
+              begin
+                 Product <= {sum[15],sum[15],sum, Product[16:2]};
+                 Mand1<=Mand1;
+                 Mand2<=Mand2;
+              end
+          endcase 
 
      end
    

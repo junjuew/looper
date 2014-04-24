@@ -136,7 +136,7 @@ module branch_fifo(/*autoarg*/
    generate
       genvar i;
       for(i = 0; i < 2; i = i + 1)
-	begin
+	begin : fifo_update_gen
 	   always@(posedge clk,negedge rst_n)
 	     begin
 		if(!rst_n)

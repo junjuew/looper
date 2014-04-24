@@ -101,7 +101,7 @@
    generate
       genvar                                      isq_lin_i;
       for (isq_lin_i=0; isq_lin_i<ISQ_DEPTH; isq_lin_i=isq_lin_i+1) 
-        begin
+        begin : isq_lin_gen
            assign isq_lin[isq_lin_i][ISQ_LINE_WIDTH-1:0] = isq_out_flat[ISQ_LINE_WIDTH*(isq_lin_i+1)-1 : ISQ_LINE_WIDTH*isq_lin_i];
         end
    endgenerate
@@ -115,7 +115,7 @@
    generate
       genvar                                      out_i;
       for (out_i=0; out_i<ISQ_DEPTH; out_i=out_i+1) 
-        begin
+        begin : out_gen
            //tpu output lines after priority routing
            // if arch == 0, then normal order 0--63
            // else 32 -- 63, 0 -- 31
@@ -140,7 +140,7 @@
    generate
       genvar                 tpu_lin_idx;
       for (tpu_lin_idx=0; tpu_lin_idx<ISQ_DEPTH; tpu_lin_idx=tpu_lin_idx+1)
-        begin
+        begin : tpu_lin_idx_gen
            if (0 == tpu_lin_idx)
               //~arch true if top segment is arch
              assign prv_map[tpu_lin_idx][TPU_MAP_WIDTH-1:0]= (~arch)? top_hed_map[TPU_MAP_WIDTH-1:0]: cur_map[ISQ_DEPTH-1][TPU_MAP_WIDTH-1:0];
@@ -207,7 +207,7 @@
    generate
       genvar                                      inst_vld_i;
       for (inst_vld_i=0; inst_vld_i<ISQ_DEPTH; inst_vld_i=inst_vld_i+1) 
-        begin
+        begin : inst_vld_gen
            assign inst_vld[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_VLD];
            assign inst_wat[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_WAT];
            assign inst_brn_wat[inst_vld_i]= isq_lin[inst_vld_i][BIT_INST_BRN_WAT];
@@ -224,7 +224,7 @@
    generate
       genvar bf_i;
       for (bf_i=0; bf_i<16; bf_i= bf_i +1)
-        begin
+        begin : bf_gen
            //before middle segment is idx 31
            assign bf_mid_map_rdy[bf_i]  = cur_map[ISQ_DEPTH/2-1][7*(bf_i+1)-1];
            //before top segment is idx 63

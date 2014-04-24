@@ -153,9 +153,9 @@
    wire[ISQ_DEPTH-1:0]                                                       prg_dst_rdy_en[3:0];   
    generate
       genvar                                                                     prg_i;
-      begin
+      begin 
          for (prg_i=0; prg_i<4; prg_i=prg_i+1)
-           begin
+           begin : prg_gen
               assign prg_rdy[prg_i][PRG_SIG_WIDTH-1:0] = prg_rdy_frm_exe[PRG_SIG_WIDTH*(prg_i+1)-1:PRG_SIG_WIDTH*prg_i];
               //if valid, decode; otherwise set 0
               assign prg_dst_rdy_en[prg_i][ISQ_DEPTH-1:0] = ( prg_rdy[prg_i][PRG_SIG_WIDTH-1] )? (1<<prg_rdy[prg_i][PRG_SIG_WIDTH-2:0]) : {ISQ_DEPTH{1'b0}};
@@ -184,9 +184,9 @@
    wire [ISQ_DEPTH-1:0] fls_inst_below;
    generate
       genvar            fls_inst_i;
-      begin
+      begin 
          for (fls_inst_i=0; fls_inst_i<ISQ_DEPTH;fls_inst_i=fls_inst_i+1)
-           begin
+           begin : fls_inst_gen
               //arch=0, flsh all inst >= fls_inst
               //arch=1, if fls_inst<=31, keep inst 32-63 and inst < fls_inst, flsh (inst<=31 and inst>=fls_inst)
               //arch=1, if fls_inst > 31, fls inst 0-31 and inst>=fls_inst

@@ -35,7 +35,7 @@ module ALU( alu_op1, alu_op2, alu_mode, alu_en, alu_inv_Rt, alu_out);
    
    
    //////// Change this to combinational logic and for multiplier hold all the controll signal
-   always @(*) begin
+   always @(alu_en, alu_mode) begin
       if(alu_en == 1'b1) 
         begin
          casex(alu_mode)
@@ -62,7 +62,7 @@ module ALU( alu_op1, alu_op2, alu_mode, alu_en, alu_inv_Rt, alu_out);
 generate
    genvar sra_i;
    for (sra_i=0;sra_i<16; sra_i=sra_i+1)
-     begin
+     begin : sra_gen
         assign pos_sra[sra_i][15:0] = { {sra_i{alu_op1[15]}}, {alu_op1[15:sra_i]} };
      end
 endgenerate
