@@ -4,10 +4,14 @@
 int main()
 {
   int fd;
-  char buf[5]="abcd\n";
-
+  //  char buf[5]="start\n";
+  int i=0;
+  
   fd = open("/dev/ttyS0", O_RDWR);
-  write(fd, &buf, 5);
+  for (i=0;i<50;i++){
+    write(fd, &i, sizeof(int));
+  }
+
   close(fd);
   perror("perror output:");
 
