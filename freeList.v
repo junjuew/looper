@@ -2,6 +2,7 @@ module freeList(/*autoarg*/
    // Outputs
    pr_num_out0, pr_num_out1, pr_num_out2, pr_num_out3, list_empty,
    curr_pos,
+
    // Inputs
    free_pr_num_in0, free_pr_num_in1, free_pr_num_in2, free_pr_num_in3,
    flush_pos, flush, pr_need_inst_in, free_pr_num, clk, rst_n, stall
