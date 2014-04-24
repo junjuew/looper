@@ -113,20 +113,31 @@ wire [3:0] exd_cnt;
 assign exd_cnt={(brnch_before_inst0>=2'b10),(brnch_before_inst1>=2'b10),
                   (brnch_before_inst2>=2'b10),(brnch_before_inst3>=2'b10)};
 wire [3:0] third_brnch;
+//modify third_brnch signal as below because the original way will hold when
+//2nd brnch is the 1st instruction
+assign third_brnch[3]=((brnch_cnt+brnch_pc_sel_from_bhndlr[3])>=3'b011);
+assign third_brnch[2]=((third_brnch[3]+brnch_pc_sel_from_bhndlr[2])>=3'b011);
+assign third_brnch[1]=((third_brnch[2]+brnch_pc_sel_from_bhndlr[1])>=3'b011);
+assign third_brnch[0]=((third_brnch[1]+brnch_pc_sel_from_bhndlr[0])>=3'b011);
+
+
+/*
 assign third_brnch[3]=exd_cnt[3]&&brnch_pc_sel_from_bhndlr[3];
 assign third_brnch[2]=(exd_cnt[2]&&brnch_pc_sel_from_bhndlr[2])||third_brnch[3];
 assign third_brnch[1]=(exd_cnt[1]&&brnch_pc_sel_from_bhndlr[1])||third_brnch[2];
 assign third_brnch[0]=(exd_cnt[0]&&brnch_pc_sel_from_bhndlr[0])||third_brnch[1] ;
-
+*/
 reg hold_for_brnch;
 always@(posedge clk or negedge rst_n)begin
   if(!rst_n)
     hold_for_brnch<=0;
+  else if(decr_count_from_rob)
+	  hold_for_brnch<=0;
   else if(|third_brnch==1'b1)
     hold_for_brnch<=1;
   else if(&exd_cnt==0)
     hold_for_brnch<=0;
-  else
+	else
     hold_for_brnch<=hold_for_brnch;
 end
 /*///limit number of brnches
