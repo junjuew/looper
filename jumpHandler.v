@@ -196,6 +196,7 @@ always@(posedge clk or negedge rst_n) begin
 		   jump_pc<=jump_pc;
 		   //disable_ins<=1;
 	      //while waiting addr, keep checking rdy signal
+		  //modified trigger signal so that output is nop
 	      if(jump_base_rdy_from_rf_0)begin//once rdy, clear stall,wt
 		   stall_for_jump<=0;
 		   wtJumpAddr<=0;
@@ -249,10 +250,10 @@ always@(posedge clk or negedge rst_n) begin
 end//always
 
 
-assign instruction0_j=stall_for_jump?16'b0:(instruction0);
-assign instruction1_j=stall_for_jump?16'b0:(instruction1);
-assign instruction2_j=stall_for_jump?16'b0:(instruction2);
-assign instruction3_j=stall_for_jump?16'b0:(instruction3);
+assign instruction0_j=(stall_for_jump||jump_base_rdy_from_rf_buf)?16'b0:(instruction0);
+assign instruction1_j=(stall_for_jump||jump_base_rdy_from_rf_buf)?16'b0:(instruction1);
+assign instruction2_j=(stall_for_jump||jump_base_rdy_from_rf_buf)?16'b0:(instruction2);
+assign instruction3_j=(stall_for_jump||jump_base_rdy_from_rf_buf)?16'b0:(instruction3);
 
 
 /*//delete BsJmp,so that jump can be issued to next stage

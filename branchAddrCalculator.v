@@ -78,8 +78,8 @@ always@(*)begin
 				recv_pc0=pc+2;
 			end
 			else begin
-			brnch_addr_pc0=pc+2;
-			brnch_addr_pc0=brnch_target_addr1;
+				brnch_addr_pc0=pc+2;
+				recv_pc0=brnch_target_addr1;
 			end
 
 		end else if(brnch_pc_sel_from_bhndlr[1]==1)begin
@@ -89,7 +89,7 @@ always@(*)begin
 			end
 			else begin
 				brnch_addr_pc0=pc+3;
-				brnch_addr_pc0=brnch_target_addr2;
+				recv_pc0=brnch_target_addr2;
 			end
 		end else if(brnch_pc_sel_from_bhndlr[0]==1)begin
 			if(tkn_brnch[0]==1)begin
@@ -98,7 +98,7 @@ always@(*)begin
 			end
 			else begin
 				brnch_addr_pc0=pc+4;
-				brnch_addr_pc0=brnch_target_addr3;
+				recv_pc0=brnch_target_addr3;
 			end
 		end 
 
