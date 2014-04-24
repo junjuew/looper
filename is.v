@@ -142,6 +142,8 @@
    
    //pdc
    wire [ISQ_DEPTH-1:0]                                       pdc_clr_inst_wat;
+   wire [IS_INST_WIDTH-1:0]                                   mul_ins_to_rf_pdc, alu1_ins_to_rf_pdc, alu2_ins_to_rf_pdc, adr_ins_to_rf_pdc;
+   
 
 
    /*************** handle physical register ready *************/
@@ -168,7 +170,7 @@
    // prg_dst_rdy_en have the same behavior as dst_reg_rdy
    assign dst_reg_rdy= prg_dst_rdy_en[3][ISQ_DEPTH-1:0] | prg_dst_rdy_en[2][ISQ_DEPTH-1:0] | prg_dst_rdy_en[1][ISQ_DEPTH-1:0] | prg_dst_rdy_en[0][ISQ_DEPTH-1:0];
 
-
+   
 
    /*********** handle branch cmt *********/
 
@@ -198,6 +200,32 @@
    
    // if valid, then flsh the branch inst and all insts below
    assign fls_inst[ISQ_DEPTH-1:0] = (fls_frm_rob[BRN_WIDTH-1])? fls_inst_below:{ISQ_DEPTH{1'b0}};
+
+
+   /*********** handle insts immediately after branch *********/
+   // when branch misprediction happen, need to flush out
+   // every inst after brn in the same cycle
+   reg [BRN_WIDTH:0]                                               br_snt;
+   wire                                              br_out;
+   assign br_out = (alu1_ins_to_rf_pdc[IS_BIT_CTRL_BR:IS_BIT_CTRL_BR-1] != 2'b00)? 1'b1:1'b0;
+   wire                                              br_prv;
+   always @(posedge clk, negedge rst_n)
+     begin
+        if (~rst_n)
+          br_snt <=7'h00;
+        else if (br_out)
+          br_snt<= {br_out, alu1_ins_to_rf_pdc[IS_BIT_IDX:IS_BIT_IDX-ISQ_IDX_BITS_NUM+1]};
+     end
+
+   //when brn mispredict, flsh those inst larger than brn idx
+   // in the same cycle
+   assign mul_ins_to_rf = (1'b1==fls_inst[ mul_ins_to_rf_pdc[IS_BIT_IDX:IS_BIT_IDX-ISQ_IDX_BITS_NUM+1] ] && br_snt[6])? 66'h0:mul_ins_to_rf_pdc;
+   assign alu1_ins_to_rf = (1'b1==fls_inst[ alu1_ins_to_rf_pdc[IS_BIT_IDX:IS_BIT_IDX-ISQ_IDX_BITS_NUM+1] ] && br_snt[6])? 66'h0:alu1_ins_to_rf_pdc;
+   assign alu2_ins_to_rf = (1'b1==fls_inst[ alu2_ins_to_rf_pdc[IS_BIT_IDX:IS_BIT_IDX-ISQ_IDX_BITS_NUM+1] ] && br_snt[6])? 66'h0:alu2_ins_to_rf_pdc;
+   assign adr_ins_to_rf = (1'b1==fls_inst[ adr_ins_to_rf_pdc[IS_BIT_IDX:IS_BIT_IDX-ISQ_IDX_BITS_NUM+1] ] && br_snt[6])? 66'h0:adr_ins_to_rf_pdc;   
+   
+   
+          
 
    
    
@@ -311,10 +339,10 @@
    is_pdc (/*autoinst*/
            // Outputs
            .pdc_clr_inst_wat            (pdc_clr_inst_wat[ISQ_DEPTH-1:0]),
-           .mul_ins_to_rf               (mul_ins_to_rf[IS_INST_WIDTH-1:0]),
-           .alu1_ins_to_rf              (alu1_ins_to_rf[IS_INST_WIDTH-1:0]),
-           .alu2_ins_to_rf              (alu2_ins_to_rf[IS_INST_WIDTH-1:0]),
-           .adr_ins_to_rf               (adr_ins_to_rf[IS_INST_WIDTH-1:0]),
+           .mul_ins_to_rf_pdc           (mul_ins_to_rf_pdc[IS_INST_WIDTH-1:0]),
+           .alu1_ins_to_rf_pdc          (alu1_ins_to_rf_pdc[IS_INST_WIDTH-1:0]),
+           .alu2_ins_to_rf_pdc          (alu2_ins_to_rf_pdc[IS_INST_WIDTH-1:0]),
+           .adr_ins_to_rf_pdc           (adr_ins_to_rf_pdc[IS_INST_WIDTH-1:0]),
            // Inputs
            .fun_rdy_frm_exe             (fun_rdy_frm_exe[3:0]),
            .tpu_out_reo_flat            (tpu_out_reo_flat[TPU_INST_WIDTH*ISQ_DEPTH-1:0]),

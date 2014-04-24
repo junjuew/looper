@@ -14,8 +14,8 @@
   ////////////////////////
   module pdc(/*autoarg*/
    // Outputs
-   pdc_clr_inst_wat, mul_ins_to_rf, alu1_ins_to_rf, alu2_ins_to_rf,
-   adr_ins_to_rf,
+   pdc_clr_inst_wat, mul_ins_to_rf_pdc, alu1_ins_to_rf_pdc,
+   alu2_ins_to_rf_pdc, adr_ins_to_rf_pdc,
    // Inputs
    fun_rdy_frm_exe, tpu_out_reo_flat, tpu_inst_rdy, fre_preg_out_flat
    );
@@ -66,17 +66,17 @@
    output wire [ISQ_DEPTH-1:0]                 pdc_clr_inst_wat;
 
    //output instruction to rf stage
-   output wire [IS_INST_WIDTH -1 :0]          mul_ins_to_rf;
-   output wire [IS_INST_WIDTH -1 :0]          alu1_ins_to_rf;
-   output wire [IS_INST_WIDTH -1 :0]          alu2_ins_to_rf;
-   output wire [IS_INST_WIDTH -1 :0]          adr_ins_to_rf;         
+   output wire [IS_INST_WIDTH -1 :0]          mul_ins_to_rf_pdc;
+   output wire [IS_INST_WIDTH -1 :0]          alu1_ins_to_rf_pdc;
+   output wire [IS_INST_WIDTH -1 :0]          alu2_ins_to_rf_pdc;
+   output wire [IS_INST_WIDTH -1 :0]          adr_ins_to_rf_pdc;         
    
    
    //wires decoding flat line from tpu
    wire [TPU_INST_WIDTH-1:0]                                        tpu_out[ISQ_DEPTH-1:0];
    wire [6:0]                                        free_preg[ISQ_DEPTH-1:0];   
-   
 
+   
 
 //reorder output packet format
 function[IS_INST_WIDTH-1:0]  reorder;
@@ -138,7 +138,7 @@ endfunction
         end
    endgenerate
    // the final output value is output from 0
-   assign mul_ins_to_rf[IS_INST_WIDTH -1 :0] = mult_out[0][IS_INST_WIDTH -1 :0];
+   assign mul_ins_to_rf_pdc[IS_INST_WIDTH -1 :0] = mult_out[0][IS_INST_WIDTH -1 :0];
    
    
    //////////////////////////
@@ -175,7 +175,7 @@ endfunction
         end
    endgenerate
    // the final output value is output from 0
-   assign alu1_ins_to_rf[IS_INST_WIDTH -1 :0] = add1_out[0][IS_INST_WIDTH -1 :0];
+   assign alu1_ins_to_rf_pdc[IS_INST_WIDTH -1 :0] = add1_out[0][IS_INST_WIDTH -1 :0];
 
 
    
@@ -213,7 +213,7 @@ endfunction
         end
    endgenerate
    // the final output value is output from 0
-   assign alu2_ins_to_rf[IS_INST_WIDTH -1 :0] = add2_out[0][IS_INST_WIDTH -1 :0];
+   assign alu2_ins_to_rf_pdc[IS_INST_WIDTH -1 :0] = add2_out[0][IS_INST_WIDTH -1 :0];
 
 
    //////////////////////////
@@ -247,7 +247,7 @@ endfunction
         end
    endgenerate
    // the final output value is output from 0
-   assign adr_ins_to_rf[IS_INST_WIDTH -1 :0] = addr_out[0][IS_INST_WIDTH -1 :0];
+   assign adr_ins_to_rf_pdc[IS_INST_WIDTH -1 :0] = addr_out[0][IS_INST_WIDTH -1 :0];
 
 
 
@@ -257,10 +257,10 @@ endfunction
    wire[ISQ_DEPTH -1 :0]  clr_inst_wat_add2;
    wire [ISQ_DEPTH -1 :0] clr_inst_wat_addr;
    
-   assign clr_inst_wat_mult[ISQ_DEPTH -1 :0] = (mul_ins_to_rf[IS_BIT_INST_VLD])? (1<<mul_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
-   assign clr_inst_wat_add1[ISQ_DEPTH -1 :0] = (alu1_ins_to_rf[IS_BIT_INST_VLD])? (1<<alu1_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
-   assign clr_inst_wat_add2[ISQ_DEPTH -1 :0] = (alu2_ins_to_rf[IS_BIT_INST_VLD])? (1<<alu2_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
-   assign clr_inst_wat_addr[ISQ_DEPTH -1 :0] = (adr_ins_to_rf[IS_BIT_INST_VLD])? (1<<adr_ins_to_rf[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};   
+   assign clr_inst_wat_mult[ISQ_DEPTH -1 :0] = (mul_ins_to_rf_pdc[IS_BIT_INST_VLD])? (1<<mul_ins_to_rf_pdc[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
+   assign clr_inst_wat_add1[ISQ_DEPTH -1 :0] = (alu1_ins_to_rf_pdc[IS_BIT_INST_VLD])? (1<<alu1_ins_to_rf_pdc[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
+   assign clr_inst_wat_add2[ISQ_DEPTH -1 :0] = (alu2_ins_to_rf_pdc[IS_BIT_INST_VLD])? (1<<alu2_ins_to_rf_pdc[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};
+   assign clr_inst_wat_addr[ISQ_DEPTH -1 :0] = (adr_ins_to_rf_pdc[IS_BIT_INST_VLD])? (1<<adr_ins_to_rf_pdc[IS_BIT_IDX: IS_BIT_IDX - (ISQ_IDX_BITS_NUM -1) ]):{(ISQ_DEPTH){1'b0}};   
    //or these signals to get a sum of what instrcutions' wait to set in one time instance
    assign pdc_clr_inst_wat[ISQ_DEPTH -1 :0] = clr_inst_wat_mult[ISQ_DEPTH -1:0] |  clr_inst_wat_add1[ISQ_DEPTH -1:0] |  clr_inst_wat_add2[ISQ_DEPTH -1:0] |  clr_inst_wat_addr[ISQ_DEPTH -1:0];
 

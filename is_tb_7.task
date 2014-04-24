@@ -1,0 +1,110 @@
+/** branch instruction, test mis prediction. need to flsh inst in the same cycle **/
+@(posedge clk);
+$display("");        
+$display("%g complex test No.6. check if mis prediction will flush immediate next insts ", $time);
+rst_n=0;
+prg_rdy_frm_exe=0;
+cmt_frm_rob=0;
+fls_frm_rob=0;
+pr_number=64;
+
+/************** load instructions with dependency ***********/
+@(posedge clk);
+rst_n=1;
+$display("%g  ============= start loading in next cycle  ==========", $time);
+
+
+// first need to load some alu instructions
+//r0 = r1 + r2
+clear();
+load(0);
+
+inst_valid=1;
+Rs_valid_bit=1;
+Rs=1;
+Rd_valid_bit=1;
+Rd=0;
+Rt_valid_bit=1;
+Rt=2;
+ALU_to_adder=1;
+pr_valid=1;
+pr_number=pr_number-1;        
+load(1);
+
+// load branch inst
+inst_valid=1;
+Rs_valid_bit=1;
+Rs=1;
+Rd_valid_bit=0;
+Rd=0;
+Rt_valid_bit=1;
+Rt=2;
+brn=2'b01;
+ALU_to_adder=0;        
+pr_valid=1;
+pr_number=pr_number-1;
+load(2);
+
+// load more alu insts
+inst_valid=1;
+Rs_valid_bit=1;
+Rs=1;
+Rd_valid_bit=1;
+Rd=0;
+Rt_valid_bit=1;
+Rt=2;
+ALU_to_adder=1;                
+pr_valid=1;
+pr_number=pr_number-1;        
+load(3);
+
+// flsh such branch
+
+@(posedge clk);
+
+clear();
+
+// first need to load some alu instructions
+//r0 = r1 + r2
+clear();
+inst_valid=1;
+Rs_valid_bit=1;
+Rs=1;
+Rd_valid_bit=1;
+Rd=0;
+Rt_valid_bit=1;
+Rt=2;
+ALU_to_adder=1;
+RegWr=1;
+pr_valid=1;
+pr_number=pr_number-1;
+load(0);
+
+clear();   
+inst_valid=1;
+Rs_valid_bit=1;
+Rs=1;
+Rd_valid_bit=1;
+Rd=0;
+Rt_valid_bit=1;
+Rt=2;
+ALU_to_adder=1;
+pr_valid=1;
+pr_number=pr_number-1;        
+load(1);
+
+clear();   
+load(2);
+load(3);
+
+@(posedge clk);
+clear();
+load(0);
+load(1);
+load(2);
+load(3);
+$display("%g ===try to flush such branch", $time);
+fls_frm_rob = {1'b1, 6'h2};
+
+
+repeat(4) @(posedge clk);
