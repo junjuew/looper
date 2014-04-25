@@ -241,6 +241,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                    .inst_if_id_in(inst_to_dec),
                    .recv_pc_if_id_in(recv_pc_to_dec),
                    .pred_result_if_id_in(pred_result_to_dec),
+				   .mis_pred(mis_pred_ROB_out),
                    //output
                    .pc_if_id_out(pc_if_id_out),
                    .inst_if_id_out(inst_if_id_out), 
@@ -276,6 +277,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                    .lbd_state_id_al_in(lbd_state_out_to_AL),
                    .fnsh_unrll_id_al_in(fnsh_unrll_out_to_AL),
                    .loop_strt_id_al_in(loop_strt_out_to_AL),
+				   .mis_pred(mis_pred_ROB_out),
 
                    // output
                    .inst0_id_al_out(inst0_id_al_out), 

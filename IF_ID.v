@@ -15,6 +15,7 @@
 module IF_ID (
     input clk, 
     input rst_n,
+	input mis_pred,
 
     
     input  [63:0]          pc_if_id_in,             // pc_to_dec
@@ -35,10 +36,10 @@ module IF_ID (
     wire enable;   // ~stall
     assign enable = ~stall;
     //data
-    rf_enable pc           [63:0]    ( .q(pc_if_id_out), .d(pc_if_id_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable inst         [63:0]    ( .q(inst_if_id_out), .d(inst_if_id_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable recv_pc      [63:0]    ( .q(recv_pc_if_id_out), .d(recv_pc_if_id_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
-    rf_enable pred_result  [3:0]    ( .q(pred_result_if_id_out), .d(pred_result_if_id_in), .wrt_en(enable), .clk(clk), .rst_n(
+    rf_enable  pc           [63:0]    ( .q(pc_if_id_out), .d(pc_if_id_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_en_flsh inst         [63:0]    ( .q(inst_if_id_out), .d(inst_if_id_in), .wrt_en(enable), .flush(mis_pred), .clk(clk), .rst_n(rst_n));
+    rf_enable  recv_pc      [63:0]    ( .q(recv_pc_if_id_out), .d(recv_pc_if_id_in), .wrt_en(enable), .clk(clk), .rst_n(rst_n));
+    rf_enable  pred_result  [3:0]     ( .q(pred_result_if_id_out), .d(pred_result_if_id_in), .wrt_en(enable), .clk(clk), .rst_n(
 rst_n));
 
 

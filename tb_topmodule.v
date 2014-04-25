@@ -111,7 +111,7 @@ module tb_topmodule();
 	     
 	     $display("the value input into reg0 is %x, the input into reg2 is %x \n" ,DUT.al_DUT.br0.fifo_update_val[0],DUT.al_DUT.br0.fifo_update_val[1]);
 	     $display("the enable signal 0 is %b, the enable signal 1 is %b",DUT.al_DUT.br0.fifo_enable[0],DUT.al_DUT.br0.fifo_enable[1]);
-	     #10;
+	     #5;
 	     $display("%t,the content in reg0 is %x, the content in reg1 is %x\n",$time,DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
 	     $display("%t, store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",$time,DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
 	     
@@ -128,7 +128,7 @@ module tb_topmodule();
 	$display("head is %b, tail is %b",DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
 	$display("the content in reg0 is %x, the content in reg1 is %x\n",DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
 	$display("store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
-	#10;
+	#5;
 	$display("%t,head is %b, tail is %b",$time,DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
 	$display("%t,the content in reg0 is %x, the content in reg1 is %x\n",$time,DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
 	$display("%t, store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",$time,DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
@@ -220,7 +220,7 @@ module tb_topmodule();
  
     
    initial begin
-      #1000;
+      #5000;
 /* -----\/----- EXCLUDED -----\/-----
       $monitor ("mult_enable_to_is:%b mult_done: %b mult_value:%x", DUT.mult_rdy_is_rf, DUT.mult_valid_ex_out, DUT.mult_data_ex_out);
  -----/\----- EXCLUDED -----/\----- */
