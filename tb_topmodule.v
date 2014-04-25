@@ -40,10 +40,12 @@ module tb_topmodule();
    end
    
    
+/* -----\/----- EXCLUDED -----\/-----
    always@(posedge clk)begin
       #2;
       
       
+/-* -----\/----- EXCLUDED -----\/-----
       $display("%t, IF: instruction0 is %x,instruction1 is %x,instruction2 is %x,instruction3 is %x\n",$time,DUT.inst_to_dec[63:48],DUT.inst_to_dec[47:32],DUT.inst_to_dec[31:16],DUT.inst_to_dec[15:0]);
       $display("%t, ID: decode inst0 out is %b %b %b %b %b\n",$time,DUT.dcd_inst1_out_to_AL[65:64],DUT.dcd_inst1_out_to_AL[63:48],DUT.dcd_inst1_out_to_AL[47:32],DUT.dcd_inst1_out_to_AL[31:16],DUT.dcd_inst1_out_to_AL[15:0]);
       
@@ -62,17 +64,19 @@ module tb_topmodule();
       
       //$display("%t, SQ:insert signal is %b",$time, DUT.top_level_WB_DUT.sq.insert);
       //$display("%t, SQ:first is %b",$time, DUT.top_level_WB_DUT.sq.update);
-/* -----\/----- EXCLUDED -----\/-----
+/-* -----\/----- EXCLUDED -----\/-----
       
       
       
       $display("%t, LQ:the 0 entry is %x, the 1 entry is %x\n",$time,DUT.top_level_WB_DUT.lq.ld_entry[0][41:0],DUT.top_level_WB_DUT.lq.ld_entry[1][41:0]);
- -----/\----- EXCLUDED -----/\----- */
+ -----/\----- EXCLUDED -----/\----- *-/
       
       
       $display("///////////////////////////////////////////////////////////////////////////////////\n");
+ -----/\----- EXCLUDED -----/\----- *-/
 
    end // always@ (posedge clk)
+ -----/\----- EXCLUDED -----/\----- */
    
 
 
@@ -90,8 +94,46 @@ module tb_topmodule();
      end
 
  -----/\----- EXCLUDED -----/\----- */
+
+
+
+   always@(posedge clk)
+     begin
+	if(DUT.al_DUT.br0.brnc_count != 2'b00)
+	  begin
+	     $display("///////////////////////////branch come in////////////////////////////\n");
+	     $display("time is %t\n",$time);
+	     $display("the current position is %x\n",DUT.al_DUT.br0.curr_pos);
+	     
+	     $display("the comming brcn signal is %b\n",{DUT.al_DUT.br0.brch3,DUT.al_DUT.br0.brch2,DUT.al_DUT.br0.brch1,DUT.al_DUT.br0.brch0});
+	     $display("the comming index is %d\n",DUT.al_DUT.br0.nxt_indx);
+	     $display("head is %b, tail is %b\n",DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
+	     
+	     $display("the value input into reg0 is %x, the input into reg2 is %x \n" ,DUT.al_DUT.br0.fifo_update_val[0],DUT.al_DUT.br0.fifo_update_val[1]);
+	     $display("the enable signal 0 is %b, the enable signal 1 is %b",DUT.al_DUT.br0.fifo_enable[0],DUT.al_DUT.br0.fifo_enable[1]);
+	     #10;
+	     $display("%t,the content in reg0 is %x, the content in reg1 is %x\n",$time,DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
+	     $display("%t, store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",$time,DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
+	     
+	  end
+	
+     end // always@ (DUT.al_DUT.br0.brch0,DUT.al_DUT.br0.brch1,DUT.al_DUT.br0.brch2,DUT.al_DUT.br0.brch3)
+
+   always@(posedge DUT.al_DUT.br0.cmt_brch,posedge DUT.al_DUT.br0.mis_pred)
+     begin
+	$display("////////////////////////////mispred or cmt//////////////////////////////\n");
+	$display("time is %t\n",$time);
+	$display("the cmt signal is %b, the mis_pred signal is %b\n",DUT.al_DUT.br0.cmt_brch,DUT.al_DUT.br0.mis_pred);
+	$display("the cmt index is %d, the mis index is %d\n",DUT.al_DUT.br0.cmt_brch_indx,DUT.al_DUT.br0.brch_mis_indx);
+	$display("head is %b, tail is %b",DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
+	$display("the content in reg0 is %x, the content in reg1 is %x\n",DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
+	$display("store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
+	#10;
+	$display("%t,head is %b, tail is %b",$time,DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
+	$display("%t,the content in reg0 is %x, the content in reg1 is %x\n",$time,DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
+	$display("%t, store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",$time,DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
+     end // always@ (posedge DUT.al_DUT.br0.cmt_brch,posedge DUT.al_DUT.br0.mis_ped)
    
-           
 /* -----\/----- EXCLUDED -----\/-----
    end // always@ (posedge clk)
    
@@ -145,6 +187,8 @@ module tb_topmodule();
 
    end // initial begin
 
+
+
    
 
 /*
@@ -177,11 +221,14 @@ module tb_topmodule();
     
    initial begin
       #1000;
+/* -----\/----- EXCLUDED -----\/-----
       $monitor ("mult_enable_to_is:%b mult_done: %b mult_value:%x", DUT.mult_rdy_is_rf, DUT.mult_valid_ex_out, DUT.mult_data_ex_out);
+ -----/\----- EXCLUDED -----/\----- */
       $finish;
       
    end
 
+/* -----\/----- EXCLUDED -----\/-----
 
    //snapshot functions for issue stage output   
    task snapshot;
@@ -202,6 +249,7 @@ module tb_topmodule();
      begin
         snapshot();
      end
+ -----/\----- EXCLUDED -----/\----- */
    
    
    

@@ -35,9 +35,9 @@ module branchUnit(/*autoarg*/
    wire [1:0] 	     brnc_count;
    
    
-   assign indx1 = nxt_indx + 1;
-   assign indx2 = nxt_indx + 2;
-   assign indx3 = nxt_indx + 3;
+   assign indx1 = nxt_indx[5:0] + 1;
+   assign indx2 = nxt_indx[5:0] + 2;
+   assign indx3 = nxt_indx[5:0] + 3;
    
    
    assign curr_pos1 = curr_pos + pr_need_inst[0];
@@ -62,7 +62,7 @@ module branchUnit(/*autoarg*/
 	fifo_update_val[0] = 13'b0;
 	fifo_update_val[1] = 13'b0;
 	if(brch0)
-	  fifo_update_val[tail] = {nxt_indx,curr_pos};
+	  fifo_update_val[tail] = {nxt_indx[5:0],curr_pos};
 	else if(brch1)
 	  fifo_update_val[tail] = {indx1,curr_pos1};
 	else if(brch2)
