@@ -1,0 +1,22 @@
+# Date: Thu Apr 24 23:13:44 2014
+
+SET addpads = false
+SET asysymbol = true
+SET busformat = BusFormatAngleBracketNotRipped
+SET createndf = false
+SET designentry = Verilog
+SET device = xc5vlx110t
+SET devicefamily = virtex5
+SET flowvendor = Foundation_ISE
+SET formalverification = false
+SET foundationsym = false
+SET implementationfiletype = Ngc
+SET package = ff1136
+SET removerpms = false
+SET simulationfiles = Behavioral
+SET speedgrade = -1
+SET verilogsim = true
+SET vhdlsim = true
+SET workingdirectory = ./tmp/
+
+# CRC: 8ac9a830

@@ -1,0 +1,15 @@
+# Output products list for <looper_dmemory>
+_xmsgs\pn_parser.xmsgs
+blk_mem_gen_ds512.pdf
+blk_mem_gen_readme.txt
+looper_dmemory.asy
+looper_dmemory.gise
+looper_dmemory.ngc
+looper_dmemory.v
+looper_dmemory.veo
+looper_dmemory.vhd
+looper_dmemory.vho
+looper_dmemory.xco
+looper_dmemory.xise
+looper_dmemory_flist.txt
+looper_dmemory_xmdf.tcl
