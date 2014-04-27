@@ -467,7 +467,33 @@ module ID_top(
 				.bck_lp_out(bck_lp_out4)
 			);
 
-	LAT LAT_DUT(
+	/*LAT LAT_DUT(
+			// input
+			.bck_lp_bus_in(bck_lp_bus),
+
+			.inst_in(inst_in_frm_IF),
+
+			.pc_in(pc_in_frm_IF),
+
+			.mis_pred_in(mis_pred_in_frm_ROB),
+			
+			.clk(clk),
+
+			.rst(rst),
+
+			// output
+			.lbd_state_out(lbd_state_out_to_AL),
+
+			.fnsh_unrll_out(fnsh_unrll_out_to_AL),	// output to interpretor
+
+			.stll_ftch_out(stll_ftch_out_to_IF),	// output to IF
+
+			.loop_strt_out(loop_strt_out_to_AL),	// output to next stage
+
+			.inst_valid_out(inst_valid_in) // output to interpretor
+			);*/
+
+	LAT_not_unroll LAT_DUT(
 			// input
 			.bck_lp_bus_in(bck_lp_bus),
 
