@@ -91,7 +91,14 @@ module LAT_not_unroll(
 		    end				
 	    end
 
-	always @(state, bck_lp_bus_in, loop_strt_out, dispatch1, dispatch2, dispatch3, dispatch4, end_lp1_train, end_lp2_train, end_lp3_train, end_lp4_train, end_lp1_dispatch, end_lp2_dispatch, end_lp3_dispatch, end_lp4_dispatch, mis_pred_in, stll_ftch_cnt, fallthrough_addr_train, num_of_inst_train, inst_in)
+	always @(/*autosense*/  bck_lp_bus_in or LAT
+		 or dispatch1 or dispatch2 or dispatch3 or dispatch4
+		 or end_lp1_dispatch or end_lp1_train
+		 or end_lp2_dispatch or end_lp2_train
+		 or end_lp3_dispatch or end_lp3_train
+		 or end_lp4_dispatch or end_lp4_train or loop_strt_out
+		 or mis_pred_in or num_of_inst_train or pc_in or state
+		 or stll_ftch_cnt)
 	    begin
 			if (state == IDLE)
 			    begin
@@ -217,7 +224,8 @@ module LAT_not_unroll(
 							(inst_valid_out_type == 2'b01) ? 4'b1100 :
 							(inst_valid_out_type == 2'b10) ? 4'b1110 : 4'b1111;
 
-	always @(end_lp1_dispatch, end_lp2_dispatch, end_lp3_dispatch, end_lp4_dispatch)
+	always @(/*autosense*/end_lp1_dispatch or end_lp2_dispatch
+		 or end_lp3_dispatch or end_lp4_dispatch or state)
 		begin
 			if (state == DISPATCH)
 				begin
@@ -232,7 +240,7 @@ module LAT_not_unroll(
 		end
 
 	// update num_of_inst_train
-	always @(inst_in)
+	always @(/*autosense*/num_of_inst_train_type)
 		begin
 			case(num_of_inst_train_type)
 				3'b001: begin num_of_inst_train <= num_of_inst_train + 1; end
@@ -284,7 +292,9 @@ module LAT_not_unroll(
 		    endcase
 		end
 
-	always @(max_unroll_train)
+	always @(/*autosense*/fallthrough_addr_train
+		 or max_unroll_train or num_of_inst_train
+		 or start_addr or write2LAT)
 		begin
 		    if (write2LAT)
 				begin

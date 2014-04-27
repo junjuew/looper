@@ -82,7 +82,7 @@ module branchUnit(/*autoarg*/
      end // always@ (...
 
    //control signal
-   always@(/*autosense*/ /*memory or*/ brch_mis_indx or brnc_count
+   always@(/*autosense*/ fifo[1] or fifo[0] or brch_mis_indx or brnc_count
 	   or cmt_brch or cmt_brch_indx or head or mis_pred or tail)
      begin
 	clear_head = 1'b0;

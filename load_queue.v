@@ -552,7 +552,7 @@ always@(bid, head)
    endcase
 
 // Priority decoding to find the oldest ready load for execution   
-always@(shifted_bid)
+always@(/*autosense*/head or shifted_bid)
    casex(shifted_bid)
        24'h0: pre_current = head;
        24'b???????????????????????1: pre_current=head; // 

@@ -17,7 +17,7 @@
   /////////////////////////////////////////////////// /
   module tpu_lin(/*autoarg*/
    // Outputs
-   cur_map, tpu_out, tpu_inst_rdy, fre_preg,
+   cur_map, fre_preg, tpu_out, tpu_inst_rdy,
    // Inputs
    rst_n, clk, dst_reg_rdy, dst_rdy_reg_en, isq_lin, prv_map
    );
@@ -94,7 +94,7 @@
    //////////////////////////////////////
    //find the physical mapping for all instructions
    //combinational logic
-   always @(/*autosense*/isq_lin or prv_map)
+   always @(/*autosense*/lsrc1 or lsrc2 or prv_map)
      begin
         //16 logical registers (4 bits)
         case (lsrc1[3:0])
@@ -181,7 +181,7 @@
    //output current mappping
    //cur_map is the actual mapping output
    //pos_map is the potential mapping output
-   always @(ldst, pos_map[0],pos_map[1],pos_map[2],pos_map[3],pos_map[4],pos_map[5],pos_map[6],pos_map[7],pos_map[8],pos_map[9],pos_map[10],pos_map[11],pos_map[12],pos_map[13],pos_map[14],pos_map[15])
+   always @(isq_lin,ldst, pos_map[0],pos_map[1],pos_map[2],pos_map[3],pos_map[4],pos_map[5],pos_map[6],pos_map[7],pos_map[8],pos_map[9],pos_map[10],pos_map[11],pos_map[12],pos_map[13],pos_map[14],pos_map[15])
      begin
         //if inst is not valid or no valid reg dest, then don't affect mapping
         if (isq_lin[BIT_INST_VLD] && ldst[4])
