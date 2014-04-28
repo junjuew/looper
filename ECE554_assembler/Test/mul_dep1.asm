@@ -10,5 +10,4 @@ mult r5, r2, r1	// expect r5 = r2 * r1 = 14
 add r5, r5, r1	// expect r5 = r5 + r1 = 16
 mult r5, r5, r1	// expect r5 = r5 * r1 = 32
 mult r5, r5, r1	// expect r5 = r5 * r1 = 64
-add r1, r1, r2	// expect r1 = r1 + r2 = 3
-mult r5, r5, r1	// expect r5 = r5 * r1 = 192
+mult r5, r5, r1	// expect r5 = r5 * r1 = 128

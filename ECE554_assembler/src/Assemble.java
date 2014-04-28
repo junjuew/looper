@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
@@ -44,6 +45,10 @@ class Assemble {
     public static final int MAX_SOURCE_LENGTH = 1024;
     private static int sourceLineID;
 
+    public static int[] registers = new int[17];
+    public static int[] memory = new int[1000];
+    public static int totalInstNum = 0;
+    public static Hashtable<String, Integer> labelTable ;
     public static void main(String [] args) {
         BufferedReader file = null;
         PrintWriter listOut = null;
@@ -55,16 +60,15 @@ class Assemble {
         String option = "";
         AssemblyLine [] progLine = new AssemblyLine[MAX_SOURCE_LENGTH];
 
-        Hashtable<String, Integer> labelTable =
-                   new Hashtable<String, Integer>();
+        labelTable = new Hashtable<String, Integer>();
 
         if (args.length != 4) {
-            System.err.println("Usage: java Assemble <file> <outfile> -m <coe or lst or mif>");
+            System.err.println("Usage: java Assemble <file> <outfile> -m <coe or lst or mif or sim>");
             System.exit(-1);
         }
         
-        if (!args[2].equals("-m") || (!args[3].equals("lst") && !args[3].equals("coe") && !args[3].equals("mif"))){
-            System.err.println("Usage: java Assemble <file> <outfile> -m <coe or lst or mif>");
+        if (!args[2].equals("-m") || (!args[3].equals("lst") && !args[3].equals("coe") && !args[3].equals("mif") && !args[3].equals("sim"))){
+            System.err.println("Usage: java Assemble <file> <outfile> -m <coe or lst or mif or sim>");
             System.exit(-1);
         }
 
@@ -80,8 +84,10 @@ class Assemble {
         	listFileName = args[1] + "_lst.lst";
         }else if (args[3].equals("coe")){
         	listFileName = args[1] + "_coe.coe";
-        }else {
+        }else if (args[3].equals("mif")){
         	listFileName = args[1] + "_mif.mif";
+        }else{
+        	listFileName = args[1] + "_sim.sim";
         }
         try {
                 listOut = new PrintWriter(listFileName);
@@ -90,6 +96,15 @@ class Assemble {
             System.exit(-1);
         }
 
+        // initialize memory
+        for (int i = 0; i < 1000; i ++){
+        	memory[i] = 0;
+        }
+        // initialize registers
+        for (int i = 0; i < 17; i ++){
+        	registers[i] = 0;
+        }
+        
         String memFileName = args[1] + "_";
         /*try {
                 mem0out = new PrintWriter(memFileName+"0"+".img");
@@ -154,7 +169,12 @@ class Assemble {
     	option = args[3];
         // patch labels and give output
         replaceLabels(progLine, labelTable);
-        printCode(progLine, listOut, mem0out, mem1out, mem2out, mem3out, option);
+        if (args[3].equals("sim")){
+            clacInstNum(listOut, progLine);
+            listOut.println("Executed instruction #: " + Integer.toString(totalInstNum));
+        }else{
+            printCode(progLine, listOut, mem0out, mem1out, mem2out, mem3out, option);
+        }
         listOut.close();
         /*mem0out.close();
         mem1out.close();
@@ -186,33 +206,313 @@ class Assemble {
 
     public static void replaceLabels(AssemblyLine[] prog, Hashtable table) {
 
-	for (int i = 0; i < sourceLineID; i++) {
-	    AssemblyLine l = prog[i];
-	    String iR = l.immediateRef;
-	    if (iR == null) continue;
-	    if (iR.startsWith("L") || iR.startsWith("U")) {
-		  iR = iR.substring(1);
-	    }
-	    Integer val = (Integer) table.get(iR);
-	    if (val == null) {
-		  l.PrintErr("could not find label in symbol table\n");
-		  continue;
-	    }
+        for (int i = 0; i < sourceLineID; i++) {
+            AssemblyLine l = prog[i];
+            String iR = l.immediateRef;
+            if (iR == null) continue;
+            if (iR.startsWith("L") || iR.startsWith("U")) {
+              iR = iR.substring(1);
+            }
+            Integer val = (Integer) table.get(iR);
+            if (val == null) {
+              l.PrintErr("could not find label in symbol table\n");
+              continue;
+            }
 
-	    l.immediateVal = val.intValue();
-	    if (l.immediateRef.startsWith("L")) {
-		  l.immediateVal &= 0xff;
-	    } else if (l.immediateRef.startsWith("U")) {
-		  l.immediateVal = (l.immediateVal >> 8) & 0xff;
+            l.immediateVal = val.intValue();
+            if (l.immediateRef.startsWith("L")) {
+              l.immediateVal &= 0xff;
+            } else if (l.immediateRef.startsWith("U")) {
+              l.immediateVal = (l.immediateVal >> 8) & 0xff;
+            }
+
+            if (l.relative) {         // PC-RELATIVE INDEXING!
+                l.immediateVal -= l.lineNum + 1; //Fall06
+            //l.immediateVal -= l.lineNum + 1;// Spring 06
+            //l.immediateVal -= l.lineNum;  // Fall 05
+            }
         }
-
-	    if (l.relative) {         // PC-RELATIVE INDEXING!
-	    	l.immediateVal -= l.lineNum + 1; //Fall06
-		//l.immediateVal -= l.lineNum + 1;// Spring 06
-		//l.immediateVal -= l.lineNum;  // Fall 05
-	    }
-	}
     }
+    
+    public static void clacInstNum(PrintWriter simOut, AssemblyLine[] prog){
+		int currentLineNum = prog[0].lineNum;
+		int currentIndex = 0;
+		int nextLineNum = 0;
+		int nextIndex = 0;
+		while (currentLineNum == -1 || (prog[currentLineNum] != null)){
+			if (currentLineNum == -1){
+				nextLineNum = prog[currentIndex + 1].lineNum;
+				nextIndex = currentIndex + 1;
+			}else{
+				nextLineNum = generateNextLineNum(simOut, prog, currentIndex);
+				if (nextLineNum != -1){
+					nextIndex = nextLineNum;
+				}else{
+					nextIndex = currentIndex + 1;
+				}
+			}
+			if (currentLineNum != -1){
+				simOut.println("current inst: " + prog[currentIndex].srcLine);
+				processLine(simOut, prog, currentIndex);
+			}
+			currentLineNum = nextLineNum;
+			currentIndex = nextIndex;
+		}
+	}
+	
+	public static int generateNextLineNum(PrintWriter simOut, AssemblyLine[] prog, int currentLineNum){
+		AssemblyLine currentLine = prog[currentLineNum];
+		if (currentLine != null && currentLine.inst_name != null){
+			simOut.println();
+			if (currentLine.inst_name.equals("beqz")){
+				if (registers[currentLine.src1] == 0){
+					int immediate = currentLine.immediateVal;
+					int nextLineNum = currentLineNum + 1;
+					while (prog[nextLineNum].inst_name == null){
+						nextLineNum ++;
+					}
+					while(immediate != 0){
+						if (immediate > 0){
+							if (prog[nextLineNum].inst_name != null){
+								immediate --;
+							}
+							nextLineNum ++;
+							if (immediate == 0){
+								while (prog[nextLineNum].inst_name == null){
+									nextLineNum ++;
+								}
+							}
+						}else{
+							if (prog[nextLineNum].inst_name != null){
+								immediate ++;
+							}
+							nextLineNum --;
+							if (immediate == 0){
+								while (prog[nextLineNum].inst_name == null){
+									nextLineNum --;
+								}
+							}
+						}
+					}
+					if (prog[nextLineNum] != null){
+						simOut.println("next inst: " + prog[nextLineNum].srcLine);
+					}else{
+						simOut.println("next inst: end");
+					}
+					return nextLineNum;
+				}else{
+					if (prog[currentLineNum+1].srcLine != null){
+	                	simOut.println("next inst: " + prog[currentLineNum+1]);
+					}else{
+						simOut.println("next inst: end");
+					}
+	                return currentLineNum + 1;
+				}
+			}else if (currentLine.inst_name.equals("bltz")){
+				if (registers[currentLine.src1] < 0){
+					int immediate = currentLine.immediateVal;
+					int nextLineNum = currentLineNum + 1;
+					while (prog[nextLineNum].inst_name == null){
+						nextLineNum ++;
+					}
+					while(immediate != 0){
+						if (immediate > 0){
+							if (prog[nextLineNum].inst_name != null){
+								immediate --;
+							}
+							nextLineNum ++;
+							if (immediate == 0){
+								while (prog[nextLineNum].inst_name == null){
+									nextLineNum ++;
+								}
+							}
+						}else{
+							if (prog[nextLineNum].inst_name != null){
+								immediate ++;
+							}
+							nextLineNum --;
+							if (immediate == 0){
+								while (prog[nextLineNum].inst_name == null){
+									nextLineNum --;
+								}
+							}
+						}
+					}
+					if (prog[nextLineNum] != null){
+						simOut.println("next inst: " + prog[nextLineNum].srcLine);
+					}else{
+						simOut.println("next inst: end");
+					}
+					return nextLineNum;
+				}else{
+					if (prog[currentLineNum+1] != null){
+						simOut.println("next inst: " + prog[currentLineNum+1].srcLine);
+					}else{
+						simOut.println("next inst: end");
+					}
+					return currentLineNum + 1;
+				}
+			}else if (currentLine.inst_name.equals("bgtz")){
+				if (registers[currentLine.src1] > 0){
+					int immediate = currentLine.immediateVal;
+					int nextLineNum = currentLineNum + 1;
+					while (prog[nextLineNum].inst_name == null){
+						nextLineNum ++;
+					}
+					while(immediate != 0){
+						if (immediate > 0){
+							if (prog[nextLineNum].inst_name != null){
+								immediate --;
+							}
+							nextLineNum ++;
+							if (immediate == 0){
+								while (prog[nextLineNum].inst_name == null){
+									nextLineNum ++;
+								}
+							}
+						}else{
+							if (prog[nextLineNum].inst_name != null){
+								immediate ++;
+							}
+							nextLineNum --;
+							if (immediate == 0){
+								while (prog[nextLineNum].inst_name == null){
+									nextLineNum --;
+								}
+							}
+						}
+					}
+					if (prog[nextLineNum] != null){
+	                	simOut.println("next inst: " + prog[nextLineNum].srcLine);
+					}else{
+						simOut.println("next inst: end");
+					}
+					return nextLineNum;
+				}else{
+					if (prog[currentLineNum+1] != null){
+	                	simOut.println("next inst: " + prog[currentLineNum+1].srcLine);
+					}else{
+						simOut.println("next inst: end");
+					}
+					return currentLineNum + 1;
+				}
+			}else if (currentLine.inst_name.equals("j")){
+				int immediate = currentLine.immediateVal;
+				int nextLineNum = currentLineNum + 1;
+				while (prog[nextLineNum].inst_name == null){
+					nextLineNum ++;
+				}
+				while(immediate != 0){
+					if (immediate > 0){
+						if (prog[nextLineNum].inst_name != null){
+							immediate --;
+						}
+						nextLineNum ++;
+						if (immediate == 0){
+							while (prog[nextLineNum].inst_name == null){
+								nextLineNum ++;
+							}
+						}
+					}else{
+						if (prog[nextLineNum].inst_name != null){
+							immediate ++;
+						}
+						nextLineNum --;
+						if (immediate == 0){
+							while (prog[nextLineNum].inst_name == null){
+								nextLineNum --;
+							}
+						}
+					}
+				}
+				if (prog[nextLineNum] != null){
+					simOut.println("next inst: " + prog[nextLineNum].srcLine);
+				}else{
+					simOut.println("next inst: end");
+				}
+				return nextLineNum;
+			}else if (currentLine.inst_name.equals("jr")){
+				int immediate = currentLine.immediateVal;
+				if (prog[registers[currentLine.src1] + immediate] != null){
+					simOut.println("next inst: " + prog[registers[currentLine.src1] + immediate].srcLine);
+				}else{
+					simOut.println("next inst: end");
+				}
+				return registers[currentLine.src1] + immediate;
+			}else if (currentLine.inst_name.equals("jal")){
+				int immediate = currentLine.immediateVal;
+				registers[15] = currentLineNum + 1;
+				if (prog[currentLineNum+1+immediate] != null){
+	            	simOut.println("next inst: " + prog[currentLineNum+1+immediate].srcLine);
+				}else{
+					simOut.println("next inst: end");
+				}
+				return currentLineNum + 1 + immediate;
+			}else{
+				if (prog[currentLineNum+1] != null){
+	            	simOut.println("next inst: " + prog[currentLineNum+1].srcLine);
+				}else{
+					simOut.println("next inst: end");
+				}
+				return currentLineNum + 1;
+			}
+		}else{
+			return currentLineNum + 1;
+		}
+	}
+
+	public static void processLine(PrintWriter simOut, AssemblyLine[] prog, int currentLineNum){
+		AssemblyLine currentLine = prog[currentLineNum];
+		if (currentLine != null && currentLine.inst_name != null){
+			if (currentLine.inst_name.equals("nop")){
+				// do nothing
+			}else if (currentLine.inst_name.equals("add")){
+				registers[currentLine.dst] = registers[currentLine.src1] + registers[currentLine.src2];
+			}else if (currentLine.inst_name.equals("sub")){
+				registers[currentLine.dst] = registers[currentLine.src1] - registers[currentLine.src2];
+			}else if (currentLine.inst_name.equals("and")){
+				registers[currentLine.dst] = registers[currentLine.src1] & registers[currentLine.src2];
+			}else if (currentLine.inst_name.equals("or")){
+				registers[currentLine.dst] = registers[currentLine.src1] | registers[currentLine.src2];
+			}else if (currentLine.inst_name.equals("xor")){
+				registers[currentLine.dst] = registers[currentLine.src1] ^ registers[currentLine.src2];
+			}else if (currentLine.inst_name.equals("not")){
+				registers[currentLine.dst] = ~registers[currentLine.src1];
+			}else if (currentLine.inst_name.equals("sra")){
+				registers[currentLine.dst] = registers[currentLine.src1] >> registers[currentLine.src2];
+			}else if (currentLine.inst_name.equals("mult")){
+				registers[currentLine.dst] = registers[currentLine.src1] * registers[currentLine.src2];
+			}else if (currentLine.inst_name.equals("ldi")){
+                int immediate = currentLine.immediateVal;
+				registers[currentLine.src1] = immediate;
+			}else if (currentLine.inst_name.equals("str")){
+                int immediate = currentLine.immediateVal;
+				int memLocation = registers[currentLine.src1] + immediate;
+				memory[memLocation] = registers[currentLine.dst];
+				simOut.println("***********************************");
+				simOut.println("********   Memory update   ********");
+				simOut.println("***********************************");
+	            simOut.println("memory[" + Integer.toString(memLocation) + "] = " + Integer.toString(memory[memLocation]));
+			}else if (currentLine.inst_name.equals("ldr")){
+                int immediate = currentLine.immediateVal;
+				int memLocation = registers[currentLine.src1] + immediate;
+				registers[currentLine.dst] = memory[memLocation];
+			}
+			printRegisters(simOut);
+			totalInstNum ++;
+		}
+	}
+
+
+	
+	public static void printRegisters(PrintWriter simOut){
+		simOut.println("***********************************");
+		simOut.println("*******   View registers   ********");
+		simOut.println("***********************************");
+		for (int i = 0; i < 16; i ++){
+			simOut.println("R" + Integer.toString(i) + ": " + "hex: " + Integer.toHexString(registers[i]) + " decimal: " + Integer.toString(registers[i]));
+		}
+	}
 
     public static void printCode(AssemblyLine [] prog, PrintWriter listOut,
                                   PrintWriter mem0out, PrintWriter mem1out,

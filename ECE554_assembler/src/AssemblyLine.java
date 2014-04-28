@@ -17,6 +17,7 @@ class AssemblyLine {
 
 	public static final int BOGUS_IMM       = (1 << 14);
 
+	public String inst_name;
 	public String srcLine;
 	public int type;
 	public int src1;
@@ -310,8 +311,10 @@ class AssemblyLine {
 		if (dst < 0 && useRs == false) {
 			dst = temp;
 		} else if (src1 < 0) {
+			// src1 is Rs
 			src1 = temp;
 		} else if (src2 < 0) {
+			// src2 is Rt
 			src2 = temp;
 		} else {
 			PrintErr("Error assigning register specifier\n");
@@ -328,9 +331,11 @@ class AssemblyLine {
 		case 'A':
 		case 'a':
 			if (Opcode.equalsIgnoreCase("add")) {
+				inst_name = "add";
 				type = RRR_FORM;
 				return 0x1;
 			} else if (Opcode.equalsIgnoreCase("and")){
+				inst_name = "and";
                 type = RRR_FORM;
                 return 0x3;
             }
@@ -366,6 +371,7 @@ class AssemblyLine {
 				return 0x19;
 			} else */
             if (Opcode.equalsIgnoreCase("beqz")) {
+				inst_name = "beqz";
 				type = RI_FORM;
 				relative = true;
 				return 0x9;
@@ -377,10 +383,12 @@ class AssemblyLine {
 				return 13;
 			}*/
             else if (Opcode.equalsIgnoreCase("bltz")) {
+				inst_name = "bltz";
 				type = RI_FORM;
 				relative = true;
 				return 0xA;
 			} else if (Opcode.equalsIgnoreCase("bgtz")) {
+				inst_name = "bgtz";
 				type = RI_FORM;
 				relative = true;
 				return 0xB;
@@ -414,21 +422,25 @@ class AssemblyLine {
 		case 'J':
 		case 'j':
 			if (Opcode.equalsIgnoreCase("j")) {
+				inst_name = "j";
 				type = JUMP_FORM;
                 jmp_offset = 0x0;
 				relative = true;
 				return 0xf;
 			} else if (Opcode.equalsIgnoreCase("jal")) {
+				inst_name = "jal";
 				type = JUMP_FORM;
 				relative = true;
                 jmp_offset = 0x2;
 				return 0xf;
 			} else if (Opcode.equalsIgnoreCase("jalr")) {
+				inst_name = "jalr";
 				type = RI_FORM;
 				relative = true;
                 jmp_offset = 0x3;
 				return 0xf;
 			} else if (Opcode.equalsIgnoreCase("jr")) {
+				inst_name = "jr";
 				type = RI_FORM;
                 jmp_offset = 0x1;
 				return 0xf;
@@ -454,9 +466,11 @@ class AssemblyLine {
 				return 18;   // use SLBI; this works for the sequence lui/lli
 			}*/
             if (Opcode.equalsIgnoreCase("ldi")) {
+				inst_name = "ldi";
                 type = RI_FORM;
                 return 0xc;
             } else if (Opcode.equalsIgnoreCase("ldr")) {
+				inst_name = "ldr";
                 type = RRI_FORM;
                 return 0xe;
             }
@@ -468,6 +482,7 @@ class AssemblyLine {
         case 'M':
         case 'm':
             if (Opcode.equalsIgnoreCase("mult")){
+				inst_name = "mult";
                 type = RRR_FORM;
                 return 0x8;
             } else {
@@ -477,6 +492,7 @@ class AssemblyLine {
 		case 'N':
 		case 'n':
 			if (Opcode.equalsIgnoreCase("nop")) {
+				inst_name = "nop";
 				type = NOP_FORM;
 				return 0x0;
 				//} else if (Opcode.equalsIgnoreCase("nandi")) {
@@ -486,6 +502,7 @@ class AssemblyLine {
 				//type = RRR_FORM;
 				//return 11;
 			} else if (Opcode.equalsIgnoreCase("not")){
+				inst_name = "not";
                 type = NOT_FORM;
                 return 0x6;
             }
@@ -497,6 +514,7 @@ class AssemblyLine {
         case 'O':
         case 'o':
             if (Opcode.equalsIgnoreCase("or")){
+				inst_name = "or";
                 type = RRR_FORM;
                 return 0x4;
             }else {
@@ -517,7 +535,7 @@ class AssemblyLine {
 
 		case 'R':
 		case 'r':
-			if (Opcode.equalsIgnoreCase("rol")) {
+			/*if (Opcode.equalsIgnoreCase("rol")) {
 				type = RRR_FORM;
 				return 0x1a;
 			} else if (Opcode.equalsIgnoreCase("roli")) {
@@ -535,17 +553,20 @@ class AssemblyLine {
 			} else {
 				PrintErr("Unknown opcode: " + Opcode);
 				return -1;
-			}
+			}*/
 
 		case 'S':
 		case 's':
 			if (Opcode.equalsIgnoreCase("sub")) {
+				inst_name = "sub";
 				type = RRR_FORM;
 				return 0x2;
 			} else if (Opcode.equalsIgnoreCase("sra")){
+				inst_name = "sra";
                 type = RRR_FORM;
                 return 0x7;
             } else if (Opcode.equalsIgnoreCase("str")){
+				inst_name = "str";
                 type = RRI_FORM;
                 return 0xd;
             }
@@ -599,6 +620,7 @@ class AssemblyLine {
 		case 'X':
 		case 'x':
 			if (Opcode.equalsIgnoreCase("xor")) {
+				inst_name = "xor";
 				type = RRR_FORM;
 				return 0x5;
 			} /*else if (Opcode.equalsIgnoreCase("xori")) {
@@ -705,5 +727,6 @@ class AssemblyLine {
 		immediateVal &= mask;
 		return;
 	}
+	
 
 } // class AssemblyLine
