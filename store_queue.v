@@ -14,12 +14,12 @@ output  [15:0] data_ca, addr, data_fwd;
    
 reg str_req, str_iss, finished, loop_mode, pre_loop_strt;
 reg [40:0] str_entry [0:15]; // store queue entries
-reg [15:0] indx_comp, // used to tell whether the corresponding store occurs before the load being executed
+wire [15:0] indx_comp, // used to tell whether the corresponding store occurs before the load being executed
             update, // indicate whether there is an index match for address and data update in the store queue entry
             ready, // indicate whether all stores occurring before the load being executed have memory addresses updated
             addr_comp, // indicate whether an address match occurs between the store and load to trigger data forwarding
-            match, // indicate whether the corresponding store is a candidate for data forwarding
-            shifted_match, // reordered match start from head
+            match; // indicate whether the corresponding store is a candidate for data forwarding
+reg [15:0]  shifted_match, // reordered match start from head
             first,
             second,
             third,
@@ -32,7 +32,7 @@ reg [15:0] indx_comp, // used to tell whether the corresponding store occurs bef
 reg [3:0] head, tail,  nxt_tail, indx_to_fwd, loop_start, loop_end;
 wire [4:0] loop_body_diff, flush_body_diff;
 wire [3:0] vld;
-integer i;
+//integer i;
 reg [1:0] state,nxt_state; // state registers
 wire [15:0] data_to_fwd; 
 wire [6:0] first_indx, second_indx, third_indx, fourth_indx;
@@ -345,13 +345,20 @@ endcase
 assign insert = first | second | third | fourth;
 
 // entry update with physical register address and memory address
-always@(*)
-   for (i=0;i<16;i=i+1) 
-      update[i]=mem_wrt & (str_entry[i][37:32] == indx_ls) & (!str_entry[i][40]);
+generate
+genvar i_1;
+   for (i_1=0;i_1<16;i_1=i_1+1)
+	begin : update_st_gen
+		assign update[i_1]=mem_wrt & (str_entry[i_1][37:32] == indx_ls) & (!str_entry[i_1][40]);
+	end
+endgenerate
 
-
+generate
+genvar i;
+for (i=0;i<16;i=i+1) 
+begin : str_entry_gen
 always@(posedge clk, negedge rst)
-for (i=0;i<16;i=i+1) begin
+	begin
     if (!rst)
       str_entry[i][40:0] <= 41'h10000000000;
     else begin
@@ -394,12 +401,10 @@ for (i=0;i<16;i=i+1) begin
                str_entry[i][39] <= 1;
             else
                str_entry[i][39] <= str_entry[i][39];
-            
-               
-               
-               
        end
    end
+end
+endgenerate
   
 // execute upon commitment
 always@(posedge clk, negedge rst)
@@ -459,30 +464,48 @@ begin
        
 
 assign signed_comp=str_entry[head][38]; // whether to compard the indexes in a signed manner
-always@(*)
-   for (i=0;i<16;i=i+1)
-   if (signed_comp)
-      indx_comp[i]=($signed(indx_fwd) > $signed(str_entry[i][38:32])) ? 1:0; 
-   else
-      indx_comp[i]= (indx_fwd > str_entry[i][38:32])? 1 : 0; 
+generate
+genvar i_2;
+for (i_2=0;i_2<16;i_2=i_2+1)
+	begin : index_comp_gen
+		assign indx_comp[i_2] = (signed_comp) ? (($signed(indx_fwd) > $signed(str_entry[i_2][38:32])) ? 1:0) : ((indx_fwd > str_entry[i_2][38:32])? 1 : 0); 
+	end
+endgenerate
       
-      
-always@(*)
-   for (i=0;i<16;i=i+1)
-      addr_comp[i]= (addr_fwd == str_entry[i][31:16]);
+generate
+genvar i_3;
+for (i_3=0;i_3<16;i_3=i_3+1)
+	begin : addr_comp_gen
+		assign addr_comp[i_3]= (addr_fwd == str_entry[i_3][31:16]);
+	end
+endgenerate
             
       
-always@(*)
-   for (i=0;i<16;i=i+1)
-      ready[i]= str_entry[i][40] | (str_entry[i][39] & indx_comp[i]) | (~indx_comp[i]);
-      
+generate
+genvar i_4;
+for (i_4=0;i_4<16;i_4=i_4+1)
+	begin : ready_gen
+      assign ready[i_4]= str_entry[i_4][40] | (str_entry[i_4][39] & indx_comp[i_4]) | (~indx_comp[i_4]);
+	end
+endgenerate
+
 
 assign fwd_rdy=&ready;
 
+
+generate
+genvar i_5;
+for(i_5 = 0; i_5 < 16; i_5 = i_5 + 1)
+	begin : match_gen
+		assign match[i_5] = (~str_entry[i_5][40]) & addr_comp[i_5] & indx_comp[i_5];
+	end
+endgenerate
+/**	
 always@(*)
    for (i=0;i<16;i=i+1)
       match[i]= (~str_entry[i][40]) & addr_comp[i] & indx_comp[i];
-      
+*/
+
 always@(match)
    case(head)
        4'h0:shifted_match=match;

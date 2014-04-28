@@ -53,12 +53,12 @@ module LAT(
 
 
 
-	//*
-	//assign lbd_state_out = IDLE;
-	//assign fnsh_unrll_out = 0;
-	//assign stll_ftch_out = 0;
-	//assign loop_strt_out = 0;
-	//assign inst_valid_out = 4'bzzzz;
+	/*
+	assign lbd_state_out = IDLE;
+	assign fnsh_unrll_out = 0;
+	assign stll_ftch_out = 0;
+	assign loop_strt_out = 0;
+	assign inst_valid_out = 4'bzzzz;
 	//*/
 	always @(posedge clk)
 	    begin
@@ -156,15 +156,15 @@ module LAT(
 									start_addr <= pc_in[63:48];
 							    end
 						    casex ({end_lp1_train, end_lp2_train, end_lp3_train, end_lp4_train, write2LAT_en})
-						    	5'b1xxx_0: begin num_of_inst_train_type <= 3'b001; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
-						    	5'bx1xx_0: begin num_of_inst_train_type <= 3'b010; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
-						    	5'bxx1x_0: begin num_of_inst_train_type <= 3'b011; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
-						    	5'bxxx1_0: begin num_of_inst_train_type <= 3'b100; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
-						    	5'b1xxx_1: begin num_of_inst_train_type <= 3'b001; nxt_state <= IDLE; write2LAT <= 1'b1; end
-						    	5'bx1xx_1: begin num_of_inst_train_type <= 3'b010; nxt_state <= IDLE; write2LAT <= 1'b1; end
-						    	5'bxx1x_1: begin num_of_inst_train_type <= 3'b011; nxt_state <= IDLE; write2LAT <= 1'b1; end
-						    	5'bxxx1_1: begin num_of_inst_train_type <= 3'b100; nxt_state <= IDLE; write2LAT <= 1'b1; end
-						    	5'b0000_x: begin num_of_inst_train_type <= 3'b100; nxt_state <= TRAIN; end
+						    	5'b1xxx_0: begin num_of_inst_train_type = 3'b001; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
+						    	5'bx1xx_0: begin num_of_inst_train_type = 3'b010; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
+						    	5'bxx1x_0: begin num_of_inst_train_type = 3'b011; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
+						    	5'bxxx1_0: begin num_of_inst_train_type = 3'b100; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
+						    	5'b1xxx_1: begin num_of_inst_train_type = 3'b001; nxt_state <= IDLE; write2LAT <= 1'b1; end
+						    	5'bx1xx_1: begin num_of_inst_train_type = 3'b010; nxt_state <= IDLE; write2LAT <= 1'b1; end
+						    	5'bxx1x_1: begin num_of_inst_train_type = 3'b011; nxt_state <= IDLE; write2LAT <= 1'b1; end
+						    	5'bxxx1_1: begin num_of_inst_train_type = 3'b100; nxt_state <= IDLE; write2LAT <= 1'b1; end
+						    	5'b0000_x: begin num_of_inst_train_type = 3'b100; nxt_state <= TRAIN; end
 						    endcase
 	
 						end	
@@ -301,3 +301,4 @@ module LAT(
 
 
 endmodule
+

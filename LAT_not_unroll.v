@@ -66,24 +66,6 @@ module LAT_not_unroll(
 	        if (rst)
 		    begin
 		        state <= IDLE;
-				nxt_state <= IDLE;
-				train_content <= 45'b0;
-
-				num_of_inst_train_type <= 3'b0;
-
-				fallthrough_addr_train <= 16'b0;
-				fallthrough_addr_dispatch <= 16'b0;
-				LAT_pointer <= 2'b0;
-		    	//num_of_inst_cnt <= 7'b0;
-
-		    	inst_valid_out_type <= 2'b11;
-		    	fnsh_unrll_out <= 1'b0;
-		    	stll_ftch_out <= 1'b0;
-		    	stll_ftch_cnt_type <= 3'b0;
-		    	LAT[0] <= {47{1'b1}};
-		    	LAT[1] <= {47{1'b1}};
-		    	LAT[2] <= {47{1'b1}};
-		    	LAT[3] <= {47{1'b1}};
 		    end
 		else
             begin
@@ -100,40 +82,56 @@ module LAT_not_unroll(
 		 or mis_pred_in or num_of_inst_train or pc_in or state
 		 or stll_ftch_cnt)
 	    begin
+			if (rst)
+				begin
+					nxt_state = IDLE;
+					train_content = 45'b0;
+
+					num_of_inst_train_type = 3'b0;
+
+					fallthrough_addr_train = 16'b0;
+					fallthrough_addr_dispatch = 16'b0;
+					//num_of_inst_cnt = 7'b0;
+
+					inst_valid_out_type = 2'b11;
+					fnsh_unrll_out = 1'b0;
+					stll_ftch_out = 1'b0;
+					stll_ftch_cnt_type = 3'b0;
+				end
 			if (state == IDLE)
 			    begin
-			    	num_of_inst_train_type <= 3'b0;
-			    	//num_of_inst_cnt <= 7'b0;
-			    	inst_valid_out_type <= 4'b1111;
-		    		fnsh_unrll_out <= 1'b0;
-		    		stll_ftch_out <= 1'b0;
-		    		stll_ftch_cnt_type <= 3'b0;
-					write2LAT <= 1'b0;
-					write2LAT_en <= 1'b0;
+			    	num_of_inst_train_type = 3'b0;
+			    	//num_of_inst_cnt = 7'b0;
+			    	inst_valid_out_type = 4'b1111;
+		    		fnsh_unrll_out = 1'b0;
+		    		stll_ftch_out = 1'b0;
+		    		stll_ftch_cnt_type = 3'b0;
+					write2LAT = 1'b0;
+					write2LAT_en = 1'b0;
 					if (bck_lp_bus_in & 4'b1111 != 4'b0)
 					    begin
 			    	        casex(bck_lp_bus_in)
-							    4'b1xxx: begin  fallthrough_addr_train <= pc_in[63:48] + 1; nxt_state <= TRAIN; end
-							    4'bx1xx: begin  fallthrough_addr_train <= pc_in[47:32] + 1; nxt_state <= TRAIN; end
-							    4'bxx1x: begin  fallthrough_addr_train <= pc_in[31:16] + 1; nxt_state <= TRAIN; end
-							    4'bxxx1: begin  fallthrough_addr_train <= pc_in[15:0] + 1; nxt_state <= TRAIN; end
+							    4'b1xxx: begin  fallthrough_addr_train = pc_in[63:48] + 1; nxt_state = TRAIN; end
+							    4'bx1xx: begin  fallthrough_addr_train = pc_in[47:32] + 1; nxt_state = TRAIN; end
+							    4'bxx1x: begin  fallthrough_addr_train = pc_in[31:16] + 1; nxt_state = TRAIN; end
+							    4'bxxx1: begin  fallthrough_addr_train = pc_in[15:0] + 1; nxt_state = TRAIN; end
 					        endcase
 					    end
 					if (loop_strt_out == 1'b1)
 						begin
-							nxt_state <= DISPATCH;
+							nxt_state = DISPATCH;
 							casex({dispatch1, dispatch2, dispatch3, dispatch4})
-								4'b1xxx: begin max_unroll_dispatch <= LAT[0][6:0]; fallthrough_addr_dispatch <= LAT[0][29:14]; end
-								4'bx1xx: begin max_unroll_dispatch <= LAT[1][6:0]; fallthrough_addr_dispatch <= LAT[1][29:14]; end
-								4'bxx1x: begin max_unroll_dispatch <= LAT[2][6:0]; fallthrough_addr_dispatch <= LAT[2][29:14]; end
-								4'bxxx1: begin max_unroll_dispatch <= LAT[3][6:0]; fallthrough_addr_dispatch <= LAT[3][29:14]; end
+								4'b1xxx: begin max_unroll_dispatch = LAT[0][6:0]; fallthrough_addr_dispatch = LAT[0][29:14]; end
+								4'bx1xx: begin max_unroll_dispatch = LAT[1][6:0]; fallthrough_addr_dispatch = LAT[1][29:14]; end
+								4'bxx1x: begin max_unroll_dispatch = LAT[2][6:0]; fallthrough_addr_dispatch = LAT[2][29:14]; end
+								4'bxxx1: begin max_unroll_dispatch = LAT[3][6:0]; fallthrough_addr_dispatch = LAT[3][29:14]; end
 							endcase
 						    casex ({end_lp1_dispatch, end_lp2_dispatch, end_lp3_dispatch, end_lp4_dispatch})
-						    	4'b1xxx: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b00; stll_ftch_cnt_type <= 3'b001; end
-						    	4'bx1xx: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b01; stll_ftch_cnt_type <= 3'b010; end
-						    	4'bxx1x: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b10; stll_ftch_cnt_type <= 3'b011; end
-						    	4'bxxx1: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b11; stll_ftch_cnt_type <= 3'b100; end
-						    	4'b0000: begin inst_valid_out_type <= 2'b11; stll_ftch_cnt_type <= 3'b100; end
+						    	4'b1xxx: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b00; stll_ftch_cnt_type = 3'b001; end
+						    	4'bx1xx: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b01; stll_ftch_cnt_type = 3'b010; end
+						    	4'bxx1x: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b10; stll_ftch_cnt_type = 3'b011; end
+						    	4'bxxx1: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b11; stll_ftch_cnt_type = 3'b100; end
+						    	4'b0000: begin inst_valid_out_type = 2'b11; stll_ftch_cnt_type = 3'b100; end
 						    endcase
 						end
 			    end // end IDLE
@@ -141,64 +139,72 @@ module LAT_not_unroll(
 			    begin
 					if (loop_strt_out == 1'b1)
 						begin
-							nxt_state <= DISPATCH;
+							nxt_state = DISPATCH;
 							casex({dispatch1, dispatch2, dispatch3, dispatch4})
-								4'b1xxx: begin max_unroll_dispatch <= LAT[0][6:0]; fallthrough_addr_dispatch <= LAT[0][29:14]; end
-								4'bx1xx: begin max_unroll_dispatch <= LAT[1][6:0]; fallthrough_addr_dispatch <= LAT[1][29:14]; end
-								4'bxx1x: begin max_unroll_dispatch <= LAT[2][6:0]; fallthrough_addr_dispatch <= LAT[2][29:14]; end
-								4'bxxx1: begin max_unroll_dispatch <= LAT[3][6:0]; fallthrough_addr_dispatch <= LAT[3][29:14]; end
+								4'b1xxx: begin max_unroll_dispatch = LAT[0][6:0]; fallthrough_addr_dispatch = LAT[0][29:14]; end
+								4'bx1xx: begin max_unroll_dispatch = LAT[1][6:0]; fallthrough_addr_dispatch = LAT[1][29:14]; end
+								4'bxx1x: begin max_unroll_dispatch = LAT[2][6:0]; fallthrough_addr_dispatch = LAT[2][29:14]; end
+								4'bxxx1: begin max_unroll_dispatch = LAT[3][6:0]; fallthrough_addr_dispatch = LAT[3][29:14]; end
 							endcase
 						    casex ({end_lp1_train, end_lp2_train, end_lp3_train, end_lp4_train})
-						    	4'b1xxx: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b00; stll_ftch_cnt_type <= 3'b001; end
-						    	4'bx1xx: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b01; stll_ftch_cnt_type <= 3'b010; end
-						    	4'bxx1x: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b10; stll_ftch_cnt_type <= 3'b011; end
-						    	4'bxxx1: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b11; stll_ftch_cnt_type <= 3'b100; end
-						    	4'b0000: begin inst_valid_out_type <= 2'b11; stll_ftch_cnt_type <= 3'b100; end
+						    	4'b1xxx: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b00; stll_ftch_cnt_type = 3'b001; end
+						    	4'bx1xx: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b01; stll_ftch_cnt_type = 3'b010; end
+						    	4'bxx1x: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b10; stll_ftch_cnt_type = 3'b011; end
+						    	4'bxxx1: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b11; stll_ftch_cnt_type = 3'b100; end
+						    	4'b0000: begin inst_valid_out_type = 2'b11; stll_ftch_cnt_type = 3'b100; end
 						    endcase
 						end
 					else
 						begin
 						    if (num_of_inst_train == 0)
 							    begin
-									start_addr <= pc_in[63:48];
+									start_addr = pc_in[63:48];
 							    end
 						    casex ({end_lp1_train, end_lp2_train, end_lp3_train, end_lp4_train, write2LAT_en})
-						    	5'b1xxx_0: begin num_of_inst_train_type <= 3'b001; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
-						    	5'bx1xx_0: begin num_of_inst_train_type <= 3'b010; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
-						    	5'bxx1x_0: begin num_of_inst_train_type <= 3'b011; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
-						    	5'bxxx1_0: begin num_of_inst_train_type <= 3'b100; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
-						    	5'b1xxx_1: begin num_of_inst_train_type <= 3'b001; nxt_state <= IDLE; write2LAT <= 1'b1; end
-						    	5'bx1xx_1: begin num_of_inst_train_type <= 3'b010; nxt_state <= IDLE; write2LAT <= 1'b1; end
-						    	5'bxx1x_1: begin num_of_inst_train_type <= 3'b011; nxt_state <= IDLE; write2LAT <= 1'b1; end
-						    	5'bxxx1_1: begin num_of_inst_train_type <= 3'b100; nxt_state <= IDLE; write2LAT <= 1'b1; end
-						    	5'b0000_x: begin num_of_inst_train_type <= 3'b100; nxt_state <= TRAIN; end
+						    	5'b1xxx_0: begin num_of_inst_train_type = 3'b001; nxt_state = TRAIN; write2LAT_en = 1'b1; end
+						    	5'bx1xx_0: begin num_of_inst_train_type = 3'b010; nxt_state = TRAIN; write2LAT_en = 1'b1; end
+						    	5'bxx1x_0: begin num_of_inst_train_type = 3'b011; nxt_state = TRAIN; write2LAT_en = 1'b1; end
+						    	5'bxxx1_0: begin num_of_inst_train_type = 3'b100; nxt_state = TRAIN; write2LAT_en = 1'b1; end
+						    	5'b1xxx_1: begin num_of_inst_train_type = 3'b001; nxt_state = IDLE; write2LAT = 1'b1; end
+						    	5'bx1xx_1: begin num_of_inst_train_type = 3'b010; nxt_state = IDLE; write2LAT = 1'b1; end
+						    	5'bxx1x_1: begin num_of_inst_train_type = 3'b011; nxt_state = IDLE; write2LAT = 1'b1; end
+						    	5'bxxx1_1: begin num_of_inst_train_type = 3'b100; nxt_state = IDLE; write2LAT = 1'b1; end
+						    	5'b0000_x: begin num_of_inst_train_type = 3'b100; nxt_state = TRAIN; end
 						    endcase
 	
 						end	
 			    end // end TRAIN
+
 			if (state == DISPATCH)
 				begin
-					write2LAT <= 1'b0;
-	    			num_of_inst_train_type <= 3'b0;
+					casex ({end_lp1_dispatch, end_lp2_dispatch, end_lp3_dispatch, end_lp4_dispatch})
+						4'b1xxx: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b00; stll_ftch_cnt_type = 3'b001; end
+						4'bx1xx: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b01; stll_ftch_cnt_type = 3'b010; end
+						4'bxx1x: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b10; stll_ftch_cnt_type = 3'b011; end
+						4'bxxx1: begin max_unroll_dispatch = max_unroll_dispatch - 1; inst_valid_out_type = 2'b11; stll_ftch_cnt_type = 3'b100; end
+						4'b0000: begin inst_valid_out_type = 2'b11; stll_ftch_cnt_type = 3'b100; end
+					endcase
+					write2LAT = 1'b0;
+	    			num_of_inst_train_type = 3'b0;
 					if (mis_pred_in != 1'b1)
 						begin
-							nxt_state <= DISPATCH;
+							nxt_state = DISPATCH;
 						    if (max_unroll_dispatch == 7'd0)
 						    	begin
-						    		fnsh_unrll_out <= 1'b1;
+						    		fnsh_unrll_out = 1'b1;
 						    	end
 						    if (stll_ftch_cnt != 7'd64)
 						    	begin
-						    		stll_ftch_out <= 1'b0;
+						    		stll_ftch_out = 1'b0;
 						    	end
 						    else 
 						    	begin
-						    		stll_ftch_out <= 1'b1;
+						    		stll_ftch_out = 1'b1;
 						    	end
 				    	end
 				    else 
 					    begin
-					    	nxt_state <= IDLE;
+					    	nxt_state = IDLE;
 					    end
 				end
     	end 
@@ -224,20 +230,14 @@ module LAT_not_unroll(
 							(inst_valid_out_type == 2'b01) ? 4'b1100 :
 							(inst_valid_out_type == 2'b10) ? 4'b1110 : 4'b1111;
 
-	always @(/*autosense*/end_lp1_dispatch or end_lp2_dispatch
-		 or end_lp3_dispatch or end_lp4_dispatch or state)
+
+	/*always @(end_lp1_dispatch, end_lp2_dispatch, end_lp3_dispatch, end_lp4_dispatch)
+
 		begin
 			if (state == DISPATCH)
 				begin
-					casex ({end_lp1_dispatch, end_lp2_dispatch, end_lp3_dispatch, end_lp4_dispatch})
-						4'b1xxx: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b00; stll_ftch_cnt_type <= 3'b001; end
-						4'bx1xx: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b01; stll_ftch_cnt_type <= 3'b010; end
-						4'bxx1x: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b10; stll_ftch_cnt_type <= 3'b011; end
-						4'bxxx1: begin max_unroll_dispatch <= max_unroll_dispatch - 1; inst_valid_out_type <= 2'b11; stll_ftch_cnt_type <= 3'b100; end
-						4'b0000: begin inst_valid_out_type <= 2'b11; stll_ftch_cnt_type <= 3'b100; end
-					endcase
 				end
-		end
+		end*/
 
 	// update num_of_inst_train
 	always @(/*autosense*/num_of_inst_train_type)
@@ -251,7 +251,7 @@ module LAT_not_unroll(
 			endcase
 		end
 
-	always @(posedge clk)
+	always @(inst_in)
 		begin
 			case (stll_ftch_cnt_type)
 				3'b001: begin stll_ftch_cnt <= stll_ftch_cnt + 1; end
@@ -292,10 +292,22 @@ module LAT_not_unroll(
 		    endcase
 		end
 
+<<<<<<< HEAD
 	always @(/*autosense*/fallthrough_addr_train
 		 or max_unroll_train or num_of_inst_train
 		 or start_addr or write2LAT)
+=======
+	always @(write2LAT, rst)
+>>>>>>> modify the LAT,lsq
 		begin
+			if (rst)
+				begin
+					LAT[0] <= {47{1'b1}};
+					LAT[1] <= {47{1'b1}};
+					LAT[2] <= {47{1'b1}};
+					LAT[3] <= {47{1'b1}};
+					LAT_pointer <= 2'b0;
+				end
 		    if (write2LAT)
 				begin
 					casex(LAT_pointer)

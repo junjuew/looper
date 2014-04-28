@@ -30,7 +30,7 @@ fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
 	.exter_pc(16'b0),
 	.exter_pc_en(1'b0),
 	.mispred_num(1'b0),
-	.brnc_pred_log(1'b1),
+	.brnc_pred_log(1'b0),
 	//output
 	.pc_to_dec(pc_to_dec),
 	.inst_to_dec(inst_to_dec), 

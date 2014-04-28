@@ -18,10 +18,10 @@ wire [4:0] nxt_head, nxt_tail, pre_head, cmmt_diff, loop_body_diff, flush_body_d
 reg [41:0] ld_entry [0:23]; // load queue entries
 reg [4:0] head, tail, current, pre_tail, pre_current, loop_end, loop_start;
 reg busy, finished, loop_mode, pre_loop_strt;
-integer i;
-reg [23:0] update, // whether the corresponding entry needs update
-            bid, // whether the corresponding load instruction is ready to execute
-            shifted_bid, // shifted version of bid for priority decoding
+//integer i;
+wire [23:0] update, // whether the corresponding entry needs update
+				bid; // whether the corresponding load instruction is ready to execute
+reg [23:0]  shifted_bid, // shifted version of bid for priority decoding
             execute, // whether the corresponding entry 
             pre_commit,
             commit,
@@ -449,16 +449,22 @@ case(tail)
     default: fourth = 0;
 endcase
 
-always@(*)
-for (i=0;i<24;i=i+1)
-   update[i]= mem_rd & (!ld_entry[i][41]) & (indx_ls == ld_entry[i][37:32]);
-   
+generate
+genvar i_1;
+for (i_1=0;i_1<24;i_1=i_1+1)
+	begin : update_gen
+		assign update[i_1] = mem_rd & (!ld_entry[i_1][41]) & (indx_ls == ld_entry[i_1][37:32]);
+	end
+endgenerate
    
 assign insert = first | second | third | fourth;
 
-always@(posedge clk, negedge rst)
-   for (i=0;i<24;i=i+1) begin
-       if (!rst)
+generate
+genvar i;
+for (i=0;i<24;i=i+1) 
+	begin : ld_entry_gen
+       always@(posedge clk, negedge rst)
+		 if (!rst)
           ld_entry[i][41:0] <= 42'h20000000000;
        else begin
           if (update[i]) begin
@@ -507,18 +513,21 @@ always@(posedge clk, negedge rst)
                ld_entry[i][39] <= 1;
             else
                ld_entry[i][39] <= ld_entry[i][39];
-               
-               
-               
        end
    end
-      
+endgenerate
+
     
 // execute load
-always@(*)
-   for (i=0;i<24;i=i+1)
-      bid[i]= (~busy) & (~ld_entry[i][41]) & (~ld_entry[i][39]) & (ld_entry[i][40]); // find ready load that has not been done
- 
+generate
+genvar i_2;
+   for (i_2=0;i_2<24;i_2=i_2+1)
+	begin : bid_gen
+		assign bid[i_2] = (~busy) & (~ld_entry[i_2][41]) & (~ld_entry[i_2][39]) & (ld_entry[i_2][40]); // find ready load that has not been done
+	end
+endgenerate
+
+
 assign ld_rdy= |bid ;      
 
 // Order the bids from head
