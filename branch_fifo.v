@@ -77,7 +77,7 @@ module branch_fifo(/*autoarg*/
    
    
    
-   always@(/*autosense*/ /*memory or*/ brnc_count or cmt_brnc
+   always@(/*autosense*/ fifo[0] or fifo[1] or brnc_count or cmt_brnc
 	   or cmt_brnc_indx or head or mis_pred or mis_pred_brnc_indx
 	   or tail)
      begin

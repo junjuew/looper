@@ -181,7 +181,7 @@
    //output current mappping
    //cur_map is the actual mapping output
    //pos_map is the potential mapping output
-   always @(isq_lin,ldst, pos_map[0],pos_map[1],pos_map[2],pos_map[3],pos_map[4],pos_map[5],pos_map[6],pos_map[7],pos_map[8],pos_map[9],pos_map[10],pos_map[11],pos_map[12],pos_map[13],pos_map[14],pos_map[15])
+   always @(prv_map, isq_lin[ISQ_LINE_WIDTH-1:0],ldst[4:0], pos_map[0],pos_map[1],pos_map[2],pos_map[3],pos_map[4],pos_map[5],pos_map[6],pos_map[7],pos_map[8],pos_map[9],pos_map[10],pos_map[11],pos_map[12],pos_map[13],pos_map[14],pos_map[15])
      begin
         //if inst is not valid or no valid reg dest, then don't affect mapping
         if (isq_lin[BIT_INST_VLD] && ldst[4])

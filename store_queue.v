@@ -506,7 +506,7 @@ always@(*)
       match[i]= (~str_entry[i][40]) & addr_comp[i] & indx_comp[i];
 */
 
-always@(match)
+always@(match, head)
    case(head)
        4'h0:shifted_match=match;
        4'h1:shifted_match={match[0],match[15:1]};
@@ -528,7 +528,7 @@ always@(match)
    endcase
    
 // find the closest match for data forwarding     
-always@(shifted_match)
+always@(shifted_match,head)
    casex(shifted_match)
        16'h0: indx_to_fwd=0;
        16'b1???????????????: indx_to_fwd=head+15;

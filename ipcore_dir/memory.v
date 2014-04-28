@@ -44,7 +44,14 @@ module memory(
 	wea,
 	addra,
 	dina,
-	douta);
+	douta,
+	clkb,
+	rstb,
+	enb,
+	web,
+	addrb,
+	dinb,
+	doutb);
 
 
 input clka;
@@ -52,8 +59,15 @@ input rsta;
 input ena;
 input [0 : 0] wea;
 input [13 : 0] addra;
-input [15 : 0] dina;
-output [15 : 0] douta;
+input [63 : 0] dina;
+output [63 : 0] douta;
+input clkb;
+input rstb;
+input enb;
+input [0 : 0] web;
+input [13 : 0] addrb;
+input [63 : 0] dinb;
+output [63 : 0] doutb;
 
 // synthesis translate_off
 
@@ -68,7 +82,7 @@ output [15 : 0] douta;
 		.C_DISABLE_WARN_BHV_RANGE(0),
 		.C_FAMILY("virtex5"),
 		.C_HAS_ENA(1),
-		.C_HAS_ENB(0),
+		.C_HAS_ENB(1),
 		.C_HAS_INJECTERR(0),
 		.C_HAS_MEM_OUTPUT_REGS_A(0),
 		.C_HAS_MEM_OUTPUT_REGS_B(0),
@@ -77,20 +91,20 @@ output [15 : 0] douta;
 		.C_HAS_REGCEA(0),
 		.C_HAS_REGCEB(0),
 		.C_HAS_RSTA(1),
-		.C_HAS_RSTB(0),
+		.C_HAS_RSTB(1),
 		.C_HAS_SOFTECC_INPUT_REGS_A(0),
 		.C_HAS_SOFTECC_OUTPUT_REGS_B(0),
 		.C_INITA_VAL("0"),
 		.C_INITB_VAL("0"),
-		.C_INIT_FILE_NAME("no_coe_file_loaded"),
-		.C_LOAD_INIT_FILE(0),
-		.C_MEM_TYPE(0),
+		.C_INIT_FILE_NAME("memory.mif"),
+		.C_LOAD_INIT_FILE(1),
+		.C_MEM_TYPE(2),
 		.C_MUX_PIPELINE_STAGES(0),
 		.C_PRIM_TYPE(1),
 		.C_READ_DEPTH_A(16384),
 		.C_READ_DEPTH_B(16384),
-		.C_READ_WIDTH_A(16),
-		.C_READ_WIDTH_B(16),
+		.C_READ_WIDTH_A(64),
+		.C_READ_WIDTH_B(64),
 		.C_RSTRAM_A(0),
 		.C_RSTRAM_B(0),
 		.C_RST_PRIORITY_A("CE"),
@@ -108,8 +122,8 @@ output [15 : 0] douta;
 		.C_WRITE_DEPTH_B(16384),
 		.C_WRITE_MODE_A("WRITE_FIRST"),
 		.C_WRITE_MODE_B("WRITE_FIRST"),
-		.C_WRITE_WIDTH_A(16),
-		.C_WRITE_WIDTH_B(16),
+		.C_WRITE_WIDTH_A(64),
+		.C_WRITE_WIDTH_B(64),
 		.C_XDEVICEFAMILY("virtex5"))
 	inst (
 		.CLKA(clka),
@@ -119,15 +133,15 @@ output [15 : 0] douta;
 		.ADDRA(addra),
 		.DINA(dina),
 		.DOUTA(douta),
+		.CLKB(clkb),
+		.RSTB(rstb),
+		.ENB(enb),
+		.WEB(web),
+		.ADDRB(addrb),
+		.DINB(dinb),
+		.DOUTB(doutb),
 		.REGCEA(),
-		.CLKB(),
-		.RSTB(),
-		.ENB(),
 		.REGCEB(),
-		.WEB(),
-		.ADDRB(),
-		.DINB(),
-		.DOUTB(),
 		.INJECTSBITERR(),
 		.INJECTDBITERR(),
 		.SBITERR(),
@@ -136,6 +150,10 @@ output [15 : 0] douta;
 
 
 // synthesis translate_on
+
+// XST black box declaration
+// box_type "black_box"
+// synthesis attribute box_type of memory is "black_box"
 
 endmodule
 

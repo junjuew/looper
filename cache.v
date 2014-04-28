@@ -27,10 +27,10 @@ module cache (rst, clk, addr_ca, data_ca_in, rd_wrt_ca, enable,
     assign offset=addr_ca[1:0];
     assign read=enable & rd_wrt_ca & rst;
     assign write=enable & (!rd_wrt_ca) & rst;
-    assign hit_first=(mem[index][152] === 1) & (tag === mem[index][151:141]);
-    assign hit_second=(mem[index][75] === 1) & (tag === mem[index][74:64]);
+    assign hit_first=(mem[index][152] == 1) & (tag == mem[index][151:141]);
+    assign hit_second=(mem[index][75] == 1) & (tag == mem[index][74:64]);
     assign miss_hit=hit_first | hit_second;
-    assign wrt_bck= (victim == 1'b1) ?  (!(miss_hit) & (mem[index][153] === 1)) :(!(miss_hit) & (mem[index][76] === 1)); // whether a writeback is needed telling from the corresponding dirty bit
+    assign wrt_bck= (victim == 1'b1) ?  (!(miss_hit) & (mem[index][153] == 1)) :(!(miss_hit) & (mem[index][76] == 1)); // whether a writeback is needed telling from the corresponding dirty bit
     
    
 
@@ -43,6 +43,14 @@ module cache (rst, clk, addr_ca, data_ca_in, rd_wrt_ca, enable,
         addr_mem <= 0;
         victim <= 0;
         done <= 0;
+		  mem[0][153:0] <= 0;
+		  mem[1][153:0] <= 0;
+		  mem[2][153:0] <= 0;
+		  mem[3][153:0] <= 0;
+		  mem[4][153:0] <= 0;
+		  mem[5][153:0] <= 0;
+		  mem[6][153:0] <= 0;
+		  mem[7][153:0] <= 0;
     end
     else if (miss_hit & enable) begin  
           // read hit

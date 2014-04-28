@@ -47,8 +47,15 @@ ENTITY memory IS
 	ena: IN std_logic;
 	wea: IN std_logic_VECTOR(0 downto 0);
 	addra: IN std_logic_VECTOR(13 downto 0);
-	dina: IN std_logic_VECTOR(15 downto 0);
-	douta: OUT std_logic_VECTOR(15 downto 0));
+	dina: IN std_logic_VECTOR(63 downto 0);
+	douta: OUT std_logic_VECTOR(63 downto 0);
+	clkb: IN std_logic;
+	rstb: IN std_logic;
+	enb: IN std_logic;
+	web: IN std_logic_VECTOR(0 downto 0);
+	addrb: IN std_logic_VECTOR(13 downto 0);
+	dinb: IN std_logic_VECTOR(63 downto 0);
+	doutb: OUT std_logic_VECTOR(63 downto 0));
 END memory;
 
 ARCHITECTURE memory_a OF memory IS
@@ -60,8 +67,15 @@ component wrapped_memory
 	ena: IN std_logic;
 	wea: IN std_logic_VECTOR(0 downto 0);
 	addra: IN std_logic_VECTOR(13 downto 0);
-	dina: IN std_logic_VECTOR(15 downto 0);
-	douta: OUT std_logic_VECTOR(15 downto 0));
+	dina: IN std_logic_VECTOR(63 downto 0);
+	douta: OUT std_logic_VECTOR(63 downto 0);
+	clkb: IN std_logic;
+	rstb: IN std_logic;
+	enb: IN std_logic;
+	web: IN std_logic_VECTOR(0 downto 0);
+	addrb: IN std_logic_VECTOR(13 downto 0);
+	dinb: IN std_logic_VECTOR(63 downto 0);
+	doutb: OUT std_logic_VECTOR(63 downto 0));
 end component;
 
 -- Configuration specification 
@@ -69,30 +83,30 @@ end component;
 		generic map(
 			c_has_regceb => 0,
 			c_has_regcea => 0,
-			c_mem_type => 0,
+			c_mem_type => 2,
 			c_rstram_b => 0,
 			c_rstram_a => 0,
 			c_has_injecterr => 0,
 			c_rst_type => "SYNC",
 			c_prim_type => 1,
-			c_read_width_b => 16,
+			c_read_width_b => 64,
 			c_initb_val => "0",
 			c_family => "virtex5",
-			c_read_width_a => 16,
+			c_read_width_a => 64,
 			c_disable_warn_bhv_coll => 0,
 			c_use_softecc => 0,
 			c_write_mode_b => "WRITE_FIRST",
-			c_init_file_name => "no_coe_file_loaded",
+			c_init_file_name => "memory.mif",
 			c_write_mode_a => "WRITE_FIRST",
 			c_mux_pipeline_stages => 0,
 			c_has_softecc_output_regs_b => 0,
 			c_has_mem_output_regs_b => 0,
 			c_has_mem_output_regs_a => 0,
-			c_load_init_file => 0,
+			c_load_init_file => 1,
 			c_xdevicefamily => "virtex5",
 			c_write_depth_b => 16384,
 			c_write_depth_a => 16384,
-			c_has_rstb => 0,
+			c_has_rstb => 1,
 			c_has_rsta => 1,
 			c_has_mux_output_regs_b => 0,
 			c_inita_val => "0",
@@ -104,15 +118,15 @@ end component;
 			c_use_ecc => 0,
 			c_algorithm => 1,
 			c_disable_warn_bhv_range => 0,
-			c_write_width_b => 16,
-			c_write_width_a => 16,
+			c_write_width_b => 64,
+			c_write_width_a => 64,
 			c_read_depth_b => 16384,
 			c_read_depth_a => 16384,
 			c_byte_size => 9,
 			c_sim_collision_check => "ALL",
 			c_common_clk => 0,
 			c_wea_width => 1,
-			c_has_enb => 0,
+			c_has_enb => 1,
 			c_web_width => 1,
 			c_has_ena => 1,
 			c_use_byte_web => 0,
@@ -131,7 +145,14 @@ U0 : wrapped_memory
 			wea => wea,
 			addra => addra,
 			dina => dina,
-			douta => douta);
+			douta => douta,
+			clkb => clkb,
+			rstb => rstb,
+			enb => enb,
+			web => web,
+			addrb => addrb,
+			dinb => dinb,
+			doutb => doutb);
 -- synthesis translate_on
 
 END memory_a;

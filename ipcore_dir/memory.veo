@@ -37,8 +37,15 @@ memory YourInstanceName (
 	.ena(ena),
 	.wea(wea), // Bus [0 : 0] 
 	.addra(addra), // Bus [13 : 0] 
-	.dina(dina), // Bus [15 : 0] 
-	.douta(douta)); // Bus [15 : 0] 
+	.dina(dina), // Bus [63 : 0] 
+	.douta(douta), // Bus [63 : 0] 
+	.clkb(clkb),
+	.rstb(rstb),
+	.enb(enb),
+	.web(web), // Bus [0 : 0] 
+	.addrb(addrb), // Bus [13 : 0] 
+	.dinb(dinb), // Bus [63 : 0] 
+	.doutb(doutb)); // Bus [63 : 0] 
 
 // INST_TAG_END ------ End INSTANTIATION Template ---------
 

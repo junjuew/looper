@@ -36,9 +36,20 @@ component memory
 	ena: IN std_logic;
 	wea: IN std_logic_VECTOR(0 downto 0);
 	addra: IN std_logic_VECTOR(13 downto 0);
-	dina: IN std_logic_VECTOR(15 downto 0);
-	douta: OUT std_logic_VECTOR(15 downto 0));
+	dina: IN std_logic_VECTOR(63 downto 0);
+	douta: OUT std_logic_VECTOR(63 downto 0);
+	clkb: IN std_logic;
+	rstb: IN std_logic;
+	enb: IN std_logic;
+	web: IN std_logic_VECTOR(0 downto 0);
+	addrb: IN std_logic_VECTOR(13 downto 0);
+	dinb: IN std_logic_VECTOR(63 downto 0);
+	doutb: OUT std_logic_VECTOR(63 downto 0));
 end component;
+
+-- Synplicity black box declaration
+attribute syn_black_box : boolean;
+attribute syn_black_box of memory: component is true;
 
 -- COMP_TAG_END ------ End COMPONENT Declaration ------------
 
@@ -54,7 +65,14 @@ your_instance_name : memory
 			wea => wea,
 			addra => addra,
 			dina => dina,
-			douta => douta);
+			douta => douta,
+			clkb => clkb,
+			rstb => rstb,
+			enb => enb,
+			web => web,
+			addrb => addrb,
+			dinb => dinb,
+			doutb => doutb);
 -- INST_TAG_END ------ End INSTANTIATION Template ------------
 
 -- You must compile the wrapper file memory.vhd when simulating

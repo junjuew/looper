@@ -1,2 +1,2 @@
-SETPROJECT "I:/looper/looper/ipcore_dir/coregen.cgp"
-LAUNCHXCO "I:/looper/looper/ipcore_dir/imemory.xco"
+SETPROJECT "I:/ECE554/looper/ipcore_dir/coregen.cgp"
+LAUNCHXCO "I:/ECE554/looper/ipcore_dir/imemory.xco"

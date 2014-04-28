@@ -12,10 +12,13 @@ module dff (q, d, clk, rst_n);
 
     reg            state;
 
-    assign #(1) q = state;
+    assign q = state;
 
-    always @(posedge clk) begin
-      state = rst_n? d : 0;
+    always @(posedge clk, negedge rst_n) begin
+      if(~rst_n)
+			state <= 1'b0;
+		else
+			state <= d;
     end
 
 endmodule

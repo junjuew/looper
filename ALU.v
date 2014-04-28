@@ -35,8 +35,25 @@ module ALU( alu_op1, alu_op2, alu_mode, alu_en, alu_inv_Rt, alu_out);
    
    
    //////// Change this to combinational logic and for multiplier hold all the controll signal
-   always @(/*autosense*/ pos_sra or alu_en or alu_mode or alu_op1
-	    or alu_op2 or alu_op2_new) begin
+   always @(/*autosense*/ 
+			pos_sra[0] or 
+			pos_sra[1] or 
+			pos_sra[2] or 
+			pos_sra[3] or 
+			pos_sra[4] or 
+			pos_sra[5] or 
+			pos_sra[6] or 
+			pos_sra[7] or 
+			pos_sra[8] or 
+			pos_sra[9] or 
+			pos_sra[10] or 
+			pos_sra[11] or 
+			pos_sra[12] or 
+			pos_sra[13] or 
+			pos_sra[14] or 
+			pos_sra[15] or 
+			alu_en or alu_mode or alu_op1
+			or alu_op2 or alu_op2_new) begin
       if(alu_en == 1'b1) 
         begin
          casex(alu_mode)

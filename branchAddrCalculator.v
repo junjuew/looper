@@ -60,6 +60,10 @@ always@(*)
 
 //use taken signal to select output
 always@(*)begin
+	brnch_addr_pc0=16'b0;
+	recv_pc0=16'b0;
+	brnch_addr_pc1=16'b0;
+	recv_pc1=16'b0;
 	if((|brnch_pc_sel_from_bhndlr)&&(^brnch_pc_sel_from_bhndlr))begin//if one bran instruction 
 		brnch_addr_pc1=16'b0;
 		recv_pc1=16'b0;
@@ -239,12 +243,14 @@ always@(*)begin
 			end
 
 		end
-
-
-
-
-
 	end//two branch
+	else
+	begin
+		brnch_addr_pc0=16'b0;
+		recv_pc0=16'b0;
+		brnch_addr_pc1=16'b0;
+		recv_pc1=16'b0;
+	end
 end//always
 
 

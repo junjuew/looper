@@ -182,16 +182,274 @@
 <msg type="info" file="ip" num="0" delta="new" ><arg fmt="%d" index="1">28</arg>: (<arg fmt="%d" index="2">55</arg>,<arg fmt="%d" index="3">12288</arg>) 	: <arg fmt="%d" index="4">9</arg>x<arg fmt="%d" index="5">4096</arg> 	u:<arg fmt="%d" index="6">9</arg>
 </msg>
 
-<msg type="warning" file="Xst" num="795" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">92</arg>: Size of operands are different : result is &lt;false&gt;.
+<msg type="warning" file="Xst" num="795" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">92</arg>: Size of operands are different : result is &lt;false&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="2095" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">92</arg>: Size of operands are different : result is &lt;true&gt;.
+<msg type="warning" file="Xst" num="2095" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">92</arg>: Size of operands are different : result is &lt;true&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="795" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">92</arg>: Size of operands are different : result is &lt;false&gt;.
+<msg type="warning" file="Xst" num="795" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">92</arg>: Size of operands are different : result is &lt;false&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="2095" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">92</arg>: Size of operands are different : result is &lt;true&gt;.
+<msg type="warning" file="Xst" num="2095" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">92</arg>: Size of operands are different : result is &lt;true&gt;.
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" ><arg fmt="%s" index="1">$Id: get_init_bmg_v4_2.c,v 1.1.2.1 2010/04/01 12:39:27 muruga Exp $</arg>
+</msg>
+
+<msg type="info" file="ip" num="0" delta="new" >Reading MIF file at <arg fmt="%s" index="1">I:\ECE554\looper\ipcore_dir\.\tmp\_cg\memory.mif</arg>
 </msg>
 
 <msg type="info" file="ip" num="0" delta="new" ><arg fmt="%d" index="1">0</arg>: (<arg fmt="%d" index="2">0</arg>,<arg fmt="%d" index="3">0</arg>) 	: <arg fmt="%d" index="4">1</arg>x<arg fmt="%d" index="5">16384</arg> 	u:<arg fmt="%d" index="6">1</arg>
@@ -368,262 +626,238 @@
 <msg type="info" file="ip" num="0" delta="new" ><arg fmt="%d" index="1">28</arg>: (<arg fmt="%d" index="2">55</arg>,<arg fmt="%d" index="3">12288</arg>) 	: <arg fmt="%d" index="4">9</arg>x<arg fmt="%d" index="5">4096</arg> 	u:<arg fmt="%d" index="6">9</arg>
 </msg>
 
-<msg type="warning" file="Xst" num="752" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected input port &apos;<arg fmt="%s" index="3">ADDR_IN</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos; is tied to default value.
+<msg type="warning" file="Xst" num="752" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected input port &apos;<arg fmt="%s" index="3">ADDR_IN</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos; is tied to default value.
 </msg>
 
-<msg type="warning" file="Xst" num="752" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected input port &apos;<arg fmt="%s" index="3">SBITERRIN</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos; is tied to default value.
+<msg type="warning" file="Xst" num="752" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected input port &apos;<arg fmt="%s" index="3">SBITERRIN</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos; is tied to default value.
 </msg>
 
-<msg type="warning" file="Xst" num="752" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected input port &apos;<arg fmt="%s" index="3">DBITERRIN</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos; is tied to default value.
+<msg type="warning" file="Xst" num="752" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected input port &apos;<arg fmt="%s" index="3">DBITERRIN</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos; is tied to default value.
 </msg>
 
-<msg type="warning" file="Xst" num="753" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected output port &apos;<arg fmt="%s" index="3">SBITERR</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos;.
+<msg type="warning" file="Xst" num="753" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected output port &apos;<arg fmt="%s" index="3">SBITERR</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos;.
 </msg>
 
-<msg type="warning" file="Xst" num="753" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected output port &apos;<arg fmt="%s" index="3">DBITERR</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos;.
+<msg type="warning" file="Xst" num="753" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected output port &apos;<arg fmt="%s" index="3">DBITERR</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos;.
 </msg>
 
-<msg type="warning" file="Xst" num="753" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected output port &apos;<arg fmt="%s" index="3">RDADDRECC</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos;.
+<msg type="warning" file="Xst" num="753" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_generic_cstr.vhd</arg>&quot; line <arg fmt="%d" index="2">1599</arg>: Unconnected output port &apos;<arg fmt="%s" index="3">RDADDRECC</arg>&apos; of component &apos;<arg fmt="%s" index="4">blk_mem_gen_mux</arg>&apos;.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_wrapper_v5.vhd</arg>&quot; line <arg fmt="%d" index="2">4196</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">pad_addr_a14</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_wrapper_v5_init.vhd</arg>&quot; line <arg fmt="%d" index="2">4241</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">pad_addr_a14</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_wrapper_v5.vhd</arg>&quot; line <arg fmt="%d" index="2">4198</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">pad_addr_b14</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_wrapper_v5_init.vhd</arg>&quot; line <arg fmt="%d" index="2">4243</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">pad_addr_b14</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">976</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addra_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="2096" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
+<msg type="warning" file="Xst" num="2096" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_prim_width.vhd</arg>&quot; line <arg fmt="%d" index="2">977</arg>: Use of null array slice on signal &lt;<arg fmt="%s" index="3">addrb_pad</arg>&gt; is not supported.
 </msg>
 
-<msg type="warning" file="Xst" num="795" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">428</arg>: Size of operands are different : result is &lt;false&gt;.
+<msg type="warning" file="Xst" num="795" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">428</arg>: Size of operands are different : result is &lt;false&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="2095" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">455</arg>: Size of operands are different : result is &lt;true&gt;.
+<msg type="warning" file="Xst" num="2095" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">455</arg>: Size of operands are different : result is &lt;true&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="795" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">459</arg>: Size of operands are different : result is &lt;false&gt;.
+<msg type="warning" file="Xst" num="795" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">459</arg>: Size of operands are different : result is &lt;false&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="795" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">470</arg>: Size of operands are different : result is &lt;false&gt;.
+<msg type="warning" file="Xst" num="795" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">470</arg>: Size of operands are different : result is &lt;false&gt;.
 </msg>
 
 <msg type="info" file="Xst" num="2679" delta="old" >Register &lt;<arg fmt="%s" index="1">rdaddrecc_lat</arg>&gt; in unit &lt;<arg fmt="%s" index="2">blk_mem_gen_mux.1</arg>&gt; has a constant value of <arg fmt="%s" index="3">00000000000000</arg> during circuit operation. The register is replaced by logic.
 </msg>
 
-<msg type="warning" file="Xst" num="795" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">428</arg>: Size of operands are different : result is &lt;false&gt;.
+<msg type="warning" file="Xst" num="795" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">428</arg>: Size of operands are different : result is &lt;false&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="2095" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">455</arg>: Size of operands are different : result is &lt;true&gt;.
+<msg type="warning" file="Xst" num="2095" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">455</arg>: Size of operands are different : result is &lt;true&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="795" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">459</arg>: Size of operands are different : result is &lt;false&gt;.
+<msg type="warning" file="Xst" num="795" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">459</arg>: Size of operands are different : result is &lt;false&gt;.
 </msg>
 
-<msg type="warning" file="Xst" num="795" delta="old" >&quot;<arg fmt="%s" index="1">I:/looper/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">470</arg>: Size of operands are different : result is &lt;false&gt;.
+<msg type="warning" file="Xst" num="795" delta="new" >&quot;<arg fmt="%s" index="1">I:/ECE554/looper/ipcore_dir/./tmp/_cg/_bbx/blk_mem_gen_v4_2/blk_mem_gen_mux.vhd</arg>&quot; line <arg fmt="%d" index="2">470</arg>: Size of operands are different : result is &lt;false&gt;.
 </msg>
 
 <msg type="info" file="Xst" num="2679" delta="old" >Register &lt;<arg fmt="%s" index="1">rdaddrecc_lat</arg>&gt; in unit &lt;<arg fmt="%s" index="2">blk_mem_gen_mux.2</arg>&gt; has a constant value of <arg fmt="%s" index="3">00000000000000</arg> during circuit operation. The register is replaced by logic.
-</msg>
-
-<msg type="warning" file="Xst" num="647" delta="old" >Input &lt;<arg fmt="%s" index="1">ENA</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-</msg>
-
-<msg type="warning" file="Xst" num="647" delta="old" >Input &lt;<arg fmt="%s" index="1">ENB</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-</msg>
-
-<msg type="warning" file="Xst" num="647" delta="old" >Input &lt;<arg fmt="%s" index="1">RSTA</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-</msg>
-
-<msg type="warning" file="Xst" num="647" delta="old" >Input &lt;<arg fmt="%s" index="1">RSTB</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-</msg>
-
-<msg type="warning" file="Xst" num="647" delta="new" >Input &lt;<arg fmt="%s" index="1">WEA&lt;0&gt;</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-</msg>
-
-<msg type="warning" file="Xst" num="647" delta="old" >Input &lt;<arg fmt="%s" index="1">WEB&lt;0&gt;</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 </msg>
 
 <msg type="warning" file="Xst" num="647" delta="old" >Input &lt;<arg fmt="%s" index="1">INJECTDBITERR</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 </msg>
 
 <msg type="warning" file="Xst" num="647" delta="old" >Input &lt;<arg fmt="%s" index="1">INJECTSBITERR</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-</msg>
-
-<msg type="warning" file="Xst" num="647" delta="new" >Input &lt;<arg fmt="%s" index="1">DINA</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-</msg>
-
-<msg type="warning" file="Xst" num="647" delta="old" >Input &lt;<arg fmt="%s" index="1">DINB</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 </msg>
 
 <msg type="warning" file="Xst" num="647" delta="old" >Input &lt;<arg fmt="%s" index="1">REGCEA</arg>&gt; is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
@@ -752,7 +986,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web2&lt;1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2&lt;1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_wea8</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -824,7 +1058,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18&lt;17:1&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18&lt;17:1&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_a72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -833,7 +1067,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_a36</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_a18&lt;17:1&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_a18&lt;17:1&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_din_b36</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -890,7 +1124,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -962,7 +1196,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1031,7 +1265,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1103,7 +1337,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1172,7 +1406,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1244,7 +1478,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1313,7 +1547,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1385,7 +1619,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1454,7 +1688,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1526,7 +1760,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1595,7 +1829,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1667,7 +1901,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1736,7 +1970,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1808,7 +2042,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1877,7 +2111,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -1949,7 +2183,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2018,7 +2252,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2090,7 +2324,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2159,7 +2393,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2231,7 +2465,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2300,7 +2534,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2372,7 +2606,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2441,7 +2675,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2513,7 +2747,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2582,7 +2816,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2654,7 +2888,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2723,7 +2957,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2795,7 +3029,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2864,7 +3098,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -2936,7 +3170,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3005,7 +3239,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3077,7 +3311,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3146,7 +3380,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3218,7 +3452,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3287,7 +3521,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3359,7 +3593,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3428,7 +3662,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3500,7 +3734,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3569,7 +3803,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3641,7 +3875,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3710,7 +3944,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3782,7 +4016,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3851,7 +4085,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3923,7 +4157,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -3992,7 +4226,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4064,7 +4298,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4133,7 +4367,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4205,7 +4439,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4274,7 +4508,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4346,7 +4580,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4415,7 +4649,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4487,7 +4721,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4556,7 +4790,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4628,7 +4862,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4697,7 +4931,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_i</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="1780" delta="new" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web4&lt;3:1&gt;</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">pad_web2</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4769,7 +5003,7 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b72</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b36&lt;35:9&gt;</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">full_dout_b18</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
@@ -4829,7 +5063,7 @@
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_sdp</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="653" delta="new" >Signal &lt;<arg fmt="%s" index="1">sbiterr_array</arg>&gt; is used but never assigned. This sourceless signal will be automatically connected to value <arg fmt="%s" index="2">0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</arg>.
+<msg type="warning" file="Xst" num="653" delta="old" >Signal &lt;<arg fmt="%s" index="1">sbiterr_array</arg>&gt; is used but never assigned. This sourceless signal will be automatically connected to value <arg fmt="%s" index="2">0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</arg>.
 </msg>
 
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">rst_enb</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
@@ -4850,13 +5084,13 @@
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">rdaddrecc_last</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr9</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr9</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr8</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr8</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr7</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr7</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr6</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
@@ -4871,61 +5105,61 @@
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr3</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr27</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr27</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr26</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr26</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr25</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr25</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr24</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr24</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr23</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr23</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr22</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr22</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr21</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr21</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr20</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr20</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr2</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr19</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr19</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr18</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr18</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr17</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr17</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr16</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr16</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr15</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr15</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr14</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr14</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr13</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr13</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr12</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr12</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr11</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr11</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr10</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr10</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr1</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
@@ -4937,13 +5171,13 @@
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_sbiterr</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr9</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr9</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr8</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr8</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr7</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr7</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr6</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
@@ -4958,61 +5192,61 @@
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr3</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr27</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr27</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr26</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr26</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr25</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr25</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr24</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr24</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr23</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr23</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr22</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr22</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr21</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr21</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr20</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr20</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr2</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr19</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr19</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr18</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr18</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr17</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr17</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr16</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr16</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr15</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr15</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr14</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr14</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr13</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr13</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr12</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr12</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr11</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr11</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="646" delta="new" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr10</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+<msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr10</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">ram_dbiterr1</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
@@ -5027,166 +5261,94 @@
 <msg type="warning" file="Xst" num="646" delta="old" >Signal &lt;<arg fmt="%s" index="1">dbiterr_sdp</arg>&gt; is assigned but never used. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="warning" file="Xst" num="653" delta="new" >Signal &lt;<arg fmt="%s" index="1">dbiterr_array</arg>&gt; is used but never assigned. This sourceless signal will be automatically connected to value <arg fmt="%s" index="2">0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</arg>.
+<msg type="warning" file="Xst" num="653" delta="old" >Signal &lt;<arg fmt="%s" index="1">dbiterr_array</arg>&gt; is used but never assigned. This sourceless signal will be automatically connected to value <arg fmt="%s" index="2">0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</arg>.
 </msg>
 
 <msg type="warning" file="Xst" num="1780" delta="old" >Signal &lt;<arg fmt="%s" index="1">addrb_in</arg>&gt; is never used or assigned. This unconnected signal will be trimmed during the optimization process.
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[1].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[1].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[2].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[2].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[3].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[3].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[4].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[4].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[5].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[5].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[6].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[6].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[7].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[7].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[8].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[8].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[9].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[9].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[10].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[10].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[11].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[11].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[12].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[12].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[13].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[13].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[14].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[14].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[15].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[15].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[16].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[16].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[17].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[17].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[18].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[18].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[19].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[19].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[20].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[20].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[21].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[21].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[22].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[22].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[23].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[23].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[24].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[24].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[25].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[25].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[26].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[26].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[27].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[27].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
-<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[28].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[28].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[24].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[28].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[20].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[28].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[16].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[28].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[12].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[28].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[8].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[28].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[4].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[27].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[23].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[27].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[19].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[27].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[15].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[27].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[11].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[27].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[7].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[27].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[3].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[26].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[22].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[26].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[18].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[26].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[14].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[26].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[10].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[26].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[6].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[26].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[2].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[25].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[21].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[25].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[17].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[25].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[13].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[25].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[9].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[25].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[5].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
-</msg>
-
-<msg type="warning" file="Xst" num="2398" delta="new" >RAMs &lt;<arg fmt="%s" index="1">U0/blk_mem_generator/valid.cstr/ramloop[25].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt;, &lt;<arg fmt="%s" index="2">U0/blk_mem_generator/valid.cstr/ramloop[1].ram.r/v5_noinit.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg>&gt; are equivalent
+<msg type="info" file="Xst" num="1901" delta="new" >Instance <arg fmt="%s" index="1">ramloop[28].ram.r/v5_init.ram/TRUE_DP.SINGLE_PRIM36.TDP</arg> in unit <arg fmt="%s" index="2">blk_mem_gen_generic_cstr</arg> of type <arg fmt="%s" index="3">RAMB36</arg> has been replaced by <arg fmt="%s" index="4">RAMB36_EXP</arg>
 </msg>
 
 <msg type="info" file="Xst" num="2169" delta="old" >HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
