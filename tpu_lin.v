@@ -72,8 +72,8 @@
    wire [5:0]                      pdst; //allocated physical register
    wire [4:0]                      ldst;
 
-   //valid bit | logical reg number 
-   wire [4:0]                      lsrc1, lsrc2;
+   //(valid bit) | logical reg number 
+   wire [3:0]                      lsrc1, lsrc2;
 
    //mapping wires separated from prv_map
    wire [6:0]                      idi_map[15:0];
@@ -85,8 +85,8 @@
    assign ldst = isq_lin[BIT_LDST_VLD :BIT_LDST_VLD -4];
    //by default the physical register addr is at the LSB of inst coming in
    assign pdst = isq_lin [5:0];
-   assign lsrc1 = isq_lin[BIT_LSRC1_VLD : BIT_LSRC1_VLD - 4];
-   assign lsrc2 = isq_lin[BIT_LSRC2_VLD : BIT_LSRC2_VLD - 4];   
+   assign lsrc1 = isq_lin[BIT_LSRC1_VLD -1: BIT_LSRC1_VLD - 4];
+   assign lsrc2 = isq_lin[BIT_LSRC2_VLD -1: BIT_LSRC2_VLD - 4];   
    
    
    ///////////////////////////////////////

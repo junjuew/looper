@@ -61,3 +61,17 @@ Current implementation scheme:
 3. Arch swt in TPU will only happen until all instructions in the active region resolved, not only sent. 
    reason: for example, idx 31 is sent but not resolved. At this time, arch swt cannot happen, since if happened (assume , top segment is the current header), middle segment will clock in idx 31's dest register as invalid. When we resolve it, we can only update idx 31's pdest instead of updating middle segment.
 
+
+
+
+Synthesis warning:
+
+1. tpu_out (tpu.v): bit 6 and bit 56 are unused, since bit 6 -- pr_valid -- is combined with RegWrite. 
+            bit 56 (brn_wat) is not used in pdc and output, since only tpu use it to determine the arch swt.
+2. free_preg (pdc.v): bit 6 is not used, since it is replaced by RegWrite signal            
+3. clr_val (isq_lin.v): is not used, but is left there as a port
+4. changed lsrc2 in tpu_lin.v to 4 bits, remove the valid bit, since I'm using isq_lin to get the valid bit
+5. inst (isq_lin.v): bit 6(pr_valid) and 39(immediate valid) are not used by is or later stage
+6. changed br_snt to 7 bits instead of 8 bits
+7. combinational loop in issue: since the tpu will bypass the header when needed, then there is a loop formed depending on what the mux will choose.
+: need to test such case 

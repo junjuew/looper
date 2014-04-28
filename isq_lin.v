@@ -23,7 +23,7 @@ module isq_lin(/*autoarg*/
    input wire [ISQ_LINE_NO_IDX_WIDTH-1:0] isq_lin_in;
    output wire [ISQ_LINE_NO_IDX_WIDTH-1:0] isq_lin_out;
 
-   reg                          val, wat, brn_wat;
+   reg                          wat, brn_wat;
    reg [INST_WIDTH-1:0]             inst;
          
              

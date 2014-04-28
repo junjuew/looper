@@ -205,7 +205,7 @@
    /*********** handle insts immediately after branch *********/
    // when branch misprediction happen, need to flush out
    // every inst after brn in the same cycle
-   reg [BRN_WIDTH:0]                                               br_snt;
+   reg [BRN_WIDTH-1:0]                                               br_snt;
    wire                                              br_out;
    assign br_out = (alu1_ins_to_rf_pdc[IS_BIT_CTRL_BR:IS_BIT_CTRL_BR-1] != 2'b00)? 1'b1:1'b0;
    wire                                              br_prv;
