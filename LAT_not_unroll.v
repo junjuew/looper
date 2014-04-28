@@ -73,14 +73,14 @@ module LAT_not_unroll(
 		    end				
 	    end
 
-	always @(/*autosense*/  bck_lp_bus_in or LAT
+	always @(/*autosense*/ /*memory or*/ bck_lp_bus_in
 		 or dispatch1 or dispatch2 or dispatch3 or dispatch4
 		 or end_lp1_dispatch or end_lp1_train
 		 or end_lp2_dispatch or end_lp2_train
 		 or end_lp3_dispatch or end_lp3_train
 		 or end_lp4_dispatch or end_lp4_train or loop_strt_out
-		 or mis_pred_in or num_of_inst_train or pc_in or state
-		 or stll_ftch_cnt)
+		 or mis_pred_in or num_of_inst_train or pc_in or rst
+		 or state or stll_ftch_cnt)
 	    begin
 			if (rst)
 				begin
@@ -292,13 +292,11 @@ module LAT_not_unroll(
 		    endcase
 		end
 
-<<<<<<< HEAD
+
 	always @(/*autosense*/fallthrough_addr_train
-		 or max_unroll_train or num_of_inst_train
+		 or max_unroll_train or num_of_inst_train or rst
 		 or start_addr or write2LAT)
-=======
-	always @(write2LAT, rst)
->>>>>>> modify the LAT,lsq
+
 		begin
 			if (rst)
 				begin
