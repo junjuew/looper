@@ -1,0 +1,6 @@
+when rda goes high, the data on data out line is not valid
+
+for rx and transmission:
+
+the high byte clock in first
+but within a byte, the LSB comes in first

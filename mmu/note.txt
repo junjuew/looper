@@ -1,0 +1,3 @@
+1. add clr_tx_baud to baud module to sync baud generator and trmt signal for transmission module
+2. for transmission module: 
+   the tx_done signal will be one cycle late after the whole transmission has been done. But it won't affect our usage. 
