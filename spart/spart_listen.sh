@@ -1,1 +1,0 @@
-cat /dev/ttyS0 >| spart_output.dump
