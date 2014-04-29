@@ -54,14 +54,14 @@ module branchHandler(input clk,
 wire [3:0] all_nop;
 wire [3:0] isJump;//tkn_brnch;
 reg  [1:0] brnch_cnt;
-wire [1:0] pred_to_pcsel;
+//wire [1:0] pred_to_pcsel;
 //wire [15:0] inst0_b,inst1_b,inst2_b,inst3_b;
      
 //////////////////////////////////////////////////////////
 ///////============code starts here=============//////////
 //////////////////////////////////////////////////////////
 
-assign pred_to_pcsel=loop_start?2'b11:pred_to_pcsel0;//move from bpred to bhndlr,
+//assign pred_to_pcsel=loop_start?2'b11:pred_to_pcsel0;//move from bpred to bhndlr,
                                         //if loop start,no need consider brnch_cnt 
 
 
