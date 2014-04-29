@@ -114,7 +114,7 @@ ROB per entry:
 
     wire [5:0] rob_tail_when_mis_pred;
 
-    wire inverting_bit;
+    reg  inverting_bit;
 	wire [4:0] rob_ld_cntr_add1;
 	wire [4:0] rob_ld_cntr_add2;
 	wire [4:0] rob_ld_cntr_add3;
