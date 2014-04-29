@@ -84,6 +84,8 @@ wire [3:0]  brnch_pc_sel_from_bhndlr,isImJmp,tkn_brnch;
 wire [2:0]  PC_select;
 wire [1:0]  pred_to_pcsel;
 wire [15:0] pc_from_mux;
+   wire     brch_full;
+   
 
 ///////////////////////////////////
 //internal registers and signals///
@@ -155,6 +157,7 @@ branchHandler branchjumpHandler(
     .instruction1(instruction1), 
     .instruction2(instruction2), 
     .instruction3(instruction3),//to output
+    .brch_full(brch_full),
     //.brnch_inst0(brnch_inst0),
     //.brnch_inst1(brnch_inst1),
 	.tkn_brnch(tkn_brnch),
@@ -238,7 +241,8 @@ nextPCSel next_PC_selector(
     .pred_to_pcsel(pred_to_pcsel),
     .jump_for_pcsel(jump_for_pcsel), 
     .pcsel_from_bhndlr(pcsel_from_bhndlr),
-    .stall_for_jump(stall_for_jump), 
+    .stall_for_jump(stall_for_jump),
+    .brch_full(brch_full),
     .PC_select(PC_select)
 );
 

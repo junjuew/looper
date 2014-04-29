@@ -48,6 +48,13 @@
    output wire 	      fnsh_unrll_out_to_SCH;
    output wire 	      loop_strt_to_SCH;
 
+   // for output package
+   wire [55:0] inst_out_to_SCH0_iner;
+   wire [55:0] inst_out_to_SCH1_iner;
+   wire [55:0] inst_out_to_SCH2_iner;
+   wire [55:0] inst_out_to_SCH3_iner;
+
+
    // for instruction checker
    wire 	      all_nop_from_instChecker;
    wire 	      all_nop_from_branchUnit;
@@ -140,10 +147,10 @@
    //instCombiner
    instCombiner iscb0(/*autoinst*/
 		      // Outputs
-		      .inst_out0	(inst_out_to_SCH0),
-		      .inst_out1	(inst_out_to_SCH1),
-		      .inst_out2	(inst_out_to_SCH2),
-		      .inst_out3	(inst_out_to_SCH3),
+		      .inst_out0	(inst_out_to_SCH0_iner),
+		      .inst_out1	(inst_out_to_SCH1_iner),
+		      .inst_out2	(inst_out_to_SCH2_iner),
+		      .inst_out3	(inst_out_to_SCH3_iner),
 		      // Inputs
 		      .inst0		(inst_from_ID0),
 		      .inst1		(inst_from_ID1),
@@ -155,7 +162,11 @@
 		      .pr_num_in3	(pr_num3),
 		      .pr_need_list_in	(pr_need_inst));
 
-   assign all_nop_to_CMTIS = all_nop_from_instChecker | all_nop_from_branchUnit;
+   assign all_nop_to_CMTIS = all_nop_from_instChecker | all_nop_from_branchUnit | stall;
    
+   assign inst_out_to_SCH0 = (stall) ? 56'b0 : inst_out_to_SCH0_iner;
+   assign inst_out_to_SCH1 = (stall) ? 56'b0 : inst_out_to_SCH1_iner;
+   assign inst_out_to_SCH2 = (stall) ? 56'b0 : inst_out_to_SCH2_iner;
+   assign inst_out_to_SCH3 = (stall) ? 56'b0 : inst_out_to_SCH3_iner;
 
 endmodule // al

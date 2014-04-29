@@ -174,7 +174,7 @@ module tb_topmodule();
 
 
    initial begin
-      #995;
+      #4995;
       $display("///////////////////////////////reg file//////////////////////////");
       
       for(i = 0; i < 64; i = i + 1)

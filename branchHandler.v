@@ -23,30 +23,31 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module branchHandler(input clk,
-    input rst_n,
-    input [15:0] pc,
-    input [15:0] inst0,
-    input [15:0] inst1,
-    input [15:0] inst2,
-    input [15:0] inst3,
-    input stall_for_jump,
-    input [1:0] pred_to_pcsel,
-    input decr_count_from_rob,
-    input stall_fetch,
-    input mispred_num,
-    input brnc_pred_log,
-    output update_bpred,
-    output [3:0] brnch_pc_sel_from_bhndlr,
-    output pcsel_from_bhndlr,
+    input 	  rst_n,
+    input [15:0]  pc,
+    input [15:0]  inst0,
+    input [15:0]  inst1,
+    input [15:0]  inst2,
+    input [15:0]  inst3,
+    input 	  stall_for_jump,
+    input [1:0]   pred_to_pcsel,
+    input 	  decr_count_from_rob,
+    input 	  stall_fetch,
+    input 	  mispred_num,
+    input 	  brnc_pred_log,
+    output 	  update_bpred,
+    output [3:0]  brnch_pc_sel_from_bhndlr,
+    output 	  pcsel_from_bhndlr,
     output [15:0] pc_bhndlr,
     output [15:0] instruction0,
     output [15:0] instruction1,
     output [15:0] instruction2,
     output [15:0] instruction3,
+    output 	  brch_full, 
     //output [15:0] brnch_inst0,
    // output [15:0] brnch_inst1,
-   output [3:0] tkn_brnch,
-    output [3:0] isImJmp
+    output [3:0]  tkn_brnch,
+    output [3:0]  isImJmp
     );
      
 //internal signals
@@ -114,12 +115,16 @@ wire [3:0] exd_cnt;
 assign exd_cnt={(brnch_before_inst0>=2'b10),(brnch_before_inst1>=2'b10),
                   (brnch_before_inst2>=2'b10),(brnch_before_inst3>=2'b10)};
 wire [3:0] third_brnch;
+ 
+   
 //modify third_brnch signal as below because the original way will hold when
 //2nd brnch is the 1st instruction
+
+//modified by ling
 assign third_brnch[3]=((brnch_cnt+brnch_pc_sel_from_bhndlr[3])>=3'b011);
-assign third_brnch[2]=((third_brnch[3]+brnch_pc_sel_from_bhndlr[2])>=3'b011);
-assign third_brnch[1]=((third_brnch[2]+brnch_pc_sel_from_bhndlr[1])>=3'b011);
-assign third_brnch[0]=((third_brnch[1]+brnch_pc_sel_from_bhndlr[0])>=3'b011);
+assign third_brnch[2]=((brnch_cnt+brnch_pc_sel_from_bhndlr[3]+brnch_pc_sel_from_bhndlr[2])>=3'b011);
+assign third_brnch[1]=((brnch_cnt+brnch_pc_sel_from_bhndlr[3]+brnch_pc_sel_from_bhndlr[2]+brnch_pc_sel_from_bhndlr[1])>=3'b011);
+assign third_brnch[0]=((brnch_cnt+brnch_pc_sel_from_bhndlr[3]+brnch_pc_sel_from_bhndlr[2]+brnch_pc_sel_from_bhndlr[1]+brnch_pc_sel_from_bhndlr[0])>=3'b011);
 
 
 /*
@@ -156,6 +161,10 @@ assign update_bpred = hold_for_brnch?0:((isJump[3]||third_brnch[3])?0:
    ((brnch_pc_sel_from_bhndlr[0])?1:0))))))));
 
 
+   //when branch counter is larger than 2, the PC should stall
+   //modify by ling
+   assign brch_full = hold_for_brnch;
+   
 
 
 //update counter
@@ -237,28 +246,28 @@ always@(posedge clk or negedge rst_n)begin
         brnch_cnt<=brnch_cnt;
 end
 
-//<3>
-//check if taken or not
-//taken branch 1-taken 0-not taken
-//if already flushed no need decide
-assign tkn_brnch[3]=(exd_cnt[3])?0:(brnch_pc_sel_from_bhndlr[3]?(pred_to_pcsel[1]?1:0):0);
-assign tkn_brnch[2]=(exd_cnt[2])?0:(  brnch_pc_sel_from_bhndlr[2]?
-( brnch_pc_sel_from_bhndlr[3]?(pred_to_pcsel[0]?1:0):(pred_to_pcsel[1]?1:0) ):0  );
+   //<3>
+   //check if taken or not
+   //taken branch 1-taken 0-not taken
+   //if already flushed no need decide
+   assign tkn_brnch[3]=(exd_cnt[3])?0:(brnch_pc_sel_from_bhndlr[3]?(pred_to_pcsel[1]?1:0):0);
+   assign tkn_brnch[2]=(exd_cnt[2])?0:(  brnch_pc_sel_from_bhndlr[2]?
+					 ( brnch_pc_sel_from_bhndlr[3]?(pred_to_pcsel[0]?1:0):(pred_to_pcsel[1]?1:0) ):0  );
 
-assign tkn_brnch[1]=(exd_cnt[1])?0:(   (|brnch_pc_sel_from_bhndlr[3:2]==0)?//if there is not branch before3rd inst
-(pred_to_pcsel[0]?1:0):(pred_to_pcsel[1]?1:0)   );
-assign tkn_brnch[0]=(exd_cnt[3])?0:((|brnch_pc_sel_from_bhndlr[3:1])?
-(pred_to_pcsel[0]?1:0):(pred_to_pcsel[1]?1:0));
+   assign tkn_brnch[1]=(exd_cnt[1])?0:(   (|brnch_pc_sel_from_bhndlr[3:2]==0)?//if there is not branch before3rd inst
+					  (pred_to_pcsel[0]?1:0):(pred_to_pcsel[1]?1:0)   );
+   assign tkn_brnch[0]=(exd_cnt[3])?0:((|brnch_pc_sel_from_bhndlr[3:1])?
+				       (pred_to_pcsel[0]?1:0):(pred_to_pcsel[1]?1:0));
 
 
-//<4>
-//stall signal, plus tkn, exceed count,jump, if immdediate jump flush at dataout module
-//if previous instruction got flushed, latter ones all get flushed
-//all_nop=1-->flush
-assign all_nop[3]=(stall_fetch||hold_for_brnch)?1:(third_brnch[3]?1:0);
-assign all_nop[2]=(stall_fetch||hold_for_brnch)?1:(all_nop[3]?1:(isJump[3]?1:(third_brnch[2]?1:(tkn_brnch[3]?1:0))));
-assign all_nop[1]=(stall_fetch||hold_for_brnch)?1:(all_nop[2]?1:(isJump[2]?1:(third_brnch[1]?1:(tkn_brnch[2]?1:0))));
-assign all_nop[0]=(stall_fetch||hold_for_brnch)?1:(all_nop[1]?1:(isJump[1]?1:(third_brnch[0]?1:(tkn_brnch[1]?1:0))));
+   //<4>
+   //stall signal, plus tkn, exceed count,jump, if immdediate jump flush at dataout module
+   //if previous instruction got flushed, latter ones all get flushed
+   //all_nop=1-->flush
+   assign all_nop[3]=(stall_fetch||hold_for_brnch)?1:(third_brnch[3]?1:0);
+   assign all_nop[2]=(stall_fetch||hold_for_brnch)?1:(all_nop[3]?1:(isJump[3]?1:(third_brnch[2]?1:(tkn_brnch[3]?1:0))));
+   assign all_nop[1]=(stall_fetch||hold_for_brnch)?1:(all_nop[2]?1:(isJump[2]?1:(third_brnch[1]?1:(tkn_brnch[2]?1:0))));
+   assign all_nop[0]=(stall_fetch||hold_for_brnch)?1:(all_nop[1]?1:(isJump[1]?1:(third_brnch[0]?1:(tkn_brnch[1]?1:0))));
 
 
 ///////////////////////

@@ -95,13 +95,25 @@ always@(*)begin
 	begin
 		if((pred_to_pcsel[1])==1)begin
 			if(brnch_pc_sel_from_bhndlr[3]==1)
-				recv_pc_to_dec[63:48]=pc_plus1;
-			else if(brnch_pc_sel_from_bhndlr[2]==1)
-				recv_pc_to_dec[47:32]=pc_plus2;	
-			else if(brnch_pc_sel_from_bhndlr[1]==1)
-				recv_pc_to_dec[31:16]=pc_plus3;
-			else if(brnch_pc_sel_from_bhndlr[0]==1)
-				recv_pc_to_dec[15:0]=pc_plus3+1;
+			  begin
+			     pred_result_to_dec[3] = pred_to_pcsel[1];
+			     recv_pc_to_dec[63:48]=pc_plus1;
+			  end
+		   	else if(brnch_pc_sel_from_bhndlr[2]==1)
+			  begin
+			     pred_result_to_dec[2] = pred_to_pcsel[1];
+			     recv_pc_to_dec[47:32]=pc_plus2;
+			  end
+		   	else if(brnch_pc_sel_from_bhndlr[1]==1)
+			  begin
+			     pred_result_to_dec[1] = pred_to_pcsel[1];
+			     recv_pc_to_dec[31:16]=pc_plus3;
+			  end
+		   	else if(brnch_pc_sel_from_bhndlr[0]==1)
+			  begin
+			     pred_result_to_dec[0] = pred_to_pcsel[1];
+			     recv_pc_to_dec[15:0]=pc_plus3+1;
+			  end
 		end
 		else
 		begin

@@ -19,14 +19,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module nextPCSel(
-    input clk,
-    input rst_n,
-    input stall_fetch,
-    input has_mispredict,
-    input [1:0] pred_to_pcsel,
-    input jump_for_pcsel,
-    input pcsel_from_bhndlr,
-    input stall_for_jump,
+    input 	     clk,
+    input 	     rst_n,
+    input 	     stall_fetch,
+    input 	     has_mispredict,
+    input [1:0]      pred_to_pcsel,
+    input 	     jump_for_pcsel,
+    input 	     pcsel_from_bhndlr,
+    input 	     stall_for_jump,
+    input            brch_full,	     
     output reg [2:0] PC_select
 );
 
@@ -46,7 +47,7 @@ always @(*)begin
         PC_select=3'd7;
     else if(has_mispredict==1)
         PC_select=3'd3;//pc_recovery
-    else if(stall==1'b1)
+    else if(stall==1'b1 || brch_full == 1'b1)
         PC_select=3'd6;
     else if(jump_for_pcsel==1)
         PC_select=3'd2;

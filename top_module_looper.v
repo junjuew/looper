@@ -214,7 +214,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
    // implementation of all the modules
    fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
                    //input 
-                   .stall_fetch(stll_ftch_out_to_IF),
+                   .stall_fetch(stll_ftch_out_to_IF||no_empt_preg_to_IF||ful_to_al_is_out||rob_full_stll_ROB_out),
                    /* -----\/----- EXCLUDED -----\/-----
                     .loop_start(loop_strt_out_to_AL),
                     -----/\----- EXCLUDED -----/\----- */
@@ -235,7 +235,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                    .pred_result_to_dec(pred_result_to_dec) 
                    );
 
-   IF_ID IF_ID_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
+   IF_ID IF_ID_DUT(.clk(clk), .rst_n(rst_n), .stall(stll_ftch_out_to_IF||no_empt_preg_to_IF||ful_to_al_is_out||rob_full_stll_ROB_out),
                    //input 
                    .pc_if_id_in(pc_to_dec),
                    .inst_if_id_in(inst_to_dec),
@@ -268,7 +268,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                      .loop_strt_out_to_AL(loop_strt_out_to_AL)
                      );
 
-   ID_AL ID_AL_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
+   ID_AL ID_AL_DUT(.clk(clk), .rst_n(rst_n), .stall(no_empt_preg_to_IF||ful_to_al_is_out||rob_full_stll_ROB_out),
                    // input
                    .inst0_id_al_in(dcd_inst1_out_to_AL),
                    .inst1_id_al_in(dcd_inst2_out_to_AL),
@@ -300,7 +300,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
              .inst_from_ID2(inst2_id_al_out),
              .inst_from_ID3(inst3_id_al_out), 
              .nxt_indx_from_CMT(next_idx_ROB_out),
-             .stall(rob_full_stll_ROB_out), 
+             .stall(ful_to_al_is_out||rob_full_stll_ROB_out), 
              .lbd_state_out_from_ID(lbd_state_id_al_out), 
              .fnsh_unrll_out_from_ID(fnsh_unrll_id_al_out), 
              .loop_strt_from_ID(loop_strt_id_al_out),
@@ -347,7 +347,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
              .adr_ins_to_rf(adr_ins_to_rf_is_out) 
              );
 
-   IS_RF IS_RF(.clk(clk), .rst_n(rst_n), .stall(1'b0),
+   IS_RF IS_RF(.clk(clk), .rst_n(rst_n), .stall(rob_full_stll_ROB_out),
                // Inputs
                .mult_done(mult_valid_ex_out),
                .mult_inst_pkg_in(mul_ins_to_rf_is_out),
@@ -401,7 +401,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                          .wrt_addr_data(data_ld_wb_out)
                          );
 
-   RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
+   RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n), .stall(rob_full_stll_ROB_out),
                    // Inputs
                    .alu1_op1_rf_ex_in(alu1_op1_data_rf_out), //
                    .alu1_op2_rf_ex_in(alu1_op2_data_rf_out), //
@@ -573,7 +573,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
 
 
 
-   EX_WB EX_WB_DUT(.clk(clk), .rst_n(rst_n), .stall(1'b0),
+   EX_WB EX_WB_DUT(.clk(clk), .rst_n(rst_n), .stall(rob_full_stll_ROB_out),
                    // Inputs
                    .mult_out_ex_wb_in(mult_data_ex_out),
                    .alu1_out_ex_wb_in(alu1_data_ex_out), 
