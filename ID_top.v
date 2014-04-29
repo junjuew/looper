@@ -467,7 +467,8 @@ module ID_top(
 				.bck_lp_out(bck_lp_out4)
 			);
 
-	/*LAT LAT_DUT(
+/* -----\/----- EXCLUDED -----\/-----
+	LAT LAT_DUT(
 			// input
 			.bck_lp_bus_in(bck_lp_bus),
 
@@ -491,7 +492,8 @@ module ID_top(
 			.loop_strt_out(loop_strt_out_to_AL),	// output to next stage
 
 			.inst_valid_out(inst_valid_in) // output to interpretor
-			);*/
+			);
+ -----/\----- EXCLUDED -----/\----- */
 
 	LAT_not_unroll LAT_DUT(
 			// input
@@ -518,6 +520,7 @@ module ID_top(
 
 			.inst_valid_out(inst_valid_in) // output to interpretor
 			);
+
 
 	assign bck_lp_bus = {bck_lp_out1, bck_lp_out2, bck_lp_out3, bck_lp_out4};
 

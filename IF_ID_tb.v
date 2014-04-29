@@ -93,4 +93,11 @@ always@(posedge clk)begin
 	$display("%t, LAT: LAT entry3: %b\n",$time,ID_top_DUT.LAT_DUT.LAT[2]);
 	$display("%t, LAT: LAT entry4: %b\n",$time,ID_top_DUT.LAT_DUT.LAT[3]);
 end
+
+
+   initial begin
+      #500;
+      $finish;
+   end
+   
 endmodule

@@ -149,12 +149,12 @@ module LAT(
 						    	4'b0000: begin inst_valid_out_type <= 2'b11; stll_ftch_cnt_type <= 3'b100; end
 						    endcase
 						end
-					else
-						begin
-						    if (num_of_inst_train == 0)
-							    begin
-									start_addr <= pc_in[63:48];
-							    end
+				else
+					begin
+						if (num_of_inst_train == 0)
+							begin
+								start_addr <= pc_in[63:48];
+							end
 						    casex ({end_lp1_train, end_lp2_train, end_lp3_train, end_lp4_train, write2LAT_en})
 						    	5'b1xxx_0: begin num_of_inst_train_type = 3'b001; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
 						    	5'bx1xx_0: begin num_of_inst_train_type = 3'b010; nxt_state <= TRAIN; write2LAT_en <= 1'b1; end
@@ -235,10 +235,10 @@ module LAT(
 	always @(inst_in)
 		begin
 			case(num_of_inst_train_type)
-				3'b001: begin num_of_inst_train <= num_of_inst_train + 1; end
-				3'b010: begin num_of_inst_train <= num_of_inst_train + 2; end
-				3'b011: begin num_of_inst_train <= num_of_inst_train + 3; end
-				3'b100: begin num_of_inst_train <= num_of_inst_train + 4; end
+				3'b001: begin num_of_inst_train = num_of_inst_train + 1; end
+				3'b010: begin num_of_inst_train = num_of_inst_train + 2; end
+				3'b011: begin num_of_inst_train = num_of_inst_train + 3; end
+				3'b100: begin num_of_inst_train = num_of_inst_train + 4; end
 				default: begin num_of_inst_train <= 7'b0;				  end
 			endcase
 		end
@@ -257,7 +257,7 @@ module LAT(
 	always @(num_of_inst_train)
 		begin
 			// generate max unroll
-		    casex(num_of_inst_train)
+		    case(num_of_inst_train)
 		    	7'b0000001: begin max_unroll_train <= 7'd64; end 	// 1
 		    	7'b0000010: begin max_unroll_train <= 7'd32; end 	// 2
 		    	7'b0000011: begin max_unroll_train <= 7'd21; end 	// 3
@@ -271,30 +271,31 @@ module LAT(
 		    	7'b0001011: begin max_unroll_train <= 7'd5; end 	// 11
 		    	7'b0001100: begin max_unroll_train <= 7'd5; end 	// 12
 		    	7'b0001101: begin max_unroll_train <= 7'd4; end 	// 13
-		    	7'b000111x: begin max_unroll_train <= 7'd4; end 	// 14, 15
+		    	7'b000111?: begin max_unroll_train <= 7'd4; end 	// 14, 15
 		    	7'b0010000: begin max_unroll_train <= 7'd4; end 	// 16
 		    	7'b0010001: begin max_unroll_train <= 7'd3; end 	// 17
-		    	7'b001001x: begin max_unroll_train <= 7'd3; end 	// 18, 19
-		    	7'b001010x: begin max_unroll_train <= 7'd3; end 	// 20, 21
-		    	7'b001011x: begin max_unroll_train <= 7'd2; end 	// 22, 23
-		    	7'b0011xxx: begin max_unroll_train <= 7'd2; end 	// 24, 25, 26, 27, 28, 29, 30, 31
-		    	7'b01xxxxx: begin max_unroll_train <= 7'd1; end 	// 32 ~ 63
+		    	7'b001001?: begin max_unroll_train <= 7'd3; end 	// 18, 19
+		    	7'b001010?: begin max_unroll_train <= 7'd3; end 	// 20, 21
+		    	7'b001011?: begin max_unroll_train <= 7'd2; end 	// 22, 23
+		    	7'b0011???: begin max_unroll_train <= 7'd2; end 	// 24, 25, 26, 27, 28, 29, 30, 31
+		    	7'b01?????: begin max_unroll_train <= 7'd1; end 	// 32 ~ 63
 		    	7'b1000000: begin max_unroll_train <= 7'd1; end   // 64
 		    	default: begin max_unroll_train <= 7'd0; end
 		    endcase
 		end
 
-	always @(max_unroll_train)
+	always @(max_unroll_train or start_addr or fallthrough_addr_train or num_of_inst_train or write2
+ or LAT_pointer)
 		begin
 		    if (write2LAT)
 				begin
-					casex(LAT_pointer)
-						2'b00: begin LAT[0] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
-						2'b01: begin LAT[1] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
-						2'b10: begin LAT[2] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
-						2'b11: begin LAT[3] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
+					case(LAT_pointer)
+						2'b00: begin LAT[0] = {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
+						2'b01: begin LAT[1] = {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
+						2'b10: begin LAT[2] = {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
+						2'b11: begin LAT[3] = {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
 					endcase
-					LAT_pointer <= LAT_pointer + 1;
+					LAT_pointer = LAT_pointer + 1;
 				end	
 		end
 	//*/
