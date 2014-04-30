@@ -29,6 +29,7 @@ module branchHandler(input clk,
     input [15:0]  inst1,
     input [15:0]  inst2,
     input [15:0]  inst3,
+    input has_mispredict,
     input 	  stall_for_jump,
     input [1:0]   pred_to_pcsel,
     input 	  decr_count_from_rob,
@@ -48,7 +49,8 @@ module branchHandler(input clk,
     //output [15:0] brnch_inst0,
    // output [15:0] brnch_inst1,
     output [3:0]  tkn_brnch,
-    output [3:0]  isImJmp
+    output [3:0]  isImJmp,
+    output reg flush_mem
     );
      
 //internal signals
@@ -283,6 +285,11 @@ assign pcsel_from_bhndlr=(stall_for_jump||stall_fetch||isJump[3])||(|third_brnch
 
 assign pc_bhndlr= (stall_for_jump||stall_fetch||third_brnch[3]||isJump[3]||hold_for_brnch)?pc
                 : (third_brnch[2]?(pc+1):(third_brnch[1]?(pc+2):(third_brnch[0]?(pc+3):pc+4)));
+
+
+//add by lei for 1clk delay imm
+always@(posedge clk)
+ flush_mem<=(|pred_to_pcsel)||has_mispredict;
 
 
 //instructions

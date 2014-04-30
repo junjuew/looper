@@ -2,20 +2,19 @@
 module imemory(
         input clka,
         input[13:0] addra,
-        output [63:0] douta,
+        output reg [63:0] douta,
         input clkb,
         input[13:0] addrb,
-        output  [63:0] doutb);
+        output reg [63:0] doutb);
         
         reg [63:0] mem[0:16383];
         
-        //always@(posedge clk)begin
+        always@(posedge clka)begin
         
-         assign douta=mem[addra];
-        
-        
-         assign doutb=mem[addrb];
-        
+            douta<=mem[addra];
+            
+             doutb<=mem[addrb];
+         end
 
    initial begin
 
