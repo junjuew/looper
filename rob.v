@@ -128,8 +128,8 @@ ROB per entry:
     assign next_idx = { inverting_bit, {(mis_pred) ? rob_tail_when_mis_pred : rob_tail[5:0]}};
 
     // when tail catch up with head, and that one's vld is 1, that means ROB is full
-    assign rob_full_stll = ((rob_tail < rob_head) && (rob_tail + 4 >= rob_head)) ? 1
-                         : ((rob_tail > rob_head) && (rob_tail > 59) && (rob_tail -60 >= rob_head)) ? 1 
+    assign rob_full_stll = ((rob_tail[5:0] < rob_head[5:0]) && (rob_tail[5:0] + 4 >= rob_head[5:0])) ? 1
+                         : ((rob_tail[5:0] > rob_head[5:0]) && (rob_tail[5:0] > 59) && (rob_tail[5:0] -60 >= rob_head[5:0])) ? 1 
                          : 0;
 
     // when head catch up with tail, and that one's vld is 0, that means ROB is empty 
@@ -475,6 +475,13 @@ ROB per entry:
             if(!rst_n)
                 rob_done[rob_done_idx] <= 0;
             // set the done bit by all valid FU finish, and branch result
+            // misprediction
+            else if (mis_pred && (rob_tail_when_mis_pred < rob_tail[5:0]) && 
+                    (rob_done_idx >= rob_tail_when_mis_pred) && (rob_done_idx < rob_tail[5:0]))
+                rob_done[rob_done_idx] <= 0;
+            else if (mis_pred && (rob_tail_when_mis_pred > rob_tail[5:0]) && 
+                    ((rob_done_idx >= rob_tail_when_mis_pred) || (rob_done_idx < rob_tail[5:0])))
+                rob_done[rob_done_idx] <= 0;
             else if((mult_done_vld && (rob_done_idx == mult_done_idx)) || 
                     (alu1_done_vld && (rob_done_idx == alu1_done_idx)) || 
                     (alu2_done_vld && (rob_done_idx == alu2_done_idx)) || 
