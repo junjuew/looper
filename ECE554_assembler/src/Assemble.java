@@ -11,7 +11,7 @@ import java.util.Hashtable;
  * much work.
  *
  **************************************************************
- * 
+ *
  * This code reads a line of assembly at a time and passes it to
  * AssemblyLine, which will parse the instruction and return the
  * various fields of the machine code.  This class keeps track of
@@ -57,6 +57,15 @@ class Assemble {
         PrintWriter mem1out = null;
         PrintWriter mem2out = null;
         PrintWriter mem3out = null;
+
+		PrintWriter regOut = null;
+		String regFileName = "sim_reg.dump";
+		try {
+	        regOut = new PrintWriter(regFileName);
+		} catch (IOException ioeOpenOut) {
+		    System.err.println("could not open "+regFileName+" for output");
+		    System.exit(-1);
+		}
         String option = "";
         AssemblyLine [] progLine = new AssemblyLine[MAX_SOURCE_LENGTH];
 
@@ -66,7 +75,7 @@ class Assemble {
             System.err.println("Usage: java Assemble <file> <outfile> -m <coe or lst or mif or sim>");
             System.exit(-1);
         }
-        
+
         if (!args[2].equals("-m") || (!args[3].equals("lst") && !args[3].equals("coe") && !args[3].equals("mif") && !args[3].equals("sim"))){
             System.err.println("Usage: java Assemble <file> <outfile> -m <coe or lst or mif or sim>");
             System.exit(-1);
@@ -104,7 +113,7 @@ class Assemble {
         for (int i = 0; i < 17; i ++){
         	registers[i] = 0;
         }
-        
+
         String memFileName = args[1] + "_";
         /*try {
                 mem0out = new PrintWriter(memFileName+"0"+".img");
@@ -132,10 +141,10 @@ class Assemble {
             oneLine = new AssemblyLine(tempParseLine, objLineID);
             progLine[sourceLineID] = oneLine;
 
-            if ( !( (oneLine.lineNum == objLineID) || 
+            if ( !( (oneLine.lineNum == objLineID) ||
                 (oneLine.type == AssemblyLine.NULL_FORM) )) {
                 System.err.println("Error in Assemble.java");
-                System.err.println(oneLine.type + ", " + oneLine.lineNum + 
+                System.err.println(oneLine.type + ", " + oneLine.lineNum +
                            ", " + objLineID);
                 System.exit(-1);
             }
@@ -172,6 +181,7 @@ class Assemble {
         if (args[3].equals("sim")){
             clacInstNum(listOut, progLine);
             listOut.println("Executed instruction #: " + Integer.toString(totalInstNum));
+            printFinalRegisters(regOut);
         }else{
             printCode(progLine, listOut, mem0out, mem1out, mem2out, mem3out, option);
         }
@@ -181,7 +191,7 @@ class Assemble {
         mem2out.close();
         mem3out.close();*/
 
-        //System.err.println("IF THERE ARE ANY ERRORS, YOUR OUTPUT "+ 
+        //System.err.println("IF THERE ARE ANY ERRORS, YOUR OUTPUT "+
         //		   "PROGRAM IS NOT GUARANTEED TO BE CORRECT!");
         return;
     }
@@ -233,7 +243,7 @@ class Assemble {
             }
         }
     }
-    
+
     public static void clacInstNum(PrintWriter simOut, AssemblyLine[] prog){
 		int currentLineNum = prog[0].lineNum;
 		int currentIndex = 0;
@@ -259,7 +269,7 @@ class Assemble {
 			currentIndex = nextIndex;
 		}
 	}
-	
+
 	public static int generateNextLineNum(PrintWriter simOut, AssemblyLine[] prog, int currentLineNum){
 		AssemblyLine currentLine = prog[currentLineNum];
 		if (currentLine != null && currentLine.inst_name != null){
@@ -504,14 +514,21 @@ class Assemble {
 	}
 
 
-	
+
 	public static void printRegisters(PrintWriter simOut){
 		simOut.println("***********************************");
 		simOut.println("*******   View registers   ********");
 		simOut.println("***********************************");
 		for (int i = 0; i < 16; i ++){
-			simOut.println("R" + Integer.toString(i) + ": " + "hex: " + Integer.toHexString(registers[i]) + " decimal: " + Integer.toString(registers[i]));
+			simOut.println("R" + Integer.toString(i) + ": " + "hex: " + Integer.toHexString(0x10000 | registers[i]).substring(1) + " decimal: " + Integer.toString(registers[i]));
 		}
+	}
+
+	public static void printFinalRegisters(PrintWriter regOut){
+		for (int i = 0; i < 16; i ++){
+			regOut.println(Integer.toString(i) + ": " + Integer.toHexString(0x10000 | registers[i]).substring(1));
+		}
+		regOut.close();
 	}
 
     public static void printCode(AssemblyLine [] prog, PrintWriter listOut,
@@ -522,9 +539,9 @@ class Assemble {
 	AssemblyLine l;
 	String instrString;
 	String instrStringHex;
-	
+
 	// printout!
-        System.out.println("@0"); // tell Verilog loader to start at 0
+        //System.out.println("@0"); // tell Verilog loader to start at 0
         /*mem0out.println("@0"); // tell memory 0 to start at 0
         mem1out.println("@0"); // tell memory 1 to start at 0
         mem2out.println("@0"); // tell memory 2 to start at 0
@@ -554,11 +571,27 @@ class Assemble {
 		        listOut.println(l.srcLine);
 	    	}else if (option.equals("coe") && (i == sourceLineID - 1)){
 	    		if (!instr4String.equals("")){
+		    		if (instr4String.length() == 4){
+		    			instr4String += "000000000000;";
+		    		}else if (instr4String.length() == 8){
+		    			instr4String += "00000000;";
+		    		}else if (instr4String.length() == 12){
+		    			instr4String += "0000;";
+		    		}else{
+		    			instr4String += ';';
+		    		}
 		    		listOut.println(instr4String);
 		    		instr4String = "";
 	    		}
 	    	}else if (option.equals("mif") && (i == sourceLineID - 1)){
 	    		if (!instr4StringBinary.equals("")){
+		    		if (instr4StringBinary.length() == 16){
+		    			instr4StringBinary  += "000000000000000000000000000000000000000000000000";
+		    		}else if (instr4StringBinary.length() == 32){
+		    			instr4StringBinary  += "00000000000000000000000000000000";
+		    		}else if (instr4StringBinary.length() == 48){
+		    			instr4StringBinary  += "0000000000000000";
+		    		}
 		    		listOut.println(instr4StringBinary);
 		    		instr4StringBinary = "";
 	    		}
@@ -573,11 +606,27 @@ class Assemble {
 		        listOut.println(l.srcLine);
 	    	}else if (option.equals("coe") && (i == sourceLineID - 1)){
 	    		if (!instr4String.equals("")){
+		    		if (instr4String.length() == 4){
+		    			instr4String += "000000000000;";
+		    		}else if (instr4String.length() == 8){
+		    			instr4String += "00000000;";
+		    		}else if (instr4String.length() == 12){
+		    			instr4String += "0000;";
+		    		}else{
+		    			instr4String += ';';
+		    		}
 		    		listOut.println(instr4String);
 		    		instr4String = "";
 	    		}
 	    	}else if (option.equals("mif") && (i == sourceLineID - 1)){
 	    		if (!instr4StringBinary.equals("")){
+		    		if (instr4StringBinary.length() == 16){
+		    			instr4StringBinary  += "000000000000000000000000000000000000000000000000";
+		    		}else if (instr4StringBinary.length() == 32){
+		    			instr4StringBinary  += "00000000000000000000000000000000";
+		    		}else if (instr4StringBinary.length() == 48){
+		    			instr4StringBinary  += "0000000000000000";
+		    		}
 		    		listOut.println(instr4StringBinary);
 		    		instr4StringBinary = "";
 	    		}
@@ -592,11 +641,27 @@ class Assemble {
 		        listOut.println(l.srcLine);
 	    	}else if (option.equals("coe") && (i == sourceLineID - 1)){
 	    		if (!instr4String.equals("")){
+		    		if (instr4String.length() == 4){
+		    			instr4String += "000000000000;";
+		    		}else if (instr4String.length() == 8){
+		    			instr4String += "00000000;";
+		    		}else if (instr4String.length() == 12){
+		    			instr4String += "0000;";
+		    		}else{
+		    			instr4String += ';';
+		    		}
 		    		listOut.println(instr4String);
 		    		instr4String = "";
 	    		}
 	    	}else if (option.equals("mif") && (i == sourceLineID - 1)){
 	    		if (!instr4StringBinary.equals("")){
+		    		if (instr4StringBinary.length() == 16){
+		    			instr4StringBinary  += "000000000000000000000000000000000000000000000000";
+		    		}else if (instr4StringBinary.length() == 32){
+		    			instr4StringBinary  += "00000000000000000000000000000000";
+		    		}else if (instr4StringBinary.length() == 48){
+		    			instr4StringBinary  += "0000000000000000";
+		    		}
 		    		listOut.println(instr4StringBinary);
 		    		instr4StringBinary = "";
 	    		}
@@ -628,11 +693,11 @@ class Assemble {
 	    int immPart = l.immediateVal;
 	    int rdPart=0;
 	    if (l.dst != -1) {
-		  rdPart = l.dst << RD_SHIFT; 
+		  rdPart = l.dst << RD_SHIFT;
 	    }
 	    int rtPart=0;
-	    if (l.src2 != -1) {	
-		  rtPart = l.src2 << RT_SHIFT; 
+	    if (l.src2 != -1) {
+		  rtPart = l.src2 << RT_SHIFT;
 	    }
 	    int rsPart=0;
 	    if (l.src1 != -1) {
@@ -645,7 +710,7 @@ class Assemble {
             }
 	    }
 
-	    // at this point, all non-immediate parts of the 
+	    // at this point, all non-immediate parts of the
 	    // instruction are ready.
 	    switch (l.type) {
 	    case AssemblyLine.RRI_FORM:
@@ -656,11 +721,11 @@ class Assemble {
             instr += rdPart + rsPart + rtPart;
             instr += l.opcode >> OPCODE_LEN;
 		break;
-		
+
 		case AssemblyLine.NOT_FORM:
 			instr += rdPart + rsPart;
 		break;
-		
+
 	    case AssemblyLine.RI_FORM:
 	    	if (l.jmp_offset == 0x3 || l.jmp_offset == 0x1){
 	    		immPart = immPart << 2;
@@ -668,25 +733,25 @@ class Assemble {
 	    	}
 	    	instr += rdPart + rsPart + immPart;
 		break;
-		
+
 	    case AssemblyLine.JUMP_FORM:
 	    	immPart = immPart << 2;
 	    	immPart += l.jmp_offset;
 	    	instr += immPart;
 		break;
-		
+
 	    case AssemblyLine.DATA_FORM:
 		  instr = immPart;
 		break;
-		
+
 	    //case AssemblyLine.PRD_FORM:
 		//instr += rdPart + rsPart;
 		//break;
-	    
+
 	    case AssemblyLine.NOP_FORM:
 		  break;
 	    }
-	    
+
 	    if (instr < 0) {
 		  // must be positive for hexString to work
 		  instr += 0x10000;
@@ -761,6 +826,13 @@ class Assemble {
 	    	count ++;
 	    }
 	}
+	if (option.equals("mif")){
+		for (int j = 0; j < 20; j ++){
+			listOut.println("0000000000000000000000000000000000000000000000000000000000000000");
+		}
+	}
 }
 }
+
+
 
