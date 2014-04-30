@@ -9,7 +9,7 @@ if [ $# != 1 ]; then
 	echo "    $error_msg1"
 	echo "        $error_msg2"
 	echo ""
-	echo "OR check existing tests files by entering"
+	echo "OR check existing test files by entering"
 	echo "		./simulate -l"
 	echo ""
 	echo 'All .sim files will be stored under /ECE554_assembler/src/'
