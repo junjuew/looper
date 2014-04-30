@@ -19,6 +19,7 @@
   module tpu(/*autoarg*/
    // Outputs
    tpu_inst_rdy, tpu_out_reo_flat, fre_preg_out_flat, isq_ful, arch,
+   arch_swt_fls,
    // Inputs
    clk, rst_n, isq_out_flat, dst_reg_rdy, dst_rdy_reg_en, counter
    );
@@ -61,6 +62,10 @@
    output wire [7 * ISQ_DEPTH-1:0] fre_preg_out_flat;
    output wire                            isq_ful;
    output reg                       arch;
+   //clr instruction in the operating region when arch_swt happens
+   // for example when changed from head 0->1, flsh 0-- 31
+   // head 1->0, flsh 32 --63
+   output wire [ISQ_DEPTH-1:0]      arch_swt_fls;
    
    // get the tpu_inst_rdy before reordered
    wire [ISQ_DEPTH-1:0]            tpu_inst_rdy_raw;      
@@ -260,6 +265,13 @@
    // when arch_swt goes high, and previous arch is 0, then middle segment header should
    // load in current mapping and serve as arch state
    assign top_hed_map_en = (arch) && arch_swt;
-   assign mid_hed_map_en = (~arch) && arch_swt;   
+   assign mid_hed_map_en = (~arch) && arch_swt;
+
+   //clr old instructions in the region to make mapping clean
+   assign arch_swt_fls = (~arch_swt)? {ISQ_DEPTH{1'b0}}:
+                         // flsh 0 --31 when header 0 --> 1                         
+                         (~arch )? { {ISQ_DEPTH/2{1'b0}},{ISQ_DEPTH/2{1'b1}} }:
+                         // flsh 32 --63 when header 1 --> 0
+                         {{ISQ_DEPTH/2{1'b1}},{ISQ_DEPTH/2{1'b0}} };
    
 endmodule // isq_lin

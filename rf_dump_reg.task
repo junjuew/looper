@@ -16,7 +16,7 @@
       $fdisplay(dump_reg_file,"****************************dump reg file*****************************");
       for(iteration = 0; iteration < 64; iteration = iteration + 1)
 	begin
-	    $fdisplay(dump_reg_file,"reg %d, value is reg_file_body is %x\n",iteration,`RF.reg_file_body[iteration]);
+       	    $fdisplay(dump_reg_file,"reg %x, value is reg_file_body is %x",iteration,`RF.reg_file_body[iteration]);
 	end
 
 	$fclose(dump_reg_file);

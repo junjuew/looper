@@ -138,7 +138,7 @@
    wire [TPU_INST_WIDTH*ISQ_DEPTH-1:0]                        tpu_out_reo_flat;
    wire [7*ISQ_DEPTH-1:0]                                     fre_preg_out_flat;
    wire                                                       arch;
-   
+   wire [ISQ_DEPTH-1:0]                                       arch_swt_fls;
    
    //pdc
    wire [ISQ_DEPTH-1:0]                                       pdc_clr_inst_wat;
@@ -199,7 +199,7 @@
    endgenerate
    
    // if valid, then flsh the branch inst and all insts below
-   assign fls_inst[ISQ_DEPTH-1:0] = (fls_frm_rob[BRN_WIDTH-1])? fls_inst_below:{ISQ_DEPTH{1'b0}};
+   assign fls_inst[ISQ_DEPTH-1:0] = ( (fls_frm_rob[BRN_WIDTH-1])? fls_inst_below:{ISQ_DEPTH{1'b0}} ) | (arch_swt_fls[ISQ_DEPTH-1:0]);
 
 
    /*********** handle insts immediately after branch *********/
@@ -298,6 +298,7 @@
            .fre_preg_out_flat           (fre_preg_out_flat[7*ISQ_DEPTH-1:0]),
            .isq_ful                     (isq_ful),
            .arch                        (arch),
+           .arch_swt_fls                (arch_swt_fls[ISQ_DEPTH-1:0]),
            // Inputs
            .clk                         (clk),
            .rst_n                       (rst_n),

@@ -1,4 +1,4 @@
-allocation instruction packet format:
+stallocation instruction packet format:
         inst_valid |  rs    |  rd   |  rt   | imm_valid_bit | ...| RegWr | preg
           55         54-50    49-45   44-40      39 --------------- 7      6-0
 
@@ -75,3 +75,9 @@ Synthesis warning:
 6. changed br_snt to 7 bits instead of 8 bits
 7. combinational loop in issue: since the tpu will bypass the header when needed, then there is a loop formed depending on what the mux will choose.
 : need to test such case 
+
+
+Current Problem:
+beqz_mapping
+1. current mapping is correct, at 995 ns, all top region is filled with non-valid inst, counter right now is 0, meaning that we are about to load instructions from idx 0, so that most up-to-date should be get from idx0. no architecture swt is going to happen since counter is at 0, we need to fill and execute everything in from idx 0 and finish that region to get another arch swt
+2. think about changing the design such that every time arch_swt happen we mark the instructions in the origin operating region as invalid
