@@ -1,0 +1,8 @@
+          // test of subtracting negative number, 
+          // and Rt dependency on the result of previous operation
+          
+PC: 0000 Binary: 1100000111111011 Hex: c1fb ldi r1, -5
+PC: 0001 Binary: 1100001011110110 Hex: c2f6 ldi r2, -10
+PC: 0002 Binary: 0010001100100001 Hex: 2321 sub r3, r2, r1  // expect r3 = -5
+PC: 0003 Binary: 0010010000100011 Hex: 2423 sub r4, r2, r3  // expect r4 = -5
+PC: 0004 Binary: 0010010100110100 Hex: 2534 sub r5, r3, r4  // expect r5 = 0

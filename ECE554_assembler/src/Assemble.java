@@ -59,7 +59,7 @@ class Assemble {
         PrintWriter mem3out = null;
 
 		PrintWriter regOut = null;
-		String regFileName = "sim_reg.dump";
+		String regFileName = "../../sim_reg.dump";
 		try {
 	        regOut = new PrintWriter(regFileName);
 		} catch (IOException ioeOpenOut) {

@@ -1,0 +1,25 @@
+error_msg1="./simulate <.asm file name>"
+error_msg2="Example: ./simulate beqz1"
+testDIR='../Test/'
+asm='.asm'
+
+if [ $# != 1 ]; then
+	echo 'Run'
+	echo '    ./simulate -h for help'
+	echo 'OR run'
+	echo "    $error_msg1"
+	echo "        $error_msg2"
+else
+	if [ "$1" == "-h" ]; then
+		echo 'Run simulation by entering'
+		echo "    $error_msg1"
+		echo "        $error_msg2"
+		echo 'All .sim files will be stored under /ECE554_assembler/src/'
+		echo "A sim_reg.dump file will be produced under looper/"
+		echo ""
+	else
+		cd ECE554_assembler/src
+		java Assemble $testDIR$1$asm $1 -m sim
+		echo "$1$asm done"
+	fi
+fi

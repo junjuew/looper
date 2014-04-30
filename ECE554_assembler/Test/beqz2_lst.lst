@@ -1,0 +1,14 @@
+          // beqz test, test if register is negative , zero and positive
+          // and test negative branch offset
+          // note this is an infinite loop
+0000      .label1:
+PC: 0000 Binary: 1100000100000001 Hex: c101 ldi r1, 1            // set r1 to 1
+PC: 0001 Binary: 1100001000000010 Hex: c202 ldi r2, 2	    	 // set r2 to 2
+PC: 0002 Binary: 1100010000000100 Hex: c404 ldi r4, 4			 // set r4 to 4
+PC: 0003 Binary: 0010001100010010 Hex: 2312 sub r3, r1, r2       // r3 = r1 - r2 = -1
+PC: 0004 Binary: 1001001111111011 Hex: 93fb beqz r3, .label1     // it will not do branch here
+PC: 0005 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2       // r3 = r3 + r2 = 1
+PC: 0006 Binary: 1001001111111001 Hex: 93f9 beqz r3, .label1     // it will not do branch here
+PC: 0007 Binary: 0010001100110001 Hex: 2331 sub r3, r3, r1       // set r3 = r3 - r1 = 0
+PC: 0008 Binary: 1001001111110111 Hex: 93f7 beqz r3, .label1     // it will do branch here
+PC: 0009 Binary: 0001001100010010 Hex: 1312 add r3, r1, r2		 // set r3 = -1, but this line will be skipped

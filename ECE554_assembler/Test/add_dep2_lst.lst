@@ -1,0 +1,8 @@
+          // test of adding a positive and a negative number, 
+          // and Rt dependency on the result of previous operation
+          
+PC: 0000 Binary: 1100000111101110 Hex: c1ee ldi r1, -18     // load -18 to r1
+PC: 0001 Binary: 1100001000010100 Hex: c214 ldi r2, 20      // load 20 to r2
+PC: 0002 Binary: 0001001100010010 Hex: 1312 add r3, r1, r2  // expect r3 = 2
+PC: 0003 Binary: 0001001000010011 Hex: 1213 add r2, r1, r3  // expect r2 = -16
+PC: 0004 Binary: 0001010000110010 Hex: 1432 add r4, r3, r2  // expect r4 = -14

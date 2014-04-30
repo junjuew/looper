@@ -1,0 +1,6 @@
+          // ldr test, positive offset
+          
+PC: 0000 Binary: 1100000001100100 Hex: c064 ldi r0, 100
+PC: 0001 Binary: 1100000100000101 Hex: c105 ldi r1, 5
+PC: 0002 Binary: 1101000100000010 Hex: d102 str r1, r0, 2      // mem[102] = 5
+PC: 0003 Binary: 1110001000000010 Hex: e202 ldr r2, r0, 2      // r2 = 5
