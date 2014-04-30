@@ -128,8 +128,8 @@ ROB per entry:
     assign next_idx = { inverting_bit, {(mis_pred) ? rob_tail_when_mis_pred : rob_tail[5:0]}};
 
     // when tail catch up with head, and that one's vld is 1, that means ROB is full
-    assign rob_full_stll = ((rob_tail < rob_head) && (!all_nop) && (rob_tail + 4 >= rob_head)) ? 1
-                         : ((rob_tail > rob_head) && (!all_nop) && (rob_tail > 59) && (rob_tail -60 >= rob_head)) ? 1 
+    assign rob_full_stll = ((rob_tail < rob_head) && (rob_tail + 4 >= rob_head)) ? 1
+                         : ((rob_tail > rob_head) && (rob_tail > 59) && (rob_tail -60 >= rob_head)) ? 1 
                          : 0;
 
     // when head catch up with tail, and that one's vld is 0, that means ROB is empty 
