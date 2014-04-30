@@ -16,7 +16,7 @@ if [ $# != 1 ]; then
 	echo "A sim_reg.dump file will be produced under looper/"
 	echo ""
 else
-	if [ $1=="-l" ]; then
+	if [ $1 == "-l" ]; then
 		for asmFile in $(ls ECE554_assembler/Test/*.asm)
 			do
 				echo $asmFile
