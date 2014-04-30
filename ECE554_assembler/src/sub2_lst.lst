@@ -1,4 +1,0 @@
-          // test of subtracting negative number
-PC: 0000 Binary: 1100000111111011 Hex: c1fb ldi r1, -5
-PC: 0001 Binary: 1100001011110110 Hex: c2f6 ldi r2, -10
-PC: 0002 Binary: 0010001100100001 Hex: 2321 sub r3, r2, r1  // expect r3 = -5

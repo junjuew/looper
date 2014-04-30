@@ -1,6 +1,0 @@
-          
-PC: 0000 Binary: 1100000100000010 Hex: c102 ldi r1, 2      	// load 2 to r1
-PC: 0001 Binary: 1100001000000001 Hex: c201 ldi r2, 1      	// load 1 to r2
-PC: 0002 Binary: 0001001100100001 Hex: 1321 add r3, r2, r1	// expect r3 = r2 + r1 = 3
-PC: 0003 Binary: 1000010100100001 Hex: 8521 mult r5, r2, r1	// expect r5 = r2 * r1 = 2
-PC: 0004 Binary: 1000001000110001 Hex: 8231 mult r2, r3, r1	// expect r2 = r3 * r1 = 6

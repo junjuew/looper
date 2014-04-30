@@ -1,4 +1,0 @@
-          // test of sra
-PC: 0000 Binary: 1100000100001011 Hex: c10b ldi r1, 11
-PC: 0001 Binary: 1100001000000010 Hex: c202 ldi r2, 2
-PC: 0002 Binary: 0111001100010010 Hex: 7312 sra r3, r1, r2  // expect r3 = 2

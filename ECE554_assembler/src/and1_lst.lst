@@ -1,4 +1,0 @@
-          // test of and
-PC: 0000 Binary: 1100000111111111 Hex: c1ff ldi r1 0x00ff
-PC: 0001 Binary: 1100001011001110 Hex: c2ce ldi r2 0x00ce
-PC: 0002 Binary: 0011001100100001 Hex: 3321 and r3, r2, r1  // expect r3 = 0xce

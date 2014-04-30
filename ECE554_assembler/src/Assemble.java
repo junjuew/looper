@@ -552,6 +552,16 @@ class Assemble {
 		        listOut.print("     ");
 		        listOut.print("     ");
 		        listOut.println(l.srcLine);
+	    	}else if (option.equals("coe") && (i == sourceLineID - 1)){
+	    		if (!instr4String.equals("")){
+		    		listOut.println(instr4String);
+		    		instr4String = "";
+	    		}
+	    	}else if (option.equals("mif") && (i == sourceLineID - 1)){
+	    		if (!instr4StringBinary.equals("")){
+		    		listOut.println(instr4StringBinary);
+		    		instr4StringBinary = "";
+	    		}
 	    	}
 	        continue;
 	    }
@@ -561,6 +571,16 @@ class Assemble {
 		        listOut.print("     ");
 		        listOut.print("     ");
 		        listOut.println(l.srcLine);
+	    	}else if (option.equals("coe") && (i == sourceLineID - 1)){
+	    		if (!instr4String.equals("")){
+		    		listOut.println(instr4String);
+		    		instr4String = "";
+	    		}
+	    	}else if (option.equals("mif") && (i == sourceLineID - 1)){
+	    		if (!instr4StringBinary.equals("")){
+		    		listOut.println(instr4StringBinary);
+		    		instr4StringBinary = "";
+	    		}
 	    	}
 	        continue;
 	    }
@@ -570,6 +590,16 @@ class Assemble {
 		        listOut.print(PCstring + " ");
 		        listOut.print("     ");
 		        listOut.println(l.srcLine);
+	    	}else if (option.equals("coe") && (i == sourceLineID - 1)){
+	    		if (!instr4String.equals("")){
+		    		listOut.println(instr4String);
+		    		instr4String = "";
+	    		}
+	    	}else if (option.equals("mif") && (i == sourceLineID - 1)){
+	    		if (!instr4StringBinary.equals("")){
+		    		listOut.println(instr4StringBinary);
+		    		instr4StringBinary = "";
+	    		}
 	    	}
 	        continue;
 	    }

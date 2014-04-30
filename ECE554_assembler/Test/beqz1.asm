@@ -18,9 +18,9 @@ sub r3, r1, r2		 // r3 = 0
 beqz r3, .label2     // it will do branch here
 add r4, r4, r4	     // if the beqz above didn't branch, r4 will be 8
 ldi r1, 0
-jr r1, 0
+//jr r1, 0
 
 .label2:
 add r4, r4, r1       //if the beqz above brance, r4 will be 6
 ldi r1, 0
-jr r1, 0
+//jr r1, 0
