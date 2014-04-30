@@ -1,0 +1,11 @@
+set DIR_PATH = ../Test
+
+foreach asmFile ( `ls $DIR_PATH/*.asm` )
+	filePrefix=${asmFile%.asm}
+	java Assemble $asmFile $filePrefix -m lst
+	java Assemble $asmFile $filePrefix -m coe
+	java Assemble $asmFile $filePrefix -m mif
+	java Assemble $asmFile $filePrefix -m sim
+
+	echo $filePrefix | "done"
+end
