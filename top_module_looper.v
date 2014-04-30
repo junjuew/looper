@@ -214,7 +214,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
    // implementation of all the modules
    fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
                    //input 
-                   .stall_fetch(stll_ftch_out_to_IF||no_empt_preg_to_IF||ful_to_al_is_out||rob_full_stll_ROB_out),
+                   .stall_fetch(stll_ftch_out_to_IF||no_empt_preg_to_IF||ful_to_al_is_out||rob_full_stll_ROB_out||stll_wb_out),
                    /* -----\/----- EXCLUDED -----\/-----
                     .loop_start(loop_strt_out_to_AL),
                     -----/\----- EXCLUDED -----/\----- */
@@ -235,7 +235,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                    .pred_result_to_dec(pred_result_to_dec) 
                    );
 
-   IF_ID IF_ID_DUT(.clk(clk), .rst_n(rst_n), .stall(stll_ftch_out_to_IF||no_empt_preg_to_IF||ful_to_al_is_out||rob_full_stll_ROB_out),
+   IF_ID IF_ID_DUT(.clk(clk), .rst_n(rst_n), .stall(stll_ftch_out_to_IF||no_empt_preg_to_IF||ful_to_al_is_out||rob_full_stll_ROB_out||stll_wb_out),
                    //input 
                    .pc_if_id_in(pc_to_dec),
                    .inst_if_id_in(inst_to_dec),
@@ -268,7 +268,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                      .loop_strt_out_to_AL(loop_strt_out_to_AL)
                      );
 
-   ID_AL ID_AL_DUT(.clk(clk), .rst_n(rst_n), .stall(no_empt_preg_to_IF||ful_to_al_is_out||rob_full_stll_ROB_out),
+   ID_AL ID_AL_DUT(.clk(clk), .rst_n(rst_n), .stall(no_empt_preg_to_IF||ful_to_al_is_out||rob_full_stll_ROB_out||stll_wb_out),
                    // input
                    .inst0_id_al_in(dcd_inst1_out_to_AL),
                    .inst1_id_al_in(dcd_inst2_out_to_AL),
@@ -300,7 +300,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
              .inst_from_ID2(inst2_id_al_out),
              .inst_from_ID3(inst3_id_al_out), 
              .nxt_indx_from_CMT(next_idx_ROB_out),
-             .stall(ful_to_al_is_out||rob_full_stll_ROB_out), 
+             .stall(ful_to_al_is_out||rob_full_stll_ROB_out||stll_wb_out), 
              .lbd_state_out_from_ID(lbd_state_id_al_out), 
              .fnsh_unrll_out_from_ID(fnsh_unrll_id_al_out), 
              .loop_strt_from_ID(loop_strt_id_al_out),
@@ -663,8 +663,8 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                                  .mem_rd(addr_mem_rd_ex_wb_out), 
                                  .cmmt_str(cmmt_st_ROB_out), 
                                  .mem_wrt(addr_mem_wrt_ex_wb_out), 
-                                 .fnsh_unrll(fnsh_unrll_out_to_SCH),
-                                 .loop_strt(loop_strt_to_SCH),
+                                 .fnsh_unrll(fnsh_unrll_id_al_out),
+                                 .loop_strt(loop_strt_id_al_out),
                                  .indx_ld_al(ld_indx_to_WB), 
                                  .indx_str_al(st_indx_to_WB), 
                                  .mis_pred_ld_ptr(mis_pred_ld_ptr_num_ROB_out) , 
