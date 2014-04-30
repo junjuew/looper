@@ -1,3 +1,4 @@
+`default_nettype none
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: UW-Madison
@@ -22,9 +23,9 @@
 
 module mmu(/*autoarg*/
    // Outputs
-   txd, enb, web, addrb, dinb,
+   txd, enb, web, addrb, dinb, flsh,state,
    // Inputs
-   clk, rst_n, rxd, br_cfg, doutb
+   clk, rst_n, rxd, br_cfg, doutb, cpu_pc, mem_sys_fin
    );
 
    input wire       clk; // 100mhz clock
@@ -32,6 +33,7 @@ module mmu(/*autoarg*/
    output wire      txd; // RS232 Transmit Data
    input wire       rxd; // RS232 Recieve Data
    input wire [1:0] br_cfg; // Baud Rate Configuration, Tied to dip switches 2 and 3
+	output wire [3:0] state;
 
    //interface with memory
    // output value for simple debug for right now
@@ -39,7 +41,10 @@ module mmu(/*autoarg*/
    output wire                               enb, web;
    output wire [13:0]                        addrb;
    output wire [63:0]                        dinb;
-   input wire [63:0]                         doutb;   
+   output wire                               flsh;   
+   input wire [63:0]                         doutb;
+   input wire [15:0]                         cpu_pc;
+   input wire                                mem_sys_fin;
 
    
    wire                                      iocs;
@@ -48,7 +53,6 @@ module mmu(/*autoarg*/
    wire                                      tbr;
    wire [1:0]                                ioaddr;
    wire [7:0]                                databus;
-
 
    // Instantiate your SPART here
    spart spart0( .clk(clk),
@@ -76,6 +80,7 @@ module mmu(/*autoarg*/
                   .web                  (web),
                   .addrb                (addrb[13:0]),
                   .dinb                 (dinb[63:0]),
+                  .flsh                 (flsh),
                   // Inouts
                   .databus              (databus[7:0]),
                   // Inputs
@@ -84,6 +89,10 @@ module mmu(/*autoarg*/
                   .br_cfg               (br_cfg[1:0]),
                   .rda                  (rda),
                   .tbr                  (tbr),
-                  .doutb                (doutb[63:0]));
+                  .doutb                (doutb[63:0]),
+                  .cpu_pc               (cpu_pc[15:0]),
+                  .mem_sys_fin          (mem_sys_fin),
+						.state (state));
+
    
 endmodule

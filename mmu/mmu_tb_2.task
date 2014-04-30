@@ -1,0 +1,71 @@
+        /********************** 2nd test ********************/
+        @(posedge clk);
+        $display("%g ============== start transmission ASCII 34567810  ==========", $time);
+        spart_in_byte[0] = 3+8'h30;
+        spart_in_byte[1] = 4+8'h30;        
+        spart_in_byte[2] = 5+8'h30;
+        spart_in_byte[3] = 6+8'h30;        
+        spart_in_byte[4] = 7+8'h30;
+        spart_in_byte[5] = 8+8'h30;        
+        spart_in_byte[6] = 1+8'h30;
+        spart_in_byte[7] = 0+8'h30;        
+        for (i=0;i<8;i=i+1)
+          begin
+             $display("%g spart_in_byte[i]: %x", $time, spart_in_byte[i]);
+          end
+
+        /********* transmit all byte**************/
+        @(posedge clk);
+        for (j=0;j<8;j=j+1)
+          begin
+             $display("%g ============== start transmission ASCII %d %x  ==========", $time, j, spart_in_byte[j]);
+             rxd=0;
+             $strobe("%g  transmitting start %d",$time, rxd);
+             repeat (baud[br_cfg]) @(posedge clk);
+             
+             for (i=0;i<8;i=i+1)
+               begin
+                  rxd=spart_in_byte[j][i];
+                  $strobe("%g  transmitting rxd=%d",$time, rxd);
+                  repeat (baud[br_cfg]) @(posedge clk);                     
+               end
+             rxd=1;
+             $strobe("%g  transmitting rxd end =%d",$time, rxd);
+             $strobe("%g finish transmission", $time);
+             
+
+
+             repeat(25*baud[br_cfg] + 1000) @(posedge clk);
+          end
+
+        
+        /********* transmit final send cmd "s", echo back "s"**************/
+        spart_in_byte[0] = 8'h73;
+        j=0;
+        $display("%g ============== start transmission cmd %x  ==========", $time, spart_in_byte[j]);
+        rxd=0;
+        $strobe("%g  transmitting start %d",$time, rxd);
+        repeat (baud[br_cfg]) @(posedge clk);
+        
+        for (i=0;i<8;i=i+1)
+          begin
+             rxd=spart_in_byte[j][i];
+             $strobe("%g  transmitting rxd=%d",$time, rxd);
+             repeat (baud[br_cfg]) @(posedge clk);                     
+          end
+        rxd=1;
+        $strobe("%g  transmitting rxd end =%d",$time, rxd);
+        $strobe("%g finish transmission", $time);
+        
+
+        repeat(25*baud[br_cfg] + 1000) @(posedge clk);
+
+
+
+        //mimic cpu_pc changed its value        
+        @(posedge clk);
+        cpu_pc=16'h4;
+
+
+        @(posedge clk);
+        cpu_pc= 16'h0;

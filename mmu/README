@@ -1,6 +1,55 @@
 when rda goes high, the data on data out line is not valid
 
-for rx and transmission:
+==== big Endian and Small Endian=====
+for MMU receiption and hence PC transmission:
+the highest byte within 8 byte clock in first
+but within a byte, the LSB bit comes in first
 
-the high byte clock in first
-but within a byte, the LSB comes in first
+For MMU ouput data in memory, MMU output 8 byte:
+highest byte output first
+within in each byte, the LSB bit comes in first
+
+===============
+Operational Scheme:
+
+1. MMU spart wait for input, load data into the 8-byte buffer
+2. for every 9th byte coming in, load it into the cmd buffer
+3. When receive an "s" for cmd, write the data in 8-byte buffer to memory
+   Then immediately wait for PC to be larger than 3. If larger, then
+   clr cmd buffer and write 0 to memory 0x3fff
+
+
+   when receive "a" for cmd, write the data in 8-byte buffer(lowest 14 bits) to start addr buffer
+   when receive "e" for cmd, write the data in 8-byte buffer(lowest 14 bits) to end addr buffer
+
+=============
+About 14 bit address:
+These 14 bit address is used to identify one line in the physical memory. So that each slot is 64 bits. 
+Each line (4 * 16) comprises 4 values
+
+For example, to access memory 0x1231, use first 14 bits to feed physicla memory, and get data at 0x1230, 0x1231, 0x1232, 0x1233.
+Then the last two bits, in this case 1, is used to select from these 4 values
+
+question how many bytes are there for memory addresses?
+right now use the lowest 14 bits of transmitted data as address
+
+===========
+Workflow:
+
+transmit start addr:
+00 00 00 00 00 00 00 04 a
+
+transmit end addr:
+00 00 00 00 00 00 00 08 e
+
+transmit pc addr:
+0x31 32 33 34 35 36 37 38 s
+
+PC changed > 3
+
+... program execute ...
+
+PC change back <3
+
+driver flush mem_system
+driver starts to ouput memory data in range: start from MSB byte of 64-bits
