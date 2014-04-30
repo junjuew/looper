@@ -1,0 +1,11 @@
+set DIR_PATH=./
+
+for asmFile in $(ls ../Test/*.asm)
+	do
+		filePrefix=${asmFile%.asm}
+		java Assemble $asmFile $filePrefix -m lst
+		java Assemble $asmFile $filePrefix -m mif
+		java Assemble $asmFile $filePrefix -m coe
+		foo='.asm done'
+		echo $filePrefix$foo
+	done
