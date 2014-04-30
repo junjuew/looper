@@ -7,12 +7,15 @@ module tb_topmodule();
    reg        extern_pc_en;
    integer    i;
 
+   parameter testdone = 5000;
+   parameter dumptime = testdone - 5;
    
 
 
 `include "is_dump_map.task"
 `include "is_dump_inst.task"
-
+`include "rf_dump_reg.task"
+`include "mem_dump.task"
    
    
    top_module_looper DUT(/*autoinst*/
@@ -172,6 +175,7 @@ module tb_topmodule();
  -----/\----- EXCLUDED -----/\----- */
 
 
+/* -----\/----- EXCLUDED -----\/-----
 
    initial begin
       #4995;
@@ -187,6 +191,7 @@ module tb_topmodule();
 
    end // initial begin
 
+ -----/\----- EXCLUDED -----/\----- */
 
 
    
@@ -220,7 +225,7 @@ module tb_topmodule();
  
     
    initial begin
-      #5000;
+      #testdone;
 /* -----\/----- EXCLUDED -----\/-----
       $monitor ("mult_enable_to_is:%b mult_done: %b mult_value:%x", DUT.mult_rdy_is_rf, DUT.mult_valid_ex_out, DUT.mult_data_ex_out);
  -----/\----- EXCLUDED -----/\----- */
@@ -251,6 +256,8 @@ module tb_topmodule();
      end
  -----/\----- EXCLUDED -----/\----- */
    
+   
+
    
    
 endmodule // tb_topmodule

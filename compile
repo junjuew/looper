@@ -1,1 +1,1 @@
-vlog -work work *.v +define+IS_DUMP_MAP+TPU_MOD=DUT.is_DUT.is_tpu+define+IS_DUMP_INST+IS_DUT=DUT.is_DUT
+vlog -work work *.v +define+IS_DUMP_MAP+TPU_MOD=DUT.is_DUT.is_tpu+define+IS_DUMP_INST+IS_DUT=DUT.is_DUT+define+RF_DUMP_REG+RF=DUT.reg_file_DUT+define+DUMP_MEM

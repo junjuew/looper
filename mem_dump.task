@@ -1,0 +1,14 @@
+`ifdef DUMP_MEM
+`define MEM DUT.top_level_WB_DUT.mem_sys.mem.data_memory
+   integer 			mem_dump;
+   initial begin
+      #dumptime;
+      mem_dump = $fopen("mem.dump","w");
+      for(i = 0; i < 16384; i = i + 1)
+	begin
+	   $fdisplay(mem_dump,"addr: %x, data: %x",i,`MEM.mem[i]);
+	end
+	$fclose(mem_dump);
+   end
+
+`endif //  `ifdef DUMP_MEM
