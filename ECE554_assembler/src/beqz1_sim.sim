@@ -87,7 +87,7 @@ R13: hex: 0000 decimal: 0
 R14: hex: 0000 decimal: 0
 R15: hex: 0000 decimal: 0
 
-next inst: AssemblyLine@1aa8c488
+next inst: AssemblyLine@22998b08
 current inst: beqz r3, .label1     // it will not do branch here
 ***********************************
 *******   View registers   ********
@@ -131,7 +131,7 @@ R13: hex: 0000 decimal: 0
 R14: hex: 0000 decimal: 0
 R15: hex: 0000 decimal: 0
 
-next inst: AssemblyLine@3dfeca64
+next inst: AssemblyLine@e76cbf7
 current inst: beqz r3, .label1     // it will not do branch here
 ***********************************
 *******   View registers   ********
