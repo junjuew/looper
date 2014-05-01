@@ -509,8 +509,6 @@ module ID_top(
 
 			.rst(rst),
 
-			.branch_take(pred_result_frm_IF),
-
 			// output
 			.lbd_state_out(lbd_state_out_to_AL),
 
