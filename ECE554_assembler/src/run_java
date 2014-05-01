@@ -1,11 +1,26 @@
-set DIR_PATH=./
-
-for asmFile in $(ls ../Test/*.asm)
-	do
-		filePrefix=${asmFile%.asm}
-		java Assemble $asmFile $filePrefix -m lst
-		java Assemble $asmFile $filePrefix -m mif
-		java Assemble $asmFile $filePrefix -m coe
+if [ $# == 0 ] || [ $# != 1 ]; then
+	echo "Run"
+	echo "./run_java -all to process all *.asm files"
+	echo "OR run"
+	echo "./run_java <file.asm> to process a single .asm file"
+else
+	if [ $1 == "-all" ]; then
+		for asmFile in $(ls ../Test/*.asm)
+			do
+				filePrefix=${asmFile%.asm}
+				java Assemble $asmFile $filePrefix -m lst
+				java Assemble $asmFile $filePrefix -m mif
+				java Assemble $asmFile $filePrefix -m coe
+				foo='.asm done'
+				echo $filePrefix$foo
+			done
+	else
+		filePath="../Test/"
+		filePrefix=${1%.asm}
+		java Assemble $filePath$1 $filePath$filePrefix -m lst
+		java Assemble $filePath$1 $filePath$filePrefix -m mif
+		java Assemble $filePath$1 $filePath$filePrefix -m coe
 		foo='.asm done'
 		echo $filePrefix$foo
-	done
+	fi
+fi
