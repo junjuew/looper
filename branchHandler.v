@@ -260,7 +260,7 @@ end
    assign tkn_brnch[2]=(exd_cnt[2])?0:(  brnch_pc_sel_from_bhndlr[2]?
 					 ( brnch_pc_sel_from_bhndlr[3]?(pred_to_pcsel[0]?1:0):(pred_to_pcsel[1]?1:0) ):0  );
 
-   assign tkn_brnch[1]=(exd_cnt[1])?0:(   (|brnch_pc_sel_from_bhndlr[3:2]==0)?//if there is not branch before3rd inst
+   assign tkn_brnch[1]=(exd_cnt[1])?0:(   (|brnch_pc_sel_from_bhndlr[3:2]==1)?//if there is not branch before3rd inst
 					  (pred_to_pcsel[0]?1:0):(pred_to_pcsel[1]?1:0)   );
    assign tkn_brnch[0]=(exd_cnt[0])?0:((|brnch_pc_sel_from_bhndlr[3:1])?
 				       (pred_to_pcsel[0]?1:0):(pred_to_pcsel[1]?1:0));
