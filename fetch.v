@@ -116,6 +116,8 @@ PC_MUX PC_MUX0(
     .pc(pc_from_mux)
 );
 
+reg [15:0] pc;
+
 always@(posedge clk or negedge rst_n)begin
 	if(!rst_n)
 		pc<=16'b0;
