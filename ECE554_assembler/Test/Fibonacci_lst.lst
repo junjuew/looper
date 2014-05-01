@@ -4,7 +4,7 @@ PC: 0001 Binary: 1100001000000000 Hex: c200 ldi r2, 0		// this would be prev num
 PC: 0002 Binary: 1100001100000001 Hex: c301 ldi r3, 1 		// this would be prev number2
 PC: 0003 Binary: 1100010000000000 Hex: c400 ldi r4, 0		// constant 0
 PC: 0004 Binary: 1100011000000001 Hex: c601 ldi r6, 1 		// constant 1
-PC: 0005 Binary: 1100011100010111 Hex: c717 ldi r7, 23		// constant 23
+PC: 0005 Binary: 1100011100001011 Hex: c70b ldi r7, 11		// constant 24
 0006      .loop_start:
 PC: 0006 Binary: 0001010100100011 Hex: 1523 add	r5, r2, r3	// generate the next Fibonacci number
 PC: 0007 Binary: 0001001000110100 Hex: 1234 add r2, r3, r4	// update prev number 1

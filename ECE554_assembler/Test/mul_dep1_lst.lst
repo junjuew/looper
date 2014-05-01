@@ -10,4 +10,5 @@ PC: 0007 Binary: 1000010100100001 Hex: 8521 mult r5, r2, r1	// expect r5 = r2 * 
 PC: 0008 Binary: 0001010101010001 Hex: 1551 add r5, r5, r1	// expect r5 = r5 + r1 = 16
 PC: 0009 Binary: 1000010101010001 Hex: 8551 mult r5, r5, r1	// expect r5 = r5 * r1 = 32
 PC: 000a Binary: 1000010101010001 Hex: 8551 mult r5, r5, r1	// expect r5 = r5 * r1 = 64
-PC: 000b Binary: 1000010101010001 Hex: 8551 mult r5, r5, r1	// expect r5 = r5 * r1 = 128
+PC: 000b Binary: 0001000100010010 Hex: 1112 add r1, r1, r2	// expect r1 = r1 + r2 = 3
+PC: 000c Binary: 1000010101010001 Hex: 8551 mult r5, r5, r1	// expect r5 = r5 * r1 = 192
