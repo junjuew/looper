@@ -1,22 +1,17 @@
 `timescale 1ns / 1ps   
-module mmu_wrong_baud_tb();
+module mmu_wrong_baud_board_tb();
 
    /*AUTOWIRE*/
    // Beginning of automatic wires (for undeclared instantiated-module outputs)
-   wire [13:0]          addrb;                  // From DUT of mmu.v
-   wire [63:0]          dinb;                   // From DUT of mmu.v
    wire                 enb;                    // From DUT of mmu.v
-   wire                 flsh;                   // From DUT of mmu.v
-   wire [3:0]           state;                  // From DUT of mmu.v
    wire                 txd;                    // From DUT of mmu.v
-   wire                 web;                    // From DUT of mmu.v
+	wire [3:0] state;
    // End of automatics
    /*AUTOREGINPUT*/
    // Beginning of automatic reg inputs (for undeclared instantiated-module inputs)
    reg [1:0]            br_cfg;                 // To DUT of mmu.v
    reg                  clk;                    // To DUT of mmu.v
-   reg [15:0]           cpu_pc;                 // To DUT of mmu.v
-   reg [63:0]           doutb;                  // To DUT of mmu.v
+   reg            cpu_pc_MSB;                 // To DUT of mmu.v
    reg                  mem_sys_fin;            // To DUT of mmu.v
    reg                  rst_n;                  // To DUT of mmu.v
    reg                  rxd;                    // To DUT of mmu.v
@@ -25,25 +20,12 @@ module mmu_wrong_baud_tb();
    reg [7:0]            spart_in_byte[7:0];
    integer              i,j;
 
-   mmu DUT
+   mmu_board DUT
      (/*AUTOINST*/
-      // Outputs
-      .txd                              (txd),
-      .state                            (state[3:0]),
-      .enb                              (enb),
-      .web                              (web),
-      .addrb                            (addrb[13:0]),
-      .dinb                             (dinb[63:0]),
-      .flsh                             (flsh),
-      // Inputs
-      .clk                              (clk),
-      .rst_n                            (rst_n),
-      .rxd                              (rxd),
-      .br_cfg                           (br_cfg[1:0]),
-      .doutb                            (doutb[63:0]),
-      .cpu_pc                           (cpu_pc[15:0]),
-      .mem_sys_fin                      (mem_sys_fin));
-
+	     // Outputs
+		.txd(txd), .state(state),
+   // Inputs
+   .clk(clk), .rst_n(rst_n), .rxd(rxd), .br_cfg(br_cfg), .cpu_pc_MSB(cpu_pc_MSB), .mem_sys_fin(mem_sys_fin));
 
 
    integer              baud[3:0];
@@ -59,9 +41,14 @@ module mmu_wrong_baud_tb();
         //dump variables for debug
         ////////////////////////////////////////////////
         //dump all the signals
-        $wlfdumpvars(0, mmu_wrong_baud_tb);
-        $monitor ("%g  enb:%b, web:%b, addrb:%x, dinb:%x, doutb:%x, wrt_mem_data:%x tx_enable:%b,  tx_out_data: %x driver_state:%x mem_out_buf:%x start_mem_addr:%x stop_mem_addr:%x cmd:%x trans_cnt:%x flsh:%b",$time, enb,web,addrb, dinb, doutb, DUT.driver0.wrt_mem_data, DUT.spart0.tx_enable, DUT.spart0.tx_data, state, DUT.driver0.mem_out_buf, DUT.driver0.start_mem_addr, DUT.driver0.stop_mem_addr, DUT.driver0.cmd, DUT.driver0.trans_cnt, DUT.driver0.flsh);
-        
+ //       $wlfdumpvars(0, mmu_wrong_baud_board_tb);
+        $monitor ("%g  enb:%b, addrb:%x, dinb:%x, doutb:%x, wrt_mem_data:%x tx_enable:%b,  tx_out_data: %x driver_state:%x mem_out_buf:%x start_mem_addr:%x stop_mem_addr:%x cmd:%x trans_cnt:%x flsh:%b",
+		  $time, DUT.DUT.enb,DUT.DUT.addrb, DUT.DUT.dinb, DUT.DUT.doutb, DUT.DUT.driver0.wrt_mem_data, DUT.DUT.spart0.tx_enable, DUT.DUT.spart0.tx_data, DUT.DUT.driver0.state, DUT.DUT.driver0.mem_out_buf, DUT.DUT.driver0.start_mem_addr, DUT.DUT.driver0.stop_mem_addr, DUT.DUT.driver0.cmd, DUT.DUT.driver0.trans_cnt, DUT.DUT.driver0.flsh);
+
+//       $monitor ("%g  enb:%b, addrb:%x, dinb:%x, doutb:%x, wrt_mem_data:%x tx_enable:%b,  tx_out_data: %x driver_state:%x mem_out_buf:%x start_mem_addr:%x stop_mem_addr:%x cmd:%x trans_cnt:%x flsh:%b",
+//		  $time, DUT.DUT.enb,DUT.DUT.addrb, DUT.DUT.dinb, DUT.DUT.doutb, DUT.DUT.driver0.wrt_mem_data, DUT.DUT.spart0.spart_tx0.load, DUT.DUT.spart0.spart_tx0.TransShiftReg, DUT.DUT.driver0.state, DUT.DUT.driver0.mem_out_buf, DUT.DUT.driver0.start_mem_addr, DUT.DUT.driver0.stop_mem_addr, DUT.DUT.driver0.cmd, DUT.DUT.driver0.trans_cnt, DUT.DUT.driver0.flsh);
+  
+ 
         clk=1;
         rst_n=0;
         rxd=1; 
@@ -70,8 +57,8 @@ module mmu_wrong_baud_tb();
         baud[2] = 52083; // baud: 19200
         baud[3] = 26041; // baud: 38400       
         br_cfg = 2'b00; // test 4800 first
-        cpu_pc = 16'h0;
-        doutb= 64'ha1a2a3a4a5a6a7a8;
+        cpu_pc_MSB = 16'h0;
+//        doutb= 64'ha1a2a3a4a5a6a7a8;
         mem_sys_fin=0;
         
         
@@ -234,11 +221,11 @@ module mmu_wrong_baud_tb();
 
         //mimic cpu_pc changed its value        
         @(posedge clk);
-        cpu_pc=16'h8;
+        cpu_pc_MSB=1'b1;
 
 
         @(posedge clk);
-        cpu_pc= 16'h0;
+        cpu_pc_MSB= 1'b0;
 
 
         @(posedge clk);

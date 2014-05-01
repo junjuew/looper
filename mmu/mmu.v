@@ -33,7 +33,7 @@ module mmu(/*autoarg*/
    output wire      txd; // RS232 Transmit Data
    input wire       rxd; // RS232 Recieve Data
    input wire [1:0] br_cfg; // Baud Rate Configuration, Tied to dip switches 2 and 3
-	output wire [3:0] state;
+        output wire [3:0] state;
 
    //interface with memory
    // output value for simple debug for right now
@@ -92,7 +92,7 @@ module mmu(/*autoarg*/
                   .doutb                (doutb[63:0]),
                   .cpu_pc               (cpu_pc[15:0]),
                   .mem_sys_fin          (mem_sys_fin),
-						.state (state));
+                                                .state (state));
 
    
 endmodule

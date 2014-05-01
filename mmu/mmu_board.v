@@ -21,7 +21,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 
-module mmu_board_tb(/*autoarg*/
+module mmu_board(/*autoarg*/
    // Outputs
    txd, state,
    // Inputs
@@ -35,7 +35,7 @@ module mmu_board_tb(/*autoarg*/
    input wire [1:0] br_cfg; // Baud Rate Configuration, Tied to dip switches 2 and 3
    input wire       cpu_pc_MSB; //only the MSB of mimic PC
    input wire                  mem_sys_fin;            // To DUT of mmu.v
-	output wire [3:0] state;
+   output wire [3:0]           state;
    
 
    /*AUTOWIRE*/
@@ -56,6 +56,7 @@ module mmu_board_tb(/*autoarg*/
    mmu DUT(/*autoinst*/
            // Outputs
            .txd                         (txd),
+           .state                       (state[3:0]),
            .enb                         (enb),
            .web                         (web),
            .addrb                       (addrb[13:0]),
@@ -68,19 +69,18 @@ module mmu_board_tb(/*autoarg*/
            .br_cfg                      (br_cfg[1:0]),
            .doutb                       (doutb[63:0]),
            .cpu_pc                      (cpu_pc[15:0]),
-           .mem_sys_fin                 (mem_sys_fin),
-			  .state (state));
+           .mem_sys_fin                 (mem_sys_fin));
 
    mem data_mem(
-	        .clka(clk),
-	        .wea(1'b0), // Bus [0 : 0] 
-	        .addra(2'h0), // Bus [2 : 0] 
-	        .dina(2'h0), // Bus [15 : 0] 
-	        .douta(), // Bus [15 : 0] 
-	        .clkb(clk),
-	        .web(web), // Bus [0 : 0] 
-	        .addrb(addrb), // Bus [2 : 0] 
-	        .dinb(dinb), // Bus [15 : 0] 
-	        .doutb(doutb)); // Bus [15 : 0] 
+                .clka(clk),
+                .wea(1'b0), // Bus [0 : 0] 
+                .addra(3'h0), // Bus [2 : 0] 
+                .dina(64'h0), // Bus [15 : 0] 
+                .douta(), // Bus [15 : 0] 
+                .clkb(clk),
+                .web(web), // Bus [0 : 0] 
+                .addrb(addrb), // Bus [2 : 0] 
+                .dinb(dinb), // Bus [15 : 0] 
+                .doutb(doutb)); // Bus [15 : 0] 
    
 endmodule

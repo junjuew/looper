@@ -60,7 +60,7 @@
    input wire        mem_sys_fin;
    
    output reg [3:0]         state;
-	reg[3:0] nxt_state;
+        reg[3:0] nxt_state;
 
    //define states
    localparam IDLE = 4'h0;
@@ -121,7 +121,7 @@
    // this is referring to the receive side, transmission's baud value
    // is 16 times larger than receiver
    // 0x516 * 16 = (10^9) / 4800
-   assign baud_rate = (br_cfg == 2'b00) ? 16'h516://16'd64:
+   assign baud_rate = (br_cfg == 2'b00) ? 16'h516://16'd64://16'h516://16'd16:
                       (br_cfg == 2'b01) ? 16'h28B:
                       (br_cfg == 2'b10) ? 16'h146: 16'ha3;
    
@@ -206,7 +206,7 @@
    //cnt has already incremented by one when in ECHO state
    wire[3:0] echo_back_idx;
    assign echo_back_idx[3:0] = (cnt == 0)? 4'h8 : cnt-1;
-   assign echo_back_data[7:0]  =  (echo_back_idx == 4'h8) ? cmd: stored_spart_data[echo_back_idx][7:0];
+   assign echo_back_data[7:0]  =  (echo_back_idx == 4'h8) ? cmd: (stored_spart_data[echo_back_idx][7:0] + 8'h30);
 
 
    /******* address counter used for tranmitting out the result**/
@@ -256,7 +256,7 @@
       genvar mem_out_i;
       for (mem_out_i=0; mem_out_i < 8; mem_out_i=mem_out_i+1)
         begin: mem_out_gen
-           assign mem_out[mem_out_i][7:0] = doutb[(8 - mem_out_i)*8-1: (8 - mem_out_i -1)*8];
+           assign mem_out[mem_out_i][7:0] = mem_out_buf[(8 - mem_out_i)*8-1: (8 - mem_out_i -1)*8];
         end
    endgenerate
    
@@ -456,6 +456,7 @@
             begin
                enb=1'b1;
                ld_mem_out_buf=1'b1;
+               addrb=addr_cnt - 14'h1;
                clr_trans_cnt=1'b1;              
                nxt_state = TRANS_SEND;
             end
