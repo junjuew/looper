@@ -75,7 +75,7 @@ output [3:0]  pred_result_to_dec;
 //internal wires and signals//
 /////////////////////////////
 wire [15:0] brnch_addr_pc0, brnch_addr_pc1, jump_addr_pc,pc_plus4, pc_bhndlr,
-            pc0,pc_plus1,pc_plus2,pc_plus3,inst0,inst1, inst2, inst3,
+            pc,pc_plus1,pc_plus2,pc_plus3,inst0,inst1, inst2, inst3,
             instruction0, instruction1, instruction2,instruction3,
             instruction0_j,instruction1_j,instruction2_j,instruction3_j,
             //brnch_inst0,brnch_inst1;
@@ -115,26 +115,18 @@ PC_MUX PC_MUX0(
     .pc(pc_from_mux)
 );
 
-assign pc0=exter_pc_en?exter_pc:pc_from_mux;
+assign pc=exter_pc_en?exter_pc:pc_from_mux;
+
+//from external control signals
+assign pc_plus4=pc+4;
 
 //instruction memory
 //instrMemModule IMM(clk, pc,inst0,inst1, inst2, inst3, pc_plus1, pc_plus2, pc_plus3);
 
-reg [15:0] pc;
-always@(posedge clk or negedge rst_n)
-    if(!rst_n)
-        pc<=16'b0;
-    else
-        pc<=pc0;
-//from external control signals
-assign pc_plus4=pc+4;
-
 
 instrMemModule IMM(
     .clk(clk),
-    .rst_n(rst_n),
-    .pc(pc0),
-    .flush_mem(flush_mem),
+    .pc(pc),
     .inst0(inst0),
     .inst1(inst1),
     .inst2(inst2),
@@ -151,7 +143,6 @@ branchHandler branchjumpHandler(
     .rst_n(rst_n),
     .pc(pc),
     .inst0(inst0), .inst1(inst1), .inst2(inst2), .inst3(inst3),
-    .has_mispredict(has_mispredict),//add on april 29
     .stall_for_jump(stall_for_jump),//from jump
     .pred_to_pcsel(pred_to_pcsel),
     .decr_count_from_rob(decr_count_brnch||has_mispredict),
@@ -171,8 +162,7 @@ branchHandler branchjumpHandler(
     //.brnch_inst0(brnch_inst0),
     //.brnch_inst1(brnch_inst1),
 	.tkn_brnch(tkn_brnch),
-    .isImJmp(isImJmp),
-    .flush_mem(flush_mem)//add on april 29,for imm delay
+    .isImJmp(isImJmp)
 );//to calculator
 
 

@@ -2,23 +2,24 @@
 module imemory(
         input clka,
         input[13:0] addra,
-        output reg [63:0] douta,
+        output [63:0] douta,
         input clkb,
         input[13:0] addrb,
-        output reg [63:0] doutb);
+        output  [63:0] doutb);
         
         reg [63:0] mem[0:16383];
         
-        always@(posedge clka)begin
+        //always@(posedge clk)begin
         
-            douta<=mem[addra];
-            
-             doutb<=mem[addrb];
-         end
+         assign douta=mem[addra];
+        
+        
+         assign doutb=mem[addrb];
+        
 
    initial begin
 
-      $readmemb("./ECE554_assembler/Test/Fibonacci_mif.mif", mem); // IM.mif is memory file
+      $readmemb("./ECE554_assembler/Test/simple_lp_mif.mif", mem); // IM.mif is memory file
    end
    
         
