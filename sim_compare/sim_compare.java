@@ -63,7 +63,7 @@ public class Sim_compare{
 			System.out.println();
 		}
 		if (!allPass){
-			System.out.println("RESULT UNMATCHED");
+			System.out.println("INCORRECT");
 			int i = 0;
 			while (i <= 15){
 				if (!track[i]){
@@ -72,7 +72,7 @@ public class Sim_compare{
 				i ++;
 			}
 		}else{
-			System.out.println("RESULT MATCHED");
+			System.out.println("CORRECT");
 		}
 	}
 	
