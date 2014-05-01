@@ -21,7 +21,7 @@
 module PC_MUX(
  //   input clk, 
    // input rst_n,
-	input [15:0] pc_hold;
+	input [15:0] pc_hold,
     input [15:0] pc_recovery,
     input [15:0] brnch_addr_pc0,
     input [15:0] brnch_addr_pc1,
