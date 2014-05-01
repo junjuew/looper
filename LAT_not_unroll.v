@@ -6,6 +6,7 @@ module LAT_not_unroll(
 		      mis_pred_in,
 		      clk,
 		      rst,
+			  branch_take, // fan
 		      // output
 		      lbd_state_out,
 		      fnsh_unrll_out,	// output to interpretor
@@ -18,7 +19,8 @@ module LAT_not_unroll(
    input [63:0] 		inst_in, pc_in;
    input 			mis_pred_in;
    input 			clk, rst;
-
+   input  [3:0]     branch_take;//fan
+ 
 
    output [1:0] 		lbd_state_out;
    output reg 			fnsh_unrll_out;
@@ -44,13 +46,14 @@ module LAT_not_unroll(
    reg [15:0] 			fallthrough_addr_train, start_addr, fallthrough_addr_dispatch, temp_addr;
    reg 				fallthrough_addr_train_en;
 				
-   reg [63:0] 			pc_in_test;
+   reg [63:0] 			pc_in_buf;
    reg [6:0] 			max_unroll_train, max_unroll_dispatch;
 
    // control signals
    reg [1:0] 			inst_valid_out_type;
    reg [2:0] 			num_of_inst_train_type;
    reg 				write2LAT, write2LAT_en;
+   reg [3:0]            bck_lp_new; //fan
    
    reg [2:0] 			stll_ftch_cnt_type;
 
@@ -82,17 +85,27 @@ module LAT_not_unroll(
 	     state <= nxt_state;
 	  end				
      end
-   //
+//////////////////fan fan fan fan fan fan fan//////
+   always @(posedge clk,posedge rst)
+	 begin
+		bck_lp_new <= branch_take & bck_lp_bus_in;
+	 end
+   always @(posedge clk,posedge rst)
+	 begin
+		pc_in_buf <= pc_in;
+	 end
+///////////////////////////////////////////////////
+
    always @(/*autosense*/ 
 	    LAT[0][46:0] or LAT[1][46:0] or LAT[2][46:0] or LAT[3][46:0]
-	    or bck_lp_bus_in
+	    or bck_lp_new
 	    or dispatch1 or dispatch2 or dispatch3 or dispatch4
 	    or end_lp1_dispatch or end_lp1_train
 	    or end_lp2_dispatch or end_lp2_train
 	    or end_lp3_dispatch or end_lp3_train
 	    or end_lp4_dispatch or end_lp4_train or loop_strt_out
 	    or mis_pred_in or num_of_inst_train or pc_in or rst
-	    or state or stll_ftch_cnt)
+	    or state or stll_ftch_cnt or max_unroll_dispatch)
      begin
 	//	if (rst)
 	//		begin
@@ -116,7 +129,7 @@ module LAT_not_unroll(
 	      fnsh_unrll_out = 1'b0;
 	      stll_ftch_out = 1'b0;
 	      stll_ftch_cnt_type = 3'b0;
-	      if (bck_lp_bus_in != 4'b0)
+	      if (bck_lp_new != 4'b0)
 		begin
 		   fallthrough_addr_train_en = 1'b1;
 		   nxt_state = TRAIN;
@@ -148,14 +161,7 @@ module LAT_not_unroll(
 		   endcase
 		end
 	      else
-		begin
-		   if (num_of_inst_train == 0)
-		     begin
-			start_addr = pc_in[63:48];
-		     end
-			else 
-				start_addr = start_addr;
-			
+		begin			
 		   casex ({end_lp1_train, end_lp2_train, end_lp3_train, end_lp4_train})
 		     5'b1xxx: begin num_of_inst_train_type = 3'b001; nxt_state = IDLE; write2LAT_en = 1'b1; end
 		     5'bx1xx: begin num_of_inst_train_type = 3'b010; nxt_state = IDLE; write2LAT_en = 1'b1; end
@@ -208,14 +214,14 @@ module LAT_not_unroll(
 	   fallthrough_addr_train <= 16'b0;
 	 else if(fallthrough_addr_train_en)
 	   begin
-	      if(bck_lp_bus_in[3] == 1'b1)
-		fallthrough_addr_train <= pc_in[63:48] + 1;
-	      else if(bck_lp_bus_in[2] == 1'b1)
-		fallthrough_addr_train <= pc_in[47:32] + 1;
-	      else if(bck_lp_bus_in[1] == 1'b1)
-		fallthrough_addr_train <= pc_in[31:16] + 1;
-	      else if(bck_lp_bus_in[0] == 1'b1)
-		fallthrough_addr_train <= pc_in[15:0] + 1;
+	      if(bck_lp_new[3] == 1'b1)                      // fan changed back_lp_bus_in to bck_lp_new
+		fallthrough_addr_train <= pc_in_buf[63:48] + 1;
+	      else if(bck_lp_new[2] == 1'b1)                 // fan changed back_lp_bus_in to bck_lp_new
+		fallthrough_addr_train <= pc_in_buf[47:32] + 1;
+	      else if(bck_lp_new[1] == 1'b1)                 // fan changed back_lp_bus_in to bck_lp_new
+		fallthrough_addr_train <= pc_in_buf[31:16] + 1;
+	      else if(bck_lp_new[0] == 1'b1)                 // fan changed back_lp_bus_in to bck_lp_new
+		fallthrough_addr_train <= pc_in_buf[15:0] + 1;
 	      else
 		fallthrough_addr_train <= fallthrough_addr_train;
 	   end // if (fallthrough_addr_train_en)
@@ -287,20 +293,20 @@ module LAT_not_unroll(
 
       
    //
-   assign end_lp1_dispatch = (pc_in[63:48] - fallthrough_addr_dispatch + 1 == 16'b0) ? 1 : 0;
-   assign end_lp2_dispatch = (pc_in[47:32] - fallthrough_addr_dispatch + 1 == 16'b0) ? 1 : 0;
-   assign end_lp3_dispatch = (pc_in[31:16] - fallthrough_addr_dispatch + 1 == 16'b0) ? 1 : 0;
-   assign end_lp4_dispatch = (pc_in[15:0] - fallthrough_addr_dispatch + 1 == 16'b0) ? 1 : 0;
+   assign end_lp1_dispatch = (pc_in_buf[63:48] - fallthrough_addr_dispatch + 1 == 16'b0) ? 1 : 0;
+   assign end_lp2_dispatch = (pc_in_buf[47:32] - fallthrough_addr_dispatch + 1 == 16'b0) ? 1 : 0;
+   assign end_lp3_dispatch = (pc_in_buf[31:16] - fallthrough_addr_dispatch + 1 == 16'b0) ? 1 : 0;
+   assign end_lp4_dispatch = (pc_in_buf[15:0] - fallthrough_addr_dispatch + 1 == 16'b0) ? 1 : 0;
    //
-   assign end_lp1_train = (pc_in[63:48] - fallthrough_addr_train + 1 == 16'b0) ? 1 : 0;
-   assign end_lp2_train = (pc_in[47:32] - fallthrough_addr_train + 1 == 16'b0) ? 1 : 0;
-   assign end_lp3_train = (pc_in[31:16] - fallthrough_addr_train + 1 == 16'b0) ? 1 : 0;
-   assign end_lp4_train = (pc_in[15:0] - fallthrough_addr_train + 1 == 16'b0) ? 1 : 0;
+   assign end_lp1_train = (pc_in_buf[63:48] - fallthrough_addr_train + 1 == 16'b0) ? 1 : 0;
+   assign end_lp2_train = (pc_in_buf[47:32] - fallthrough_addr_train + 1 == 16'b0) ? 1 : 0;
+   assign end_lp3_train = (pc_in_buf[31:16] - fallthrough_addr_train + 1 == 16'b0) ? 1 : 0;
+   assign end_lp4_train = (pc_in_buf[15:0] - fallthrough_addr_train + 1 == 16'b0) ? 1 : 0;
    //
-   assign dispatch1 = (write2LAT == 1'b1) ? ((pc_in[63:48] == start_addr && LAT_pointer == 2'b00) ? 1'b1 : 1'b0) : (pc_in[63:48] == LAT[0][45:30]) ? 1 : 0;
-   assign dispatch2 = (write2LAT == 1'b1) ? ((pc_in[63:48] == start_addr && LAT_pointer == 2'b01) ? 1'b1 : 1'b0) : (pc_in[63:48] == LAT[1][45:30]) ? 1 : 0;
-   assign dispatch3 = (write2LAT == 1'b1) ? ((pc_in[63:48] == start_addr && LAT_pointer == 2'b10) ? 1'b1 : 1'b0) : (pc_in[63:48] == LAT[2][45:30]) ? 1 : 0;
-   assign dispatch4 = (write2LAT == 1'b1) ? ((pc_in[63:48] == start_addr && LAT_pointer == 2'b11) ? 1'b1 : 1'b0) : (pc_in[63:48] == LAT[3][45:30]) ? 1 : 0;
+   assign dispatch1 = (write2LAT == 1'b1) ? ((pc_in_buf[63:48] == start_addr && LAT_pointer == 2'b00) ? 1'b1 : 1'b0) : (pc_in_buf[63:48] == LAT[0][45:30]) ? 1 : 0;
+   assign dispatch2 = (write2LAT == 1'b1) ? ((pc_in_buf[63:48] == start_addr && LAT_pointer == 2'b01) ? 1'b1 : 1'b0) : (pc_in_buf[63:48] == LAT[1][45:30]) ? 1 : 0;
+   assign dispatch3 = (write2LAT == 1'b1) ? ((pc_in_buf[63:48] == start_addr && LAT_pointer == 2'b10) ? 1'b1 : 1'b0) : (pc_in_buf[63:48] == LAT[2][45:30]) ? 1 : 0;
+   assign dispatch4 = (write2LAT == 1'b1) ? ((pc_in_buf[63:48] == start_addr && LAT_pointer == 2'b11) ? 1'b1 : 1'b0) : (pc_in_buf[63:48] == LAT[3][45:30]) ? 1 : 0;
    assign loop_strt_out = (state == 2'b10) ? 0 : (dispatch1 || dispatch2 || dispatch3 || dispatch4);
    //
    // update inst_valid_out
@@ -353,7 +359,15 @@ module LAT_not_unroll(
  -----/\----- EXCLUDED -----/\----- */
 
    //
-
+   always@(posedge clk, posedge rst)
+     begin
+	if(rst)
+	  start_addr <= 16'b0;
+	else if((state == TRAIN) && (num_of_inst_train == 0))
+	  start_addr <= pc_in[63:48];
+	else 
+	  start_addr <= start_addr;	
+    end 
 
    always@(posedge clk, posedge rst)
      begin
@@ -466,3 +480,4 @@ module LAT_not_unroll(
    //*/
 
 endmodule
+
