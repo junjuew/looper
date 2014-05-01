@@ -19,8 +19,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module PC_MUX(
-    input clk, 
-    input rst_n,
+ //   input clk, 
+   // input rst_n,
+	input [15:0] pc_hold;
     input [15:0] pc_recovery,
     input [15:0] brnch_addr_pc0,
     input [15:0] brnch_addr_pc1,
@@ -32,25 +33,25 @@ module PC_MUX(
     //output reg [15:0] pc_new
 );
  
-reg [15:0] pc_new;
-
+//reg [15:0] pc_new;
+/*
 always @(posedge clk or negedge rst_n)
     if(!rst_n)
         pc<=16'b0;
     else 
         pc<=pc_new;
-
+*/
 always @(*)begin
-    pc_new=16'b0;
+    pc=16'b0;
     case(PC_select)
-        3'd0:pc_new=brnch_addr_pc0;
-        3'd1:pc_new=brnch_addr_pc1;
-        3'd2:pc_new=jump_addr_pc;
-        3'd3:pc_new=pc_recovery;
-        3'd4:pc_new=pc_bhndlr;
-        3'd5:pc_new=pc+4;//calculated by a adder
-        3'd6:pc_new=pc;
-        default:pc_new=16'b0;//???default:pc_new=16'b0;//???
+        3'd0:pc=brnch_addr_pc0;
+        3'd1:pc=brnch_addr_pc1;
+        3'd2:pc=jump_addr_pc;
+        3'd3:pc=pc_recovery;
+        3'd4:pc=pc_bhndlr;
+        3'd5:pc=pc_next;//calculated by a adder
+        3'd6:pc=pc_hold;
+        default:pc=16'b0;//???default:pc_new=16'b0;//???
     endcase
 end
 

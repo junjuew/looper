@@ -75,7 +75,7 @@ output [3:0]  pred_result_to_dec;
 //internal wires and signals//
 /////////////////////////////
 wire [15:0] brnch_addr_pc0, brnch_addr_pc1, jump_addr_pc,pc_plus4, pc_bhndlr,
-            pc,pc_plus1,pc_plus2,pc_plus3,inst0,inst1, inst2, inst3,
+            pc_plus1,pc_plus2,pc_plus3,inst0,inst1, inst2, inst3,
             instruction0, instruction1, instruction2,instruction3,
             instruction0_j,instruction1_j,instruction2_j,instruction3_j,
             //brnch_inst0,brnch_inst1;
@@ -103,8 +103,9 @@ wire [15:0] pc_from_mux;
 //    pc_plus4, pc_bhndlr, PC_select, pc_from_mux);
 
 PC_MUX PC_MUX0(
-    .clk(clk), 
-    .rst_n(rst_n),
+    //.clk(clk), 
+    //.rst_n(rst_n),
+	.pc_hold(),
     .pc_recovery(pc_recovery),
     .brnch_addr_pc0(brnch_addr_pc0),
     .brnch_addr_pc1(brnch_addr_pc1),
@@ -115,7 +116,15 @@ PC_MUX PC_MUX0(
     .pc(pc_from_mux)
 );
 
-assign pc=exter_pc_en?exter_pc:pc_from_mux;
+always@(posedge clk or negedge rst_n)begin
+	if(!rst_n)
+		pc<=16'b0;
+	if(exter_pc_en==1)
+		pc<=exter_pc;
+	else
+		pc<=pc_from_mux;
+
+end
 
 //from external control signals
 assign pc_plus4=pc+4;
