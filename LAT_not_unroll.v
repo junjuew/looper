@@ -44,7 +44,7 @@ module LAT_not_unroll(
    reg [15:0] 			fallthrough_addr_train, start_addr, fallthrough_addr_dispatch, temp_addr;
    reg 				fallthrough_addr_train_en;
 				
-   reg [63:0] 			pc_in_test;
+  // reg [63:0] 			pc_in_test;
    reg [6:0] 			max_unroll_train, max_unroll_dispatch;
 
    // control signals
