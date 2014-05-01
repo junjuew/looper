@@ -105,7 +105,7 @@ wire [15:0] pc_from_mux;
 PC_MUX PC_MUX0(
     //.clk(clk), 
     //.rst_n(rst_n),
-	.pc_hold(),
+	.pc_hold(pc),
     .pc_recovery(pc_recovery),
     .brnch_addr_pc0(brnch_addr_pc0),
     .brnch_addr_pc1(brnch_addr_pc1),
@@ -129,6 +129,9 @@ always@(posedge clk or negedge rst_n)begin
 end
 
 //from external control signals
+assign pc_plus1=pc+1;
+assign pc_plus2=pc+2;
+assign pc_plus3=pc+3;
 assign pc_plus4=pc+4;
 
 //instruction memory
@@ -137,14 +140,14 @@ assign pc_plus4=pc+4;
 
 instrMemModule IMM(
     .clk(clk),
-    .pc(pc),
+    .pc(pc_from_mux),
     .inst0(inst0),
     .inst1(inst1),
     .inst2(inst2),
-    .inst3(inst3),
-    .pc_plus1(pc_plus1),
-    .pc_plus2(pc_plus2),
-    .pc_plus3(pc_plus3)
+    .inst3(inst3)
+    //.pc_plus1(pc_plus1),
+    //.pc_plus2(pc_plus2),
+    //.pc_plus3(pc_plus3)
 );
 
 

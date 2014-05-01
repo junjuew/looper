@@ -24,17 +24,17 @@ module instrMemModule(
     output reg[15:0] inst0,
     output reg[15:0] inst1,
     output reg[15:0] inst2,
-    output reg[15:0] inst3,
-    output [15:0] pc_plus1,
-    output [15:0] pc_plus2,
-    output [15:0] pc_plus3
+    output reg[15:0] inst3
+//    output [15:0] pc_plus1,
+  //  output [15:0] pc_plus2,
+  //  output [15:0] pc_plus3
     //output [15:0] pc_plus4
 );
 
 //internal signals
 //wire [15:0] pc_plus4;
 wire [63:0] instLine0,instLine1;
-
+wire [15:0] pc_plus1,pc_plus2,pc_plus3;
 assign pc_plus1=pc+1;
 assign pc_plus2=pc+2;
 assign pc_plus3=pc+3;

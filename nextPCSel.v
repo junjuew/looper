@@ -51,7 +51,7 @@ always@(posedge clk or negedge rst_n)
 always @(*)begin
 	if(start==1'b1)
         PC_select=3'd7;
-	 if(has_mispredict==1)
+	else if(has_mispredict==1)
         PC_select=3'd3;//pc_recovery
     else if(stall==1'b1 || brch_full == 1'b1)
         PC_select=3'd6;
