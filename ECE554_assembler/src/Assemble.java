@@ -547,7 +547,7 @@ class Assemble {
 		int i = 0;
 		while (i < 16384){
 			if (memory_used[i]){
-				memOut.println("addr: " + Integer.toHexString(i | 0x10000).substring(1) + " value: " + Integer.toHexString(memory[i] | 0x10000).substring(1) + "dec: " + memory[i]);
+				memOut.println("addr: " + Integer.toHexString(i | 0x10000).substring(1) + " value: " + Integer.toHexString(memory[i] | 0x10000).substring(1) + " dec: " + memory[i]);
 			}
 			i++;
 		}
