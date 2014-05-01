@@ -87,7 +87,7 @@ R13: hex: 0000 decimal: 0
 R14: hex: 0000 decimal: 0
 R15: hex: 0000 decimal: 0
 
-next inst: AssemblyLine@11cfb549
+next inst: AssemblyLine@1aa8c488
 current inst: beqz r3, .label1     // it will not do branch here
 ***********************************
 *******   View registers   ********
@@ -131,7 +131,11 @@ R13: hex: 0000 decimal: 0
 R14: hex: 0000 decimal: 0
 R15: hex: 0000 decimal: 0
 
+<<<<<<< HEAD
 next inst: AssemblyLine@5b86d4c1
+=======
+next inst: AssemblyLine@3dfeca64
+>>>>>>> Added memory compare functionality in sim_compare.java
 current inst: beqz r3, .label1     // it will not do branch here
 ***********************************
 *******   View registers   ********

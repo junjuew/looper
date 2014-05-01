@@ -46,7 +46,8 @@ class Assemble {
     private static int sourceLineID;
 
     public static int[] registers = new int[17];
-    public static int[] memory = new int[1000];
+    public static int[] memory = new int[16384];
+    public static boolean[] memory_used = new boolean[16384];
     public static int totalInstNum = 0;
     public static Hashtable<String, Integer> labelTable ;
     public static void main(String [] args) {
@@ -59,11 +60,19 @@ class Assemble {
         PrintWriter mem3out = null;
 
 		PrintWriter regOut = null;
+		PrintWriter memOut = null;
 		String regFileName = "../../sim_reg.dump";
+		String memFileName = "../../sim_mem.dump";
 		try {
 	        regOut = new PrintWriter(regFileName);
 		} catch (IOException ioeOpenOut) {
 		    System.err.println("could not open "+regFileName+" for output");
+		    System.exit(-1);
+		}
+		try {
+	        memOut = new PrintWriter(memFileName);
+		} catch (IOException ioeOpenOut) {
+		    System.err.println("could not open "+memFileName+" for output");
 		    System.exit(-1);
 		}
         String option = "";
@@ -106,15 +115,16 @@ class Assemble {
         }
 
         // initialize memory
-        for (int i = 0; i < 1000; i ++){
+        for (int i = 0; i < 16384; i ++){
         	memory[i] = 0;
+        	memory_used[i] = false;
         }
         // initialize registers
         for (int i = 0; i < 17; i ++){
         	registers[i] = 0;
         }
 
-        String memFileName = args[1] + "_";
+        //String memFileName = args[1] + "_";
         /*try {
                 mem0out = new PrintWriter(memFileName+"0"+".img");
                 mem1out = new PrintWriter(memFileName+"1"+".img");
@@ -182,6 +192,7 @@ class Assemble {
             clacInstNum(listOut, progLine);
             listOut.println("Executed instruction #: " + Integer.toString(totalInstNum));
             printFinalRegisters(regOut);
+            printFinalMemory(memOut);
         }else{
             printCode(progLine, listOut, mem0out, mem1out, mem2out, mem3out, option);
         }
@@ -499,6 +510,7 @@ class Assemble {
                 int immediate = currentLine.immediateVal;
 				int memLocation = registers[currentLine.src1] + immediate;
 				memory[memLocation] = registers[currentLine.dst];
+				memory_used[memLocation] = true;
 				simOut.println("***********************************");
 				simOut.println("********   Memory update   ********");
 				simOut.println("***********************************");
@@ -529,6 +541,17 @@ class Assemble {
 			regOut.println(Integer.toString(i) + ": " + Integer.toHexString(0x10000 | registers[i]).substring(1));
 		}
 		regOut.close();
+	}
+
+	public static void printFinalMemory(PrintWriter memOut){
+		int i = 0;
+		while (i < 16384){
+			if (memory_used[i]){
+				memOut.println("addr: " + Integer.toHexString(i | 0x10000).substring(1) + " value: " + Integer.toHexString(memory[i] | 0x10000).substring(1));
+			}
+			i++;
+		}
+		memOut.close();
 	}
 
     public static void printCode(AssemblyLine [] prog, PrintWriter listOut,

@@ -3,22 +3,30 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Hashtable;
 import java.util.Scanner;
+import java.util.*;
 
 public class Sim_compare{
 
 	public static Hashtable<Integer, Integer> log2phyMAP = new Hashtable<Integer, Integer>();
 	public static Hashtable<Integer, Integer> phy2valMAP = new Hashtable<Integer, Integer>();
 	public static Hashtable<Integer, Integer> sim2valMAP = new Hashtable<Integer, Integer>();
+	public static Hashtable<Integer, Integer> mem2valMAP = new Hashtable<Integer, Integer>();
+	public static Hashtable<Integer, Integer> simMem2valMAP = new Hashtable<Integer, Integer>();
+
 	
 	public static void main(String[] args) {
 		// declare and initialize scanners for all dump files
 		File mapFile = new File("../map.dump");
 		File regFile = new File("../reg.dump");
-		File simFile = new File("../sim_reg.dump");
+		File simRegFile = new File("../sim_reg.dump");
+		File memFile = new File("../mem.dump");
+		File simMemFile = new File("../sim_mem.dump");
 		
 		Scanner mapScan = null;
 		Scanner regScan = null;
-		Scanner simScan = null;
+		Scanner memScan = null;
+		Scanner simRegScan = null;
+		Scanner simMemScan = null;
 		
 		try {
 			mapScan = new Scanner(mapFile);
@@ -31,7 +39,17 @@ public class Sim_compare{
 			System.out.println("reg.dump not found");
 		}
 		try {
-			simScan = new Scanner(simFile);
+			memScan = new Scanner(memFile);
+		} catch (FileNotFoundException e) {
+			System.out.println("reg.dump not found");
+		}
+		try {
+			simRegScan = new Scanner(simRegFile);
+		} catch (FileNotFoundException e) {
+			System.out.println("sim_reg.dump not found");
+		}
+		try {
+			simMemScan = new Scanner(simMemFile);
 		} catch (FileNotFoundException e) {
 			System.out.println("sim_reg.dump not found");
 		}
@@ -39,12 +57,34 @@ public class Sim_compare{
 		// process each dump file via scanner
 		processMapDump(mapScan);
 		processRegDump(regScan);
-		processSimDump(simScan);
+		processMemDump(memScan);
+		processSimRegDump(simRegScan);
+		processSimMemDump(simMemScan);
 		
-		validateResult();
+		validateRegisterResult();
+		validateMemoryResult();
 	}
 
-	private static void validateResult(){
+	private static void validateMemoryResult(){
+		boolean memoryCorrect = true;
+		for (int i = 0; i < 16384; i ++){
+			if ((simMem2valMAP.get(i) == null && mem2valMAP.get(i) != 0) || (simMem2valMAP.get(i) != null && simMem2valMAP.get(i) != mem2valMAP.get(i))){
+				memoryCorrect = false;
+				if (simMem2valMAP.get(i) == null){
+					System.out.println("ERROR: memory 0x" + Integer.toHexString(i | 0x10000).substring(1) + " should be 0x0000 but is 0x" + Integer.toHexString(mem2valMAP.get(i) | 0x10000).substring(1));
+				}else{
+					System.out.println("ERROR: memory 0x" + Integer.toHexString(i | 0x10000).substring(1) + " should be 0x" + Integer.toHexString(simMem2valMAP.get(i) | 0x10000).substring(1) + " but is " + Integer.toHexString(mem2valMAP.get(i) | 0x10000).substring(1));
+				}
+			}
+		}
+		if (memoryCorrect){
+			System.out.println("Memory CORRECT");
+		}else{
+			System.out.println("Memory INCORRECT");
+		}
+	}
+
+	private static void validateRegisterResult(){
 		boolean allPass = true;
 		boolean[] track = new boolean[16];
 		for (int i = 0; i <= 15; i ++){
@@ -63,7 +103,7 @@ public class Sim_compare{
 			System.out.println();
 		}
 		if (!allPass){
-			System.out.println("INCORRECT");
+			System.out.println("Registers INCORRECT");
 			int i = 0;
 			while (i <= 15){
 				if (!track[i]){
@@ -72,14 +112,37 @@ public class Sim_compare{
 				i ++;
 			}
 		}else{
-			System.out.println("CORRECT");
+			System.out.println("Registers CORRECT");
 		}
 	}
+
+
+	public static void processSimMemDump(Scanner simMemScan){
+		while (simMemScan.hasNextLine()){
+			String line = simMemScan.nextLine();
+			String[] tokens = line.split(" ");
+			int memLocation = hexToDec(tokens[1]);
+			int memValue = hexToDec(tokens[3]);
+			simMem2valMAP.put(memLocation, memValue);
+		}
+		// System.out.println(simMem2valMAP.toString());
+	}
 	
-	private static void processSimDump(Scanner simScan){
+	public static void processMemDump(Scanner memScan){
+		while (memScan.hasNextLine()){
+			String line = memScan.nextLine();
+			String[] tokens = line.split(" ");
+			int memLocation = hexToDec(tokens[1].substring(0, tokens[1].length() - 1));
+			int memValue = hexToDec(tokens[3]);
+			mem2valMAP.put(memLocation, memValue);
+		}
+		// System.out.println(mem2valMAP.toString());
+	}
+
+	private static void processSimRegDump(Scanner simRegScan){
 		String line = "";
-		while (simScan.hasNextLine()){
-			line = simScan.nextLine();
+		while (simRegScan.hasNextLine()){
+			line = simRegScan.nextLine();
 			String[] tokens = line.split(" ");
 			int register = Integer.parseInt(tokens[0].substring(0, tokens[0].length() - 1));
 			int value = hexToDec(tokens[1]);
