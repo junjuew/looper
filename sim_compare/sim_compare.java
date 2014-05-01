@@ -23,17 +23,17 @@ public class Sim_compare{
 		try {
 			mapScan = new Scanner(mapFile);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("map.dump not found");
 		}
 		try {
 			regScan = new Scanner(regFile);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("reg.dump not found");
 		}
 		try {
 			simScan = new Scanner(simFile);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("sim_reg.dump not found");
 		}
 		
 		// process each dump file via scanner
