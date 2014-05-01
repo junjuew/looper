@@ -36,7 +36,7 @@ module LAT_not_unroll(
    reg [1:0] 			state, nxt_state;
    reg 				tbl_entry_en1, tbl_entry_en2, tbl_entry_en3, tbl_entry_en4;
    reg [1:0] 			LAT_pointer;
-   reg [46:0] 			train_content;	// [46]: valid bit, [45:30]: start_addr, [29:14]: fallthrough_addr, [13:7]: num_insts, [6:0]: max_unroll
+//   reg [46:0] 			train_content;	// [46]: valid bit, [45:30]: start_addr, [29:14]: fallthrough_addr, [13:7]: num_insts, [6:0]: max_unroll
    reg [46:0] 			LAT[3:0];
 
    // LAT fields
@@ -50,7 +50,7 @@ module LAT_not_unroll(
    // control signals
    reg [1:0] 			inst_valid_out_type;
    reg [2:0] 			num_of_inst_train_type;
-   reg 				write2LAT, write2LAT_en,write2LAT_clr;
+   reg 				write2LAT, write2LAT_en;
    
    reg [2:0] 			stll_ftch_cnt_type;
 
@@ -97,10 +97,10 @@ module LAT_not_unroll(
 	//	if (rst)
 	//		begin
 	nxt_state = IDLE;
-	train_content = 45'b0;
+//	train_content = 45'b0;
 	num_of_inst_train_type = 3'b0;
 	
-	fallthrough_addr_dispatch = 16'b0;
+
 	inst_valid_out_type = 2'b11;
 	fnsh_unrll_out = 1'b0;
 	stll_ftch_out = 1'b0;
@@ -153,6 +153,9 @@ module LAT_not_unroll(
 		     begin
 			start_addr = pc_in[63:48];
 		     end
+			else 
+				start_addr = start_addr;
+			
 		   casex ({end_lp1_train, end_lp2_train, end_lp3_train, end_lp4_train})
 		     5'b1xxx: begin num_of_inst_train_type = 3'b001; nxt_state = IDLE; write2LAT_en = 1'b1; end
 		     5'bx1xx: begin num_of_inst_train_type = 3'b010; nxt_state = IDLE; write2LAT_en = 1'b1; end
@@ -440,17 +443,26 @@ module LAT_not_unroll(
 	     LAT[3] <= {47{1'b1}};
 	     LAT_pointer <= 2'b0;
 	  end
-	if (write2LAT)
+	
+	else if (write2LAT)
 	  begin
-	     casex(LAT_pointer)
-	       2'b00: begin LAT[0] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
-	       2'b01: begin LAT[1] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
-	       2'b10: begin LAT[2] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
-	       2'b11: begin LAT[3] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
+	     case(LAT_pointer)
+	       2'b00: begin LAT[1] <= LAT[1]; LAT[2] <= LAT[2]; LAT[3] <= LAT[3]; LAT[0] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
+	       2'b01: begin LAT[0] <= LAT[0]; LAT[2] <= LAT[2]; LAT[3] <= LAT[3]; LAT[1] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
+	       2'b10: begin LAT[1] <= LAT[1]; LAT[0] <= LAT[0]; LAT[3] <= LAT[3]; LAT[2] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
+	       2'b11: begin LAT[1] <= LAT[1]; LAT[2] <= LAT[2]; LAT[0] <= LAT[0]; LAT[3] <= {1'b1, start_addr, fallthrough_addr_train, num_of_inst_train, max_unroll_train}; end
 	     endcase
 	     LAT_pointer <= LAT_pointer + 1;
 	  end	
-     end
+	else 
+		begin
+		  LAT[0] <= LAT[0];
+	     LAT[1] <= LAT[1];
+	     LAT[2] <= LAT[2];
+	     LAT[3] <= LAT[3];
+	     LAT_pointer <= LAT_pointer;
+		  end
+   end
    //*/
 
 endmodule
