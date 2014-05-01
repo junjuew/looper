@@ -206,9 +206,8 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
    wire [5:0]   free_preg_num3_ROB_out;
    wire [5:0]   free_preg_num4_ROB_out;
    wire [2:0]   free_preg_cnt_ROB_out; 
-	
-	
-	
+   
+   /*
 	wire [15:0] data1, data2, data3, data4;
 	wire [5:0] addr1, addr2, addr3, addr4;
 	wire wrt1, wrt2, wrt3, wrt4;
@@ -241,7 +240,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
 	ITL_3 itl10(.CONTROL(CONTROL9), .DATA(wrt2), .TRIG0(rst_n), .CLK(clk));	
 	ITL_3 itl11(.CONTROL(CONTROL10), .DATA(wrt3), .TRIG0(rst_n), .CLK(clk));	
 	ITL_3 itl12(.CONTROL(CONTROL11), .DATA(wrt4), .TRIG0(rst_n), .CLK(clk));	
-
+	*/
    wire         jump_base_rdy_from_rf;
    assign jump_base_rdy_from_rf = (alu1_inst_pkg_is_rf_out[18:16] == 3'b101) ? 1:0;
 
