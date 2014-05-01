@@ -121,7 +121,7 @@ assign pc0=exter_pc_en?exter_pc:pc_from_mux;
 //instrMemModule IMM(clk, pc,inst0,inst1, inst2, inst3, pc_plus1, pc_plus2, pc_plus3);
 
 reg [15:0] pc;
-always@(posedge clk or rst_n)
+always@(posedge clk or negedge rst_n)
     if(!rst_n)
         pc<=16'b0;
     else

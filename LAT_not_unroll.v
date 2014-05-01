@@ -23,18 +23,18 @@ module LAT_not_unroll(
  
 
    output [1:0] 		lbd_state_out;
-   output reg 			fnsh_unrll_out;
-   output reg 			stll_ftch_out;
+   output  			fnsh_unrll_out;
+   output  			stll_ftch_out;
    output 			loop_strt_out;
    output [3:0] 		inst_valid_out;
 
-   /*assign lbd_state_out = 2'b00;
+    assign lbd_state_out = 2'b00;
     assign fnsh_unrll_out = 1'b0;
     assign stll_ftch_out = 1'b0;
     assign loop_strt_out = 1'b0;
     assign inst_valid_out = 4'h0;
-    */
-
+    
+/*
    reg [1:0] 			state, nxt_state;
    reg 				tbl_entry_en1, tbl_entry_en2, tbl_entry_en3, tbl_entry_en4;
    reg [1:0] 			LAT_pointer;
@@ -66,13 +66,13 @@ module LAT_not_unroll(
 
 
 
-   //*
+   //
    //assign lbd_state_out = IDLE;
    //assign fnsh_unrll_out = 0;
    //assign stll_ftch_out = 0;
    //assign loop_strt_out = 0;
    //assign inst_valid_out = 4'bzzzz;
-   //*/
+   ///
    always @(posedge clk,posedge rst)
      begin
     	// on reset
@@ -85,18 +85,8 @@ module LAT_not_unroll(
 	     state <= nxt_state;
 	  end				
      end
-//////////////////fan fan fan fan fan fan fan//////
-   always @(posedge clk,posedge rst)
-	 begin
-		bck_lp_new <= branch_take & bck_lp_bus_in;
-	 end
-   always @(posedge clk,posedge rst)
-	 begin
-		pc_in_buf <= pc_in;
-	 end
-///////////////////////////////////////////////////
-
-   always @(/*autosense*/ 
+   //
+   always @( 
 	    LAT[0][46:0] or LAT[1][46:0] or LAT[2][46:0] or LAT[3][46:0]
 	    or bck_lp_new
 	    or dispatch1 or dispatch2 or dispatch3 or dispatch4
@@ -315,13 +305,13 @@ module LAT_not_unroll(
 			   (inst_valid_out_type == 2'b10) ? 4'b1110 : 4'b1111;
    //
    //
-   /*always @(end_lp1_dispatch, end_lp2_dispatch, end_lp3_dispatch, end_lp4_dispatch)
-    //
-    begin
-    if (state == DISPATCH)
-    begin
-			end
-	end*/
+   //always @(end_lp1_dispatch, end_lp2_dispatch, end_lp3_dispatch, end_lp4_dispatch)
+   // //
+   // begin
+   // if (state == DISPATCH)
+   // begin
+	//		end
+	//end
    //
    // update num_of_inst_train
 
@@ -345,18 +335,18 @@ module LAT_not_unroll(
    
    
 
-/* -----\/----- EXCLUDED -----\/-----
-   always @(/-*autosense*-/num_of_inst_train_type)
-     begin
-	case(num_of_inst_train_type)
-	  3'b001: begin num_of_inst_train = num_of_inst_train + 1; end
-	  3'b010: begin num_of_inst_train = num_of_inst_train + 2; end
-	  3'b011: begin num_of_inst_train = num_of_inst_train + 3; end
-	  3'b100: begin num_of_inst_train = num_of_inst_train + 4; end
-	  default: begin num_of_inst_train = 7'b0;				  end
-	endcase
-     end
- -----/\----- EXCLUDED -----/\----- */
+// -----\/----- EXCLUDED -----\/-----
+//   always @(/-*autosense*-/num_of_inst_train_type)
+//     begin
+//	case(num_of_inst_train_type)
+//	  3'b001: begin num_of_inst_train = num_of_inst_train + 1; end
+//	  3'b010: begin num_of_inst_train = num_of_inst_train + 2; end
+//	  3'b011: begin num_of_inst_train = num_of_inst_train + 3; end
+//	  3'b100: begin num_of_inst_train = num_of_inst_train + 4; end
+//	  default: begin num_of_inst_train = 7'b0;				  end
+//	endcase
+//     end
+// -----/\----- EXCLUDED -----/\----- 
 
    //
    always@(posedge clk, posedge rst)
@@ -401,18 +391,18 @@ module LAT_not_unroll(
    
    
 
-/* -----\/----- EXCLUDED -----\/-----
-   always @(stll_ftch_cnt_type)
-     begin
-	case (stll_ftch_cnt_type)
-	  3'b001: begin stll_ftch_cnt = stll_ftch_cnt + 1; end
-	  3'b010: begin stll_ftch_cnt = stll_ftch_cnt + 2; end
-	  3'b011: begin stll_ftch_cnt = stll_ftch_cnt + 3; end
-	  3'b100: begin stll_ftch_cnt = stll_ftch_cnt + 4; end
-	  default: begin stll_ftch_cnt = 7'b0; end
-	endcase
-     end
- -----/\----- EXCLUDED -----/\----- */
+// -----\/----- EXCLUDED -----\/-----
+//   always @(stll_ftch_cnt_type)
+//     begin
+//	case (stll_ftch_cnt_type)
+//	  3'b001: begin stll_ftch_cnt = stll_ftch_cnt + 1; end
+//	  3'b010: begin stll_ftch_cnt = stll_ftch_cnt + 2; end
+//	  3'b011: begin stll_ftch_cnt = stll_ftch_cnt + 3; end
+//	  3'b100: begin stll_ftch_cnt = stll_ftch_cnt + 4; end
+//	  default: begin stll_ftch_cnt = 7'b0; end
+//	endcase
+//    end
+// -----/\----- EXCLUDED -----/\----- 
 
    //
    always @(num_of_inst_train)
@@ -477,7 +467,7 @@ module LAT_not_unroll(
 	     LAT_pointer <= LAT_pointer;
 		  end
    end
-   //*/
+   */
 
 endmodule
 
