@@ -4,7 +4,7 @@ ldi r2, 0		// this would be prev number1
 ldi r3, 1 		// this would be prev number2
 ldi r4, 0		// constant 0
 ldi r6, 1 		// constant 1
-ldi r7, 11		// constant 24
+ldi r7, 24		// constant 24
 .loop_start:
 add	r5, r2, r3	// generate the next Fibonacci number
 add r2, r3, r4	// update prev number 1
