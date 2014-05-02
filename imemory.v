@@ -26,7 +26,7 @@ module imemory(
 
    initial begin
 
-      $readmemb("./ECE554_assembler/Test/Fibonacci_ls_mif.mif", mem); // IM.mif is memory file
+      $readmemb("./ECE554_assembler/Test/fixed_point_itr_mif.mif", mem); // IM.mif is memory file
    end
    
         

@@ -46,29 +46,29 @@ assign stall=(stall_fetch==1) || (stall_for_jump==1);
 always@(posedge clk or negedge rst_n)
 	if(!rst_n)
 		start<=1'b1;
-	else
-		start<=1'b0;
+   else
+     start<=1'b0;
 
-always @(*)begin
-	if(start==1'b1)
+   always @(*)begin
+      if(start==1'b1)
         PC_select=3'd7;
-	else if(has_mispredict==1)
+      else if(has_mispredict==1)
         PC_select=3'd3;//pc_recovery
-    else if(stall==1'b1 || brch_full == 1'b1)
+      else if(stall==1'b1 || brch_full == 1'b1)
         PC_select=3'd6;
-    else if(jump_for_pcsel==1)
+      else if(jump_for_pcsel==1)
         PC_select=3'd2;
-    else if(|pred_to_pcsel==1)
+      else if(|pred_to_pcsel==1)
         begin
-            if(pred_to_pcsel[1]==1)
-                PC_select=3'd0;
-            else
-                PC_select=3'd1;
+           if(pred_to_pcsel[1]==1)
+             PC_select=3'd0;
+           else
+             PC_select=3'd1;
         end
-    else if(pcsel_from_bhndlr==1)//if more than two branches, third got flushed
+      else if(pcsel_from_bhndlr==1)//if more than two branches, third got flushed
         PC_select=3'd4;//pc_new=pc_bhndlr;
-    else 
+      else 
         PC_select=3'd5;
-end
+   end
 
 endmodule

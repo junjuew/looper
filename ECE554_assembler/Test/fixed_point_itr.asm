@@ -4,7 +4,7 @@
 
 // initialization
 ldi r1,	0		// r1 will be the division counter and memory base index
-ldi r2, 9	// r2 <-64, r2 contains C
+ldi r2, 16	// r2 <-64, r2 contains C
 add r3, r2, r1	// r3 = r2, r3 will always be a copy of r2
 ldi r4, 1		// r4 will serve as x(n)
 ldi r5, 0		// r5 will serve as x(n+1)
