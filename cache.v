@@ -1,41 +1,83 @@
-module cache (rst, clk, addr_ca, data_ca_in, rd_wrt_ca, enable,
+module cache (flush_finish, one_line_flushed, rst, clk, flush, addr_ca, data_ca_in, rd_wrt_ca, enable,
     data_ca_out, mem_rdy, addr_mem,
-    data_to_mem, wrt_bck, miss_hit, data_from_mem, done); 
+    data_to_mem, wrt_bck, miss_hit, data_from_mem, done, line_dirty); 
     
     // input and output ports declarations
-    input rst, clk, rd_wrt_ca, enable, mem_rdy;
+    input rst, clk, rd_wrt_ca, enable, mem_rdy, flush, one_line_flushed, flush_finish;
     input [15:0] addr_ca, data_ca_in;
     input [63:0] data_from_mem;
-    output miss_hit, wrt_bck;
+    output miss_hit, wrt_bck, line_dirty;
     output reg [15:0] data_ca_out;
 	 output reg [13:0] addr_mem;
     output reg [63:0] data_to_mem;
     output reg done;
     
+    parameter ENTRY_NUMBER = 8;
+    
     reg victim; // indicate which way to evict if a miss occurs
-    reg [153:0] mem[0:7]; // cache memory
+    reg [153:0] mem[0:ENTRY_NUMBER-1]; // cache memory
     wire [10:0] tag; // tag bits for comparison
     wire [2:0]  index; // index which entry
     wire [1:0] offset; // indicate which part of the cache line is the wanted
     wire read, // whether this is a read operation
           write, // whether this is a write operation
           hit_first, // whether the first way is a cache hit
-          hit_second; // whether the second way is a cache hit
-    
+          hit_second, // whether the second way is a cache hit
+          non_cache_able;
+      reg flush_way, flush_reg;
+      reg [2:0] flush_index;
+      
     assign tag=addr_ca[15:5];
     assign index=addr_ca[4:2];
     assign offset=addr_ca[1:0];
     assign read=enable & rd_wrt_ca & rst;
     assign write=enable & (!rd_wrt_ca) & rst;
-    assign hit_first=(mem[index][152] == 1) & (tag == mem[index][151:141]);
-    assign hit_second=(mem[index][75] == 1) & (tag == mem[index][74:64]);
-    assign miss_hit=hit_first | hit_second;
-    assign wrt_bck= (victim == 1'b1) ?  (!(miss_hit) & (mem[index][153] == 1)) :(!(miss_hit) & (mem[index][76] == 1)); // whether a writeback is needed telling from the corresponding dirty bit
+    assign hit_first=(mem[index][152] === 1) & (tag === mem[index][151:141]);
+    assign hit_second=(mem[index][75] === 1) & (tag === mem[index][74:64]);
+    assign miss_hit=(non_cache_able) ? 0 : (hit_first | hit_second);
+    assign wrt_bck= (non_cache_able) ? 0 : 
+                      (victim == 1'b1) ?  (!(miss_hit) & (mem[index][153] === 1)) :
+                                          (!(miss_hit) & (mem[index][76] === 1)); // whether a writeback is needed telling from the corresponding dirty bit
+    assign line_dirty= (flush_way == 0 && (&mem[flush_index][153:152] === 1'b1)) ? 1 : 
+                      (flush_way == 1 && (&mem[flush_index][76:75] === 1'b1)) ? 1:
+                                                                              0;
+    assign non_cache_able= (&addr_ca) & enable;
     
-   
-
+      
+      always@(posedge clk, negedge rst)
+      if (!rst)
+        flush_reg <= 0;
+      else if (flush_finish)
+        flush_reg <= 0;
+      else if (flush)
+        flush_reg <= 1;     
+      else
+        flush_reg <= flush_reg;
    
  
+ 
+      always@(posedge clk, negedge rst)
+      if (!rst)
+        flush_way <= 0;
+      else if (flush_reg & one_line_flushed)
+        flush_way <= ~flush_way;
+      else
+        flush_way <= flush_way;
+        
+        
+        
+        
+        
+        always@(posedge clk, negedge rst)
+        if (!rst)
+          flush_index <= 3'b000;
+        else if (flush_reg & one_line_flushed & flush_way)
+          flush_index <= flush_index +1'b1;
+        else
+          flush_index <= flush_index;
+          
+          
+          
     always@(posedge clk, negedge rst)
     if (!rst) begin
         data_to_mem <= 0;
@@ -43,16 +85,30 @@ module cache (rst, clk, addr_ca, data_ca_in, rd_wrt_ca, enable,
         addr_mem <= 0;
         victim <= 0;
         done <= 0;
-		  mem[0][153:0] <= 0;
-		  mem[1][153:0] <= 0;
-		  mem[2][153:0] <= 0;
-		  mem[3][153:0] <= 0;
-		  mem[4][153:0] <= 0;
-		  mem[5][153:0] <= 0;
-		  mem[6][153:0] <= 0;
-		  mem[7][153:0] <= 0;
     end
-    else if (miss_hit & enable) begin  
+    else if (flush_reg) begin
+      case(flush_way)
+        1'b0: begin
+           addr_mem <= (line_dirty ) ? {mem[flush_index][151:141], flush_index}: 0; // put memory address on the bus to write data back
+           data_to_mem <= (line_dirty)? mem[flush_index][140:77]:0;
+        end
+        1'b1: begin
+          addr_mem <= (line_dirty) ? {mem[flush_index][74:64], flush_index} : 0; // put memory address on the bus to write data back
+          data_to_mem <= (line_dirty) ? mem[flush_index][63:0] : 0;  
+      end
+    endcase       
+    end
+  else if (non_cache_able) begin
+    if (~mem_rdy) begin
+        done <= 0;
+        addr_mem <= 14'b11111111111111;
+      end
+    else begin
+        data_ca_out <= data_from_mem[15:0];
+        done <= 1;
+    end      
+  end
+  else if (miss_hit & enable) begin  
           // read hit
           done <= 1;
           data_to_mem <= data_to_mem;

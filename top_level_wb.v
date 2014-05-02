@@ -21,7 +21,8 @@
 module top_level_wb( clk,
                      rst,
                      flsh,
-							mis_pred_ld_ptr ,  
+					flsh_cache,		
+					 mis_pred_ld_ptr ,  
 							indx_ld_al, 
 							mem_rd, 
 							phy_addr_ld_in, 
@@ -45,7 +46,7 @@ module top_level_wb( clk,
     );
 
 // input and output ports declarations
-input clk, rst, flsh, mem_rd,cmmt_str,mem_wrt, fnsh_unrll, loop_strt;
+input clk, rst, flsh, mem_rd,cmmt_str,mem_wrt, fnsh_unrll, loop_strt, flsh_cache;
 input [31:0] indx_ld_al, indx_str_al;
 input [4:0] mis_pred_ld_ptr, cmmt_ld_ptr;  
 input [3:0] mis_pred_str_ptr;
@@ -78,7 +79,7 @@ load_store_arbi lsa(.rst(rst), .clk(clk),.ld_req(ld_req), .str_req(str_req), .id
                         .rd_wrt_ca(rd_wrt_ca), .enable(ca_enable));
                         
 memory_system mem_sys(.rst(rst), .clk(clk),.addr_ca(addr_ca), .data_ca_out(data_ca_out),.rd_wrt_ca(rd_wrt_ca), 
-         .data_ca_in(data_ca_in),.enable(ca_enable), .idle(ca_idle), .done(done));
+         .data_ca_in(data_ca_in),.enable(ca_enable), .idle(ca_idle), .done(done), .flush(flsh_cache));
          
 assign addr_ca= (addr_sel == 1) ? addr_str : addr_ld;
 assign stll= stll_ld | stll_str;

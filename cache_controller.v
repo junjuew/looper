@@ -1,16 +1,39 @@
-module cache_controller(rst, clk, enable_cache, done_mem, miss_hit, wrt_bck, rd_wrt_mem,
-    mem_enable, idle, mem_rdy);
+module cache_controller(rst, clk, flush, enable_cache,line_dirty, done_mem, miss_hit, wrt_bck, rd_wrt_mem,
+    mem_enable, idle, mem_rdy, one_line_flushed, flush_finish);
     
     // input and output ports declarations
-    input rst, clk, miss_hit, wrt_bck, enable_cache, done_mem;
-    output reg rd_wrt_mem, mem_enable, idle, mem_rdy;
+    input rst, clk, miss_hit, wrt_bck, enable_cache, done_mem,flush, line_dirty;
+    output reg rd_wrt_mem, mem_enable, idle, mem_rdy, one_line_flushed, flush_finish;
+    wire flush_end;
+    localparam IDLE=3'b000; // idle state
+    localparam CACHE=3'b001; // handle cache operation (busy)
+    localparam MISS =3'b010; // handle cache miss (busy)
+    localparam WRITEBACK=3'b011; // handle memory writeback (busy)
+    localparam FLUSH_START=3'b100; 
+    localparam FLUSH_IN_PROCESS=3'b101;
     
-    localparam IDLE=2'b00; // idle state
-    localparam CACHE=2'b01; // handle cache operation (busy)
-    localparam MISS =2'b10; // handle cache miss (busy)
-    localparam WRITEBACK=2'b11; // handle memory writeback (busy)
     
-    reg [1:0] state, nxt_state; // state registers
+    reg [2:0] state, nxt_state; // state registers
+    
+    reg [3:0] flush_cntr;
+    
+    reg flush_clr, flush_enable;
+    
+    
+    
+    always@(posedge clk, negedge rst)
+    if (!rst)
+      flush_cntr <= 0;
+    else if (flush_clr)
+      flush_cntr <= 0;
+    else if (flush_enable)
+      flush_cntr <= flush_cntr+1;
+    else
+      flush_cntr <= flush_cntr;
+      
+      
+      
+      assign flush_end=(flush_cntr == 4'b1111);
     
     // state transition
     always@(posedge clk, negedge rst)
@@ -26,9 +49,19 @@ module cache_controller(rst, clk, enable_cache, done_mem, miss_hit, wrt_bck, rd_
        mem_enable=0;
        idle=1;
        mem_rdy=0;
+       one_line_flushed=0;
+       flush_clr=0;
+       flush_enable=0;
+       flush_finish=0;
        case (state)
            IDLE:
-           if (enable_cache && !(miss_hit)) begin
+           if (flush) begin
+             nxt_state= FLUSH_START;
+             flush_clr=1;
+             idle=0;
+           end
+             
+         else if (enable_cache && !(miss_hit)) begin
               nxt_state=MISS;
               // Enable memory read
               mem_enable=1;
@@ -57,7 +90,7 @@ module cache_controller(rst, clk, enable_cache, done_mem, miss_hit, wrt_bck, rd_
                 mem_rdy=1;
                 nxt_state=WRITEBACK;
                 rd_wrt_mem=0;
-                 mem_enable=1;
+                mem_enable=1;
             end
             else
                 nxt_state=MISS;
@@ -74,6 +107,43 @@ module cache_controller(rst, clk, enable_cache, done_mem, miss_hit, wrt_bck, rd_
                  idle=0;
             end
                  
+                 
+                 
+            FLUSH_START: begin
+              idle=0;
+            if (line_dirty) begin
+              mem_enable=1;
+              nxt_state=FLUSH_IN_PROCESS;
+            end
+          else begin
+            flush_enable=1;
+            one_line_flushed=1;
+            nxt_state=FLUSH_START;
+          end
+        end
+          
+          
+          FLUSH_IN_PROCESS: begin
+            idle=0;
+            mem_enable=1;
+            if (done_mem && (!flush_end)) begin
+              flush_enable=1;
+              one_line_flushed=1;
+              nxt_state=FLUSH_START;
+          end
+        else if (done_mem && flush_end) begin
+              flush_finish=1;
+              flush_clr=1;
+              idle=1;
+              nxt_state=IDLE;
+            end
+          else
+              nxt_state=FLUSH_IN_PROCESS;
+        end
+        
+      
+              
+            
          endcase
          
                 

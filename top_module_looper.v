@@ -1,5 +1,5 @@
-module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
-   input clk, rst_n;
+module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
+   input clk, rst_n, flush_cache;
    input [15:0] extern_pc;
    input        extern_pc_en;
 
@@ -708,7 +708,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
                                  .indx_ls(addr_done_idx_ex_wb_out),
                                  .data_str(data_str_ex_wb_out), 
                                  .addr_ls(wrt_addr_data),
-      
+								.flsh_cache(flush_cache),
                                  // Outputs
                                  .stll(stll_wb_out),
                                  .vld_ld(vld_ld_wb_out),

@@ -114,12 +114,6 @@ memory data_memory(
 	.wea(rd_wrt_mem),
 	.addra(addr_mem),
 	.dina(data_mem_in),
-	.douta(data_out),
-	.clkb(clk),
-	.rstb(rst),
-	.enb(1'b0),
-	.web(1'b0),
-	.addrb(14'h0),
-	.dinb(64'h0),
-	.doutb());
+	.douta(data_out));
+
 endmodule
