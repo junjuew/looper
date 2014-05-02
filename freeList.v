@@ -93,8 +93,6 @@ module freeList(/*autoarg*/
 	     begin
 		if(!rst_n)
 		  list[fifo_i] <= fifo_i;
-		else if (stall)
-		  list[fifo_i] <= list[fifo_i];
 		else if(list_commit_en[fifo_i])
 		  list[fifo_i] <= update[fifo_i];
 		else
@@ -129,8 +127,6 @@ module freeList(/*autoarg*/
      begin
 	if(!rst_n)
 	  cmt_ptr <= 7'b0;
-	else if(stall)
-	  cmt_ptr <= cmt_ptr;
 	else
 	  cmt_ptr <= cmt_pos;
      end

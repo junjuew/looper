@@ -7,7 +7,7 @@ module tb_topmodule();
    reg        extern_pc_en;
    integer    i;
 
-   parameter testdone = 5000;
+   parameter testdone = 10000;
    parameter dumptime = testdone - 5;
    
 

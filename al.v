@@ -54,7 +54,8 @@
    wire [55:0] inst_out_to_SCH2_iner;
    wire [55:0] inst_out_to_SCH3_iner;
 
-
+   wire [31:0] ld_indx_to_lsq,st_indx_to_lsq;
+   
    // for instruction checker
    wire 	      all_nop_from_instChecker;
    wire 	      all_nop_from_branchUnit;
@@ -135,8 +136,8 @@
    //reorder Unit
    reorderUnit r0(/*autoinst*/
 		  // Outputs
-		  .ld_indx_to_lsq	(ld_indx_to_WB),
-		  .st_indx_to_lsq	(st_indx_to_WB),
+		  .ld_indx_to_lsq	(ld_indx_to_lsq),
+		  .st_indx_to_lsq	(st_indx_to_lsq),
 		  // Inputs
 		  .inst_in0		(inst_from_ID0),
 		  .inst_in1		(inst_from_ID1),
@@ -163,6 +164,10 @@
 		      .pr_need_list_in	(pr_need_inst));
 
    assign all_nop_to_CMTIS = all_nop_from_instChecker | all_nop_from_branchUnit | stall;
+
+   assign ld_indx_to_WB = (stall) ? 32'b0 : ld_indx_to_lsq;
+   assign st_indx_to_WB = (stall) ? 32'b0 : st_indx_to_lsq;
+   
    
    assign inst_out_to_SCH0 = (stall) ? 56'b0 : inst_out_to_SCH0_iner;
    assign inst_out_to_SCH1 = (stall) ? 56'b0 : inst_out_to_SCH1_iner;
