@@ -21,7 +21,7 @@
                   end
                 else if (`TPU_MOD.cur_map[dump_i] != prv_mapping )
                   begin
-                     $fstrobe(dumpfile, "%g: %x %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x)", $time, dump_i[5:0],
+                     $fstrobe(dumpfile, "%g: %x %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b", $time, dump_i[5:0],
 `TPU_MOD.cur_map[dump_i][7*16-1], `TPU_MOD.cur_map[dump_i][7*16-2: 7*15], 4'hf, 
 `TPU_MOD.cur_map[dump_i][7*15-1], `TPU_MOD.cur_map[dump_i][7*15-2: 7*14], 4'he,  
 `TPU_MOD.cur_map[dump_i][7*14-1], `TPU_MOD.cur_map[dump_i][7*14-2: 7*13], 4'hd,  
@@ -37,7 +37,7 @@
 `TPU_MOD.cur_map[dump_i][7*4-1], `TPU_MOD.cur_map[dump_i][7*4-2: 7*3], 4'h3,
 `TPU_MOD.cur_map[dump_i][7*3-1], `TPU_MOD.cur_map[dump_i][7*3-2: 7*2], 4'h2,
 `TPU_MOD.cur_map[dump_i][7*2-1], `TPU_MOD.cur_map[dump_i][7*2-2: 7*1], 4'h1,
-`TPU_MOD.cur_map[dump_i][7*1-1], `TPU_MOD.cur_map[dump_i][7*1-2: 7*0], 4'h0);
+`TPU_MOD.cur_map[dump_i][7*1-1], `TPU_MOD.cur_map[dump_i][7*1-2: 7*0], 4'h0, `TPU_MOD.arch);
                      prv_mapping <= `TPU_MOD.cur_map[dump_i];
                   end // if (`TPU_MOD.cur_map[dump_i] != prv_mapping )
 //                else
