@@ -192,16 +192,24 @@ always@(posedge clk or negedge rst_n) begin
 	
 	//if already waiting for a jump instruction
 	   if(wtJumpAddr==1)begin
-		   stall_for_jump<=1;
-		   jump_pc<=jump_pc;
-		   //disable_ins<=1;
-	      //while waiting addr, keep checking rdy signal
+		   //stall_for_jump<=1;
+		   //jump_pc<=jump_pc;
+	      
+           //while waiting addr, keep checking rdy signal
 		  //modified trigger signal so that output is nop
 	      if(jump_base_rdy_from_rf_0)begin//once rdy, clear stall,wt
-		   stall_for_jump<=0;
-		   wtJumpAddr<=0;
+		    stall_for_jump<=0;
+		    wtJumpAddr<=0;
 		   //jump_pc<=16'b0;//clear internal reg
-		   end
+            jump_pc<=jump_pc;
+            preJmp<=0;
+            end 
+             else begin
+                stall_for_jump<=1;
+                jump_pc<=jump_pc;
+                preJmp<=preJmp;
+                wtJumpAddr<=wtJumpAddr;
+            end
 	   end else	if(ImJmp0)begin
 				stall_for_jump<=0;
 				jump_pc<=0;

@@ -2,13 +2,13 @@
 module imemory(
         input clka,
         input[13:0] addra,
-        output [63:0] douta,
+        output reg [63:0] douta,
         input clkb,
         input[13:0] addrb,
-        output  [63:0] doutb);
+        output reg [63:0] doutb);
         
         reg [63:0] mem[0:16383];
-        reg [13:0] addr_buf1, addr_buf2;
+       /* reg [13:0] addr_buf1, addr_buf2;
 	
         always@(posedge clka)
 			begin
@@ -18,12 +18,11 @@ module imemory(
 			begin
 				addr_buf2 <= addrb;
 			end
-        
-         assign douta=mem[addr_buf1];
-        
-        
-         assign doutb=mem[addr_buf2];
-        
+        */
+       always@(posedge clka) begin
+             douta<=mem[addra];
+             doutb<=mem[addrb];
+          end
 
    initial begin
 

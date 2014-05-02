@@ -84,8 +84,8 @@ wire [3:0]  brnch_pc_sel_from_bhndlr,isImJmp,tkn_brnch;
 wire [2:0]  PC_select;
 wire [1:0]  pred_to_pcsel;
 wire [15:0] pc_from_mux;
-   wire     brch_full;
-   
+   wire     brch_full,start;
+   reg [15:0]pc;
 
 ///////////////////////////////////
 //internal registers and signals///
@@ -116,12 +116,12 @@ PC_MUX PC_MUX0(
     .pc(pc_from_mux)
 );
 
-reg [15:0] pc;
+//reg [15:0] pc;
 
 always@(posedge clk or negedge rst_n)begin
 	if(!rst_n)
 		pc<=16'b0;
-	if(exter_pc_en==1)
+	else if(exter_pc_en==1)
 		pc<=exter_pc;
 	else
 		pc<=pc_from_mux;
@@ -141,6 +141,7 @@ assign pc_plus4=pc+4;
 instrMemModule IMM(
     .clk(clk),
     .pc(pc_from_mux),
+    .pc_reg(pc),
     .inst0(inst0),
     .inst1(inst1),
     .inst2(inst2),
@@ -258,11 +259,12 @@ nextPCSel next_PC_selector(
     .pcsel_from_bhndlr(pcsel_from_bhndlr),
     .stall_for_jump(stall_for_jump),
     .brch_full(brch_full),
-    .PC_select(PC_select)
+    .PC_select(PC_select),
+    .start(start)
 );
 
 //output to DECODE stage
-dataout_pack dataout(
+dataout_pack dataout(.start(start),
     .pc(pc),
     .pc_plus1(pc_plus1),
     .pc_plus2(pc_plus2),

@@ -19,7 +19,7 @@
 //1. if instruction got replaced is the pc output set to all 0??
 //2. the recovery pc output for jump instructionis what?? what if reg based?
 //////////////////////////////////////////////////////////////////////////////////
-module dataout_pack(
+module dataout_pack(input start,
     input [15:0] pc,
     input [15:0] pc_plus1,
     input [15:0] pc_plus2,
@@ -141,8 +141,8 @@ end
 		recv_pc_to_dec[15:0]=jump_addr_pc;
 */
 assign pc_to_dec={pc,pc_plus1,pc_plus2,pc_plus3};
-assign inst_to_dec={isImJmp[3]?16'b0:instruction0,isImJmp[2]?16'b0:instruction1,
-	isImJmp[1]?16'b0:instruction2,isImJmp[0]?16'b0:instruction3};
+assign inst_to_dec=start?64'b0:({isImJmp[3]?16'b0:instruction0,isImJmp[2]?16'b0:instruction1,
+	isImJmp[1]?16'b0:instruction2,isImJmp[0]?16'b0:instruction3});
 
 
 endmodule

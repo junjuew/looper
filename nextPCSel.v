@@ -29,7 +29,8 @@ module nextPCSel(
     input 	     stall_for_jump,
     input            brch_full,	     
    // input loop_start,
-    output reg [2:0] PC_select
+    output reg [2:0] PC_select,
+    output   reg      start
 );
 
 wire stall;
@@ -41,7 +42,7 @@ assign stall=(stall_fetch==1) || (stall_for_jump==1);
 //   ((|pred_to_pcsel)?(pred_to_pcsel[1]?3'd0:3'd1)://check which branch tkn
 //   (pcsel_from_bhndlr?3'd4:3'd5)))));
 
-reg start;
+
 always@(posedge clk or negedge rst_n)
 	if(!rst_n)
 		start<=1'b1;
