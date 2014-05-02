@@ -538,7 +538,11 @@ class Assemble {
 
 	public static void printFinalRegisters(PrintWriter regOut){
 		for (int i = 0; i < 16; i ++){
-			regOut.println(Integer.toString(i) + ": " + Integer.toHexString(0x10000 | registers[i]).substring(1));
+			if (registers[i] >= 0){
+				regOut.println(Integer.toString(i) + ": " + Integer.toHexString(0x10000 | registers[i]).substring(1));
+			}else{
+				regOut.println(Integer.toString(i) + ": " + Integer.toHexString(0x10000 | registers[i]).substring(4));
+			}
 		}
 		regOut.close();
 	}
