@@ -282,10 +282,10 @@ ROB per entry:
                           : (sum_3 == 3) ? rob_free_preg_num[rob_head_3]
                           : 0;
 
-	assign rob_ld_cntr_add1 = (rob_ld_cntr == 23) ? 0 : rob_ld_cntr + 1;
-	assign rob_ld_cntr_add2 = (rob_ld_cntr == 22) ? 0 : rob_ld_cntr + 2;
-	assign rob_ld_cntr_add3 = (rob_ld_cntr == 21) ? 0 : rob_ld_cntr + 3;
-	assign rob_ld_cntr_add4 = (rob_ld_cntr == 20) ? 0 : rob_ld_cntr + 4;
+	assign rob_ld_cntr_add1 = (rob_ld_cntr == 23) ? rob_ld_cntr - 23 : rob_ld_cntr + 1;
+	assign rob_ld_cntr_add2 = (rob_ld_cntr >= 22) ? rob_ld_cntr - 22 : rob_ld_cntr + 2;
+	assign rob_ld_cntr_add3 = (rob_ld_cntr >= 21) ? rob_ld_cntr - 21 : rob_ld_cntr + 3;
+	assign rob_ld_cntr_add4 = (rob_ld_cntr >= 20) ? rob_ld_cntr - 20 : rob_ld_cntr + 4;
 
     /********************************************/
     /************ Sequential Blocks *************/
