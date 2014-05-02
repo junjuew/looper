@@ -5,9 +5,12 @@ module tb_topmodule();
    reg rst_n;
    reg [15:0] extern_pc;
    reg        extern_pc_en;
+   reg 	      flush_cache;
+   
    integer    i;
 
    parameter testdone = 10000;
+   parameter flush_mem = testdone - 2000;
    parameter dumptime = testdone - 5;
    
 
@@ -19,11 +22,12 @@ module tb_topmodule();
    
    
    top_module_looper DUT(/*autoinst*/
-                         // Inputs
-                         .clk                   (clk),
-                         .rst_n                 (rst_n),
-                         .extern_pc             (extern_pc[15:0]),
-                         .extern_pc_en          (extern_pc_en));
+			 // Inputs
+			 .clk			(clk),
+			 .rst_n			(rst_n),
+			 .flush_cache		(flush_cache),
+			 .extern_pc		(extern_pc[15:0]),
+			 .extern_pc_en		(extern_pc_en));
 
 
    initial begin
@@ -42,6 +46,12 @@ module tb_topmodule();
       extern_pc_en = 1'b0;
    end
    
+
+   initial begin
+      flush_cache = 1'b0;
+      #flush_mem;
+      flush_cache = 1'b1;
+   end
    
 /* -----\/----- EXCLUDED -----\/-----
    always@(posedge clk)begin

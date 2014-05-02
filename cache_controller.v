@@ -43,7 +43,7 @@ module cache_controller(rst, clk, flush, enable_cache,line_dirty, done_mem, miss
        state <= nxt_state;
     
     // output generation logic   
-    always@(miss_hit, wrt_bck, enable_cache, done_mem, state) 
+    always@(miss_hit,line_dirty, flush_end, flush, wrt_bck, enable_cache, done_mem, state) 
     begin
        rd_wrt_mem=0;
        mem_enable=0;
@@ -111,7 +111,7 @@ module cache_controller(rst, clk, flush, enable_cache,line_dirty, done_mem, miss
                  
             FLUSH_START: begin
               idle=0;
-            if (line_dirty) begin
+			 if (line_dirty) begin
               mem_enable=1;
               nxt_state=FLUSH_IN_PROCESS;
             end
