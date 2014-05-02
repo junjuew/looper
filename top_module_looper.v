@@ -1,8 +1,8 @@
-module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
+module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, pc_change);
    input clk, rst_n;
    input [15:0] extern_pc;
    input        extern_pc_en;
-
+	output pc_change;
    // IF output wires
    wire [63:0]  pc_to_dec,inst_to_dec,recv_pc_to_dec;
    wire [3:0]   pred_result_to_dec;
@@ -207,7 +207,8 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
    wire [5:0]   free_preg_num4_ROB_out;
    wire [2:0]   free_preg_cnt_ROB_out; 
    
-   /*
+
+// for chipscope: 
 	wire [15:0] data1, data2, data3, data4;
 	wire [5:0] addr1, addr2, addr3, addr4;
 	wire wrt1, wrt2, wrt3, wrt4;
@@ -225,25 +226,30 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en);
 	assign wrt4=reg_wrt_addr_wb_rf;
 	
 	wire [35:0] CONTROL0, CONTROL1, CONTROL2, CONTROL3,CONTROL4,CONTROL5,CONTROL6,CONTROL7,CONTROL8,CONTROL9,CONTROL10,CONTROL11; 
-	ICON icon(.CONTROL0(CONTROL0), .CONTROL1(CONTROL1),.CONTROL2(CONTROL2),.CONTROL3(CONTROL3),.CONTROL4(CONTROL4),.CONTROL5(CONTROL5),.CONTROL6(CONTROL6),.CONTROL7(CONTROL7),.CONTROL8(CONTROL8),.CONTROL9(CONTROL9),.CONTROL10(CONTROL10),.CONTROL11(CONTROL11) );
-	ITL  itl1(.CONTROL(CONTROL0), .DATA(data1), .TRIG0(rst_n), .CLK(clk));
-	ITL  itl2(.CONTROL(CONTROL1), .DATA(data2), .TRIG0(rst_n), .CLK(clk));
-	ITL  itl3(.CONTROL(CONTROL2), .DATA(data3), .TRIG0(rst_n), .CLK(clk));
-	ITL  itl4(.CONTROL(CONTROL3), .DATA(data4), .TRIG0(rst_n), .CLK(clk));
+	ICON icon(.CONTROL0(CONTROL0), .CONTROL1(CONTROL1),.CONTROL2(CONTROL2),.CONTROL3(CONTROL3),.CONTROL4(CONTROL4),.CONTROL5(CONTROL5),.CONTROL6(CONTROL6),.CONTROL7(CONTROL7),.CONTROL8(CONTROL8),.CONTROL9(CONTROL9),.CONTROL10(CONTROL10),.CONTROL11(CONTROL11) ) /* synthesis syn_noprune=1 */;
+	ITL  itl1(.CONTROL(CONTROL0), .DATA(data1), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;
+	ITL  itl2(.CONTROL(CONTROL1), .DATA(data2), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;
+	ITL  itl3(.CONTROL(CONTROL2), .DATA(data3), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;
+	ITL  itl4(.CONTROL(CONTROL3), .DATA(data4), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;
 	
-	ITL_2 itl5(.CONTROL(CONTROL4), .DATA(addr1), .TRIG0(rst_n), .CLK(clk));
-	ITL_2 itl6(.CONTROL(CONTROL5), .DATA(addr2), .TRIG0(rst_n), .CLK(clk));
-	ITL_2 itl7(.CONTROL(CONTROL6), .DATA(addr3), .TRIG0(rst_n), .CLK(clk));
-	ITL_2 itl8(.CONTROL(CONTROL7), .DATA(addr4), .TRIG0(rst_n), .CLK(clk));
+	ITL_2 itl5(.CONTROL(CONTROL4), .DATA(addr1), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;
+	ITL_2 itl6(.CONTROL(CONTROL5), .DATA(addr2), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;
+	ITL_2 itl7(.CONTROL(CONTROL6), .DATA(addr3), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;
+	ITL_2 itl8(.CONTROL(CONTROL7), .DATA(addr4), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;
 
-	ITL_3 itl9(.CONTROL(CONTROL8), .DATA(wrt1), .TRIG0(rst_n), .CLK(clk));
-	ITL_3 itl10(.CONTROL(CONTROL9), .DATA(wrt2), .TRIG0(rst_n), .CLK(clk));	
-	ITL_3 itl11(.CONTROL(CONTROL10), .DATA(wrt3), .TRIG0(rst_n), .CLK(clk));	
-	ITL_3 itl12(.CONTROL(CONTROL11), .DATA(wrt4), .TRIG0(rst_n), .CLK(clk));	
-	*/
+	ITL_3 itl9(.CONTROL(CONTROL8), .DATA(wrt1), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;
+	ITL_3 itl10(.CONTROL(CONTROL9), .DATA(wrt2), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;	
+	ITL_3 itl11(.CONTROL(CONTROL10), .DATA(wrt3), .TRIG0(rst_n), .CLK(clk)) /* synthesis syn_noprune=1 */;	
+	
+	ITL_4 itl12(.CONTROL(CONTROL11), .DATA(inst_to_dec), .TRIG0(rst_n), .CLK(clk))/* synthesis syn_noprune=1 */;
+
+// end of chipscope
+
+
    wire         jump_base_rdy_from_rf;
    assign jump_base_rdy_from_rf = (alu1_inst_pkg_is_rf_out[18:16] == 3'b101) ? 1:0;
-
+	
+ assign pc_change= (pc_to_dec[63:48] != 16'h0000) ;
 
    // implementation of all the modules
    fetch fetch_DUT(.clk(clk),.rst_n(rst_n),
