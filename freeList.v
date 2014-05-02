@@ -131,9 +131,6 @@ module freeList(/*autoarg*/
 	  cmt_ptr <= 7'b0;
 	else if(stall)
 	  cmt_ptr <= cmt_ptr;
-	else if(list_empty)
-	  cmt_ptr <= cmt_ptr;
-	
 	else
 	  cmt_ptr <= cmt_pos;
      end
