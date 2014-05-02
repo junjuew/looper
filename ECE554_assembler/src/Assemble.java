@@ -46,8 +46,8 @@ class Assemble {
     private static int sourceLineID;
 
     public static int[] registers = new int[17];
-    public static int[] memory = new int[16384];
-    public static boolean[] memory_used = new boolean[16384];
+    public static int[] memory = new int[65536];
+    public static boolean[] memory_used = new boolean[65536];
     public static int totalInstNum = 0;
     public static Hashtable<String, Integer> labelTable ;
     public static void main(String [] args) {
@@ -115,7 +115,7 @@ class Assemble {
         }
 
         // initialize memory
-        for (int i = 0; i < 16384; i ++){
+        for (int i = 0; i < 65536; i ++){
         	memory[i] = 0;
         	memory_used[i] = false;
         }
@@ -545,13 +545,16 @@ class Assemble {
 
 	public static void printFinalMemory(PrintWriter memOut){
 		int i = 0;
-		while (i < 16384){
-			if (memory_used[i]){
-				if (memory[i] >= 0){
-					memOut.println("addr: " + Integer.toHexString(i | 0x10000).substring(1) + " value: " + Integer.toHexString(memory[i] | 0x10000).substring(1) + "     dec: " + memory[i]);
-				}else{
-					memOut.println("addr: " + Integer.toHexString(i | 0x10000).substring(1) + " value: " + Integer.toHexString(memory[i] | 0x10000).substring(0) + " dec: " + memory[i]);
+		String memory_string = "";
+		while (i < 65536){
+			if (i % 4 != 3){
+				memory_string = Integer.toHexString(memory[i] | 0x10000).substring(1) + memory_string;
+			}else{
+				memory_string = Integer.toHexString(memory[i] | 0x10000).substring(1) + memory_string;
+				if (memory_used[i] || memory_used[i-1] || memory_used[i-2] || memory_used[i-3]){
+					memOut.println("addr: " + Integer.toHexString((i/3) | 0x10000).substring(1) + " value: " + memory_string);
 				}
+				memory_string = "";
 			}
 			i++;
 		}
