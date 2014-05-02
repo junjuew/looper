@@ -9,7 +9,7 @@ module tb_topmodule();
    
    integer    i;
 
-   parameter testdone = 100000000;
+   parameter testdone = 500000;
    parameter flush_mem = testdone - 2000;
    parameter dumptime = testdone - 5;
    

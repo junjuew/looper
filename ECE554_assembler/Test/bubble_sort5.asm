@@ -28,12 +28,12 @@ add r3, r3, r2
 // r9	inner count
 // r10	result of r7-r8
 // r11	temp number
-// r12	constant 40
+// r12	constant 5
 
 ldi r3, 100	// memory start
-ldi r4, 39	// length of array
+ldi r4, 5	// length of array
 ldi r5, 100	// outter index
-ldi r12, 139	// constant 139
+ldi r12, 105	// constant 105
 
 .outter_loop:
 beqz r4, .end_outter_loop
