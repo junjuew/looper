@@ -167,6 +167,7 @@ public class Sim_compare{
 	
 	private static void processMapDump(Scanner mapScan){
 		String line = "";
+
 		ArrayList<String> threeF = new ArrayList<String>();
 		ArrayList<String> oneF = new ArrayList<String>();
 
