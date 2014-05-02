@@ -10,8 +10,8 @@ public class Sim_compare{
 	public static Hashtable<Integer, Integer> log2phyMAP = new Hashtable<Integer, Integer>();
 	public static Hashtable<Integer, Integer> phy2valMAP = new Hashtable<Integer, Integer>();
 	public static Hashtable<Integer, Integer> sim2valMAP = new Hashtable<Integer, Integer>();
-	public static Hashtable<Integer, Integer> mem2valMAP = new Hashtable<Integer, Integer>();
-	public static Hashtable<Integer, Integer> simMem2valMAP = new Hashtable<Integer, Integer>();
+	public static Hashtable<Integer, String> mem2valMAP = new Hashtable<Integer, String>();
+	public static Hashtable<Integer, String> simMem2valMAP = new Hashtable<Integer, String>();
 
 	
 	public static void main(String[] args) {
@@ -68,12 +68,12 @@ public class Sim_compare{
 	private static void validateMemoryResult(){
 		boolean memoryCorrect = true;
 		for (int i = 0; i < 16384; i ++){
-			if ((simMem2valMAP.get(i) == null && mem2valMAP.get(i) != 0) || (simMem2valMAP.get(i) != null && simMem2valMAP.get(i) != mem2valMAP.get(i))){
+			if ((simMem2valMAP.get(i) == null && !mem2valMAP.get(i).equals("0000000000000000")) || (simMem2valMAP.get(i) != null && !simMem2valMAP.get(i).equals(mem2valMAP.get(i)))){
 				memoryCorrect = false;
 				if (simMem2valMAP.get(i) == null){
-					System.out.println("ERROR: memory 0x" + Integer.toHexString(i | 0x10000).substring(1) + " should be 0x0000 but is 0x" + Integer.toHexString(mem2valMAP.get(i) | 0x10000).substring(1));
+					System.out.println("ERROR: memory 0x" + Integer.toHexString(i | 0x10000).substring(1) + " should be 0x0000 but is 0x" + mem2valMAP.get(i));
 				}else{
-					System.out.println("ERROR: memory 0x" + Integer.toHexString(i | 0x10000).substring(1) + " should be 0x" + Integer.toHexString(simMem2valMAP.get(i) | 0x10000).substring(1) + " but is " + Integer.toHexString(mem2valMAP.get(i) | 0x10000).substring(1));
+					System.out.println("ERROR: memory 0x" + Integer.toHexString(i | 0x10000).substring(1) + " should be 0x" + simMem2valMAP.get(i) + " but is " + mem2valMAP.get(i));
 				}
 			}
 		}
@@ -122,7 +122,7 @@ public class Sim_compare{
 			String line = simMemScan.nextLine();
 			String[] tokens = line.split(" ");
 			int memLocation = hexToDec(tokens[1]);
-			int memValue = hexToDec(tokens[3]);
+			String memValue = tokens[3];
 			simMem2valMAP.put(memLocation, memValue);
 		}
 		// System.out.println(simMem2valMAP.toString());
@@ -133,7 +133,7 @@ public class Sim_compare{
 			String line = memScan.nextLine();
 			String[] tokens = line.split(" ");
 			int memLocation = hexToDec(tokens[1].substring(0, tokens[1].length() - 1));
-			int memValue = hexToDec(tokens[3]);
+			String memValue = tokens[3];
 			mem2valMAP.put(memLocation, memValue);
 		}
 		// System.out.println(mem2valMAP.toString());
@@ -174,21 +174,21 @@ public class Sim_compare{
 		while (mapScan.hasNextLine()){
 			line = mapScan.nextLine();
 			String tokens[] = line.split(" ");
-			if (tokens[2].equals("3f")){
+			if (tokens[1].equals("3f")){
 				threeF.add(line);
 			}
-			if (tokens[2].equals("1f")){
+			if (tokens[1].equals("1f")){
 				oneF.add(line);
 			}
 		}
-		if (line[line.length-1] == '0'){
+		if (line.charAt(line.length()-1) == '0'){
 			line = threeF.get(threeF.size()-1);
 		}else{
 			line = oneF.get(oneF.size() - 1);
 		}
 		String delims = "[ ]+";
 		String[] tokens = line.split(delims);
-		for (int i = 2; i< tokens.length; i++){
+		for (int i = 2; i< tokens.length-1; i++){
 			log2phyMAP.put(hexToDec(tokens[i].substring(4, 5)), hexToDec(tokens[i].substring(1, 3)));
 		}
 		// System.out.println(log2phyMAP.toString());

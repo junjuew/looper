@@ -552,7 +552,7 @@ class Assemble {
 			}else{
 				memory_string = Integer.toHexString(memory[i] | 0x10000).substring(1) + memory_string;
 				if (memory_used[i] || memory_used[i-1] || memory_used[i-2] || memory_used[i-3]){
-					memOut.println("addr: " + Integer.toHexString((i/3) | 0x10000).substring(1) + " value: " + memory_string);
+					memOut.println("addr: " + Integer.toHexString((i/4) | 0x10000).substring(1) + " value: " + memory_string);
 				}
 				memory_string = "";
 			}
