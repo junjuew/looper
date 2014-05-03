@@ -50,7 +50,8 @@ module top_level_wb( clk,
                      mmu_mem_web  ,
                      mmu_mem_addrb,
                      mmu_mem_dinb ,
-                     mmu_mem_doutb                     
+                     mmu_mem_doutb,
+                     ca_idle
                      );
 
 
@@ -62,6 +63,7 @@ module top_level_wb( clk,
    input wire [13:0] mmu_mem_addrb ;
    input wire [63:0] mmu_mem_dinb ;
    output wire [63:0] mmu_mem_doutb ;
+   output             ca_idle;
    
    
    // input and output ports declarations
