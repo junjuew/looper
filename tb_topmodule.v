@@ -5,7 +5,7 @@ module tb_topmodule();
    reg rst_n;
    reg [15:0] extern_pc;
    reg        extern_pc_en;
-   reg 	      flush_cache;
+   reg        flush_cache;
    
    integer    i;
 
@@ -19,15 +19,36 @@ module tb_topmodule();
 `include "is_dump_inst.task"
 `include "rf_dump_reg.task"
 `include "mem_dump.task"
-   
+
+   /*autowire*/
+   // Beginning of automatic wires (for undeclared instantiated-module outputs)
+   wire [63:0]          mmu_mem_doutb;          // From DUT of top_module_looper.v
+   // End of automatics
+   /*autoreginput*/
+   // Beginning of automatic reg inputs (for undeclared instantiated-module inputs)
+   reg [13:0]           mmu_mem_addrb;          // To DUT of top_module_looper.v
+   reg                  mmu_mem_clk;            // To DUT of top_module_looper.v
+   reg [63:0]           mmu_mem_dinb;           // To DUT of top_module_looper.v
+   reg                  mmu_mem_enb;            // To DUT of top_module_looper.v
+   reg                  mmu_mem_rst;            // To DUT of top_module_looper.v
+   reg                  mmu_mem_web;            // To DUT of top_module_looper.v
+   // End of automatics
    
    top_module_looper DUT(/*autoinst*/
-			 // Inputs
-			 .clk			(clk),
-			 .rst_n			(rst_n),
-			 .flush_cache		(flush_cache),
-			 .extern_pc		(extern_pc[15:0]),
-			 .extern_pc_en		(extern_pc_en));
+                         // Outputs
+                         .mmu_mem_doutb         (mmu_mem_doutb[63:0]),
+                         // Inputs
+                         .mmu_mem_clk           (mmu_mem_clk),
+                         .mmu_mem_rst           (mmu_mem_rst),
+                         .mmu_mem_enb           (mmu_mem_enb),
+                         .mmu_mem_web           (mmu_mem_web),
+                         .mmu_mem_addrb         (mmu_mem_addrb[13:0]),
+                         .mmu_mem_dinb          (mmu_mem_dinb[63:0]),
+                         .clk                   (clk),
+                         .rst_n                 (rst_n),
+                         .flush_cache           (flush_cache),
+                         .extern_pc             (extern_pc[15:0]),
+                         .extern_pc_en          (extern_pc_en));
 
 
    initial begin
@@ -44,6 +65,14 @@ module tb_topmodule();
    initial begin
       extern_pc = 16'b0;
       extern_pc_en = 1'b0;
+
+      mmu_mem_clk         =0;          
+      mmu_mem_rst       =0;
+      mmu_mem_enb     =0;
+      mmu_mem_web   =0;
+      mmu_mem_addrb[13:0] =0;
+      mmu_mem_dinb[63:0] =0;
+      
    end
    
 
@@ -112,39 +141,39 @@ module tb_topmodule();
 
    always@(posedge clk)
      begin
-	if(DUT.al_DUT.br0.brnc_count != 2'b00)
-	  begin
-	     $display("///////////////////////////branch come in////////////////////////////\n");
-	     $display("time is %t\n",$time);
-	     $display("the current position is %x\n",DUT.al_DUT.br0.curr_pos);
-	     
-	     $display("the comming brcn signal is %b\n",{DUT.al_DUT.br0.brch3,DUT.al_DUT.br0.brch2,DUT.al_DUT.br0.brch1,DUT.al_DUT.br0.brch0});
-	     $display("the comming index is %d\n",DUT.al_DUT.br0.nxt_indx);
-	     $display("head is %b, tail is %b\n",DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
-	     
-	     $display("the value input into reg0 is %x, the input into reg2 is %x \n" ,DUT.al_DUT.br0.fifo_update_val[0],DUT.al_DUT.br0.fifo_update_val[1]);
-	     $display("the enable signal 0 is %b, the enable signal 1 is %b",DUT.al_DUT.br0.fifo_enable[0],DUT.al_DUT.br0.fifo_enable[1]);
-	     #5;
-	     $display("%t,the content in reg0 is %x, the content in reg1 is %x\n",$time,DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
-	     $display("%t, store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",$time,DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
-	     
-	  end
-	
+        if(DUT.al_DUT.br0.brnc_count != 2'b00)
+          begin
+             $display("///////////////////////////branch come in////////////////////////////\n");
+             $display("time is %t\n",$time);
+             $display("the current position is %x\n",DUT.al_DUT.br0.curr_pos);
+             
+             $display("the comming brcn signal is %b\n",{DUT.al_DUT.br0.brch3,DUT.al_DUT.br0.brch2,DUT.al_DUT.br0.brch1,DUT.al_DUT.br0.brch0});
+             $display("the comming index is %d\n",DUT.al_DUT.br0.nxt_indx);
+             $display("head is %b, tail is %b\n",DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
+             
+             $display("the value input into reg0 is %x, the input into reg2 is %x \n" ,DUT.al_DUT.br0.fifo_update_val[0],DUT.al_DUT.br0.fifo_update_val[1]);
+             $display("the enable signal 0 is %b, the enable signal 1 is %b",DUT.al_DUT.br0.fifo_enable[0],DUT.al_DUT.br0.fifo_enable[1]);
+             #5;
+             $display("%t,the content in reg0 is %x, the content in reg1 is %x\n",$time,DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
+             $display("%t, store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",$time,DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
+             
+          end
+        
      end // always@ (DUT.al_DUT.br0.brch0,DUT.al_DUT.br0.brch1,DUT.al_DUT.br0.brch2,DUT.al_DUT.br0.brch3)
 
    always@(posedge DUT.al_DUT.br0.cmt_brch,posedge DUT.al_DUT.br0.mis_pred)
      begin
-	$display("////////////////////////////mispred or cmt//////////////////////////////\n");
-	$display("time is %t\n",$time);
-	$display("the cmt signal is %b, the mis_pred signal is %b\n",DUT.al_DUT.br0.cmt_brch,DUT.al_DUT.br0.mis_pred);
-	$display("the cmt index is %d, the mis index is %d\n",DUT.al_DUT.br0.cmt_brch_indx,DUT.al_DUT.br0.brch_mis_indx);
-	$display("head is %b, tail is %b",DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
-	$display("the content in reg0 is %x, the content in reg1 is %x\n",DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
-	$display("store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
-	#5;
-	$display("%t,head is %b, tail is %b",$time,DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
-	$display("%t,the content in reg0 is %x, the content in reg1 is %x\n",$time,DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
-	$display("%t, store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",$time,DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
+        $display("////////////////////////////mispred or cmt//////////////////////////////\n");
+        $display("time is %t\n",$time);
+        $display("the cmt signal is %b, the mis_pred signal is %b\n",DUT.al_DUT.br0.cmt_brch,DUT.al_DUT.br0.mis_pred);
+        $display("the cmt index is %d, the mis index is %d\n",DUT.al_DUT.br0.cmt_brch_indx,DUT.al_DUT.br0.brch_mis_indx);
+        $display("head is %b, tail is %b",DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
+        $display("the content in reg0 is %x, the content in reg1 is %x\n",DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
+        $display("store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
+        #5;
+        $display("%t,head is %b, tail is %b",$time,DUT.al_DUT.br0.head,DUT.al_DUT.br0.tail);
+        $display("%t,the content in reg0 is %x, the content in reg1 is %x\n",$time,DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
+        $display("%t, store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",$time,DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
      end // always@ (posedge DUT.al_DUT.br0.cmt_brch,posedge DUT.al_DUT.br0.mis_ped)
 
 
