@@ -56,7 +56,7 @@ output stll,vld_ld,reg_wrt_ld,str_iss;
 output [5:0] indx_ld,phy_addr_ld;
 output [15:0] data_ld;
 
-wire ld_grnt, done, fwd,fwd_rdy, ld_req, stll_ld, stll_str, str_req, str_grnt, addr_sel, rd_wrt_ca, ca_idle, ca_enable;
+wire ld_grnt, done, fwd,fwd_rdy, ld_req, stll_ld, stll_str, str_req, str_grnt, addr_sel, ld_head, rd_wrt_ca, ca_idle, ca_enable;
 wire [15:0] data_ca_out , data_ca_in , addr_ca , data_fwd , addr_ld, addr_str;
 wire [6:0] indx_fwd;
 
@@ -65,9 +65,9 @@ load_queue lq(.fnsh_unrll(fnsh_unrll), .rst(rst), .clk(clk), .loop_strt(loop_str
                .ld_grnt(ld_grnt), .done(done), .data_sq(data_fwd), .data_ca(data_ca_out),
                .fwd(fwd), .fwd_rdy(fwd_rdy), .ld_req(ld_req), .addr(addr_ld), .reg_wrt_ld(reg_wrt_ld),
                .phy_addr_ld(phy_addr_ld), .data_ld(data_ld), .vld_ld(vld_ld), .indx_ld(indx_ld), .stll(stll_ld),
-               .mis_pred_ld_ptr(mis_pred_ld_ptr),  .indx_fwd(indx_fwd), .cmmt_ld_ptr(cmmt_ld_ptr));
+               .mis_pred_ld_ptr(mis_pred_ld_ptr),  .indx_fwd(indx_fwd), .cmmt_ld_ptr(cmmt_ld_ptr), .ld_head(ld_head));
                
-store_queue sq(.fnsh_unrll(fnsh_unrll), .loop_strt(loop_strt), .rst(rst), .clk(clk),.addr_fwd(addr_ld),.indx_fwd(indx_fwd), .flsh(flsh), .indx_str_al(indx_str_al), .ld_grnt(ld_grnt),
+store_queue sq(.ld_head(ld_head),.fnsh_unrll(fnsh_unrll), .loop_strt(loop_strt), .rst(rst), .clk(clk),.addr_fwd(addr_ld),.indx_fwd(indx_fwd), .flsh(flsh), .indx_str_al(indx_str_al), .ld_grnt(ld_grnt),
              .mem_wrt(mem_wrt), .data_str(data_str), .indx_ls(indx_ls), 
                 .addr_ls(addr_ls), .str_grnt(str_grnt), .done(done), .str_req(str_req), 
                 .str_iss(str_iss), .stll(stll_str), .fwd(fwd), .fwd_rdy(fwd_rdy), .addr(addr_str),

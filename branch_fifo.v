@@ -34,9 +34,9 @@ module branch_fifo(/*autoarg*/
    reg [5:0]  fifo_update_val[0:1];
    
    
-   assign indx1 = (rob_tail < 63) ? rob_tail + 1 : 0;
-   assign indx2 = (rob_tail < 62) ? rob_tail + 2 : rob_tail - 62;
-   assign indx3 = (rob_tail < 61) ? rob_tail + 3 : rob_tail - 61;
+   assign indx1 = (rob_tail < 63) ? rob_tail + 6'h1 : 0;
+   assign indx2 = (rob_tail < 62) ? rob_tail + 6'h2 : rob_tail - 6'd62;
+   assign indx3 = (rob_tail < 61) ? rob_tail + 6'h3 : rob_tail - 6'd61;
 
    assign brnc_count = brnc_in[0] + brnc_in[1] + brnc_in[2] + brnc_in[3];
 
@@ -66,11 +66,11 @@ module branch_fifo(/*autoarg*/
 	if(brnc_count == 2'b10)
 	  begin
 	     if(brnc_in[3])
-	       fifo_update_val[tail + 1] = indx3;
+	       fifo_update_val[tail + 1'b1] = indx3;
 	     else if(brnc_in[2])
-	       fifo_update_val[tail + 1] = indx2;
+	       fifo_update_val[tail + 1'b1] = indx2;
 	     else
-	       fifo_update_val[tail + 1] = indx1;
+	       fifo_update_val[tail + 1'b1] = indx1;
 	  end
      end // always@ (...
    

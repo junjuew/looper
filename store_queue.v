@@ -1,9 +1,9 @@
-module store_queue(fnsh_unrll, loop_strt, clk,rst, mis_pred_str_ptr, cmmt_str, flsh, addr_fwd, indx_fwd, indx_str_al,ld_grnt,
+module store_queue(fnsh_unrll, ld_head, loop_strt, clk,rst, mis_pred_str_ptr, cmmt_str, flsh, addr_fwd, indx_fwd, indx_str_al,ld_grnt,
                      mem_wrt, data_str, indx_ls, addr_ls, str_grnt, done, str_req,
                      str_iss, stll, fwd, fwd_rdy, addr, data_ca, data_fwd);
                      
 // input and output ports declarations
-input rst, mem_wrt, flsh, clk, cmmt_str, done, str_grnt, ld_grnt, fnsh_unrll, loop_strt;
+input rst, mem_wrt, flsh, clk, cmmt_str, done, str_grnt, ld_grnt, fnsh_unrll, loop_strt, ld_head;
 input [31:0] indx_str_al;
 input [3:0] mis_pred_str_ptr;
 input [15:0] data_str, addr_ls, addr_fwd;
@@ -151,13 +151,13 @@ endcase
 
 assign loop_round_up=loop_end < loop_start;
 
-assign added_loop_end=loop_end+24;
+assign added_loop_end=loop_end+16;
 
 assign loop_body_diff= (loop_round_up) ? (added_loop_end-loop_start+1) : (loop_end - loop_start+1);
 
-assign flush_round_up=tail < mis_pred_str_ptr;
-assign added_tail=tail+24;
-assign flush_body_diff= (flush_round_up) ? (added_tail-mis_pred_str_ptr) : (tail-mis_pred_str_ptr);
+assign flush_round_up=nxt_tail < mis_pred_str_ptr;
+assign added_tail=nxt_tail+16;
+assign flush_body_diff= (flush_round_up) ? (added_tail-mis_pred_str_ptr) : (nxt_tail-mis_pred_str_ptr);
  
 always@(loop_body_diff)
 case(loop_body_diff)
@@ -365,14 +365,16 @@ always@(posedge clk, negedge rst)
        if (update[i]) begin
               str_entry[i][15:0] <= data_str; // update data to be stored into memory
               str_entry[i][31:16] <= addr_ls; // update memory address field
-           end
+           end 
            
            else begin
               str_entry[i][15:0] <= str_entry[i][15:0]; // 
               str_entry[i][31:16] <= str_entry[i][31:16]; // 
            end
            
-           if (first[i])
+           if (flush_body[i] & flsh)
+			   str_entry[i][38:32] <= 7'h00;
+		   else if (first[i])
               str_entry[i][38:32] <= first_indx;
            else if (second[i])
               str_entry[i][38:32] <= second_indx;
@@ -395,7 +397,11 @@ always@(posedge clk, negedge rst)
             else
                str_entry[i][40] <= str_entry[i][40];
                
-            if (commit[i] & finished)
+           if (flush_body[i] & flsh)
+			   str_entry[i][39] <= 0;
+		   else if (loop_body[i] & loop_back)
+			   str_entry[i][39] <= 0;
+		   else if (commit[i] & finished)
                str_entry[i][39] <= 0;
             else if (update[i])
                str_entry[i][39] <= 1;
@@ -419,7 +425,7 @@ else
 assign addr=str_entry[head][31:16];
 assign data_ca=str_entry[head][15:0];
 
-always@(state, str_grnt, cmmt_str, done, no_wait)
+always@(state,flsh,  str_grnt, cmmt_str, done, no_wait)
 begin
    str_req=0;
    str_iss=0;
@@ -437,13 +443,13 @@ begin
        nxt_state=IDLE;
        
    WAIT_ONE:
-   if (no_wait)
+	if (no_wait)
       nxt_state=WAIT_TWO;
    else
       nxt_state=WAIT_ONE;
     
     WAIT_TWO:
-    if (str_grnt) begin
+	if (str_grnt) begin
        nxt_state= ISSUED;
        str_iss=1;
     end
@@ -453,7 +459,7 @@ begin
     end
      
     ISSUED:
-    if (done) begin
+	if (done) begin
          finished=1;
          nxt_state = IDLE;
     end
@@ -463,7 +469,7 @@ begin
  end
        
 
-assign signed_comp=str_entry[head][38]; // whether to compard the indexes in a signed manner
+assign signed_comp=str_entry[head][38] & ld_head; // whether to compard the indexes in a signed manner
 generate
 genvar i_2;
 for (i_2=0;i_2<16;i_2=i_2+1)

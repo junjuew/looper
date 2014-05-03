@@ -133,7 +133,7 @@ ROB per entry:
                          : 0;
 
     // when head catch up with tail, and that one's vld is 0, that means ROB is empty 
-    assign rob_empt = ((rob_head == rob_tail) && (rob_vld[rob_head] == 0)) ? 1:0;
+    assign rob_empt = ((rob_head == rob_tail[5:0]) && (rob_vld[rob_head] == 0)) ? 1:0;
 
     // misprediction
     assign mis_pred = ((brnc_cmp_rslt != 0) && rob_brnc[brnc_idx] && 
@@ -331,12 +331,12 @@ ROB per entry:
 		if(!rst_n)
 			inverting_bit <= 1'b0;
 		else if (mis_pred)begin
-			if (rob_tail < rob_tail_when_mis_pred)
+			if (rob_tail[5:0] < rob_tail_when_mis_pred)
 				inverting_bit <= ~inverting_bit;
 			else
 				inverting_bit <= inverting_bit;
 		end
-		else if ((!all_nop) && (rob_tail == 60))
+		else if ((!all_nop) && (rob_tail[5:0] == 60))
 			inverting_bit <= ~inverting_bit;
 		else
 			inverting_bit <= inverting_bit;
@@ -434,13 +434,13 @@ ROB per entry:
             if(!rst_n)
                 rob_vld[rob_vld_idx] <= 0;
             // adding into ROB
-            else if ((!all_nop) && (rob_vld_idx >= rob_tail && rob_vld_idx <= (rob_tail+3))) 
+            else if ((!all_nop) && (rob_vld_idx >= rob_tail[5:0] && rob_vld_idx <= (rob_tail[5:0]+3))) 
                 rob_vld[rob_vld_idx] <= 1;
-            else if ((!all_nop) && (rob_tail == 63 && (rob_vld_idx == 0||rob_vld_idx == 1||rob_vld_idx == 2)))
+            else if ((!all_nop) && (rob_tail[5:0] == 63 && (rob_vld_idx == 0||rob_vld_idx == 1||rob_vld_idx == 2)))
                 rob_vld[rob_vld_idx] <= 1;
-            else if ((!all_nop) && (rob_tail == 62 && (rob_vld_idx == 0||rob_vld_idx == 1)))
+            else if ((!all_nop) && (rob_tail[5:0] == 62 && (rob_vld_idx == 0||rob_vld_idx == 1)))
                 rob_vld[rob_vld_idx] <= 1;
-            else if ((!all_nop) && (rob_tail == 61 && (rob_vld_idx == 0)))
+            else if ((!all_nop) && (rob_tail[5:0] == 61 && (rob_vld_idx == 0)))
                 rob_vld[rob_vld_idx] <= 1;
             // commiting out ROB
             else if ((rob_vld_idx >= rob_head) && (rob_vld_idx < (rob_head + rob_head_cmmt_num))) 
@@ -449,11 +449,11 @@ ROB per entry:
                     (rob_vld_idx < (rob_head + rob_head_cmmt_num - 64)))
                 rob_vld[rob_vld_idx] <= 0;
             // misprediction
-            else if (mis_pred && (rob_tail_when_mis_pred < rob_tail) && 
-                    (rob_vld_idx >= rob_tail_when_mis_pred) && (rob_vld_idx < rob_tail))
+            else if (mis_pred && (rob_tail_when_mis_pred < rob_tail[5:0]) && 
+                    (rob_vld_idx >= rob_tail_when_mis_pred) && (rob_vld_idx < rob_tail[5:0]))
                 rob_vld[rob_vld_idx] <= 0;
-            else if (mis_pred && (rob_tail_when_mis_pred > rob_tail) && 
-                    ((rob_vld_idx >= rob_tail_when_mis_pred) || (rob_vld_idx < rob_tail)))
+            else if (mis_pred && (rob_tail_when_mis_pred > rob_tail[5:0]) && 
+                    ((rob_vld_idx >= rob_tail_when_mis_pred) || (rob_vld_idx < rob_tail[5:0])))
                 rob_vld[rob_vld_idx] <= 0;
             // default
             else begin
@@ -533,7 +533,7 @@ ROB per entry:
                     ((rob_brnc_idx >= mis_pred_brnc_idx)))
                 rob_brnc[rob_brnc_idx] <= 0;
             // adding into ROB
-            else if ((!all_nop) && (rob_brnc_idx == rob_tail)) begin 
+            else if ((!all_nop) && (rob_brnc_idx == rob_tail[5:0])) begin 
                 if(brnc_in[0])begin
                     rob_brnc     [rob_brnc_idx] <= 1;
                     rob_brnc_pred[rob_brnc_idx] <= brnc_pred[0];
@@ -545,7 +545,7 @@ ROB per entry:
                 end
             end
             else if ((!all_nop) && 
-                    ((rob_brnc_idx == rob_tail + 1) || (rob_brnc_idx == (rob_tail-63)))) begin
+                    ((rob_brnc_idx == rob_tail[5:0] + 1) || (rob_brnc_idx == (rob_tail[5:0]-63)))) begin
                 if(brnc_in[1])begin
                     rob_brnc     [rob_brnc_idx] <= 1;
                     rob_brnc_pred[rob_brnc_idx] <= brnc_pred[1];
@@ -557,7 +557,7 @@ ROB per entry:
                 end
             end
             else if ((!all_nop) && 
-                    ((rob_brnc_idx == rob_tail + 2) || (rob_brnc_idx == (rob_tail-62)))) begin
+                    ((rob_brnc_idx == rob_tail[5:0] + 2) || (rob_brnc_idx == (rob_tail[5:0]-62)))) begin
                 if(brnc_in[2])begin
                     rob_brnc     [rob_brnc_idx] <= 1;
                     rob_brnc_pred[rob_brnc_idx] <= brnc_pred[2];
@@ -569,7 +569,7 @@ ROB per entry:
                 end
             end
             else if ((!all_nop) && 
-                    ((rob_brnc_idx == rob_tail + 3) || (rob_brnc_idx == (rob_tail-61)))) begin
+                    ((rob_brnc_idx == rob_tail[5:0] + 3) || (rob_brnc_idx == (rob_tail[5:0]-61)))) begin
                 if(brnc_in[3])begin
                     rob_brnc     [rob_brnc_idx] <= 1;
                     rob_brnc_pred[rob_brnc_idx] <= brnc_pred[3];
@@ -610,28 +610,28 @@ ROB per entry:
                     ((rob_reg_wrt_idx >= mis_pred_brnc_idx)))
                 rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             // adding into ROB
-            else if ((!all_nop) && (rob_reg_wrt_idx == rob_tail)) begin 
+            else if ((!all_nop) && (rob_reg_wrt_idx == rob_tail[5:0])) begin 
 				if(reg_wrt_in[0])
 					rob_reg_wrt[rob_reg_wrt_idx] <= 1;
 				else
 					rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             end
             else if ((!all_nop) && 
-                    ((rob_reg_wrt_idx == rob_tail + 1) || (rob_reg_wrt_idx == (rob_tail-63)))) begin
+                    ((rob_reg_wrt_idx == rob_tail[5:0] + 1) || (rob_reg_wrt_idx == (rob_tail[5:0]-63)))) begin
 				if(reg_wrt_in[1])
 					rob_reg_wrt[rob_reg_wrt_idx] <= 1;
 				else
 					rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             end
             else if ((!all_nop) && 
-                    ((rob_reg_wrt_idx == rob_tail + 2) || (rob_reg_wrt_idx == (rob_tail-62)))) begin
+                    ((rob_reg_wrt_idx == rob_tail[5:0] + 2) || (rob_reg_wrt_idx == (rob_tail[5:0]-62)))) begin
 				if(reg_wrt_in[2])
 					rob_reg_wrt[rob_reg_wrt_idx] <= 1;
 				else
 					rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             end
             else if ((!all_nop) && 
-                    ((rob_reg_wrt_idx == rob_tail + 3) || (rob_reg_wrt_idx == (rob_tail-61)))) begin
+                    ((rob_reg_wrt_idx == rob_tail[5:0] + 3) || (rob_reg_wrt_idx == (rob_tail[5:0]-61)))) begin
 				if(reg_wrt_in[3])
 					rob_reg_wrt[rob_reg_wrt_idx] <= 1;
 				else
@@ -701,13 +701,13 @@ ROB per entry:
                 rob_st_ptr[rob_st_idx] <= rob_st_ptr[mis_pred_brnc_idx];
 			end
             // adding into ROB
-            else if ((!all_nop) && (rob_st_idx == rob_tail)) begin 
+            else if ((!all_nop) && (rob_st_idx == rob_tail[5:0])) begin 
                 rob_st    [rob_st_idx] <= (st_in[0]) ? 1:0;
                 rob_st_ptr[rob_st_idx] <= (st_in[0]) ? rob_st_cntr + 1
                                         : rob_st_cntr;
             end
             else if ((!all_nop) && 
-                    ((rob_st_idx == rob_tail + 1) || (rob_st_idx == (rob_tail-63)))) begin
+                    ((rob_st_idx == rob_tail[5:0] + 1) || (rob_st_idx == (rob_tail[5:0]-63)))) begin
                 rob_st    [rob_st_idx] <= (st_in[1]) ? 1:0;
                 rob_st_ptr[rob_st_idx] <= (st_in[1:0] == 2'b11) ? rob_st_cntr + 2
                                         : (st_in[1:0] == 2'b01) ? rob_st_cntr + 1
@@ -715,7 +715,7 @@ ROB per entry:
                                         : rob_st_cntr;
             end
             else if ((!all_nop) && 
-                    ((rob_st_idx == rob_tail + 2) || (rob_st_idx == (rob_tail-62)))) begin
+                    ((rob_st_idx == rob_tail[5:0] + 2) || (rob_st_idx == (rob_tail[5:0]-62)))) begin
                 rob_st    [rob_st_idx] <= (st_in[2]) ? 1:0;
                 rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 3
                                         : (st_in[2:0] == 3'b011) ? rob_st_cntr + 2
@@ -727,7 +727,7 @@ ROB per entry:
                                         : rob_st_cntr;
             end
             else if ((!all_nop) && 
-                    ((rob_st_idx == rob_tail + 3) || (rob_st_idx == (rob_tail-61)))) begin
+                    ((rob_st_idx == rob_tail[5:0] + 3) || (rob_st_idx == (rob_tail[5:0]-61)))) begin
                 rob_st    [rob_st_idx] <= (st_in[3]) ? 1:0;
                 if (st_in[3]) begin
                     rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 4
@@ -778,19 +778,19 @@ ROB per entry:
 				    ((rob_ld_idx >= mis_pred_brnc_idx)))
                 rob_ld_ptr[rob_ld_idx] <= rob_ld_ptr[mis_pred_brnc_idx];
             // adding into ROB
-            else if ((!all_nop) && (rob_ld_idx == rob_tail)) begin 
+            else if ((!all_nop) && (rob_ld_idx == rob_tail[5:0])) begin 
                 rob_ld_ptr[rob_ld_idx] <= (ld_in[0]) ? rob_ld_cntr_add1
                                         : rob_ld_cntr;
             end
             else if ((!all_nop) && 
-                    ((rob_ld_idx == rob_tail + 1) || (rob_ld_idx == (rob_tail-63)))) begin
+                    ((rob_ld_idx == rob_tail[5:0] + 1) || (rob_ld_idx == (rob_tail[5:0]-63)))) begin
                 rob_ld_ptr[rob_ld_idx] <= (ld_in[1:0] == 2'b11) ? rob_ld_cntr_add2
                                         : (ld_in[1:0] == 2'b01) ? rob_ld_cntr_add1
                                         : (ld_in[1:0] == 2'b10) ? rob_ld_cntr_add1
                                         : rob_ld_cntr;
             end
             else if ((!all_nop) && 
-                    ((rob_ld_idx == rob_tail + 2) || (rob_ld_idx == (rob_tail-62)))) begin
+                    ((rob_ld_idx == rob_tail[5:0] + 2) || (rob_ld_idx == (rob_tail[5:0]-62)))) begin
                 rob_ld_ptr[rob_ld_idx] <= (ld_in[2:0] == 3'b111) ? rob_ld_cntr_add3
                                         : (ld_in[2:0] == 3'b011) ? rob_ld_cntr_add2
                                         : (ld_in[2:0] == 3'b110) ? rob_ld_cntr_add2
@@ -801,7 +801,7 @@ ROB per entry:
                                         : rob_ld_cntr;
             end
             else if ((!all_nop) && 
-                    ((rob_ld_idx == rob_tail + 3) || (rob_ld_idx == (rob_tail-61)))) begin
+                    ((rob_ld_idx == rob_tail[5:0] + 3) || (rob_ld_idx == (rob_tail[5:0]-61)))) begin
                 if (ld_in[3]) begin
                     rob_ld_ptr[rob_ld_idx] <= (ld_in[2:0] == 3'b111) ? rob_ld_cntr_add4
                                             : (ld_in[2:0] == 3'b011) ? rob_ld_cntr_add3

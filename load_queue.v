@@ -1,6 +1,6 @@
 module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld_al, mem_rd, phy_addr_ld_in, indx_ls, addr_ls,
 ld_grnt, done, data_sq, data_ca, fwd, fwd_rdy, ld_req, addr, reg_wrt_ld, phy_addr_ld,
-data_ld, vld_ld, indx_ld,stll, indx_fwd, cmmt_ld_ptr);
+data_ld, vld_ld, indx_ld,stll, indx_fwd, cmmt_ld_ptr, ld_head);
 
 // input and output ports declarations
 input rst, clk, flsh, mem_rd, ld_grnt, done, fwd, fwd_rdy, fnsh_unrll,  loop_strt;
@@ -8,7 +8,7 @@ input [31:0] indx_ld_al;
 input [4:0] mis_pred_ld_ptr, cmmt_ld_ptr;
 input [5:0] phy_addr_ld_in, indx_ls;
 input [15:0] addr_ls, data_ca, data_sq;
-output vld_ld, reg_wrt_ld, stll, ld_req;
+output vld_ld, reg_wrt_ld, stll, ld_req, ld_head;
 output [5:0] indx_ld, phy_addr_ld;
 output [6:0] indx_fwd;
 output [15:0] data_ld, addr;
@@ -18,6 +18,8 @@ wire [4:0] nxt_head, nxt_tail, pre_head, cmmt_diff, loop_body_diff, flush_body_d
 reg [41:0] ld_entry [0:23]; // load queue entries
 reg [4:0] head, tail, current, pre_tail, pre_current, loop_end, loop_start;
 reg busy, finished, loop_mode, pre_loop_strt;
+
+assign ld_head=ld_entry[head][38];
 //integer i;
 wire [23:0] update, // whether the corresponding entry needs update
 				bid; // whether the corresponding load instruction is ready to execute
@@ -34,7 +36,7 @@ reg [23:0]  shifted_bid, // shifted version of bid for priority decoding
             third, 
             fourth;
 wire [23:0] insert, pre_first, pre_second, pre_third, pre_fourth;
-reg vld_ld, reg_wrt_ld, stored_fwd, ld_req ;
+reg vld_ld, reg_wrt_ld, stored_fwd, ld_req;
 reg [15:0] stored_data_sq, stored_data_ca; // used to store data received from store queue and cache
 reg [2:0] state, nxt_state; // state registers
 wire [6:0] first_indx, second_indx, third_indx, fourth_indx;
@@ -112,6 +114,7 @@ else if (flsh)
 else
    loop_mode <= loop_mode;
 
+
 //assign pre_head = head + cmmt_ld;
 //assign nxt_head =  (pre_head > 23)? (pre_head-24) : pre_head; // need modification in loop-mode
 assign cmmt_round_up=cmmt_ld_ptr < head;
@@ -120,9 +123,9 @@ assign added_cmmt_ld_ptr=cmmt_ld_ptr+24;
 assign added_loop_end=loop_end+24;
 assign cmmt_diff=(cmmt_round_up) ? (added_cmmt_ld_ptr - head) : (cmmt_ld_ptr - head); // round up
 assign loop_body_diff= (loop_round_up) ? (added_loop_end-loop_start+1) : (loop_end - loop_start+1);
-assign flush_round_up=tail < mis_pred_ld_ptr;
-assign added_tail=tail+24;
-assign flush_body_diff=(flush_round_up) ? (added_tail-mis_pred_ld_ptr) : (tail-mis_pred_ld_ptr);
+assign flush_round_up=nxt_tail < mis_pred_ld_ptr;
+assign added_tail=nxt_tail+24;
+assign flush_body_diff=(flush_round_up) ? (added_tail-mis_pred_ld_ptr) : (nxt_tail-mis_pred_ld_ptr);
 always@(cmmt_diff)
 case(cmmt_diff)
     5'd0: pre_commit=0;
@@ -477,7 +480,9 @@ for (i=0;i<24;i=i+1)
               ld_entry[i][31:16] <= ld_entry[i][31:16]; 
            end
            
-           if (first[i])
+           if (flush_body[i] & flsh)
+			   ld_entry[i][38:32] <= 7'h00;	
+		   else if (first[i])
               ld_entry[i][38:32] <= first_indx;
            else if (second[i])
               ld_entry[i][38:32] <= second_indx;
@@ -500,16 +505,24 @@ for (i=0;i<24;i=i+1)
             else
                ld_entry[i][41] <= ld_entry[i][41];
                
-            if (commit[i] & cmmt)
+            if (flush_body[i] & flsh)
+				ld_entry[i][40] <= 0;
+			else if (loop_body[i] & loop_back)
+				ld_entry[i][40] <=0;
+		    else if (commit[i] & cmmt)
                ld_entry[i][40] <= 0;
             else if (update[i])
                ld_entry[i][40] <= 1;
             else
                ld_entry[i][40] <= ld_entry[i][40];
                
-            if (commit[i] & cmmt)
+           if (flush_body[i] & flsh)
+			   ld_entry[i][39] <= 0;
+		   else if (loop_body[i] & loop_back)
+			   ld_entry[i][39] <= 0;
+		   else if (commit[i] & cmmt)
                ld_entry[i][39] <= 0;
-            else if (finished & execute[i])
+            else if (finished & execute[i] )
                ld_entry[i][39] <= 1;
             else
                ld_entry[i][39] <= ld_entry[i][39];
@@ -670,7 +683,7 @@ else
    state <= nxt_state;
    
 // Control signals generation   
-always@(ld_rdy, done, fwd_rdy, ld_grnt, state) begin
+always@(ld_rdy, done, flsh, fwd_rdy, ld_grnt, state) begin
    ld_req=0;
    busy=0;
    reg_wrt_ld=0;
@@ -678,7 +691,7 @@ always@(ld_rdy, done, fwd_rdy, ld_grnt, state) begin
    finished=0;
    case(state)
        IDLE:
-       if (ld_rdy) begin
+       if (ld_rdy & (~flsh)) begin
             nxt_state=WAIT;
        end
        else
@@ -686,7 +699,9 @@ always@(ld_rdy, done, fwd_rdy, ld_grnt, state) begin
     
        WAIT: begin
        ld_req=1; // Keep requesting
-       if (ld_grnt) begin
+       if (flsh)
+		   nxt_state=IDLE;
+	   else if (ld_grnt) begin
            nxt_state=ISSUED;
        end
        else 
@@ -695,7 +710,9 @@ always@(ld_rdy, done, fwd_rdy, ld_grnt, state) begin
    
        ISSUED: begin
        busy=1;
-       if (done & !fwd_rdy)
+	   if (flsh)
+		   nxt_state=IDLE;
+       else if (done & !fwd_rdy)
         nxt_state=MEM_RDY;
        else if (!done & fwd_rdy)
         nxt_state=FWD_RDY;
@@ -707,7 +724,9 @@ always@(ld_rdy, done, fwd_rdy, ld_grnt, state) begin
    
         FWD_RDY: begin
         busy=1;
-        if (done)
+		if (flsh)
+			nxt_state=IDLE;
+        else if (done)
           nxt_state=WRITEBACK;
         else
           nxt_state=FWD_RDY;
@@ -715,18 +734,28 @@ always@(ld_rdy, done, fwd_rdy, ld_grnt, state) begin
       
         MEM_RDY: begin
         busy=1;
-        if (fwd_rdy)
+		if (flsh)
+			nxt_state=IDLE;
+        else if (fwd_rdy)
           nxt_state=WRITEBACK;
         else
           nxt_state=MEM_RDY; 
         end   
         
         BOTH_RDY: begin
-           nxt_state=WRITEBACK;
-           busy=1;
+			busy=1;
+			if (flsh)
+				nxt_state=IDLE;
+           else
+			   nxt_state=WRITEBACK;
+           
     end
     
-        WRITEBACK: begin
+	WRITEBACK: begin
+		busy=1;
+		if (flsh)
+			nxt_state=IDLE;
+		else begin
         reg_wrt_ld=1;
         vld_ld=1;
         busy=1;
@@ -736,6 +765,7 @@ always@(ld_rdy, done, fwd_rdy, ld_grnt, state) begin
         else
            nxt_state=IDLE;
         end
+	end
 endcase
 end
 

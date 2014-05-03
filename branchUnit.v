@@ -33,11 +33,14 @@ module branchUnit(/*autoarg*/
    reg 		     clear_head,decrement_tail,increment_tail1,increment_tail2,increment_head;
    reg 		     fifo_enable[0:1];
    wire [1:0] 	     brnc_count;
+   wire [12:0] 	     fifo0,fifo1;
+   wire 	     fifo_en0,fifo_en1;
+   wire [12:0] 	     fifo_update0,fifo_update1;
    
    
-   assign indx1 = nxt_indx[5:0] + 1;
-   assign indx2 = nxt_indx[5:0] + 2;
-   assign indx3 = nxt_indx[5:0] + 3;
+   assign indx1 = nxt_indx[5:0] + 6'h1;
+   assign indx2 = nxt_indx[5:0] + 6'h2;
+   assign indx3 = nxt_indx[5:0] + 6'h3;
    
    
    assign curr_pos1 = curr_pos + pr_need_inst[0];
@@ -73,69 +76,81 @@ module branchUnit(/*autoarg*/
 	if(brnc_count == 2'b10)
 	  begin
 	     if(brch3)
-	       fifo_update_val[tail + 1] = {indx3,curr_pos3};
+	       fifo_update_val[tail + 1'b1] = {indx3,curr_pos3};
 	     else if(brch2)
-	       fifo_update_val[tail + 1] = {indx2,curr_pos2};
+	       fifo_update_val[tail + 1'b1] = {indx2,curr_pos2};
 	     else
-	       fifo_update_val[tail + 1] = {indx1,curr_pos1};
+	       fifo_update_val[tail + 1'b1] = {indx1,curr_pos1};
 	  end
      end // always@ (...
 
    //control signal
-   always@(/*autosense*/ fifo[1] or fifo[0] or brch_mis_indx or brnc_count
-	   or cmt_brch or cmt_brch_indx or head or mis_pred or tail)
+   always@(/*autosense*/  brch_mis_indx or head
+	   or mis_pred)
      begin
 	clear_head = 1'b0;
 	decrement_tail = 1'b0;
-	increment_tail1 = 1'b0;
-	increment_tail2 = 1'b0;
-	increment_head = 1'b0;
-	fifo_enable[0] = 1'b0;
-	fifo_enable[1] = 1'b0;
 	flush_pos = 7'b0;
 	flush = 1'b0;
-	
 	if(mis_pred)
 	  begin
 	     flush = 1'b1;
 	     if(brch_mis_indx == fifo[head][12:7])
 	       begin
 		  flush_pos = fifo[head][6:0];
-		  clear_head = 1'b1;		  
+		  clear_head = 1'b1;	
+		  //$display("comming!!!!--if");
 	       end
 	     else
 	       begin
-		  flush_pos = fifo[head + 1][6:0];
+		  //if(head == 1'b0)
+		    flush_pos = fifo[head + 1'b1][6:0];
+/* -----\/----- EXCLUDED -----\/-----
+		  else
+		    flush_pos = fifo[0][6:0];
+ -----/\----- EXCLUDED -----/\----- */
 		  decrement_tail = 1'b1;
+		  //$display("comming!!!!--else");
 	       end
 	  end // if (mis_pred)
-
-	if(cmt_brch)
-	  begin
-	     if(cmt_brch_indx == fifo[head][12:7])
-	       begin
-		  increment_head = 1'b1;
-	       end
-	     else
-	       decrement_tail = 1'b1;
-	  end
-
+     end // always@ (...
+   
+   always@(/*autosense*/ fifo[0] or fifo[1] or  cmt_brch or cmt_brch_indx
+	    or head)
+      begin
+	 increment_head = 1'b0;
+	 decrement_tail = 1'b0;
+	 if(cmt_brch)
+	   begin
+	      if(cmt_brch_indx == fifo[head][12:7])
+		begin
+		   increment_head = 1'b1;
+		end
+	      else
+		decrement_tail = 1'b1;
+	   end
+      end // always@ (...
+   
+   always@(/*autosense*/brnc_count or tail)
+     begin
+	increment_tail1 = 1'b0;
+	fifo_enable[0] = 1'b0;
+	fifo_enable[1] = 1'b0;
+	increment_tail2 = 1'b0;
 	if(brnc_count == 2'b01)
 	  begin
 	     increment_tail1 = 1'b1;
 	     fifo_enable[tail] = 1'b1;
 	  end
-	
-	
-	if(brnc_count == 2'b10)
+	else if(brnc_count == 2'b10)
 	  begin
 	     increment_tail2 = 1'b1;
 	     fifo_enable[0] = 1'b1;
 	     fifo_enable[1] = 1'b1;
 	  end
-	
-     end
-   //fifo update
+     end // always@ (...
+   
+//fifo update
    generate
       genvar i;
       for(i = 0; i < 2; i = i + 1)
@@ -326,6 +341,12 @@ module branchUnit(/*autoarg*/
    
    assign all_nop_from_branchUnit = (mis_pred) ? 1: 0;
    
+   assign fifo0 = fifo[0];
+   assign fifo1 = fifo[1];
    
+   assign fifo_en0 = fifo_enable[0];
+   assign fifo_en1 = fifo_enable[1];
+   assign fifo_update0 = fifo_update_val[0];
+   assign fifo_update1 = fifo_update_val[1];
    
 endmodule // branchUnit
