@@ -5,7 +5,9 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache,
                          mmu_mem_web  ,
                          mmu_mem_addrb,
                          mmu_mem_dinb ,
-                         mmu_mem_doutb
+                         mmu_mem_doutb,
+                         pc_to_dec,
+                         mem_sys_idle
                          );
 
    input  mmu_mem_clk ;
@@ -19,6 +21,8 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache,
    input clk, rst_n, flush_cache;
    input [15:0] extern_pc;
    input        extern_pc_en;
+   output       pc_to_dec;
+   output wire  mem_sys_idle;
 
    // IF output wires
    wire [63:0]  pc_to_dec,inst_to_dec,recv_pc_to_dec;
@@ -756,7 +760,8 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache,
                                  .str_iss(str_iss_wb_out),
                                  .indx_ld(indx_ld_wb_out),
                                  .phy_addr_ld(phy_addr_ld_wb_out),
-                                 .data_ld(data_ld_wb_out)
+                                 .data_ld(data_ld_wb_out),
+                                 .ca_idle(mem_sys_idle)
                                  );
    
    rob rob_DUT(.clk(clk), .rst_n(rst_n),
