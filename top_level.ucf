@@ -1,22 +1,59 @@
-# RS232 Configuration
-#NET rxd       LOC="AG15";  # Bank 4, Vcco=3.3V, No DCI (rxd)
-#NET txd       LOC="AG20";  # Bank 4, Vcco=3.3V, No DCI (txd)
+# Clock Configuration
+NET clk_100mhz       LOC="AH15" | IOSTANDARD = LVCMOS33;  # Bank 4, Vcco=3.3V, No DCI
 
-# LEDS
-NET  GPIO_LED_0           LOC="H18";   # Bank 3, Vcco=2.5V, No DCI
+#rst switch
+NET rst_n LOC = "U25" |  IOSTANDARD = LVCMOS18; #DIP 1
+
+# RS232 Configuration
+NET rxd       LOC="AG15" | IOSTANDARD = LVCMOS33;  # Bank 4, Vcco=3.3V, No DCI (rxd)
+NET txd       LOC="AG20" | IOSTANDARD = LVCMOS33;  # Bank 4, Vcco=3.3V, No DCI (txd)
+
+#LEDS
+# conflict with state output
+#NET  GPIO_LED_0           LOC="H18";   # Bank 3, Vcco=2.5V, No DCI
 NET  GPIO_LED_1           LOC="L18";   # Bank 3, Vcco=2.5V, No DCI
 #NET  GPIO_LED_2           LOC="G15";   # Bank 3, Vcco=2.5V, No DCI
 #NET  GPIO_LED_3           LOC="AD26";  # Bank 21, Vcco=1.8V, DCI using 49.9 ohm resistors
 #NET  GPIO_LED_4           LOC="G16";   # Bank 3, Vcco=2.5V, No DCI
 #NET  GPIO_LED_5           LOC="AD25";  # Bank 21, Vcco=1.8V, DCI using 49.9 ohm resistors
 #NET  GPIO_LED_6           LOC="AD24";  # Bank 21, Vcco=1.8V, DCI using 49.9 ohm resistors
-#NET  GPIO_LED_7           LOC="AE24";  # Bank 21, Vcco=1.8V, DCI using 49.9 ohm resistorsET  data_reg_out<0> LOC="AE24";  # Bank 21, Vcco=1.8V, DCI using 49.9 ohm resistors ohm resistors
+#NET  GPIO_LED_7           LOC="AE24";  # Bank 21, Vcco=1.8V, DCI using 49.9 ohm resistorsET
 
 # Switch Configuration
-NET rst_n     LOC="U25" | IOSTANDARD = LVCMOS18;   # Bank 15, Vcco=1.8V, DCI using 49.9 ohm resistors
-#NET br_cfg<0> LOC="AC25";  # Bank 21, Vcco=1.8V, DCI using 49.9 ohm resistors
-#NET br_cfg<1> LOC="AC24";  # Bank 21, Vcco=1.8V, DCI using 49.9 ohm resistors
-#NET button    LOC="AJ6";   # Bank 18, Vcco=3.3V, No DCI
-# Clock Configuration
-NET clk_100MHz   LOC="AH15";  # Bank 4, Vcco=3.3V, No DCI
-NET clk_100MHz   IOSTANDARD = LVCMOS33;
+NET br_cfg<0> LOC="AC24";  # Bank 21, Vcco=1.8V, DCI using 49.9 ohm resistors switch 8
+NET br_cfg<1> LOC="AC25";  # Bank 21, Vcco=1.8V, DCI using 49.9 ohm resistors switch 7
+NET cpu_pc_MSB LOC="AE26";  # switch 6
+NET mem_sys_fin LOC="AE27";  # switch 5
+
+# state output
+NET state<0> LOC="AD26";  # led3(rxd)
+NET state<1> LOC="G15";  # led2(rxd)
+NET state<2> LOC="L18";  # led1(rxd)
+NET state<3> LOC="H18";  # led0(rxd)
+
+#DVI output
+NET  "d<0>"               LOC="AB8" | IOSTANDARD = LVCMOS33; 
+NET  "d<1>"               LOC="AC8" | IOSTANDARD = LVCMOS33;
+NET  "d<2>"               LOC="AN12" | IOSTANDARD = LVCMOS33;
+NET  "d<3>"               LOC="AP12" | IOSTANDARD = LVCMOS33;
+NET  "d<4>"               LOC="AA9" | IOSTANDARD = LVCMOS33;
+NET  "d<5>"               LOC="AA8" | IOSTANDARD = LVCMOS33;
+NET  "d<6>"               LOC="AM13" | IOSTANDARD = LVCMOS33;
+NET  "d<7>"               LOC="AN13" | IOSTANDARD = LVCMOS33;
+NET  "d<8>"               LOC="AA10" | IOSTANDARD = LVCMOS33;
+NET  "d<9>"               LOC="AB10" | IOSTANDARD = LVCMOS33;
+NET  "d<10>"              LOC="AP14" | IOSTANDARD = LVCMOS33;
+NET  "d<11>"              LOC="AN14" | IOSTANDARD = LVCMOS33;
+
+NET d<*>  IOSTANDARD = LVDCI_33;
+
+NET "blank"					LOC = "AE8"  | IOSTANDARD = LVDCI_33;  #data enable
+NET "hsync"					LOC = "AM12" | IOSTANDARD = LVDCI_33;
+NET "vsync"					LOC = "AM11"  | IOSTANDARD = LVDCI_33;
+
+NET "dvi_clk"					LOC = "AL10" | IOSTANDARD = LVCMOS33 | DRIVE = 24 | SLEW = FAST;
+NET "dvi_clk_n"					LOC="AL11" | IOSTANDARD = LVCMOS33 | DRIVE = 24 | SLEW = FAST;
+NET "dvi_rst"           LOC="AK6" |  IOSTANDARD = LVCMOS33;
+
+NET  "scl_tri"        LOC="U27" | SLEW = SLOW |  DRIVE = 6 | TIG |  IOSTANDARD = LVCMOS18;   # Bank 15, Vcco=1.8V, DCI using 49.9 ohm resistors
+NET  "sda_tri"        LOC="T29" | SLEW = SLOW |  DRIVE = 6 | TIG |  IOSTANDARD = LVCMOS18;   # Bank 15, Vcco=1.8V, DCI using 49.9 ohm resistors
