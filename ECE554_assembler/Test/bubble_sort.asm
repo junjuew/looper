@@ -1,6 +1,6 @@
 ldi r1, 0	// constant 0
 ldi r2, 1	// constant 1
-ldi r3, 100	// memory start at 500
+ldi r3, 100	// memory start at 100
 ldi r5, 2	
 str r5, r3, 0
 add r3, r3, r2
@@ -16,6 +16,111 @@ add r3, r3, r2
 ldi r5, -22	
 str r5, r3, 0
 add r3, r3, r2
+ldi r5, -38	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -97	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 98
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 123	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 321	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 178	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -169	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 144	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -16	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 25	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -4	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 69	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 39	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -50	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -240	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -178	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 239	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 37	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 19	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 73	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -100	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 92	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 108	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 216	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 49	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -81	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -121	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -198	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 196	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 137	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -184	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -7	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 55	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, -66	
+str r5, r3, 0
+add r3, r3, r2
+ldi r5, 172	
+str r5, r3, 0
+add r3, r3, r2
 
 // r1	constant 0
 // r2	constant 1
@@ -28,12 +133,12 @@ add r3, r3, r2
 // r9	inner count
 // r10	result of r7-r8
 // r11	temp number
-// r12	constant 5
+// r12	constant 140
 
 ldi r3, 100	// memory start
-ldi r4, 5	// length of array
+ldi r4, 40	// length of array
 ldi r5, 100	// outter index
-ldi r12, 105	// constant 105
+ldi r12, 140	// constant 140
 
 .outter_loop:
 beqz r4, .end_outter_loop
