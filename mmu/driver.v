@@ -1,4 +1,4 @@
-`default_nettype none
+//`default_nettype none
 `timescale 1ns / 1ps
   //////////////////////////////////////////////////////////////////////////////////
 // Company: UW-Madison
@@ -23,13 +23,15 @@
   //
   //////////////////////////////////////////////////////////////////////////////////
   module driver(/*autoarg*/
-                // Outputs
-                iocs, iorw, ioaddr, enb, web, addrb, dinb, flsh,
-                // Inouts
-                databus,
-                // Inputs
-                clk, rst_n, br_cfg, rda, tbr, doutb, cpu_pc, mem_sys_fin, state
-                );
+   // Outputs
+   iocs, iorw, ioaddr, enb, web, addrb, dinb, flsh, rom_out,
+   dis_dvi_out, state,
+   // Inouts
+   databus,
+   // Inputs
+   clk, rst_n, br_cfg, rda, tbr, doutb, cpu_pc, mem_sys_fin,
+   display_plane_addr
+   );
 
 
    parameter LAST_SLOT_MEM_ADDR=14'h3fff;
@@ -58,9 +60,15 @@
    //interface with memory system
    output reg        flsh;//state machine output
    input wire        mem_sys_fin;
+
+   //interface with DVI
+   input wire [12:0] display_plane_addr;
+   output reg [23:0] rom_out;
+   //disable dvi unit
+   output reg        dis_dvi_out;
    
    output reg [3:0]         state;
-        reg[3:0] nxt_state;
+   reg [3:0]                nxt_state;
 
    //define states
    localparam IDLE = 4'h0;
@@ -73,7 +81,6 @@
    localparam TRANS_LOAD=4'h7;
    localparam TRANS_SEND=4'h8;   
    
-   
    reg [1:0]         ioaddr_reg;
    reg               iorw_reg;
    
@@ -84,6 +91,7 @@
    assign iorw = iorw_reg;
    
 
+   
    reg [1:0]         prev_br_cfg; //used to check the change of baud rate
    reg               prev_br_cfg_en;
    
@@ -306,16 +314,12 @@
      end
 
 
-
-
-
-
    always@( mem_out[0] or mem_out[1] or mem_out[2] or mem_out[3] or mem_out[4] or mem_out[5] 
             or mem_out[6] or mem_out[7] 
             or addr_cnt or baud_rate or br_cfg or cmd or cpu_pc
             or echo_back_data or mem_sys_fin or prev_br_cfg or rda
             or state or stop_mem_addr or tbr or trans_cnt
-            or wrt_mem_data)
+            or wrt_mem_data or doutb or start_mem_addr or display_plane_addr)
      begin
         /*default*/
         // by default we are just reading the status register
@@ -340,7 +344,8 @@
         clr_trans_cnt=1'b0;
         trans_cnt_en=1'b0;
         ld_mem_out_buf=1'b0;
-        
+        dis_dvi_out=1'b1;
+        rom_out = 24'h0;
         
         case(state)
           IDLE://idle state
@@ -355,7 +360,7 @@
                     cnt_en=1'b1;
                     nxt_state = ECHO;                    
                  end
-               else if (cmd == 8'h73)
+               else if (cmd == 8'h73) //s
                  begin
                     /********* cmd: send to data memory *************/
                     enb = 1'b1;
@@ -368,19 +373,30 @@
                     //next state clr such value
                     nxt_state = CLR_MEM;
                  end // if (cmd == 8'h73)
-               else if (cmd == 8'h61)
+               else if (cmd == 8'h61) //a
                  begin
                     /********* cmd: update start addr *************/
                     start_mem_addr_en=1'b1;
                     clr_cmd=1'b1;
                     nxt_state = IDLE;
                  end
-               else if (cmd == 8'h65)
+               else if (cmd == 8'h65) //e
                  begin
                     /********* cmd: update stop addr *************/
                     stop_mem_addr_en=1'b1;                    
                     clr_cmd=1'b1;
                     nxt_state = IDLE;
+                 end
+               else if (cmd == 8'h64) //d
+                 begin
+                    /********* display img through dvi *************/
+                    dis_dvi_out=1'b0;
+                    rom_out = doutb[23:0];
+                    enb=1'b1;
+                    addrb= start_mem_addr + display_plane_addr;
+                    //don't clr cmd in this case, keep continuously display
+                    //wait for another cmd from spart to stop display
+                    nxt_state=IDLE;
                  end
                else 
                  nxt_state = IDLE;
@@ -512,6 +528,7 @@
                prev_br_cfg_en=1;
                nxt_state = IDLE;
             end
+
         endcase // case (state)
      end
 

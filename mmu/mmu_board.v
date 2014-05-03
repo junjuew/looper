@@ -1,59 +1,83 @@
-`default_nettype none
+//`default_nettype none
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: UW-Madison
-// Engineer: J.J.(Junjue) Wang, Pari Lingampally, Zheng Ling
+// company: uw-madison
+// engineer: j.j.(junjue) wang, pari lingampally, zheng ling
 // 
-// Create Date: Feb 03   
-// Design Name: SPART
-// Module Name: top_level
-// Project Name: SPART
-// Target Devices: FPGA Virtex 2 Pro
-// Tool versions: Xilinx 10.1
-// Description: 
-// The overall purpose of the SPART (Special Purpose Asynchronous Receiver/Transmitter) is to function as a serial I/O interface of communicating between the computer and the FPGA. 
+// create date: feb 03   
+// design name: spart
+// module name: top_level
+// project name: spart
+// target devices: fpga virtex 2 pro
+// tool versions: xilinx 10.1
+// description: 
+// the overall purpose of the spart (special purpose asynchronous receiver/transmitter) is to function as a serial i/o interface of communicating between the computer and the fpga. 
 //
-// Dependencies: spart, driver
+// dependencies: spart, driver
 //
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
+// revision: 
+// revision 0.01 - file created
+// additional comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
 
 module mmu_board(/*autoarg*/
    // Outputs
-   txd, state,
+   txd, state, d, blank, hsync, vsync, dvi_clk, dvi_clk_n, dvi_rst,
+   gpio_led_0, gpio_led_1, gpio_led_2, gpio_led_4, gpio_led_7,
+   // Inouts
+   scl_tri, sda_tri,
    // Inputs
-   clk, rst_n, rxd, br_cfg, cpu_pc_MSB, mem_sys_fin
+   clk, rst_n, rxd, br_cfg, cpu_pc_msb, mem_sys_fin
    );
 
    input wire       clk; // 100mhz clock
-   input wire       rst_n; // Asynchronous reset, tied to dip switch 0
-   output wire      txd; // RS232 Transmit Data
-   input wire       rxd; // RS232 Recieve Data
-   input wire [1:0] br_cfg; // Baud Rate Configuration, Tied to dip switches 2 and 3
-   input wire       cpu_pc_MSB; //only the MSB of mimic PC
-   input wire                  mem_sys_fin;            // To DUT of mmu.v
+   input wire       rst_n; // asynchronous reset, tied to dip switch 0
+   output wire      txd; // rs232 transmit data
+   input wire       rxd; // rs232 recieve data
+   input wire [1:0] br_cfg; // baud rate configuration, tied to dip switches 2 and 3
+   input wire       cpu_pc_msb; //only the msb of mimic pc
+   input wire                  mem_sys_fin;            // to dut of mmu.v
    output wire [3:0]           state;
    
+   //dvi ouput
+   output wire [11:0] d          ;
+   output wire        blank      ;
+   output wire        hsync      ;
+   output wire        vsync      ;
+   output wire        dvi_clk        ;
+   output wire        dvi_clk_n      ;
+   output wire        dvi_rst    ;
+   output wire        gpio_led_0 ;
+   output wire        gpio_led_1 ;
+   output wire        gpio_led_2 ;
+   output wire        gpio_led_4 ;
+   output wire        gpio_led_7 ;
+   // inouts
+   inout wire         scl_tri               ;
+   inout wire         sda_tri   ;
 
-   /*AUTOWIRE*/
-   // Beginning of automatic wires (for undeclared instantiated-module outputs)
-   wire [13:0]          addrb;                  // From DUT of mmu.v
-   wire [63:0]          dinb;                   // From DUT of mmu.v
-   wire                 enb;                    // From DUT of mmu.v
-   wire                 flsh;                   // From DUT of mmu.v
-   wire                 web;                    // From DUT of mmu.v
-   // End of automatics
-   // Beginning of automatic reg inputs (for undeclared instantiated-module inputs)
-   wire [15:0]           cpu_pc;                 // To DUT of mmu.v
-   wire [63:0]           doutb;                  // To DUT of mmu.v
-   // End of automatics
-
-   assign cpu_pc = {cpu_pc_MSB, 15'h0};
    
-   mmu DUT(/*autoinst*/
+   // beginning of automatic wires (for undeclared instantiated-module outputs)
+   wire [13:0]          addrb;                  // from dut of mmu.v
+   wire [63:0]          dinb;                   // from dut of mmu.v
+   wire                 enb;                    // from dut of mmu.v
+   wire                 flsh;                   // from dut of mmu.v
+   wire                 web;                    // from dut of mmu.v
+	wire scl,sda;
+   // end of automatics
+   // beginning of automatic reg inputs (for undeclared instantiated-module inputs)
+   wire [15:0]           cpu_pc;                 // to dut of mmu.v
+   wire [63:0]           doutb;                  // to dut of mmu.v
+   // end of automatics
+
+   assign cpu_pc = {cpu_pc_msb, 15'h0};
+        
+        wire clk_100mhz, clk_25mhz;
+        wire               locked_dcm;
+   wire               clkin_ibufg_out;
+   
+   mmu dut(/*autoinst*/
            // Outputs
            .txd                         (txd),
            .state                       (state[3:0]),
@@ -62,8 +86,24 @@ module mmu_board(/*autoarg*/
            .addrb                       (addrb[13:0]),
            .dinb                        (dinb[63:0]),
            .flsh                        (flsh),
+           .d                           (d[11:0]),
+           .blank                       (blank),
+           .hsync                       (hsync),
+           .vsync                       (vsync),
+           .dvi_clk                     (dvi_clk),
+           .dvi_clk_n                   (dvi_clk_n),
+           .dvi_rst                     (dvi_rst),
+           .gpio_led_0                  (gpio_led_0),
+           .gpio_led_1                  (gpio_led_1),
+           .gpio_led_2                  (gpio_led_2),
+           .gpio_led_4                  (gpio_led_4),
+           .gpio_led_7                  (gpio_led_7),
+           .scl                         (scl),
+           .sda                         (sda),
            // Inputs
-           .clk                         (clk),
+			  .locked_dcm 		(locked_dcm),
+           .clk_100mhz                  (clk_100mhz),
+           .clk_25mhz                   (clk_25mhz),
            .rst_n                       (rst_n),
            .rxd                         (rxd),
            .br_cfg                      (br_cfg[1:0]),
@@ -71,16 +111,24 @@ module mmu_board(/*autoarg*/
            .cpu_pc                      (cpu_pc[15:0]),
            .mem_sys_fin                 (mem_sys_fin));
 
+
+   clk_25mhz clk_25mhz1(clk, ~rst_n, clk_25mhz, clkin_ibufg_out, clk_100mhz, locked_dcm);   
+
+   
    mem data_mem(
-                .clka(clk),
-                .wea(1'b0), // Bus [0 : 0] 
-                .addra(3'h0), // Bus [2 : 0] 
-                .dina(64'h0), // Bus [15 : 0] 
-                .douta(), // Bus [15 : 0] 
-                .clkb(clk),
-                .web(web), // Bus [0 : 0] 
-                .addrb(addrb), // Bus [2 : 0] 
-                .dinb(dinb), // Bus [15 : 0] 
-                .doutb(doutb)); // Bus [15 : 0] 
+                .clka(clk_100mhz),
+                .wea(1'b0), // bus [0 : 0] 
+                .addra(13'h0), // bus [2 : 0] 
+                .dina(64'h0), // bus [15 : 0] 
+                .douta(), // bus [15 : 0] 
+                .clkb(clk_100mhz),
+                .web(web), // bus [0 : 0] 
+                .addrb(addrb), // bus [2 : 0] 
+                .dinb(dinb), // bus [15 : 0] 
+                .doutb(doutb)); // bus [15 : 0] 
+
+   //may need to make inout global
+   assign sda_tri = (sda)? 1'bz: 1'b0;
+   assign scl_tri = (scl)? 1'bz: 1'b0;
    
 endmodule

@@ -53,3 +53,17 @@ PC change back <3
 
 driver flush mem_system
 driver starts to ouput memory data in range: start from MSB byte of 64-bits
+
+===========
+for DVI display, MMU will only check the start the address register
+DVI assume there are 60 * 80 pixels in the memory for display
+
+We assume only LSB 24bits in each slot in memory are used for display
+
+==========
+cmd:
+a  ---   load mem transfer start addr regs
+e  ---   load mem transfer end addr regs
+s  ---   overwrite program start addr regs
+d  ---   the screen display output is always on
+
