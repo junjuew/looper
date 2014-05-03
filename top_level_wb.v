@@ -19,33 +19,50 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module top_level_wb(signed_comp,
-					clk,
+                                        clk,
                      rst,
                      flsh,
-					flsh_cache,		
-					 mis_pred_ld_ptr ,  
-							indx_ld_al, 
-							mem_rd, 
-							phy_addr_ld_in, 
-							mis_pred_str_ptr, 
-							cmmt_str, 
-							indx_str_al, 
-							mem_wrt, 
-							data_str, 
-							indx_ls,
-							addr_ls,
-							fnsh_unrll,
-							loop_strt,
-							stll,
-							indx_ld,
-							vld_ld,
-							data_ld,
-							phy_addr_ld,
-							reg_wrt_ld,
-							str_iss,
-							cmmt_ld_ptr
-    );
+                     flsh_cache,                
+                     mis_pred_ld_ptr ,  
+                     indx_ld_al, 
+                     mem_rd, 
+                     phy_addr_ld_in, 
+                     mis_pred_str_ptr, 
+                     cmmt_str, 
+                     indx_str_al, 
+                     mem_wrt, 
+                     data_str, 
+                     indx_ls,
+                     addr_ls,
+                     fnsh_unrll,
+                     loop_strt,
+                     stll,
+                     indx_ld,
+                     vld_ld,
+                     data_ld,
+                     phy_addr_ld,
+                     reg_wrt_ld,
+                     str_iss,
+                     cmmt_ld_ptr,
+                     mmu_mem_clk  ,
+                     mmu_mem_rst  ,
+                     mmu_mem_enb  ,
+                     mmu_mem_web  ,
+                     mmu_mem_addrb,
+                     mmu_mem_dinb ,
+                     mmu_mem_doutb                     
+                     );
 
+
+   //for mmu
+   input wire    mmu_mem_clk ;
+   input wire    mmu_mem_rst ;
+   input wire    mmu_mem_enb ;
+   input wire    mmu_mem_web ;
+   input wire [13:0] mmu_mem_addrb ;
+   input wire [63:0] mmu_mem_dinb ;
+   output wire [63:0] mmu_mem_doutb ;
+   
 // input and output ports declarations
 input signed_comp, clk, rst, flsh, mem_rd,cmmt_str,mem_wrt, fnsh_unrll, loop_strt, flsh_cache;
 input [31:0] indx_ld_al, indx_str_al;
@@ -78,11 +95,44 @@ store_queue sq(.signed_comp(signed_comp),.fnsh_unrll(fnsh_unrll), .loop_strt(loo
 load_store_arbi lsa(.rst(rst), .clk(clk),.ld_req(ld_req), .str_req(str_req), .idle(ca_idle), .done(done),
                      .ld_grnt(ld_grnt), .str_grnt(str_grnt), .addr_sel(addr_sel),
                         .rd_wrt_ca(rd_wrt_ca), .enable(ca_enable));
+
                         
-memory_system mem_sys(.rst(rst), .clk(clk),.addr_ca(addr_ca), .data_ca_out(data_ca_out),.rd_wrt_ca(rd_wrt_ca), 
-         .data_ca_in(data_ca_in),.enable(ca_enable), .idle(ca_idle), .done(done), .flush(flsh_cache));
          
 assign addr_ca= (addr_sel == 1) ? addr_str : addr_ld;
 assign stll= stll_ld | stll_str;
+
+
+/* -----\/----- EXCLUDED -----\/-----
+   memory_system mem_sys(.rst(rst), .clk(clk),.addr_ca(addr_ca), .data_ca_out(data_ca_out),.rd_wrt_ca(rd_wrt_ca), 
+                         .data_ca_in(data_ca_in),.enable(ca_enable), .idle(ca_idle), .done(done), .flush(flsh_cache));
+ -----/\----- EXCLUDED -----/\----- */
+
+
+   memory_system mem_sys(
+                         // Outputs
+                         .idle                  (ca_idle),
+                         .done                  (done),
+                         .data_ca_out           (data_ca_out[15:0]),
+                         // Inputs
+                         .rd_wrt_ca             (rd_wrt_ca),
+                         .enable                (ca_enable),
+                         .clk                   (clk),
+                         .rst                   (rst),
+                         .flush                 (flsh_cache),
+                         .addr_ca               (addr_ca[15:0]),
+                         .data_ca_in            (data_ca_in[15:0]),
+                         .mmu_mem_clk           (mmu_mem_clk),
+                         .mmu_mem_rst           (mmu_mem_rst),
+                         .mmu_mem_enb           (mmu_mem_enb),
+                         .mmu_mem_web           (mmu_mem_web),
+                         .mmu_mem_addrb         (mmu_mem_addrb[13:0]),
+                         .mmu_mem_dinb          (mmu_mem_dinb[63:0]),
+                         .mmu_mem_doutb         (mmu_mem_doutb[63:0]));
+   
+
+
+   
+   assign addr_ca= (addr_sel == 1) ? addr_str : addr_ld;
+   assign stll= stll_ld | stll_str;
 
 endmodule

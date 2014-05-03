@@ -1,4 +1,21 @@
-module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
+module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache, 
+                         mmu_mem_clk  ,
+                         mmu_mem_rst  ,
+                         mmu_mem_enb  ,
+                         mmu_mem_web  ,
+                         mmu_mem_addrb,
+                         mmu_mem_dinb ,
+                         mmu_mem_doutb
+                         );
+
+   input  mmu_mem_clk ;
+   input  mmu_mem_rst ;
+   input  mmu_mem_enb ;
+   input  mmu_mem_web ;
+   input [13:0] mmu_mem_addrb ;
+   input [63:0] mmu_mem_dinb ;
+   output [63:0] mmu_mem_doutb ;
+   
    input clk, rst_n, flush_cache;
    input [15:0] extern_pc;
    input        extern_pc_en;
@@ -211,39 +228,39 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
    wire [5:0]   rob_tail_out_for_flsh;
    
    /*
-	wire [15:0] data1, data2, data3, data4;
-	wire [5:0] addr1, addr2, addr3, addr4;
-	wire wrt1, wrt2, wrt3, wrt4;
-	assign data1=wrt_alu1_data;
-	assign data2=wrt_alu2_data;
-	assign data3=wrt_mult_data;
-	assign data4=wrt_addr_data;
-	assign addr1=wrt_alu1_dst_pnum;
-	assign addr2=wrt_alu2_dst_pnum;
-	assign addr3=wrt_mult_dst_pnum;
-	assign addr4=wrt_addr_dst_pnum;
-	assign wrt1=reg_wrt_alu1_wb_rf;
-	assign wrt2=reg_wrt_alu2_wb_rf;
-	assign wrt3=reg_wrt_mul_wb_rf;
-	assign wrt4=reg_wrt_addr_wb_rf;
-	
-	wire [35:0] CONTROL0, CONTROL1, CONTROL2, CONTROL3,CONTROL4,CONTROL5,CONTROL6,CONTROL7,CONTROL8,CONTROL9,CONTROL10,CONTROL11; 
-	ICON icon(.CONTROL0(CONTROL0), .CONTROL1(CONTROL1),.CONTROL2(CONTROL2),.CONTROL3(CONTROL3),.CONTROL4(CONTROL4),.CONTROL5(CONTROL5),.CONTROL6(CONTROL6),.CONTROL7(CONTROL7),.CONTROL8(CONTROL8),.CONTROL9(CONTROL9),.CONTROL10(CONTROL10),.CONTROL11(CONTROL11) );
-	ITL  itl1(.CONTROL(CONTROL0), .DATA(data1), .TRIG0(rst_n), .CLK(clk));
-	ITL  itl2(.CONTROL(CONTROL1), .DATA(data2), .TRIG0(rst_n), .CLK(clk));
-	ITL  itl3(.CONTROL(CONTROL2), .DATA(data3), .TRIG0(rst_n), .CLK(clk));
-	ITL  itl4(.CONTROL(CONTROL3), .DATA(data4), .TRIG0(rst_n), .CLK(clk));
-	
-	ITL_2 itl5(.CONTROL(CONTROL4), .DATA(addr1), .TRIG0(rst_n), .CLK(clk));
-	ITL_2 itl6(.CONTROL(CONTROL5), .DATA(addr2), .TRIG0(rst_n), .CLK(clk));
-	ITL_2 itl7(.CONTROL(CONTROL6), .DATA(addr3), .TRIG0(rst_n), .CLK(clk));
-	ITL_2 itl8(.CONTROL(CONTROL7), .DATA(addr4), .TRIG0(rst_n), .CLK(clk));
+        wire [15:0] data1, data2, data3, data4;
+        wire [5:0] addr1, addr2, addr3, addr4;
+        wire wrt1, wrt2, wrt3, wrt4;
+        assign data1=wrt_alu1_data;
+        assign data2=wrt_alu2_data;
+        assign data3=wrt_mult_data;
+        assign data4=wrt_addr_data;
+        assign addr1=wrt_alu1_dst_pnum;
+        assign addr2=wrt_alu2_dst_pnum;
+        assign addr3=wrt_mult_dst_pnum;
+        assign addr4=wrt_addr_dst_pnum;
+        assign wrt1=reg_wrt_alu1_wb_rf;
+        assign wrt2=reg_wrt_alu2_wb_rf;
+        assign wrt3=reg_wrt_mul_wb_rf;
+        assign wrt4=reg_wrt_addr_wb_rf;
+        
+        wire [35:0] CONTROL0, CONTROL1, CONTROL2, CONTROL3,CONTROL4,CONTROL5,CONTROL6,CONTROL7,CONTROL8,CONTROL9,CONTROL10,CONTROL11; 
+        ICON icon(.CONTROL0(CONTROL0), .CONTROL1(CONTROL1),.CONTROL2(CONTROL2),.CONTROL3(CONTROL3),.CONTROL4(CONTROL4),.CONTROL5(CONTROL5),.CONTROL6(CONTROL6),.CONTROL7(CONTROL7),.CONTROL8(CONTROL8),.CONTROL9(CONTROL9),.CONTROL10(CONTROL10),.CONTROL11(CONTROL11) );
+        ITL  itl1(.CONTROL(CONTROL0), .DATA(data1), .TRIG0(rst_n), .CLK(clk));
+        ITL  itl2(.CONTROL(CONTROL1), .DATA(data2), .TRIG0(rst_n), .CLK(clk));
+        ITL  itl3(.CONTROL(CONTROL2), .DATA(data3), .TRIG0(rst_n), .CLK(clk));
+        ITL  itl4(.CONTROL(CONTROL3), .DATA(data4), .TRIG0(rst_n), .CLK(clk));
+        
+        ITL_2 itl5(.CONTROL(CONTROL4), .DATA(addr1), .TRIG0(rst_n), .CLK(clk));
+        ITL_2 itl6(.CONTROL(CONTROL5), .DATA(addr2), .TRIG0(rst_n), .CLK(clk));
+        ITL_2 itl7(.CONTROL(CONTROL6), .DATA(addr3), .TRIG0(rst_n), .CLK(clk));
+        ITL_2 itl8(.CONTROL(CONTROL7), .DATA(addr4), .TRIG0(rst_n), .CLK(clk));
 
-	ITL_3 itl9(.CONTROL(CONTROL8), .DATA(wrt1), .TRIG0(rst_n), .CLK(clk));
-	ITL_3 itl10(.CONTROL(CONTROL9), .DATA(wrt2), .TRIG0(rst_n), .CLK(clk));	
-	ITL_3 itl11(.CONTROL(CONTROL10), .DATA(wrt3), .TRIG0(rst_n), .CLK(clk));	
-	ITL_3 itl12(.CONTROL(CONTROL11), .DATA(wrt4), .TRIG0(rst_n), .CLK(clk));	
-	*/
+        ITL_3 itl9(.CONTROL(CONTROL8), .DATA(wrt1), .TRIG0(rst_n), .CLK(clk));
+        ITL_3 itl10(.CONTROL(CONTROL9), .DATA(wrt2), .TRIG0(rst_n), .CLK(clk)); 
+        ITL_3 itl11(.CONTROL(CONTROL10), .DATA(wrt3), .TRIG0(rst_n), .CLK(clk));        
+        ITL_3 itl12(.CONTROL(CONTROL11), .DATA(wrt4), .TRIG0(rst_n), .CLK(clk));        
+        */
    wire         jump_base_rdy_from_rf;
    assign jump_base_rdy_from_rf = (alu1_inst_pkg_is_rf_out[18:16] == 3'b101) ? 1:0;
 
@@ -278,7 +295,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
                    .inst_if_id_in(inst_to_dec),
                    .recv_pc_if_id_in(recv_pc_to_dec),
                    .pred_result_if_id_in(pred_result_to_dec),
-				   .mis_pred(mis_pred_ROB_out),
+                                   .mis_pred(mis_pred_ROB_out),
                    //output
                    .pc_if_id_out(pc_if_id_out),
                    .inst_if_id_out(inst_if_id_out), 
@@ -314,7 +331,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
                    .lbd_state_id_al_in(lbd_state_out_to_AL),
                    .fnsh_unrll_id_al_in(fnsh_unrll_out_to_AL),
                    .loop_strt_id_al_in(loop_strt_out_to_AL),
-				   .mis_pred(mis_pred_ROB_out),
+                                   .mis_pred(mis_pred_ROB_out),
 
                    // output
                    .inst0_id_al_out(inst0_id_al_out), 
@@ -720,7 +737,18 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
                                  .indx_ls(addr_done_idx_ex_wb_out),
                                  .data_str(data_str_ex_wb_out), 
                                  .addr_ls(wrt_addr_data),
-								.flsh_cache(flush_cache),
+                                 .flsh_cache(flush_cache),
+
+                                 //mmu input & output
+                                 .mmu_mem_clk   (mmu_mem_clk   ),   
+                                 .mmu_mem_rst   (mmu_mem_rst   ),   
+                                 .mmu_mem_enb   (mmu_mem_enb   ),   
+                                 .mmu_mem_web   (mmu_mem_web   ),   
+                                 .mmu_mem_addrb (mmu_mem_addrb ),   
+                                 .mmu_mem_dinb  (mmu_mem_dinb  ),      
+                                 .mmu_mem_doutb (mmu_mem_doutb ),               
+                                 
+                                 
                                  // Outputs
                                  .stll(stll_wb_out),
                                  .vld_ld(vld_ld_wb_out),

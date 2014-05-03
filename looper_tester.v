@@ -19,49 +19,77 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module looper_tester(
-    input clk_100MHz,
-    input rst_n,
-	 output reg GPIO_LED_1,
-	 output     GPIO_LED_0
-    );
+                     input      clk_100MHz,
+                     input      rst_n,
+                     output reg GPIO_LED_1,
+                     output     GPIO_LED_0
+                     );
 
-	wire clk_10MHz, clk_100MHz_buf;
-	reg [21:0] cnt;
-	
-	assign GPIO_LED_0 = 1'b1;
-	
-	always@(posedge clk_100MHz_buf, negedge rst_n) begin
-	if(!rst_n) begin
-		GPIO_LED_1 <= 1'b0;
-		cnt <= 22'h0;
-	end
-	else begin
-		cnt <= cnt+1;
-		if(cnt[21] == 1) begin
-			GPIO_LED_1 <= 1'b1;
-		end
-		else begin
-			GPIO_LED_1 <= 1'b0;
-		end
-	end
-	end
-	
-	top_module_looper looper_DUT(
-		.clk(clk_10MHz),
-		.rst_n(rst_n),
-		.extern_pc(15'b0),
-		.extern_pc_en(1'b0)
-	);
-	
-	clock_gen c0(
-		.CLKIN_IN(clk_100MHz),
-		.RST_IN(~rst_n),
-		.CLKDV_OUT(clk_10MHz),
-		.CLKIN_IBUFG_OUT(clk_100MHz_buf),
-		.CLK0_OUT()
-	);
-	
-		
-	
+   wire                         clk_10MHz, clk_100MHz_buf;
+   reg [21:0]                   cnt;
+   
+   assign GPIO_LED_0 = 1'b1;
+   
+   always@(posedge clk_100MHz_buf, negedge rst_n) begin
+      if(!rst_n) begin
+         GPIO_LED_1 <= 1'b0;
+         cnt <= 22'h0;
+      end
+      else begin
+         cnt <= cnt+1;
+         if(cnt[21] == 1) begin
+            GPIO_LED_1 <= 1'b1;
+         end
+         else begin
+            GPIO_LED_1 <= 1'b0;
+         end
+      end
+   end
 
+/*   
+   top_module_looper looper_DUT(
+                                .clk(clk_10MHz),
+                                .rst_n(rst_n),
+                                .extern_pc(15'b0),
+                                .extern_pc_en(1'b0));*/
+
+
+   wire[63:0] mmu_mem_doutb;
+   
+   wire       mmu_mem_clk;
+   wire       mmu_mem_rst;
+   wire       mmu_mem_enb;
+   wire       mmu_mem_web;
+   wire [13:0] mmu_mem_addrb;
+   wire [63:0] mmu_mem_dinb;
+   
+   top_module_looper looper_DUT(
+                                // Outputs
+                                .mmu_mem_doutb  (mmu_mem_doutb[63:0]),
+                                // Inputs
+                                .mmu_mem_clk    (mmu_mem_clk),
+                                .mmu_mem_rst    (mmu_mem_rst),
+                                .mmu_mem_enb    (mmu_mem_enb),
+                                .mmu_mem_web    (mmu_mem_web),
+                                .mmu_mem_addrb  (mmu_mem_addrb[13:0]),
+                                .mmu_mem_dinb   (mmu_mem_dinb[63:0]),
+                                .clk            (clk_10MHz_buf),
+                                .rst_n          (rst_n),
+                                .flush_cache    (flush_cache),
+                                .extern_pc      (15'b0),
+                                .extern_pc_en   (1'b0));
+
+   
+   clock_gen c0(
+                .CLKIN_IN(clk_100MHz),
+                .RST_IN(~rst_n),
+                .CLKDV_OUT(clk_10MHz),
+                .CLKIN_IBUFG_OUT(clk_100MHz_buf),
+                .CLK0_OUT()
+                );
+
+
+
+   
+   
 endmodule
