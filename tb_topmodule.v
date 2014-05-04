@@ -18,7 +18,7 @@ module tb_topmodule();
 `include "is_dump_map.task"
 `include "is_dump_inst.task"
 `include "rf_dump_reg.task"
-`include "mem_dump.task"
+//`include "mem_dump.task"
 
    /*autowire*/
    // Beginning of automatic wires (for undeclared instantiated-module outputs)
@@ -52,7 +52,7 @@ module tb_topmodule();
 
 
    initial begin
-      $wlfdumpvars(0,tb_topmodule);
+//      $wlfdumpvars(0,tb_topmodule);
       clk = 0;
       forever #5 clk = ~clk;
    end
@@ -273,6 +273,17 @@ module tb_topmodule();
 /* -----\/----- EXCLUDED -----\/-----
       $monitor ("mult_enable_to_is:%b mult_done: %b mult_value:%x", DUT.mult_rdy_is_rf, DUT.mult_valid_ex_out, DUT.mult_data_ex_out);
  -----/\----- EXCLUDED -----/\----- */
+
+      //flush all dump files
+      $fflush(dump_1);
+      $fflush(dump_2);
+      $fflush(dump_3);
+      
+      $fclose(dump_1);
+      $fclose(dump_2);
+      $fclose(dump_3);            
+      
+      
       $finish;
       
    end

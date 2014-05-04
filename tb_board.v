@@ -48,8 +48,9 @@ module tb_board();
 
 
    initial begin
-      clk = 0;
-      forever #0.5 clk = ~clk;
+      //100mhz
+      clk_100mhz = 0;
+      forever #5 clk_100mhz = ~clk_100mhz;
    end
 
    initial begin
@@ -58,8 +59,9 @@ module tb_board();
 
       $monitor("state:%x pc:%x flsh:%x mem_sys_fin:%x", state, DUT.cpu_pc, DUT.flsh, DUT.mem_sys_fin);
       
-      repeat(10) @(posedge clk);
-      //first bench mark is at memory addr 0x4 
+      repeat(10) @(posedge clk_100mhz);
+      //first bench mark is at memory addr 0x4
+      //cmd will be auto cleared in driver
       DUT.mmu1.driver0.stored_spart_data[0][7:0] = 8'h0;
       DUT.mmu1.driver0.stored_spart_data[1][7:0] = 8'h0;
       DUT.mmu1.driver0.stored_spart_data[2][7:0] = 8'h0;
@@ -70,14 +72,47 @@ module tb_board();
       DUT.mmu1.driver0.stored_spart_data[7][7:0] = 8'h4;
       DUT.mmu1.driver0.cmd=8'h73;
       $display("%g wrt_mem_data: %x, cmd:%x. should be 0x4 and 0x73 ", $time, DUT.mmu1.driver0.wrt_mem_data, DUT.mmu1.driver0.cmd);
-      $display("%g. state should go to CLR_MEM(1) as program begins to start", $time);      
-      @(state==4'h8);//trans_send
-      $display("%g state:%x, should be 4'h8", state);
-      
-        
+      $display("%g. state should go to CLR_MEM(1) as program begins to start", $time);
 
+      //add1 store value from decimal 50, for physical memory, that is 50/4= 12
+      DUT.mmu1.driver0.start_mem_addr = 14'd12;
+      //stop 64/4 = 16  -- r1 -- r15
+      DUT.mmu1.driver0.stop_mem_addr = 14'd12 + 14'd15;      
+      $display("%g. mem start addr %x, should be decimal 12", $time,       DUT.mmu1.driver0.start_mem_addr);
+      $display("%g. mem stop addr %x, should be decimal 16", $time,       DUT.mmu1.driver0.stop_mem_addr);
+
+      //transfer 12
+      @(state==4'h7);//trans_load
+      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", state, DUT.addrb, DUT.enb, DUT.web);
+      @(posedge clk_100mhz);
+      $display("%g state:%x, should be 4'h8, data:%x ", state, DUT.doutb);      
+
+      //transfer 13
+      @(state==4'h7);//trans_load
+      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", state, DUT.addrb, DUT.enb, DUT.web);
+      @(posedge clk_100mhz);
+      $display("%g state:%x, should be 4'h8, data:%x ", state, DUT.doutb);      
+
+      //transfer 14
+      @(state==4'h7);//trans_load
+      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", state, DUT.addrb, DUT.enb, DUT.web);
+      @(posedge clk_100mhz);
+      $display("%g state:%x, should be 4'h8, data:%x ", state, DUT.doutb);      
+
+      //transfer 15
+      @(state==4'h7);//trans_load
+      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", state, DUT.addrb, DUT.enb, DUT.web);
+      @(posedge clk_100mhz);
+      $display("%g state:%x, should be 4'h8, data:%x ", state, DUT.doutb);      
+
+      //transfer 16
+      @(state==4'h7);//trans_load
+      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", state, DUT.addrb, DUT.enb, DUT.web);
+      @(posedge clk_100mhz);
+      $display("%g state:%x, should be 4'h8, data:%x ", state, DUT.doutb);      
       
-      
+
+      repeat(100) @(posedge clk_100mhz);
       
    end
    

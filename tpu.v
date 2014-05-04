@@ -125,13 +125,13 @@
            // if arch == 0, then normal order 0--63
            // else 32 -- 63, 0 -- 31
            assign tpu_out_reo_flat[TPU_INST_WIDTH*(out_i+1)-1:TPU_INST_WIDTH*out_i]= (~arch)? tpu_out[out_i][TPU_INST_WIDTH-1:0]:
-                                                                                     (out_i< ISQ_DEPTH/2)? tpu_out[out_i + ISQ_DEPTH/2][TPU_INST_WIDTH-1:0]:
+                                                                                     (out_i< (ISQ_DEPTH/2))? tpu_out[out_i + ISQ_DEPTH/2][TPU_INST_WIDTH-1:0]:
                                                                                      tpu_out[out_i - ISQ_DEPTH/2][TPU_INST_WIDTH-1:0];
            assign fre_preg_out_flat[7*(out_i+1)-1:7*out_i]= (~arch)? fre_preg[out_i][6:0]:
-                                                            (out_i< ISQ_DEPTH/2)? fre_preg[out_i + ISQ_DEPTH/2][6:0]:
+                                                            (out_i< (ISQ_DEPTH/2))? fre_preg[out_i + ISQ_DEPTH/2][6:0]:
                                                             fre_preg[out_i - ISQ_DEPTH/2][6:0];
            assign tpu_inst_rdy[out_i]= (~arch)? tpu_inst_rdy_raw[out_i]:
-                                       (out_i< ISQ_DEPTH/2)? tpu_inst_rdy_raw[out_i + ISQ_DEPTH/2]:
+                                       (out_i< (ISQ_DEPTH/2))? tpu_inst_rdy_raw[out_i + ISQ_DEPTH/2]:
                                        tpu_inst_rdy_raw[out_i - ISQ_DEPTH/2];
         end
    endgenerate
