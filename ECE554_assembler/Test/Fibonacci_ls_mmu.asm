@@ -32,22 +32,22 @@ str r10, r5, 0		// store prev number 2
 sub r7, r7, r6		// r7 = r7 - 1
 bgtz	r7, .loop_start	// branch if not reaching 24 times
 add r5, r5, r4		// else r5 = r5
-ldi r0, 124	// start storing registers from mem[248]
+ldi r0, 124	// start storing registers from mem[241] ~ mem[255]
 add r0, r0, r0	
-str r1, r0, 0
-str r2, r0, 1
-str r3, r0, 2
-str r4, r0, 3
-str r5, r0, 4
-str r6, r0, 5
-str r7, r0, 6
-str r8, r0, 7
-str r9, r0, 8
-str r10, r0, 9
-str r11, r0, 10
-str r12, r0, 11
-str r13, r0, 12
-str r14, r0, 13
-str r15, r0, 14
+str r1, r0, -7
+str r2, r0, -6
+str r3, r0, -5
+str r4, r0, -4
+str r5, r0, -3
+str r6, r0, -2
+str r7, r0, -1
+str r8, r0, 0
+str r9, r0, 1
+str r10, r0, 2
+str r11, r0, 3
+str r12, r0, 4
+str r13, r0, 5
+str r14, r0, 6
+str r15, r0, 7
 ldi r0, 0
 jr	r0, 0
