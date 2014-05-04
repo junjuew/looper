@@ -9,15 +9,15 @@ module imemory(
         
         reg [63:0] mem[0:16383];
        /* reg [13:0] addr_buf1, addr_buf2;
-	
+        
         always@(posedge clka)
-			begin
-				addr_buf1 <= addra;
-			end
- 		always@(posedge clkb)
-			begin
-				addr_buf2 <= addrb;
-			end
+                        begin
+                                addr_buf1 <= addra;
+                        end
+                always@(posedge clkb)
+                        begin
+                                addr_buf2 <= addrb;
+                        end
         */
        always@(posedge clka) begin
              douta<=mem[addra];
