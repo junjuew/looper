@@ -45,7 +45,7 @@ module jumpHandler(input has_mispredict,
    reg 				 wtJumpAddr,preJmp;
 
    reg [15:0] 			 jump_base_from_rf;
-   reg 				 jump_base_rdy_from_rf,jump_base_rdy_from_rf_buf; 
+   reg 				 jump_base_rdy_from_rf_buf; 
    reg 				 disable_ins;
    //assign disable_ins=0;
    

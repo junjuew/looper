@@ -351,30 +351,34 @@ ROB per entry:
 		else if(mis_pred)begin
 			rob_st_cntr <= rob_st_ptr[mis_pred_brnc_idx];
 		end
-        else if(st_in == 0)begin
+        else if((!all_nop) && (st_in == 0))begin
             rob_st_cntr <= rob_st_cntr;
         end
-        else if((st_in == 4'd1 ) || 
+        else if((!all_nop) && (
+				(st_in == 4'd1 ) || 
                 (st_in == 4'd2 ) ||
                 (st_in == 4'd4 ) ||
-                (st_in == 4'd8 ))begin
+                (st_in == 4'd8 )))begin
             rob_st_cntr <= rob_st_cntr + 1;
         end
-        else if((st_in == 4'd3 ) || 
+        else if((!all_nop) && (
+				(st_in == 4'd3 ) || 
                 (st_in == 4'd5 ) ||
                 (st_in == 4'd9 ) ||
                 (st_in == 4'd6 ) ||
                 (st_in == 4'd10) ||
-                (st_in == 4'd12))begin
+                (st_in == 4'd12)))begin
             rob_st_cntr <= rob_st_cntr + 2;
         end
-        else if((st_in == 4'd7 ) || 
+        else if((!all_nop) && (
+				(st_in == 4'd7 ) || 
                 (st_in == 4'd11) ||
                 (st_in == 4'd13) ||
-                (st_in == 4'd14))begin
+                (st_in == 4'd14)))begin
             rob_st_cntr <= rob_st_cntr + 3;
         end
-        else if(st_in == 4'd15)begin
+        else if((!all_nop) && (
+				st_in == 4'd15))begin
             rob_st_cntr <= rob_st_cntr + 4;
         end
         else begin
@@ -391,30 +395,35 @@ ROB per entry:
 		else if(mis_pred)begin
 			rob_ld_cntr <= rob_ld_ptr[mis_pred_brnc_idx];
 		end
-        else if(ld_in == 0)begin
+        else if((!all_nop) && (
+				ld_in == 0))begin
             rob_ld_cntr <= rob_ld_cntr;
         end
-        else if((ld_in == 4'd1 ) || 
+        else if((!all_nop) && (
+				(ld_in == 4'd1 ) || 
                 (ld_in == 4'd2 ) ||
                 (ld_in == 4'd4 ) ||
-                (ld_in == 4'd8 ))begin
+                (ld_in == 4'd8 )))begin
             rob_ld_cntr <= rob_ld_cntr_add1;
         end
-        else if((ld_in == 4'd3 ) || 
+        else if((!all_nop) && (
+				(ld_in == 4'd3 ) || 
                 (ld_in == 4'd5 ) ||
                 (ld_in == 4'd9 ) ||
                 (ld_in == 4'd6 ) ||
                 (ld_in == 4'd10) ||
-                (ld_in == 4'd12))begin
+                (ld_in == 4'd12)))begin
             rob_ld_cntr <= rob_ld_cntr_add2;
         end
-        else if((ld_in == 4'd7 ) || 
+        else if((!all_nop) && (
+				(ld_in == 4'd7 ) || 
                 (ld_in == 4'd11) ||
                 (ld_in == 4'd13) ||
-                (ld_in == 4'd14))begin
+                (ld_in == 4'd14)))begin
             rob_ld_cntr <= rob_ld_cntr_add3;
         end
-        else if(ld_in == 4'd15)begin
+        else if((!all_nop) && (
+				ld_in == 4'd15))begin
             rob_ld_cntr <= rob_ld_cntr_add4;
         end
         else begin
@@ -527,11 +536,19 @@ ROB per entry:
             end
             // misprediction
             else if (mis_pred && (mis_pred_brnc_idx <= rob_tail_when_mis_pred) && 
-                    (rob_brnc_idx >= mis_pred_brnc_idx) && (rob_brnc_idx < rob_tail_when_mis_pred))
+					(rob_brnc_idx >= mis_pred_brnc_idx) && (rob_brnc_idx < rob_tail_when_mis_pred))begin
                 rob_brnc[rob_brnc_idx] <= 0;
+                rob_brnc_pred[rob_brnc_idx] <= 0;
+                rob_brnc_cond[rob_brnc_idx] <= 0;
+                rob_rcvr_PC  [rob_brnc_idx] <= 0;
+			end
             else if (mis_pred && (mis_pred_brnc_idx > rob_tail_when_mis_pred) && 
-                    ((rob_brnc_idx >= mis_pred_brnc_idx)))
+					((rob_brnc_idx >= mis_pred_brnc_idx)))begin
                 rob_brnc[rob_brnc_idx] <= 0;
+                rob_brnc_pred[rob_brnc_idx] <= 0;
+                rob_brnc_cond[rob_brnc_idx] <= 0;
+                rob_rcvr_PC  [rob_brnc_idx] <= 0;
+			end
             // adding into ROB
             else if ((!all_nop) && (rob_brnc_idx == rob_tail[5:0])) begin 
                 if(brnc_in[0])begin
@@ -542,6 +559,9 @@ ROB per entry:
                 end
                 else begin
                     rob_brnc     [rob_brnc_idx] <= 0;
+					rob_brnc_pred[rob_brnc_idx] <= 0;
+					rob_brnc_cond[rob_brnc_idx] <= 0;
+					rob_rcvr_PC  [rob_brnc_idx] <= 0;
                 end
             end
             else if ((!all_nop) && 
@@ -554,6 +574,9 @@ ROB per entry:
                 end
                 else begin
                     rob_brnc     [rob_brnc_idx] <= 0;
+					rob_brnc_pred[rob_brnc_idx] <= 0;
+					rob_brnc_cond[rob_brnc_idx] <= 0;
+					rob_rcvr_PC  [rob_brnc_idx] <= 0;
                 end
             end
             else if ((!all_nop) && 
@@ -566,6 +589,9 @@ ROB per entry:
                 end
                 else begin
                     rob_brnc     [rob_brnc_idx] <= 0;
+					rob_brnc_pred[rob_brnc_idx] <= 0;
+					rob_brnc_cond[rob_brnc_idx] <= 0;
+					rob_rcvr_PC  [rob_brnc_idx] <= 0;
                 end
             end
             else if ((!all_nop) && 
@@ -578,6 +604,9 @@ ROB per entry:
                 end
                 else begin
                     rob_brnc     [rob_brnc_idx] <= 0;
+					rob_brnc_pred[rob_brnc_idx] <= 0;
+					rob_brnc_cond[rob_brnc_idx] <= 0;
+					rob_rcvr_PC  [rob_brnc_idx] <= 0;
                 end
             end
             else begin
@@ -637,6 +666,12 @@ ROB per entry:
 				else
 					rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             end
+            // commiting out ROB
+            else if ((rob_reg_wrt_idx >= rob_head) && (rob_reg_wrt_idx < (rob_head + rob_head_cmmt_num))) 
+                rob_reg_wrt[rob_reg_wrt_idx] <= 0;
+            else if (((rob_head + rob_head_cmmt_num) >= 64) && 
+                    (rob_reg_wrt_idx < (rob_head + rob_head_cmmt_num - 64)))
+                rob_reg_wrt[rob_reg_wrt_idx] <= 0;
             else begin
                 rob_reg_wrt[rob_reg_wrt_idx] <= rob_reg_wrt[rob_reg_wrt_idx];
             end
@@ -750,6 +785,16 @@ ROB per entry:
                                             : rob_st_cntr;
                 end
             end
+            // commiting out ROB
+			else if ((rob_st_idx >= rob_head) && (rob_st_idx < (rob_head + rob_head_cmmt_num)))begin 
+                rob_st[rob_st_idx] <= 0;
+                rob_st_ptr[rob_st_idx] <= 0;
+			end
+            else if (((rob_head + rob_head_cmmt_num) >= 64) && 
+					(rob_st_idx < (rob_head + rob_head_cmmt_num - 64)))begin
+                rob_st[rob_st_idx] <= 0;
+                rob_st_ptr[rob_st_idx] <= 0;
+			end
             else begin
                 rob_st    [rob_st_idx] <= rob_st    [rob_st_idx];
                 rob_st_ptr[rob_st_idx] <= rob_st_ptr[rob_st_idx];
@@ -823,6 +868,14 @@ ROB per entry:
                                             : rob_ld_cntr;
                 end
             end
+            /*/ commiting out ROB
+			else if ((rob_ld_idx >= rob_head) && (rob_ld_idx < (rob_head + rob_head_cmmt_num)))begin 
+                rob_ld_ptr[rob_ld_idx] <= 0;
+			end
+            else if (((rob_head + rob_head_cmmt_num) >= 64) && 
+					(rob_ld_idx < (rob_head + rob_head_cmmt_num - 64)))begin
+                rob_ld_ptr[rob_ld_idx] <= 0;
+			end*/
             else begin
                 rob_ld_ptr[rob_ld_idx] <= rob_ld_ptr[rob_ld_idx];
             end

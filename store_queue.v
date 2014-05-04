@@ -111,7 +111,7 @@ always@(vld, tail)
        default: nxt_tail = tail;
    endcase
    
-assign stll= (!str_entry[tail][40]); 
+assign stll= (!str_entry[tail+4'd4][40]); 
 
 
 always@(posedge clk,negedge rst)

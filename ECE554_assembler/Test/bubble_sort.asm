@@ -28,16 +28,16 @@ add r3, r3, r2
 ldi r5, 123	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 321	
+ldi r5, 127	
 str r5, r3, 0
 add r3, r3, r2
 ldi r5, 178	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, -169	
+ldi r5, -98	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 144	
+ldi r5, 111	
 str r5, r3, 0
 add r3, r3, r2
 ldi r5, -16	
@@ -58,13 +58,13 @@ add r3, r3, r2
 ldi r5, -50	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, -240	
+ldi r5, -120	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, -178	
+ldi r5, -52	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 239	
+ldi r5, 109	
 str r5, r3, 0
 add r3, r3, r2
 ldi r5, 37	
@@ -85,7 +85,7 @@ add r3, r3, r2
 ldi r5, 108	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 216	
+ldi r5, 101	
 str r5, r3, 0
 add r3, r3, r2
 ldi r5, 49	
@@ -97,16 +97,16 @@ add r3, r3, r2
 ldi r5, -121	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, -198	
+ldi r5, -10	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 196	
+ldi r5, 115	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 137	
+ldi r5, 106	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, -184	
+ldi r5, -120	
 str r5, r3, 0
 add r3, r3, r2
 ldi r5, -7	
@@ -118,7 +118,7 @@ add r3, r3, r2
 ldi r5, -66	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 172	
+ldi r5, 104	
 str r5, r3, 0
 add r3, r3, r2
 ldi r3, 100	// memory start
