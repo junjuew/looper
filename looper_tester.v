@@ -129,7 +129,18 @@ module looper_tester(/*autoarg*/
     );
     */
    
-   clk_gen clk_25mhz1(clk, ~rst_n, clk_25mhz, clkin_ibufg_out, clk_100mhz_buf, locked_dcm); 
+//   clk_gen clk_25mhz1(clk, ~rst_n, clk_25mhz, clkin_ibufg_out, clk_100mhz_buf, locked_dcm); 
+	
+	clk_gen clk_25mhz1 (
+    .CLKIN_IN(clk_100mhz), 
+    .RST_IN(~rst_n), 
+    .CLKDV_OUT(clk_25mhz), 
+    .CLKIN_IBUFG_OUT(clkin_ibufg_out), 
+    .CLK0_OUT(clk_100mhz_buf), 
+    .LOCKED_OUT(locked_dcm)
+    );
+
+
 
    mmu mmu1(
             // Outputs
