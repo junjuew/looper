@@ -105,8 +105,8 @@ module looper_tester(/*autoarg*/
                                 // Outputs
                                 .mmu_mem_doutb  (mmu_mem_doutb[63:0]),
                                 .pc_to_dec (pc_to_dec),
+                                .mem_sys_idle (mem_sys_fin),                                
                                 // Inputs
-                                .mem_sys_idle (mem_sys_fin),
                                 .mmu_mem_clk    (mmu_mem_clk),
                                 .mmu_mem_rst    (mmu_mem_rst),
                                 .mmu_mem_enb    (mmu_mem_enb),
@@ -115,7 +115,7 @@ module looper_tester(/*autoarg*/
                                 .mmu_mem_dinb   (mmu_mem_dinb[63:0]),
                                 .clk            (clk_100mhz_buf),
                                 .rst_n          (rst_n),
-                                .flush_cache    (flush_cache),
+                                .flush_cache    (flsh),
                                 .extern_pc      (15'b0),
                                 .extern_pc_en   (1'b0));
 
@@ -130,8 +130,8 @@ module looper_tester(/*autoarg*/
     */
    
 //   clk_gen clk_25mhz1(clk, ~rst_n, clk_25mhz, clkin_ibufg_out, clk_100mhz_buf, locked_dcm); 
-	
-	clk_gen clk_25mhz1 (
+        
+        clk_gen clk_25mhz1 (
     .CLKIN_IN(clk_100mhz), 
     .RST_IN(~rst_n), 
     .CLKDV_OUT(clk_25mhz), 
