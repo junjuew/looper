@@ -469,7 +469,7 @@ begin
  end
        
 
-assign signed_comp=str_entry[head][38] & ld_head; // whether to compard the indexes in a signed manner
+assign signed_comp=(str_entry[head][38] == ld_head)? str_entry[head][38] & ld_head: indx_fwd[6] ; // whether to compard the indexes in a signed manner
 generate
 genvar i_2;
 for (i_2=0;i_2<16;i_2=i_2+1)
