@@ -1,3 +1,11 @@
+ldi r0, 0xff		// assign 0xffff to r0
+ldr r0, r0, 0
+jr  r0, 0		// jump to 0xffff
+nop
+nop
+nop
+nop
+nop
 ldi r1, 11
 ldi r2, 2
 sra r3, r1, r2  // expect r3 = 2
