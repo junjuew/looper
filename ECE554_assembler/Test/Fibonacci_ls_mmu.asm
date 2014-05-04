@@ -45,3 +45,5 @@ str r12, r0, 11
 str r13, r0, 12
 str r14, r0, 13
 str r15, r0, 14
+ldi r0, 0
+jr	r0, 0

@@ -42,4 +42,5 @@ PC: 0024 Binary: 1101110000001011 Hex: dc0b str r12, r0, 11
 PC: 0025 Binary: 1101110100001100 Hex: dd0c str r13, r0, 12
 PC: 0026 Binary: 1101111000001101 Hex: de0d str r14, r0, 13
 PC: 0027 Binary: 1101111100001110 Hex: df0e str r15, r0, 14
-          
+PC: 0028 Binary: 1100000000000000 Hex: c000 ldi r0, 0
+PC: 0029 Binary: 1111000000000001 Hex: f001 jr	r0, 0
