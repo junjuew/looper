@@ -59,11 +59,12 @@ module tb_board();
       repeat(5) @(posedge clk_100mhz);
       rst_n = 1'b1;
 
-      $monitor("state:%x pc:%x flsh:%x mem_sys_fin:%x", state, DUT.cpu_pc, DUT.flsh, DUT.mem_sys_fin);
+      $monitor("%g state:%x pc:%x flsh:%x mem_sys_fin:%x", $time, state, DUT.cpu_pc, DUT.flsh, DUT.mem_sys_fin);
 
       $display(" ==================== test addd1_mmu =================");
       
-      repeat(10) @(posedge clk_100mhz);
+      repeat(300) @(posedge clk_100mhz);
+      $display("%g changed memory content", $time);
       //first bench mark is at memory addr 0x4
       //cmd will be auto cleared in driver
       DUT.mmu1.driver0.stored_spart_data[0][7:0] = 8'h0;
@@ -81,7 +82,7 @@ module tb_board();
       //add1 store value from decimal 50, for physical memory, that is 50/4= 12
       DUT.mmu1.driver0.start_mem_addr = 14'd12;
       //stop 64/4 = 16  -- r1 -- r15
-      DUT.mmu1.driver0.stop_mem_addr = 14'd12 + 14'd15;      
+      DUT.mmu1.driver0.stop_mem_addr = 14'd16;
       $display("%g. mem start addr %x, should be decimal 12", $time,       DUT.mmu1.driver0.start_mem_addr);
       $display("%g. mem stop addr %x, should be decimal 16", $time,       DUT.mmu1.driver0.stop_mem_addr);
 
