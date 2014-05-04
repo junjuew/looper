@@ -1,24 +1,24 @@
 /*******dump the register file value*******/
-`ifdef RF_DUMP_REG
+//`ifdef RF_DUMP_REG
  `define RF DUT.reg_file_DUT
  `define DUMP_REG_FILE "reg.dump"
    
    
-   integer dump_reg_file;
+   integer dump_3;
    integer iteration;
    
    initial begin
-      dump_reg_file = $fopen(`DUMP_REG_FILE,"w+");
+      dump_3 = $fopen(`DUMP_REG_FILE,"w+");
    end
 
    initial begin
       #dumptime;
-      $fdisplay(dump_reg_file,"****************************dump reg file*****************************");
+      $fdisplay(dump_3,"****************************dump reg file*****************************");
       for(iteration = 0; iteration < 64; iteration = iteration + 1)
 	begin
-       	    $fdisplay(dump_reg_file,"reg %x, value is reg_file_body is %x",iteration,`RF.reg_file_body[iteration]);
+       	    $fdisplay(dump_3,"reg %x, value is reg_file_body is %x",iteration,`RF.reg_file_body[iteration]);
 	end
 
-	$fclose(dump_reg_file);
+  	$fclose(dump_3);
    end
-`endif //  `ifdef RF_DUMP_REG
+//`endif //  `ifdef RF_DUMP_REG

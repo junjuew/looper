@@ -1,4 +1,4 @@
-`ifdef DUMP_MEM
+//`ifdef DUMP_MEM
 `define MEM DUT.top_level_WB_DUT.mem_sys.mem.data_memory
    integer 			mem_dump;
    initial begin
@@ -11,4 +11,4 @@
 	$fclose(mem_dump);
    end
 
-`endif //  `ifdef DUMP_MEM
+//`endif //  `ifdef DUMP_MEM

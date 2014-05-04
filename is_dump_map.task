@@ -1,17 +1,17 @@
    /******** dump logical -> physical mappings from tpu ***********/
-   `ifdef IS_DUMP_MAP
+//   `ifdef IS_DUMP_MAP
    `define TPU_MOD DUT.is_DUT.is_tpu
    `define DUMP_FILE "map.dump"
-   integer dumpfile;
+   integer dump_2;
    initial
      begin
-        dumpfile=$fopen(`DUMP_FILE, "w+");
+        dump_2=$fopen(`DUMP_FILE, "w+");
      end
    
    generate
       genvar dump_i;
       for (dump_i=0;dump_i<64;dump_i=dump_i+1)
-        begin
+        begin: dump_i_gen
            reg [7*16-1:0] prv_mapping;
            always@(posedge clk, negedge rst_n)
              begin
@@ -21,7 +21,7 @@
                   end
                 else if (`TPU_MOD.cur_map[dump_i] != prv_mapping )
                   begin
-                     $fstrobe(dumpfile, "%g: %x %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b", $time, dump_i[5:0],
+                     $fstrobe(dump_2, "%g: %x %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b%x(%x) %b", $time, dump_i[5:0],
 `TPU_MOD.cur_map[dump_i][7*16-1], `TPU_MOD.cur_map[dump_i][7*16-2: 7*15], 4'hf, 
 `TPU_MOD.cur_map[dump_i][7*15-1], `TPU_MOD.cur_map[dump_i][7*15-2: 7*14], 4'he,  
 `TPU_MOD.cur_map[dump_i][7*14-1], `TPU_MOD.cur_map[dump_i][7*14-2: 7*13], 4'hd,  
@@ -45,4 +45,4 @@
              end
         end
    endgenerate
-   `endif
+//   `endif
