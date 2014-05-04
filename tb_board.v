@@ -83,33 +83,33 @@ module tb_board();
 
       //transfer 12
       @(state==4'h7);//trans_load
-      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", state, DUT.addrb, DUT.enb, DUT.web);
+      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", $time, state, DUT.mmu_mem_addrb, DUT.mmu_mem_enb, DUT.mmu_mem_web);
       @(posedge clk_100mhz);
-      $display("%g state:%x, should be 4'h8, data:%x ", state, DUT.doutb);      
+      $display("%g state:%x, should be 4'h8, data:%x ", $time, state, DUT.mmu_mem_doutb);      
 
       //transfer 13
       @(state==4'h7);//trans_load
-      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", state, DUT.addrb, DUT.enb, DUT.web);
+      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", $time, state, DUT.mmu_mem_addrb, DUT.mmu_mem_enb, DUT.mmu_mem_web);
       @(posedge clk_100mhz);
-      $display("%g state:%x, should be 4'h8, data:%x ", state, DUT.doutb);      
+      $display("%g state:%x, should be 4'h8, data:%x ", $time, state, DUT.mmu_mem_doutb);      
 
       //transfer 14
       @(state==4'h7);//trans_load
-      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", state, DUT.addrb, DUT.enb, DUT.web);
+      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", $time, state, DUT.mmu_mem_addrb, DUT.mmu_mem_enb, DUT.mmu_mem_web);
       @(posedge clk_100mhz);
-      $display("%g state:%x, should be 4'h8, data:%x ", state, DUT.doutb);      
+      $display("%g state:%x, should be 4'h8, data:%x ", $time, state, DUT.mmu_mem_doutb);      
 
       //transfer 15
       @(state==4'h7);//trans_load
-      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", state, DUT.addrb, DUT.enb, DUT.web);
+      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", $time, state, DUT.mmu_mem_addrb, DUT.mmu_mem_enb, DUT.mmu_mem_web);
       @(posedge clk_100mhz);
-      $display("%g state:%x, should be 4'h8, data:%x ", state, DUT.doutb);      
+      $display("%g state:%x, should be 4'h8, data:%x ", $time, state, DUT.mmu_mem_doutb);      
 
       //transfer 16
       @(state==4'h7);//trans_load
-      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", state, DUT.addrb, DUT.enb, DUT.web);
+      $display("%g state:%x, should be 4'h7, mem addr:%x enb:%x web:%x", $time, state, DUT.mmu_mem_addrb, DUT.mmu_mem_enb, DUT.mmu_mem_web);
       @(posedge clk_100mhz);
-      $display("%g state:%x, should be 4'h8, data:%x ", state, DUT.doutb);      
+      $display("%g state:%x, should be 4'h8, data:%x ", $time, state, DUT.mmu_mem_doutb);      
       
 
       repeat(100) @(posedge clk_100mhz);

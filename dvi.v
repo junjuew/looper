@@ -34,7 +34,7 @@ module dvi(
            //for memory interface
            rom_out,
            display_plane_addr,
-                          locked_dcm,
+           locked_dcm
            );
    
    input clk_100mhz;

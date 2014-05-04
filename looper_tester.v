@@ -116,7 +116,7 @@ module looper_tester(/*autoarg*/
                                 .clk            (clk_100mhz_buf),
                                 .rst_n          (rst_n),
                                 .flush_cache    (flsh),
-                                .extern_pc      (15'b0),
+                                .extern_pc      (16'b0),
                                 .extern_pc_en   (1'b0));
 
    /*   
