@@ -48,16 +48,20 @@ module tb_board();
 
 
    initial begin
-      //100mhz
-      clk_100mhz = 0;
       forever #5 clk_100mhz = ~clk_100mhz;
    end
 
    initial begin
       rst_n = 1'b0;
-      #7 rst_n = 1'b1;
+      //100mhz
+      clk_100mhz = 0;
+      
+      repeat(5) @(posedge clk_100mhz);
+      rst_n = 1'b1;
 
       $monitor("state:%x pc:%x flsh:%x mem_sys_fin:%x", state, DUT.cpu_pc, DUT.flsh, DUT.mem_sys_fin);
+
+      $display(" ==================== test addd1_mmu =================");
       
       repeat(10) @(posedge clk_100mhz);
       //first bench mark is at memory addr 0x4
@@ -113,7 +117,8 @@ module tb_board();
       
 
       repeat(100) @(posedge clk_100mhz);
-      
+
+      $finish;
    end
    
 endmodule // tb_topmodule
