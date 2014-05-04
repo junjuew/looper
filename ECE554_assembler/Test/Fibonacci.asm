@@ -1,4 +1,3 @@
-// first 11 Fibonacci numbers
 ldi r1, 0		// this would be the counter
 ldi r2, 0		// this would be prev number1
 ldi r3, 1 		// this would be prev number2

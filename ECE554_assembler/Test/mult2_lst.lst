@@ -1,4 +1,3 @@
-          
 PC: 0000 Binary: 1100000100000010 Hex: c102 ldi r1,2   //load 2 to r1
 PC: 0001 Binary: 1100001000000100 Hex: c204 ldi r2,4   //load 4 to r2
 PC: 0002 Binary: 1100001100000100 Hex: c304 ldi r3,4   //load 4 to r3

@@ -1,4 +1,3 @@
-// 
 ldi r1, 2      	// load 2 to r1
 ldi r2, 1      	// load 1 to r2
 add r3, r1, r2  // expect r3 = 3

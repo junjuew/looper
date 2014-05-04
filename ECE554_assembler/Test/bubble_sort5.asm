@@ -16,25 +16,10 @@ add r3, r3, r2
 ldi r5, -22	
 str r5, r3, 0
 add r3, r3, r2
-
-// r1	constant 0
-// r2	constant 1
-// r3	memory start
-// r4	length of array, outter count
-// r5	outter index
-// r6	inner index
-// r7	first number to compare
-// r8 	second number to compare
-// r9	inner count
-// r10	result of r7-r8
-// r11	temp number
-// r12	constant 5
-
 ldi r3, 100	// memory start
 ldi r4, 5	// length of array
 ldi r5, 100	// outter index
 ldi r12, 105	// constant 105
-
 .outter_loop:
 beqz r4, .end_outter_loop
 add r6, r5, r2	// generate inner index

@@ -1,18 +1,14 @@
-// first 11 Fibonacci numbers
 ldi r1, 100		// memory base register
 ldi r3, 100		// prev number1 memory base
 ldi r5, 101		// prev number2 memory base
-
 ldi r4, 0		// constant 0
 ldi r6, 1 		// constant 1
 ldi r2, 2		// constant 2
 ldi r7, 23		// constant 23
-
 str r4, r1, 0		// mem[100] = 0
 add r1, r1, r6		// r1 = 101
 str r6, r1, 0		// mem[101] = 1
 add r1, r1, r6		// r1 = 102
-
 .loop_start:
 ldr r9, r3, 0		// r9 = prev number1
 ldr r10, r5, 0		// r10 = prev number 2

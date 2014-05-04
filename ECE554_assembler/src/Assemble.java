@@ -806,9 +806,15 @@ class Assemble {
 	    	instrString = "00" + instrString;
 	    }else if (instrString.length() == 15){
 	    	instrString = "0" + instrString;
+	    }else if (instrString.length() == 1){
+		instrString = "000000000000000" + instrString;
 	    }
-	    while (instrStringHex.length() < 4) {
-		  instrStringHex = "0" + instrString;
+	    if (instr == 0){
+		instrStringHex = "0000";
+	    }else{
+		    while (instrStringHex.length() < 4) {
+			  instrStringHex = "0" + instrString;
+		    }
 	    }
             // Print the hex version to the loadfile(s)
 	    // System.out.println(instrString.substring(0, 2)+'\n'+instrString.substring(2, 4));

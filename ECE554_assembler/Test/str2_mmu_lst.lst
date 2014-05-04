@@ -1,0 +1,10 @@
+PC: 0000 Binary: 1100000011111111 Hex: c0ff ldi r0, 0xff		// assign 0xffff to r0
+PC: 0001 Binary: 1111000000000001 Hex: f001 jr  r0, 0		// jump to 0xffff
+PC: 0002 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0003 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0004 Binary: 1100000001100100 Hex: c064 ldi r0, 100
+PC: 0005 Binary: 1100001111111110 Hex: c3fe ldi r3, -2
+PC: 0006 Binary: 1100000100000101 Hex: c105 ldi r1, 5
+PC: 0007 Binary: 1101000100001110 Hex: d10e str r1, r0, -2      // mem[98] = 5
+PC: 0008 Binary: 0001000000000011 Hex: 1003 add r0, r0, r3
+PC: 0009 Binary: 1110001000000000 Hex: e200 ldr r2, r0, 0      // r2 = 5

@@ -1,0 +1,9 @@
+PC: 0000 Binary: 1100000011111111 Hex: c0ff ldi r0, 0xff		// assign 0xffff to r0
+PC: 0001 Binary: 1111000000000001 Hex: f001 jr  r0, 0		// jump to 0xffff
+PC: 0002 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0003 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0004 Binary: 1100000100000101 Hex: c105 ldi r1, 5
+PC: 0005 Binary: 1100001000001010 Hex: c20a ldi r2, 10
+PC: 0006 Binary: 0010001100100001 Hex: 2321 sub r3, r2, r1  // expect r3 = 5
+PC: 0007 Binary: 0010010000100011 Hex: 2423 sub r4, r2, r3  // expect r4 = 5
+PC: 0008 Binary: 0010010100110100 Hex: 2534 sub r5, r3, r4  // expect r5 = 0

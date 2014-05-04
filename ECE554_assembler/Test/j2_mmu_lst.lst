@@ -1,0 +1,13 @@
+PC: 0000 Binary: 1100000011111111 Hex: c0ff ldi r0, 0xff		// assign 0xffff to r0
+PC: 0001 Binary: 1111000000000001 Hex: f001 jr  r0, 0		// jump to 0xffff
+PC: 0002 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0003 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0004 Binary: 1100000111111011 Hex: c1fb ldi r1, -5
+PC: 0005 Binary: 1100001000001001 Hex: c209 ldi r2, 9
+PC: 0006 Binary: 1111000000001000 Hex: f008 j	.label1
+PC: 0007 Binary: 0001001100100001 Hex: 1321 add r3, r2, r1	// expect r3 = 4
+PC: 0008 Binary: 1111000000000100 Hex: f004 j	.end
+0009      .label1:
+PC: 0009 Binary: 1100001111111100 Hex: c3fc ldi r3, -4
+000a      .end:
+PC: 000a Binary: 1100001000001001 Hex: c209 ldi r2, 9

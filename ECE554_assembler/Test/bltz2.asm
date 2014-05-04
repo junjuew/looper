@@ -1,6 +1,3 @@
-// bltz test, test if register is negative , zero and positive
-// and test negative branch offset
-// note this is an infinite loop
 .label1:
 ldi r1, 1            // set r1 to 1
 ldi r2, 1	    	 // set r2 to 2

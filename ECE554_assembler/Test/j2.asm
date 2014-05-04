@@ -1,4 +1,3 @@
-// test for j
 ldi r1, -5
 ldi r2, 9
 j	.label1

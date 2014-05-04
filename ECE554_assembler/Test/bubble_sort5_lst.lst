@@ -16,25 +16,10 @@ PC: 000e Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 000f Binary: 1100010111101010 Hex: c5ea ldi r5, -22	
 PC: 0010 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0011 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-          
-          // r1	constant 0
-          // r2	constant 1
-          // r3	memory start
-          // r4	length of array, outter count
-          // r5	outter index
-          // r6	inner index
-          // r7	first number to compare
-          // r8 	second number to compare
-          // r9	inner count
-          // r10	result of r7-r8
-          // r11	temp number
-          // r12	constant 5
-          
 PC: 0012 Binary: 1100001101100100 Hex: c364 ldi r3, 100	// memory start
 PC: 0013 Binary: 1100010000000101 Hex: c405 ldi r4, 5	// length of array
 PC: 0014 Binary: 1100010101100100 Hex: c564 ldi r5, 100	// outter index
 PC: 0015 Binary: 1100110001101001 Hex: cc69 ldi r12, 105	// constant 105
-          
 0016      .outter_loop:
 PC: 0016 Binary: 1001010000010010 Hex: 9412 beqz r4, .end_outter_loop
 PC: 0017 Binary: 0001011001010010 Hex: 1652 add r6, r5, r2	// generate inner index

@@ -1,0 +1,6 @@
+PC: 0000 Binary: 1100000011111111 Hex: c0ff ldi r0, 0xff		// assign 0xffff to r0
+PC: 0001 Binary: 1111000000000001 Hex: f001 jr  r0, 0		// jump to 0xffff
+PC: 0002 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0003 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0004 Binary: 1100000111000101 Hex: c1c5 ldi r1, 0x00c5
+PC: 0005 Binary: 0110001000010000 Hex: 6210 not r2, r1

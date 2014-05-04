@@ -1,4 +1,3 @@
-
 ldi r1,2   //load 2 to r1
 ldi r2,4   //load 4 to r2
 ldi r3,4   //load 4 to r3

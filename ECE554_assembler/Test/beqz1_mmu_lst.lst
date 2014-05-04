@@ -1,0 +1,24 @@
+PC: 0000 Binary: 1100000011111111 Hex: c0ff ldi r0, 0xff		// assign 0xffff to r0
+PC: 0001 Binary: 1111000000000001 Hex: f001 jr  r0, 0		// jump to 0xffff
+PC: 0002 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0003 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0004 Binary: 1100000100000001 Hex: c101 ldi r1, 1            // set r1 to 1
+PC: 0005 Binary: 1100001000000010 Hex: c202 ldi r2, 2	    	 // set r2 to 2
+PC: 0006 Binary: 1100010000000100 Hex: c404 ldi r4, 4			 // set r4 to 4
+PC: 0007 Binary: 0010001100010010 Hex: 2312 sub r3, r1, r2       // r3 = r1 - r2 = -1
+PC: 0008 Binary: 1001001100000101 Hex: 9305 beqz r3, .label1     // it will not do branch here
+PC: 0009 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2       // r3 = r3 + r2 = 1
+PC: 000a Binary: 1001001100000011 Hex: 9303 beqz r3, .label1     // it will not do branch here
+PC: 000b Binary: 0010001100110001 Hex: 2331 sub r3, r3, r1       // set r3 = r3 - r1 = 0
+PC: 000c Binary: 1001001100000001 Hex: 9301 beqz r3, .label1     // it will do branch here
+PC: 000d Binary: 0001001100010010 Hex: 1312 add r3, r1, r2		 // set r3 = -1, but this line will be skipped
+000e      .label1:
+PC: 000e Binary: 1100000100000010 Hex: c102 ldi r1, 2            // set r1 to 2
+PC: 000f Binary: 1100001000000010 Hex: c202 ldi r2, 2	     	 // set r2 to 2
+PC: 0010 Binary: 0010001100010010 Hex: 2312 sub r3, r1, r2		 // r3 = 0
+PC: 0011 Binary: 1001001100000010 Hex: 9302 beqz r3, .label2     // it will do branch here
+PC: 0012 Binary: 0001010001000100 Hex: 1444 add r4, r4, r4	     // if the beqz above didn't branch, r4 will be 8
+PC: 0013 Binary: 1100000100000000 Hex: c100 ldi r1, 0
+0014      .label2:
+PC: 0014 Binary: 0001010001000001 Hex: 1441 add r4, r4, r1       //if the beqz above brance, r4 will be 6
+PC: 0015 Binary: 1100000100000000 Hex: c100 ldi r1, 0

@@ -1,0 +1,7 @@
+PC: 0000 Binary: 1100000011111111 Hex: c0ff ldi r0, 0xff		// assign 0xffff to r0
+PC: 0001 Binary: 1111000000000001 Hex: f001 jr  r0, 0		// jump to 0xffff
+PC: 0002 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0003 Binary: 0000000000000000 Hex: 0000 nop
+PC: 0004 Binary: 1100000111101110 Hex: c1ee ldi r1, -18      // load -18 to r1
+PC: 0005 Binary: 1100001000010100 Hex: c214 ldi r2, 20      // load 20 to r2
+PC: 0006 Binary: 0001001100010010 Hex: 1312 add r3, r1, r2  // expect r3 = 2
