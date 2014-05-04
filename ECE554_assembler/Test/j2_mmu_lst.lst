@@ -11,3 +11,19 @@ PC: 0008 Binary: 1111000000000100 Hex: f004 j	.end
 PC: 0009 Binary: 1100001111111100 Hex: c3fc ldi r3, -4
 000a      .end:
 PC: 000a Binary: 1100001000001001 Hex: c209 ldi r2, 9
+PC: 000b Binary: 1100000000110010 Hex: c032 ldi r0, 50	
+PC: 000c Binary: 1101000100000000 Hex: d100 str r1, r0, 0
+PC: 000d Binary: 1101001000000001 Hex: d201 str r2, r0, 1
+PC: 000e Binary: 1101001100000010 Hex: d302 str r3, r0, 2
+PC: 000f Binary: 1101010000000011 Hex: d403 str r4, r0, 3
+PC: 0010 Binary: 1101010100000100 Hex: d504 str r5, r0, 4
+PC: 0011 Binary: 1101011000000101 Hex: d605 str r6, r0, 5
+PC: 0012 Binary: 1101011100000110 Hex: d706 str r7, r0, 6
+PC: 0013 Binary: 1101100000000111 Hex: d807 str r8, r0, 7
+PC: 0014 Binary: 1101100100001000 Hex: d908 str r9, r0, 8
+PC: 0015 Binary: 1101101000001001 Hex: da09 str r10, r0, 9
+PC: 0016 Binary: 1101101100001010 Hex: db0a str r11, r0, 10
+PC: 0017 Binary: 1101110000001011 Hex: dc0b str r12, r0, 11
+PC: 0018 Binary: 1101110100001100 Hex: dd0c str r13, r0, 12
+PC: 0019 Binary: 1101111000001101 Hex: de0d str r14, r0, 13
+PC: 001a Binary: 1101111100001110 Hex: df0e str r15, r0, 14
