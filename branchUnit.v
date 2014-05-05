@@ -3,7 +3,7 @@ module branchUnit(/*autoarg*/
    flush_pos, flush, all_nop_from_branchUnit,
    // Inputs
    inst0, inst1, inst2, inst3, nxt_indx, brch_mis_indx, curr_pos,
-   pr_need_inst, mis_pred, cmt_brch_indx, cmt_brch, clk, rst_n, stall
+   pr_need_inst, mis_pred, cmt_brch_indx, cmt_brch, stall, clk, rst_n
    );
    input wire [65:0] inst0,inst1, inst2, inst3;
    input wire [6:0] 	nxt_indx;
@@ -28,16 +28,16 @@ module branchUnit(/*autoarg*/
   // reg [13:0]	     pos_reg0_input,pos_reg1_input;
    //reg 		     pos_reg0_clr,pos_reg1_clr;
    //reg 		     flush_pos_sel;
-   reg [12:0] 	     fifo[0:1];// {brch_indx|pointer_pos}
-   reg [12:0] 	     fifo_update_val[0:1];
+   reg [13:0] 	     fifo[0:1];// {brch_indx|pointer_pos}
+   reg [13:0] 	     fifo_update_val[0:1];
    reg 		     head,tail;
    reg 		     clear_head,decrement_tail,increment_tail1,increment_tail2,increment_head;
    reg 		     fifo_enable[0:1];
    wire [1:0] 	     brnc_count;
    
-   wire [12:0] 	     fifo0,fifo1;
+   wire [13:0] 	     fifo0,fifo1;
    wire 	     fifo_en0,fifo_en1;
-   wire [12:0] 	     fifo_update0,fifo_update1;
+   wire [13:0] 	     fifo_update0,fifo_update1;
    
    assign indx1 = nxt_indx[5:0] + 6'h1;
    assign indx2 = nxt_indx[5:0] + 6'h2;
@@ -59,52 +59,55 @@ module branchUnit(/*autoarg*/
 
 
    //new part!!!! may have bug, need to take care once there is freelist problme
-   always@(/*autosense*/brch0 or brch1 or brch2 or brch3 or brnc_count
-	   or curr_pos or curr_pos1 or curr_pos2 or curr_pos3 or indx1
-	   or indx2 or indx3 or nxt_indx or tail)
+   always@(/*autosense*/ fifo[0] or fifo[1] or brch0 or brch1 or brch2
+	   or brch3 or brch_mis_indx or brnc_count or cmt_brch
+	   or cmt_brch_indx or curr_pos or curr_pos1 or curr_pos2
+	   or curr_pos3 or head or indx1 or indx2 or indx3 or mis_pred
+	   or nxt_indx or tail)
      begin
-	fifo_update_val[0] = 13'b0;
-	fifo_update_val[1] = 13'b0;
+	fifo_update_val[0] = 14'b0;
+	fifo_update_val[1] = 14'b0;
 	if(mis_pred)
 	  begin
 	     if(brch_mis_indx != fifo[head][12:7])
 	       begin
-		    fifo_update_val[head + 1'b1] = 13'b0;
+		    fifo_update_val[head + 1'b1] = 14'b0;
 	       end
 	  end
 	
 	if(cmt_brch)
 	  if(cmt_brch_indx == fifo[head][12:7])
 	     begin
-	     	fifo_update_val[head] = 13'b0;
+	     	fifo_update_val[head] = 14'b0;
 	     end
 	   else
-	     fifo_update_val[head + 1'b1] = 13'b0;
+	     fifo_update_val[head + 1'b1] = 14'b0;
 	
 	 	     
 	if(brch0)
-	  fifo_update_val[tail] = {nxt_indx[5:0],curr_pos};
+	  fifo_update_val[tail] = {1'b1,nxt_indx[5:0],curr_pos};
 	else if(brch1)
-	  fifo_update_val[tail] = {indx1,curr_pos1};
+	  fifo_update_val[tail] = {1'b1,indx1,curr_pos1};
 	else if(brch2)
-	  fifo_update_val[tail] = {indx2,curr_pos2};
+	  fifo_update_val[tail] = {1'b1,indx2,curr_pos2};
 	else if(brch3)
-	  fifo_update_val[tail] = {indx3,curr_pos3};
+	  fifo_update_val[tail] = {1'b1,indx3,curr_pos3};
 
 	if(brnc_count == 2'b10)
 	  begin
 	     if(brch3)
-	       fifo_update_val[tail + 1'b1] = {indx3,curr_pos3};
+	       fifo_update_val[tail + 1'b1] = {1'b1,indx3,curr_pos3};
 	     else if(brch2)
-	       fifo_update_val[tail + 1'b1] = {indx2,curr_pos2};
+	       fifo_update_val[tail + 1'b1] = {1'b1,indx2,curr_pos2};
 	     else
-	       fifo_update_val[tail + 1'b1] = {indx1,curr_pos1};
+	       fifo_update_val[tail + 1'b1] = {1'b1,indx1,curr_pos1};
 	  end
      end // always@ (...
 
    //control signal
-   always@(/*autosense*/ fifo[1] or fifo[0] or brch_mis_indx or brnc_count
-	   or cmt_brch or cmt_brch_indx or head or mis_pred or tail)
+   always@(/*autosense*/ fifo[0] or fifo[1] or brch_mis_indx or brnc_count
+	   or cmt_brch or cmt_brch_indx or head
+	   or mis_pred or tail)
      begin
 	clear_head = 1'b0;
 	decrement_tail = 1'b0;
@@ -119,12 +122,12 @@ module branchUnit(/*autoarg*/
 	if(mis_pred)
 	  begin
 	     flush = 1'b1;
-	     if(brch_mis_indx == fifo[head][12:7])
+	     if((brch_mis_indx == fifo[head][12:7]) && fifo[head][13])
 	       begin
 		  flush_pos = fifo[head][6:0];
 		  clear_head = 1'b1;		  
 	       end
-	     else
+	     else if((brch_mis_indx == fifo[head + 1'b1][12:7]) && fifo[head + 1'b1][13])
 	       begin
 		  flush_pos = fifo[head + 1'b1][6:0];
 		  decrement_tail = 1'b1;
@@ -135,13 +138,13 @@ module branchUnit(/*autoarg*/
 
 	if(cmt_brch)
 	  begin
-	     if(cmt_brch_indx == fifo[head][12:7])
+	     if((cmt_brch_indx == fifo[head][12:7]) && fifo[head][13])
 	       begin
 		  increment_head = 1'b1;
 		  fifo_enable[head] = 1'b1;
 		  
 	       end
-	     else
+	     else if((cmt_brch_indx == fifo[head + 1'b1][12:7]) && fifo[head + 1'b1][13])
 	       begin
 		  decrement_tail = 1'b1;
 		  fifo_enable[head + 1'b1] = 1'b1;
@@ -172,11 +175,11 @@ module branchUnit(/*autoarg*/
 	   always@(posedge clk,negedge rst_n)
 	     begin
 		if(!rst_n)
-		  fifo[i] <= 13'b0;
+		  fifo[i] <= 14'b0;
 		else if(stall)
 		  fifo[i] <= fifo[i];
 		else if(clear_head)
-		  fifo[i] <= 13'b0;
+		  fifo[i] <= 14'b0;
 		else if(fifo_enable[i])
 		  fifo[i] <= fifo_update_val[i];
 		else

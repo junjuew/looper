@@ -215,39 +215,54 @@ module branchHandler(input clk,
    end
 
 
+   reg [1:0] brnch_cnt_update;
+
+   always@(/*autosense*/brnch_cnt or decr_count_from_rob or incr_cnt
+	   or mispred_num)
+     begin
+	brnch_cnt_update = brnch_cnt;
+	if(decr_count_from_rob==1 && brnch_cnt_update>2'b00)
+	  begin
+	     //expected if normal brnch commit,decrease one
+	     if(mispred_num==1)begin
+		if(brnch_cnt_update>=2'b10)
+		  brnch_cnt_update = brnch_cnt_update-2'b10;
+		else
+		  brnch_cnt_update = 2'b00;
+	     end
+	     //if mispredict rob output decr_count also, if mispred_num==1, we decrease two
+	     else begin
+		if(brnch_cnt_update>=2'b01)
+		  brnch_cnt_update = brnch_cnt_update-1;
+		else
+		  brnch_cnt_update = 2'b00;
+	     end
+	  end // if (decr_count_from_rob==1 && brnch_cnt>2'b00)
+	else
+	  begin
+	     brnch_cnt_update  = brnch_cnt_update;
+	  end // else: !if(decr_count_from_rob==1 && brnch_cnt>2'b00)
+	
+	if((|incr_cnt)&& (brnch_cnt_update<2'b10))
+	  brnch_cnt_update = brnch_cnt_update+incr_cnt;
+	else if(brnch_cnt_update>=2'b10)
+          brnch_cnt_update = 2'b10;
+	else
+          brnch_cnt_update = brnch_cnt_update;
+     end
 
    //(brnch_before_inst3>=2'b10)?2'b10:(
    //  ((brnch_before_inst3-brnch_cnt)==2'b01)?2'b01:2'b00);
    //(brnch_before_inst0>=2'b10)+(brnch_before_inst1>=2'b10)+
    //  (brnch_before_inst2>=2'b10)+(brnch_before_inst3>=2'b10);
-
+   
    //counter to keep track of number of branches
    //counter need to be decreased if misperdiction takes place
    always@(posedge clk or negedge rst_n)begin
-      if(rst_n==0)
+      if(!rst_n)
         brnch_cnt<=2'b00;
-      else if(decr_count_from_rob==1 && brnch_cnt>2'b00)begin
-	 //expected if normal brnch commit,decrease one
-	 if(mispred_num==1)begin
-            if(brnch_cnt>=2'b10)
-	      brnch_cnt<=brnch_cnt-2'b10;
-	    else
-	      brnch_cnt<=2'b00;
-	 end
-	 //if mispredict rob output decr_count also, if mispred_num==1, we decrease two
-	 else begin
-	    if(brnch_cnt>=2'b01)
-              brnch_cnt<=brnch_cnt-1;
-	    else
-	      brnch_cnt<=2'b00;
-	 end
-      end
-      else if((|incr_cnt)&& (brnch_cnt<2'b10))
-        brnch_cnt<=brnch_cnt+incr_cnt;
-      else if(brnch_cnt>=2'b10)
-        brnch_cnt<=2'b10;
-      else
-        brnch_cnt<=brnch_cnt;
+      else 
+	brnch_cnt <= brnch_cnt_update;
    end
 
    //<3>
