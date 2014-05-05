@@ -111,7 +111,12 @@ module cache_controller(rst, clk, flush, enable_cache,line_dirty, done_mem, miss
                  
             FLUSH_START: begin
               idle=0;
-			 if (line_dirty) begin
+				  if (flush_end) begin
+						nxt_state=IDLE;
+						flush_finish=1;
+						flush_clr=1;
+					end
+			 else if (line_dirty) begin
               mem_enable=1;
               nxt_state=FLUSH_IN_PROCESS;
             end
