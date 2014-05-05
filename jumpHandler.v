@@ -81,9 +81,9 @@ end
        disable_ins<=0;
      else if(jump_base_rdy_from_rf_0)
        disable_ins<=1;
-     else if(jump_for_pcsel==1)
+     else if(stall_for_jump1==1)
        disable_ins<=1;
-     else if(jump_for_pcsel==0)
+     else if(stall_for_jump1==0)
        disable_ins<=0;
 
 

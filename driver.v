@@ -1,37 +1,37 @@
 //`default_nettype none
 `timescale 1ns / 1ps
-  //////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 // Company: UW-Madison
-  // Engineer: J.J.(Junjue) Wang, Pari Lingampally, Zheng Ling
-  // 
-  // Create Date: Feb 03   
-  // Design Name: SPART
-  // Module Name:    driver 
-  // Project Name: SPART
-  // Target Devices: FPGA Virtex 2 Pro
-  // Tool versions: Xilinx 10.1
-  // Description: This block is used to drive the whole spart and let it can work on  the FPGA board. 
-  // The functionality of this block is to receive the data from spart when there is data received by spart and then transmit it back to spart and let it do the transmission. // There is a FSM designed in the driver, it has five state, including one idle state, one receive state, 
-  // one transmit state and the other two state used to write the baud rate divisor. '
-  // It can also write different baud rate to spart based on the two selections br_cfg.
-  //
-  // Dependencies: 
-  //
-  // Revision: 
-  // Revision 0.01 - File Created
-  // Additional Comments: 
-  //
-  //////////////////////////////////////////////////////////////////////////////////
-  module driver(/*autoarg*/
-   // Outputs
-   iocs, iorw, ioaddr, enb, web, addrb, dinb, flsh, rom_out,
-   dis_dvi_out, state,
-   // Inouts
-   databus,
-   // Inputs
-   clk, rst_n, br_cfg, rda, tbr, doutb, cpu_pc, mem_sys_fin,
-   display_plane_addr
-   );
+// Engineer: J.J.(Junjue) Wang, Pari Lingampally, Zheng Ling
+// 
+// Create Date: Feb 03   
+// Design Name: SPART
+// Module Name:    driver 
+// Project Name: SPART
+// Target Devices: FPGA Virtex 2 Pro
+// Tool versions: Xilinx 10.1
+// Description: This block is used to drive the whole spart and let it can work on  the FPGA board. 
+// The functionality of this block is to receive the data from spart when there is data received by spart and then transmit it back to spart and let it do the transmission. // There is a FSM designed in the driver, it has five state, including one idle state, one receive state, 
+// one transmit state and the other two state used to write the baud rate divisor. '
+// It can also write different baud rate to spart based on the two selections br_cfg.
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module driver(/*autoarg*/
+              // Outputs
+              iocs, iorw, ioaddr, enb, web, addrb, dinb, flsh, rom_out,
+              dis_dvi_out, state,
+              // Inouts
+              databus,
+              // Inputs
+              clk, rst_n, br_cfg, rda, tbr, doutb, cpu_pc, mem_sys_fin, 
+              display_plane_addr
+              );
 
 
    parameter LAST_SLOT_MEM_ADDR=14'h3fff;
@@ -59,7 +59,7 @@
 
    //interface with memory system
    output reg        flsh;//state machine output
-   input wire        mem_sys_fin;
+   input wire        mem_sys_fin; //one cycle signal
 
    //interface with DVI
    input wire [12:0] display_plane_addr;
@@ -67,8 +67,8 @@
    //disable dvi unit
    output reg        dis_dvi_out;
    
-   output reg [3:0]         state;
-   reg [3:0]                nxt_state;
+   output reg [3:0]  state;
+   reg [3:0]         nxt_state;
 
    //define states
    localparam IDLE = 4'h0;
@@ -98,13 +98,11 @@
 
    wire [7:0]        data_in;
    reg [7:0]         data_out;
-   
    wire [15:0]       baud_rate;
 
    //registers to store the value of data read from spart   
    reg [7:0]         stored_spart_data[7:0]; 
 
-   
    //cnt is considered 9 clock cycles as one full operation cycle
    //when cnt is 0--7: recording data
    //cnt is 8: recording cmd
@@ -116,7 +114,12 @@
    // is character "s" 0x73
    reg [7:0]         cmd;
 
-   reg [13:0] start_mem_addr;
+   reg [13:0]        start_mem_addr;
+   //1 if program is done and memory system is done
+   // 0 if program is done and memory system is busing flushing
+   // no guarantee what the value would be (0 or 1) when program is running
+   reg               mem_done_aft_prg;
+
    
    reg               ld_data, clr_cmd, start_mem_addr_en, stop_mem_addr_en, ld_addr_cnt, addr_cnt_en, clr_trans_cnt, ld_mem_out_buf, trans_cnt_en;
    wire [7:0]        echo_back_data;
@@ -162,6 +165,21 @@
            assign stored_spart_data_en[en_i] =  (ld_data) && (cnt == en_i);   
         end
    endgenerate
+
+
+   always @(posedge clk, negedge rst_n)
+     begin
+        if(~rst_n)
+          mem_done_aft_prg <= 1'b0;
+        else if (flsh)
+          mem_done_aft_prg <=1'b0;
+        else if (mem_sys_fin)
+          mem_done_aft_prg <=1'b1;
+        else
+          mem_done_aft_prg <= mem_done_aft_prg;
+     end
+   
+          
    
    
    always@(posedge clk, negedge rst_n)
@@ -317,7 +335,7 @@
    always@( mem_out[0] or mem_out[1] or mem_out[2] or mem_out[3] or mem_out[4] or mem_out[5] 
             or mem_out[6] or mem_out[7] 
             or addr_cnt or baud_rate or br_cfg or cmd or cpu_pc
-            or echo_back_data or mem_sys_fin or prev_br_cfg or rda
+            or echo_back_data or mem_done_aft_prg or prev_br_cfg or rda
             or state or stop_mem_addr or tbr or trans_cnt
             or wrt_mem_data or doutb or start_mem_addr or display_plane_addr)
      begin
@@ -444,7 +462,7 @@
           // make sure tranmission buffer is rdy as well
           TRANS_RESULT:
             begin
-               if (tbr && mem_sys_fin)
+               if (tbr && mem_done_aft_prg)
                  begin
                     // loop through interested memory region
                     if (addr_cnt <= stop_mem_addr)

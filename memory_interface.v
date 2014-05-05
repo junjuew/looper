@@ -128,9 +128,9 @@ module memory_interface(rst, clk, addr_mem, rd_wrt_mem, enable, data_mem_in, dat
    // add data memory second port for MMU
    memory data_memory(
                       .clka(clk),
-                      .rsta(rst),
+                      .rsta(~rst),
                       .ena(enable),
-                      .wea(rd_wrt_mem),
+                      .wea(~rd_wrt_mem),
                       .addra(addr_mem),
                       .dina(data_mem_in),
                       .douta(data_out),
