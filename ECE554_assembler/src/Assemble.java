@@ -512,13 +512,17 @@ class Assemble {
 				memory[memLocation] = registers[currentLine.dst];
 				memory_used[memLocation] = true;
 				simOut.println("***********************************");
-				simOut.println("********   Memory update   ********");
+				simOut.println("********   Memory write   ********");
 				simOut.println("***********************************");
 	            simOut.println("memory[" + Integer.toString(memLocation) + "] = " + Integer.toString(memory[memLocation]));
 			}else if (currentLine.inst_name.equals("ldr")){
                 int immediate = currentLine.immediateVal;
 				int memLocation = registers[currentLine.src1] + immediate;
 				registers[currentLine.dst] = memory[memLocation];
+				simOut.println("***********************************");
+				simOut.println("********   Memory read   ********");
+				simOut.println("***********************************");
+				simOut.println("r" + currentLine.dst + " = memory[" + memLocation + "]" + " = " + registers[currentLine.dst]);
 			}
 			printRegisters(simOut);
 			totalInstNum ++;
