@@ -126,27 +126,31 @@ PC: 007c Binary: 1100010000101000 Hex: c428 ldi r4, 40	// length of array
 PC: 007d Binary: 1100010101100100 Hex: c564 ldi r5, 100	// outter index
 PC: 007e Binary: 1100110010001100 Hex: cc8c ldi r12, 140	// constant 140
 007f      .outter_loop:
-PC: 007f Binary: 1001010000010010 Hex: 9412 beqz r4, .end_outter_loop
+PC: 007f Binary: 1001010000010110 Hex: 9416 beqz r4, .end_outter_loop
 PC: 0080 Binary: 0001011001010010 Hex: 1652 add r6, r5, r2	// generate inner index
-PC: 0081 Binary: 0010100111000101 Hex: 29c5 sub r9, r12, r5	// generate inner count
-0082      .inner_loop:
-PC: 0082 Binary: 1001100100001100 Hex: 990c beqz r9, .end_inner_loop
-PC: 0083 Binary: 1110011101010000 Hex: e750 ldr r7, r5, 0	// load first number
-PC: 0084 Binary: 1110100001100000 Hex: e860 ldr r8, r6, 0	// load second number
-PC: 0085 Binary: 0010101001111000 Hex: 2a78 sub r10, r7, r8	// r10 = r7 - r8
-PC: 0086 Binary: 1010101000000101 Hex: aa05 bltz r10, .swap_end
-PC: 0087 Binary: 0001101001110001 Hex: 1a71 add r10, r7, r1	// r10 = r7
-PC: 0088 Binary: 0001011110000001 Hex: 1781 add r7, r8, r1	// r7 = r8
-PC: 0089 Binary: 0001100010100001 Hex: 18a1 add r8, r10, r1 // r8 = r10 
-PC: 008a Binary: 1101011101010000 Hex: d750 str r7, r5, 0
-PC: 008b Binary: 1101100001100000 Hex: d860 str r8, r6, 0
-008c      .swap_end:
-PC: 008c Binary: 0010100110010010 Hex: 2992 sub r9, r9, r2
-PC: 008d Binary: 0001011001100010 Hex: 1662 add r6, r6, r2	// update inner loop index
-PC: 008e Binary: 1111111111001100 Hex: ffcc j	.inner_loop
-008f      .end_inner_loop:
-PC: 008f Binary: 0001010101010010 Hex: 1552 add r5, r5, r2	// update outter loop index
-PC: 0090 Binary: 0010010001000010 Hex: 2442 sub r4, r4, r2
-PC: 0091 Binary: 1111111110110100 Hex: ffb4 j	.outter_loop
-0092      .end_outter_loop:
-PC: 0092 Binary: 1100000100000000 Hex: c100 ldi r1, 0
+PC: 0081 Binary: 0010101101101100 Hex: 2b6c sub r11,r6,r12
+PC: 0082 Binary: 1001101100010000 Hex: 9b10 beqz r11,.end_inner_loop
+PC: 0083 Binary: 0010100111000101 Hex: 29c5 sub r9, r12, r5	// generate inner count
+0084      .inner_loop:
+PC: 0084 Binary: 1001100100001110 Hex: 990e beqz r9, .end_inner_loop
+PC: 0085 Binary: 1110011101010000 Hex: e750 ldr r7, r5, 0	// load first number
+PC: 0086 Binary: 1110100001100000 Hex: e860 ldr r8, r6, 0	// load second number
+PC: 0087 Binary: 0010101001111000 Hex: 2a78 sub r10, r7, r8	// r10 = r7 - r8
+PC: 0088 Binary: 1010101000000101 Hex: aa05 bltz r10, .swap_end
+PC: 0089 Binary: 0001101001110001 Hex: 1a71 add r10, r7, r1	// r10 = r7
+PC: 008a Binary: 0001011110000001 Hex: 1781 add r7, r8, r1	// r7 = r8
+PC: 008b Binary: 0001100010100001 Hex: 18a1 add r8, r10, r1 // r8 = r10 
+PC: 008c Binary: 1101011101010000 Hex: d750 str r7, r5, 0
+PC: 008d Binary: 1101100001100000 Hex: d860 str r8, r6, 0
+008e      .swap_end:
+PC: 008e Binary: 0010100110010010 Hex: 2992 sub r9, r9, r2
+PC: 008f Binary: 0001011001100010 Hex: 1662 add r6, r6, r2	// update inner loop index
+PC: 0090 Binary: 0010101101101100 Hex: 2b6c sub r11,r6,r12
+PC: 0091 Binary: 1001101100000001 Hex: 9b01 beqz r11,.end_inner_loop
+PC: 0092 Binary: 1111111111000100 Hex: ffc4 j	.inner_loop
+0093      .end_inner_loop:
+PC: 0093 Binary: 0001010101010010 Hex: 1552 add r5, r5, r2	// update outter loop index
+PC: 0094 Binary: 0010010001000010 Hex: 2442 sub r4, r4, r2
+PC: 0095 Binary: 1111111110100100 Hex: ffa4 j	.outter_loop
+0096      .end_outter_loop:
+PC: 0096 Binary: 1100000100000000 Hex: c100 ldi r1, 0

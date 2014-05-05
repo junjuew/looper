@@ -128,6 +128,8 @@ ldi r12, 140	// constant 140
 .outter_loop:
 beqz r4, .end_outter_loop
 add r6, r5, r2	// generate inner index
+sub r11,r6,r12
+beqz r11,.end_inner_loop
 sub r9, r12, r5	// generate inner count
 .inner_loop:
 beqz r9, .end_inner_loop
@@ -143,6 +145,8 @@ str r8, r6, 0
 .swap_end:
 sub r9, r9, r2
 add r6, r6, r2	// update inner loop index
+sub r11,r6,r12
+beqz r11,.end_inner_loop
 j	.inner_loop
 .end_inner_loop:
 add r5, r5, r2	// update outter loop index

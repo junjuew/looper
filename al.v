@@ -108,8 +108,9 @@
 		  .cmt_brch_indx	(cmt_brch_indx_from_CMT),
 		  .cmt_brch		(cmt_brch_from_CMT),
 		  .clk			(clk),
-		  .rst_n		(rst_n));
-
+		  .rst_n		(rst_n),
+		  .stall                (stall | fnsh_unrll_out_from_ID | full_signal_from_SCH ));
+   
    //freeList
    freeList f0(/*autoinst*/
 	       // Outputs

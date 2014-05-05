@@ -101,6 +101,8 @@ module branch_fifo(/*autoarg*/
 	     else
 	       begin
 		  decrement_tail = 1'b1;
+		  fifo_enable[head + 1'b1] = 1'b1;
+		  
 	       end
 	  end // if (mis_pred)
 
@@ -109,9 +111,14 @@ module branch_fifo(/*autoarg*/
 	     if(cmt_brnc_indx == fifo[head])
 	       begin
 		  increment_head = 1'b1;
+		  fifo_enable[head] = 1'b1;
 	       end
 	     else
-	       decrement_tail = 1'b1;
+	       begin
+		  decrement_tail = 1'b1;
+		  fifo_enable[head + 1'b1] = 1'b1;
+	       end
+	     
 	  end
 
 	if(brnc_count == 2'b01)

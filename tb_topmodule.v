@@ -9,7 +9,7 @@ module tb_topmodule();
    
    integer    i;
 
-   parameter testdone = 200000;
+   parameter testdone = 100000;
    parameter flush_mem = testdone - 2000;
    parameter dumptime = testdone - 5;
    
@@ -146,6 +146,11 @@ module tb_topmodule();
 	$display("%t,the content in reg0 is %x, the content in reg1 is %x\n",$time,DUT.al_DUT.br0.fifo[0],DUT.al_DUT.br0.fifo[1]);
 	$display("%t, store_indx0 is %d, store_pos0 is %x, store_indx1 is %d, store_pos1 is %x\n",$time,DUT.al_DUT.br0.fifo[0][12:7],DUT.al_DUT.br0.fifo[0][6:0],DUT.al_DUT.br0.fifo[1][12:7],DUT.al_DUT.br0.fifo[1][6:0]);
      end // always@ (posedge DUT.al_DUT.br0.cmt_brch,posedge DUT.al_DUT.br0.mis_ped)
+
+
+
+
+
    
 /* -----\/----- EXCLUDED -----\/-----
    end // always@ (posedge clk)

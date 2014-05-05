@@ -26,7 +26,7 @@ module imemory(
 
    initial begin
 
-      $readmemb("./ECE554_assembler/Test/bubble_sort_mif.mif", mem); // IM.mif is memory file
+      $readmemb("./ECE554_assembler/Test/bubble_sort11_mif.mif", mem); // IM.mif is memory file
    end
    
         
