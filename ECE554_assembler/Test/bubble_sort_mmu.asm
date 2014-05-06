@@ -129,10 +129,10 @@ add r3, r3, r2
 ldi r5, 104	
 str r5, r3, 0
 add r3, r3, r2
-ldi r3, 100	// memory start
+ldi r3, 80	// memory start
 ldi r4, 40	// length of array
-ldi r5, 100	// outter index
-ldi r12, 140	// constant 140
+ldi r5, 80	// outter index
+ldi r12, 120	// constant 140
 .outter_loop:
 beqz r4, .end_outter_loop
 add r6, r5, r2	// generate inner index

@@ -4,3 +4,7 @@
 transcript
 work/
 *.dump
+*_sim.sim
+*_mif.mif
+*_lst.lst
+*_coe.coe

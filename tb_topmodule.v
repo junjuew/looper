@@ -9,7 +9,7 @@ module tb_topmodule();
    
    integer    i;
 
-   parameter testdone = 100000;
+   parameter testdone = 600000;
    parameter flush_mem = testdone - 2000;
    parameter dumptime = testdone - 5;
    
@@ -19,7 +19,10 @@ module tb_topmodule();
 `include "is_dump_inst.task"
 `include "rf_dump_reg.task"
 `include "mem_dump.task"
+`include "rf_dump_reg_all_time.task"
 
+
+   
    /*autowire*/
    // Beginning of automatic wires (for undeclared instantiated-module outputs)
    wire [63:0] mmu_mem_doutb;          // From DUT of top_module_looper.v
@@ -277,9 +280,11 @@ module tb_topmodule();
       //flush all dump files
       $fflush(dump_1);
       $fflush(dump_2);
+      $fflush(reg_dump);      
       
       $fclose(dump_1);
       $fclose(dump_2);
+      $fclose(reg_dump);      
       
       
       $finish;
