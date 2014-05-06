@@ -21,7 +21,7 @@
 module looper_tester(/*autoarg*/
    // Outputs
    txd, state, d, blank, hsync, vsync, dvi_clk, dvi_clk_n, dvi_rst,
-   GPIO_LED_1,
+   GPIO_LED_4, GPIO_LED_5,GPIO_LED_6,
    // Inouts
    scl_tri, sda_tri,
    // Inputs
@@ -48,28 +48,66 @@ module looper_tester(/*autoarg*/
    inout wire         scl_tri               ;
    inout wire         sda_tri   ;
    
-   output reg         GPIO_LED_1 ;
+   output reg         GPIO_LED_4 ;
+   output reg         GPIO_LED_5 ;
+   output reg         GPIO_LED_6 ;
    
    wire               clk_100mhz_buf;
-   wire               clk_25mhz;   
+   wire               clk_25mhz,clk_10mhz;   
    reg [21:0]         cnt;
    
 
-   always@(posedge clk_100mhz_buf, negedge rst_n) begin
+   //fetch to mmu
+   wire[15:0]        cpu_pc;
+   wire[63:0]        pc_to_dec;
+   //concern about the first inst
+   assign cpu_pc = pc_to_dec[63:48];
+   //wb to mmu
+   wire        mem_sys_fin; 
+
+
+   always@(posedge clk_10mhz, negedge rst_n) begin
       if(!rst_n) begin
-         GPIO_LED_1 <= 1'b0;
-         cnt <= 22'h0;
+         GPIO_LED_4 <= 1'b0;
       end
       else begin
-         cnt <= cnt+1;
-         if(cnt[21] == 1) begin
-            GPIO_LED_1 <= 1'b1;
+         if(cpu_pc[15:0] > 3) begin
+            GPIO_LED_4 <= 1'b1;
          end
          else begin
-            GPIO_LED_1 <= 1'b0;
+            GPIO_LED_4 <= 1'b0;
          end
       end
    end
+
+   always@(posedge clk_10mhz, negedge rst_n) begin
+      if(!rst_n) begin
+         GPIO_LED_5 <= 1'b0;
+      end
+      else begin
+         if(cpu_pc[15:0] ==0 ) begin
+            GPIO_LED_5 <= 1'b1;
+         end
+         else begin
+            GPIO_LED_5 <= 1'b0;
+         end
+      end
+   end
+
+   always@(posedge clk_10mhz, negedge rst_n) begin
+      if(!rst_n) begin
+         GPIO_LED_6 <= 1'b0;
+      end
+      else begin
+         if(cpu_pc[15:0] >0 ) begin
+            GPIO_LED_6 <= 1'b1;
+         end
+         else begin
+            GPIO_LED_6 <= 1'b0;
+         end
+      end
+   end
+
 
    /*   
     top_module_looper looper_DUT(
@@ -88,16 +126,9 @@ module looper_tester(/*autoarg*/
    wire [13:0] mmu_mem_addrb;
    wire [63:0] mmu_mem_dinb;
 
-   assign mmu_mem_clk = clk_100mhz_buf;
+   assign mmu_mem_clk = clk_10mhz;
    assign mmu_mem_rst = ~rst_n;
 
-   //fetch to mmu
-   wire[15:0]        cpu_pc;
-   wire[63:0]        pc_to_dec;
-   //concern about the first inst
-   assign cpu_pc = pc_to_dec[63:48];
-   //wb to mmu
-   wire        mem_sys_fin; 
 
    
    
@@ -113,7 +144,7 @@ module looper_tester(/*autoarg*/
                                 .mmu_mem_web    (mmu_mem_web),
                                 .mmu_mem_addrb  (mmu_mem_addrb[13:0]),
                                 .mmu_mem_dinb   (mmu_mem_dinb[63:0]),
-                                .clk            (clk_100mhz_buf),
+                                .clk            (clk_10mhz),
                                 .rst_n          (rst_n),
                                 .flush_cache    (flsh),
                                 .extern_pc      (16'b0),
@@ -131,14 +162,24 @@ module looper_tester(/*autoarg*/
    
 //   clk_gen clk_25mhz1(clk, ~rst_n, clk_25mhz, clkin_ibufg_out, clk_100mhz_buf, locked_dcm); 
         
-        clk_gen clk_25mhz1 (
+	  clk_gen clk_10mhz1 (
     .CLKIN_IN(clk_100mhz), 
     .RST_IN(~rst_n), 
-    .CLKDV_OUT(clk_25mhz), 
+    .CLKDV_OUT(clk_10mhz), //right now use 10Mhz clk
     .CLKIN_IBUFG_OUT(clkin_ibufg_out), 
     .CLK0_OUT(clk_100mhz_buf), 
     .LOCKED_OUT(locked_dcm)
     );
+/*
+	  clk_gen_vga clk_25mhz1 (
+    .CLKIN_IN(clk_100mhz), 
+    .RST_IN(~rst_n), 
+    .CLKDV_OUT(clk_25mhz), //for dvi
+    .CLKIN_IBUFG_OUT(), 
+    .CLK0_OUT(), 
+    .LOCKED_OUT()
+    );
+*/
 
 
 
@@ -161,8 +202,8 @@ module looper_tester(/*autoarg*/
             .scl                        (scl),
             .sda                        (sda),
             // Inputs
-            .clk_100mhz                 (clk_100mhz_buf),
-            .clk_25mhz                  (clk_25mhz),
+            .clk_100mhz                 (clk_10mhz),
+            .clk_25mhz                  (clk_10mhz),//wrong, just for testing. should use 25mhz
             .rst_n                      (rst_n),
             .rxd                        (rxd),
             .br_cfg                     (br_cfg[1:0]),
@@ -175,5 +216,11 @@ module looper_tester(/*autoarg*/
    assign sda_tri = (sda)? 1'bz: 1'b0;
    assign scl_tri = (scl)? 1'bz: 1'b0;
    
+	wire[35:0] control;
+	
+	chipscopeicon icon(.CONTROL0(control)) /* synthesis syn_noprune=1 */;
+	chipscopeila ila(.CLK(clk_10mhz),.DATA({pc_to_dec}), .TRIG0(state[0]), .CONTROL(control) ) /* synthesis syn_noprune=1 */;
+
+	
    
 endmodule

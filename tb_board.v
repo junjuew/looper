@@ -35,7 +35,7 @@ module tb_board();
                      .dvi_clk        (dvi_clk),
                      .dvi_clk_n      (dvi_clk_n),
                      .dvi_rst        (dvi_rst),
-                     .GPIO_LED_1     (GPIO_LED_1),
+//                     .GPIO_LED_1     (GPIO_LED_1),
                      // Inouts
                      .scl_tri        (scl_tri),
                      .sda_tri        (sda_tri),
