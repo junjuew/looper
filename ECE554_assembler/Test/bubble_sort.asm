@@ -31,7 +31,7 @@ add r3, r3, r2
 ldi r5, 127	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 178	
+ldi r5, 124	
 str r5, r3, 0
 add r3, r3, r2
 ldi r5, -98	

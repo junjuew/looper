@@ -36,16 +36,16 @@ PC: 0022 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 0023 Binary: 1100010101111011 Hex: c57b ldi r5, 123	
 PC: 0024 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0025 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-          ldi r5, 321	
+PC: 0026 Binary: 1100010101111111 Hex: c57f ldi r5, 127	
 PC: 0027 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0028 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-PC: 0029 Binary: 1100010110110010 Hex: c5b2 ldi r5, 178	
+PC: 0029 Binary: 1100010101111100 Hex: c57c ldi r5, 124	
 PC: 002a Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 002b Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-          ldi r5, -169	
+PC: 002c Binary: 1100010110011110 Hex: c59e ldi r5, -98	
 PC: 002d Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 002e Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-PC: 002f Binary: 1100010110010000 Hex: c590 ldi r5, 144	
+PC: 002f Binary: 1100010101101111 Hex: c56f ldi r5, 111	
 PC: 0030 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0031 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 0032 Binary: 1100010111110000 Hex: c5f0 ldi r5, -16	
@@ -66,13 +66,13 @@ PC: 0040 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 0041 Binary: 1100010111001110 Hex: c5ce ldi r5, -50	
 PC: 0042 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0043 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-          ldi r5, -240	
+PC: 0044 Binary: 1100010110001000 Hex: c588 ldi r5, -120	
 PC: 0045 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0046 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-          ldi r5, -178	
+PC: 0047 Binary: 1100010111001100 Hex: c5cc ldi r5, -52	
 PC: 0048 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0049 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-PC: 004a Binary: 1100010111101111 Hex: c5ef ldi r5, 239	
+PC: 004a Binary: 1100010101101101 Hex: c56d ldi r5, 109	
 PC: 004b Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 004c Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 004d Binary: 1100010100100101 Hex: c525 ldi r5, 37	
@@ -93,7 +93,7 @@ PC: 005b Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 005c Binary: 1100010101101100 Hex: c56c ldi r5, 108	
 PC: 005d Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 005e Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-PC: 005f Binary: 1100010111011000 Hex: c5d8 ldi r5, 216	
+PC: 005f Binary: 1100010101100101 Hex: c565 ldi r5, 101	
 PC: 0060 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0061 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 0062 Binary: 1100010100110001 Hex: c531 ldi r5, 49	
@@ -105,16 +105,16 @@ PC: 0067 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 0068 Binary: 1100010110000111 Hex: c587 ldi r5, -121	
 PC: 0069 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 006a Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-          ldi r5, -198	
+PC: 006b Binary: 1100010111110110 Hex: c5f6 ldi r5, -10	
 PC: 006c Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 006d Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-PC: 006e Binary: 1100010111000100 Hex: c5c4 ldi r5, 196	
+PC: 006e Binary: 1100010101110011 Hex: c573 ldi r5, 115	
 PC: 006f Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0070 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-PC: 0071 Binary: 1100010110001001 Hex: c589 ldi r5, 137	
+PC: 0071 Binary: 1100010101101010 Hex: c56a ldi r5, 106	
 PC: 0072 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0073 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-          ldi r5, -184	
+PC: 0074 Binary: 1100010110001000 Hex: c588 ldi r5, -120	
 PC: 0075 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0076 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 0077 Binary: 1100010111111001 Hex: c5f9 ldi r5, -7	
@@ -126,7 +126,7 @@ PC: 007c Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 007d Binary: 1100010110111110 Hex: c5be ldi r5, -66	
 PC: 007e Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 007f Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
-PC: 0080 Binary: 1100010110101100 Hex: c5ac ldi r5, 172	
+PC: 0080 Binary: 1100010101101000 Hex: c568 ldi r5, 104	
 PC: 0081 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
 PC: 0082 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
 PC: 0083 Binary: 1100001101100100 Hex: c364 ldi r3, 100	// memory start

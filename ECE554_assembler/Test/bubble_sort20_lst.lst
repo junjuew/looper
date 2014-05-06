@@ -1,0 +1,96 @@
+PC: 0000 Binary: 1100000100000000 Hex: c100 ldi r1, 0	// constant 0
+PC: 0001 Binary: 1100001000000001 Hex: c201 ldi r2, 1	// constant 1
+PC: 0002 Binary: 1100001101100100 Hex: c364 ldi r3, 100	// memory start at 100
+PC: 0003 Binary: 1100010100000010 Hex: c502 ldi r5, 2	
+PC: 0004 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0005 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0006 Binary: 1100010100010101 Hex: c515 ldi r5, 21	
+PC: 0007 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0008 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0009 Binary: 1100010111111110 Hex: c5fe ldi r5, -2	
+PC: 000a Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 000b Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 000c Binary: 1100010100110100 Hex: c534 ldi r5, 52	
+PC: 000d Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 000e Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 000f Binary: 1100010111101010 Hex: c5ea ldi r5, -22	
+PC: 0010 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0011 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0012 Binary: 1100010111011010 Hex: c5da ldi r5, -38	
+PC: 0013 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0014 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0015 Binary: 1100010110011111 Hex: c59f ldi r5, -97	
+PC: 0016 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0017 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0018 Binary: 1100010101100010 Hex: c562 ldi r5, 98
+PC: 0019 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 001a Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 001b Binary: 1100010101100111 Hex: c567 ldi r5, 103	
+PC: 001c Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 001d Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 001e Binary: 1100010101101011 Hex: c56b ldi r5, 107	
+PC: 001f Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0020 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0021 Binary: 1100010101101100 Hex: c56c ldi r5, 108	
+PC: 0022 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0023 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0024 Binary: 1100010110011110 Hex: c59e ldi r5, -98	
+PC: 0025 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0026 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0027 Binary: 1100010111110110 Hex: c5f6 ldi r5, -10	
+PC: 0028 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0029 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 002a Binary: 1100010101110011 Hex: c573 ldi r5, 115	
+PC: 002b Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 002c Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 002d Binary: 1100010101101010 Hex: c56a ldi r5, 106	
+PC: 002e Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 002f Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0030 Binary: 1100010110001000 Hex: c588 ldi r5, -120	
+PC: 0031 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0032 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0033 Binary: 1100010111111001 Hex: c5f9 ldi r5, -7	
+PC: 0034 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0035 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0036 Binary: 1100010100110111 Hex: c537 ldi r5, 55	
+PC: 0037 Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 0038 Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 0039 Binary: 1100010110111110 Hex: c5be ldi r5, -66	
+PC: 003a Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 003b Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 003c Binary: 1100010101101000 Hex: c568 ldi r5, 104	
+PC: 003d Binary: 1101010100110000 Hex: d530 str r5, r3, 0
+PC: 003e Binary: 0001001100110010 Hex: 1332 add r3, r3, r2
+PC: 003f Binary: 1100001101100100 Hex: c364 ldi r3, 100	// memory start
+PC: 0040 Binary: 1100010000010100 Hex: c414 ldi r4, 20	// length of array
+PC: 0041 Binary: 1100010101100100 Hex: c564 ldi r5, 100	// outter index
+PC: 0042 Binary: 1100110001111000 Hex: cc78 ldi r12, 120	// constant 120
+0043      .outter_loop:
+PC: 0043 Binary: 1001010000010110 Hex: 9416 beqz r4, .end_outter_loop
+PC: 0044 Binary: 0001011001010010 Hex: 1652 add r6, r5, r2	// generate inner index
+PC: 0045 Binary: 0010101101101100 Hex: 2b6c sub r11,r6,r12
+PC: 0046 Binary: 1001101100010000 Hex: 9b10 beqz r11,.end_inner_loop
+PC: 0047 Binary: 0010100111000101 Hex: 29c5 sub r9, r12, r5	// generate inner count
+0048      .inner_loop:
+PC: 0048 Binary: 1001100100001110 Hex: 990e beqz r9, .end_inner_loop
+PC: 0049 Binary: 1110011101010000 Hex: e750 ldr r7, r5, 0	// load first number
+PC: 004a Binary: 1110100001100000 Hex: e860 ldr r8, r6, 0	// load second number
+PC: 004b Binary: 0010101001111000 Hex: 2a78 sub r10, r7, r8	// r10 = r7 - r8
+PC: 004c Binary: 1010101000000101 Hex: aa05 bltz r10, .swap_end
+PC: 004d Binary: 0001101001110001 Hex: 1a71 add r10, r7, r1	// r10 = r7
+PC: 004e Binary: 0001011110000001 Hex: 1781 add r7, r8, r1	// r7 = r8
+PC: 004f Binary: 0001100010100001 Hex: 18a1 add r8, r10, r1 // r8 = r10 
+PC: 0050 Binary: 1101011101010000 Hex: d750 str r7, r5, 0
+PC: 0051 Binary: 1101100001100000 Hex: d860 str r8, r6, 0
+0052      .swap_end:
+PC: 0052 Binary: 0010100110010010 Hex: 2992 sub r9, r9, r2
+PC: 0053 Binary: 0001011001100010 Hex: 1662 add r6, r6, r2	// update inner loop index
+PC: 0054 Binary: 0010101101101100 Hex: 2b6c sub r11,r6,r12
+PC: 0055 Binary: 1001101100000001 Hex: 9b01 beqz r11,.end_inner_loop
+PC: 0056 Binary: 1111111111000100 Hex: ffc4 j	.inner_loop
+0057      .end_inner_loop:
+PC: 0057 Binary: 0001010101010010 Hex: 1552 add r5, r5, r2	// update outter loop index
+PC: 0058 Binary: 0010010001000010 Hex: 2442 sub r4, r4, r2
+PC: 0059 Binary: 1111111110100100 Hex: ffa4 j	.outter_loop
+005a      .end_outter_loop:
+PC: 005a Binary: 1100000100000000 Hex: c100 ldi r1, 0
