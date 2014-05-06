@@ -316,16 +316,16 @@ class Assemble {
 						}
 					}
 					if (prog[nextLineNum] != null){
-						simOut.println("next inst: " + prog[nextLineNum].srcLine);
+						//simOut.println("next inst: " + prog[nextLineNum].srcLine);
 					}else{
-						simOut.println("next inst: end");
+						//simOut.println("next inst: end");
 					}
 					return nextLineNum;
 				}else{
 					if (prog[currentLineNum+1].srcLine != null){
-	                	simOut.println("next inst: " + prog[currentLineNum+1]);
+	                	//simOut.println("next inst: " + prog[currentLineNum+1]);
 					}else{
-						simOut.println("next inst: end");
+						//simOut.println("next inst: end");
 					}
 	                return currentLineNum + 1;
 				}
@@ -360,16 +360,16 @@ class Assemble {
 						}
 					}
 					if (prog[nextLineNum] != null){
-						simOut.println("next inst: " + prog[nextLineNum].srcLine);
+						//simOut.println("next inst: " + prog[nextLineNum].srcLine);
 					}else{
-						simOut.println("next inst: end");
+						//simOut.println("next inst: end");
 					}
 					return nextLineNum;
 				}else{
 					if (prog[currentLineNum+1] != null){
-						simOut.println("next inst: " + prog[currentLineNum+1].srcLine);
+						//simOut.println("next inst: " + prog[currentLineNum+1].srcLine);
 					}else{
-						simOut.println("next inst: end");
+						//simOut.println("next inst: end");
 					}
 					return currentLineNum + 1;
 				}
@@ -404,16 +404,16 @@ class Assemble {
 						}
 					}
 					if (prog[nextLineNum] != null){
-	                	simOut.println("next inst: " + prog[nextLineNum].srcLine);
+	                	//simOut.println("next inst: " + prog[nextLineNum].srcLine);
 					}else{
-						simOut.println("next inst: end");
+						//simOut.println("next inst: end");
 					}
 					return nextLineNum;
 				}else{
 					if (prog[currentLineNum+1] != null){
-	                	simOut.println("next inst: " + prog[currentLineNum+1].srcLine);
+	                	//simOut.println("next inst: " + prog[currentLineNum+1].srcLine);
 					}else{
-						simOut.println("next inst: end");
+						//simOut.println("next inst: end");
 					}
 					return currentLineNum + 1;
 				}
@@ -447,33 +447,33 @@ class Assemble {
 					}
 				}
 				if (prog[nextLineNum] != null){
-					simOut.println("next inst: " + prog[nextLineNum].srcLine);
+					//simOut.println("next inst: " + prog[nextLineNum].srcLine);
 				}else{
-					simOut.println("next inst: end");
+					//simOut.println("next inst: end");
 				}
 				return nextLineNum;
 			}else if (currentLine.inst_name.equals("jr")){
 				int immediate = currentLine.immediateVal;
 				if (prog[registers[currentLine.src1] + immediate] != null){
-					simOut.println("next inst: " + prog[registers[currentLine.src1] + immediate].srcLine);
+					//simOut.println("next inst: " + prog[registers[currentLine.src1] + immediate].srcLine);
 				}else{
-					simOut.println("next inst: end");
+					//simOut.println("next inst: end");
 				}
 				return registers[currentLine.src1] + immediate;
 			}else if (currentLine.inst_name.equals("jal")){
 				int immediate = currentLine.immediateVal;
 				registers[15] = currentLineNum + 1;
 				if (prog[currentLineNum+1+immediate] != null){
-	            	simOut.println("next inst: " + prog[currentLineNum+1+immediate].srcLine);
+	            	//simOut.println("next inst: " + prog[currentLineNum+1+immediate].srcLine);
 				}else{
-					simOut.println("next inst: end");
+					//simOut.println("next inst: end");
 				}
 				return currentLineNum + 1 + immediate;
 			}else{
 				if (prog[currentLineNum+1] != null){
-	            	simOut.println("next inst: " + prog[currentLineNum+1].srcLine);
+	            	//simOut.println("next inst: " + prog[currentLineNum+1].srcLine);
 				}else{
-					simOut.println("next inst: end");
+					//simOut.println("next inst: end");
 				}
 				return currentLineNum + 1;
 			}
@@ -519,12 +519,12 @@ class Assemble {
                 int immediate = currentLine.immediateVal;
 				int memLocation = registers[currentLine.src1] + immediate;
 				registers[currentLine.dst] = memory[memLocation];
-				simOut.println("***********************************");
+				/*simOut.println("***********************************");
 				simOut.println("********   Memory read   ********");
 				simOut.println("***********************************");
-				simOut.println("r" + currentLine.dst + " = memory[" + memLocation + "]" + " = " + registers[currentLine.dst]);
+				simOut.println("r" + currentLine.dst + " = memory[" + memLocation + "]" + " = " + registers[currentLine.dst]);*/
 			}
-			printRegisters(simOut);
+			//printRegisters(simOut);
 			totalInstNum ++;
 		}
 	}

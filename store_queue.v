@@ -1,9 +1,9 @@
-module store_queue(fnsh_unrll, ld_head, loop_strt, clk,rst, mis_pred_str_ptr, cmmt_str, flsh, addr_fwd, indx_fwd, indx_str_al,ld_grnt,
+module store_queue(signed_comp, fnsh_unrll, loop_strt, clk,rst, mis_pred_str_ptr, cmmt_str, flsh, addr_fwd, indx_fwd, indx_str_al,ld_grnt,
                      mem_wrt, data_str, indx_ls, addr_ls, str_grnt, done, str_req,
                      str_iss, stll, fwd, fwd_rdy, addr, data_ca, data_fwd);
                      
 // input and output ports declarations
-input rst, mem_wrt, flsh, clk, cmmt_str, done, str_grnt, ld_grnt, fnsh_unrll, loop_strt, ld_head;
+input signed_comp, rst, mem_wrt, flsh, clk, cmmt_str, done, str_grnt, ld_grnt, fnsh_unrll, loop_strt;
 input [31:0] indx_str_al;
 input [3:0] mis_pred_str_ptr;
 input [15:0] data_str, addr_ls, addr_fwd;
@@ -11,7 +11,7 @@ input [5:0] indx_ls;
 input [6:0] indx_fwd;
 output str_req, str_iss, fwd, fwd_rdy, stll;
 output  [15:0] data_ca, addr, data_fwd;
-   
+wire [4:0] tail_plus_four;   
 reg str_req, str_iss, finished, loop_mode, pre_loop_strt;
 reg [40:0] str_entry [0:15]; // store queue entries
 wire [15:0] indx_comp, // used to tell whether the corresponding store occurs before the load being executed
@@ -111,7 +111,15 @@ always@(vld, tail)
        default: nxt_tail = tail;
    endcase
    
-assign stll= (!str_entry[tail+4'd4][40]); 
+assign tail_plus_four = tail+4;
+assign stll=  (tail < head) ? (tail_plus_four > head) : 
+			  ( tail > head && tail < 13) ? 0 :
+			  (tail > head && tail == 13) ? (!(head > 0)):
+			 (tail > head && tail == 14) ? (!(head >1)) :
+			 (tail >head && tail == 15) ? (!(head >2)):
+			 (head == tail) ? (str_entry[head][40]) : 0;
+
+
 
 
 always@(posedge clk,negedge rst)
@@ -349,7 +357,7 @@ generate
 genvar i_1;
    for (i_1=0;i_1<16;i_1=i_1+1)
 	begin : update_st_gen
-		assign update[i_1]=mem_wrt & (str_entry[i_1][37:32] == indx_ls) & (!str_entry[i_1][40]);
+		assign update[i_1]=mem_wrt & (str_entry[i_1][37:32] == indx_ls) & (str_entry[i_1][40]);
 	end
 endgenerate
 
@@ -360,7 +368,7 @@ begin : str_entry_gen
 always@(posedge clk, negedge rst)
 	begin
     if (!rst)
-      str_entry[i][40:0] <= 41'h10000000000;
+      str_entry[i][40:0] <= 41'h00000000000;
     else begin
        if (update[i]) begin
               str_entry[i][15:0] <= data_str; // update data to be stored into memory
@@ -387,13 +395,13 @@ always@(posedge clk, negedge rst)
                    
            // state bits
            if (flush_body[i] & flsh)
-              str_entry[i][40] <= 1;
-           else if (loop_body[i] & loop_back)
               str_entry[i][40] <= 0;
-           else if (commit[i] & finished)
+           else if (loop_body[i] & loop_back)
               str_entry[i][40] <= 1;
+           else if (commit[i] & finished)
+              str_entry[i][40] <= 0;
             else if (insert[i])
-               str_entry[i][40] <= 0;
+               str_entry[i][40] <= 1;
             else
                str_entry[i][40] <= str_entry[i][40];
                
@@ -469,7 +477,6 @@ begin
  end
        
 
-assign signed_comp=(str_entry[head][38] == ld_head)? str_entry[head][38] & ld_head: indx_fwd[6] ; // whether to compard the indexes in a signed manner
 generate
 genvar i_2;
 for (i_2=0;i_2<16;i_2=i_2+1)
@@ -491,7 +498,7 @@ generate
 genvar i_4;
 for (i_4=0;i_4<16;i_4=i_4+1)
 	begin : ready_gen
-      assign ready[i_4]= str_entry[i_4][40] | (str_entry[i_4][39] & indx_comp[i_4]) | (~indx_comp[i_4]);
+      assign ready[i_4]= (~str_entry[i_4][40]) | (str_entry[i_4][39] & indx_comp[i_4]) | (~indx_comp[i_4]);
 	end
 endgenerate
 
@@ -503,7 +510,7 @@ generate
 genvar i_5;
 for(i_5 = 0; i_5 < 16; i_5 = i_5 + 1)
 	begin : match_gen
-		assign match[i_5] = (~str_entry[i_5][40]) & addr_comp[i_5] & indx_comp[i_5];
+		assign match[i_5] = (str_entry[i_5][40]) & addr_comp[i_5] & indx_comp[i_5];
 	end
 endgenerate
 /**	

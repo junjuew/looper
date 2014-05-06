@@ -186,6 +186,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
    wire [15:0]  data_ld_wb_out;
 
    // ROB output wires
+   wire signed_comp_ROB_out;
    wire [6:0]   next_idx_ROB_out;
    wire         mis_pred_ROB_out;
    wire         flush_ROB_out; 
@@ -206,6 +207,8 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
    wire [5:0]   free_preg_num3_ROB_out;
    wire [5:0]   free_preg_num4_ROB_out;
    wire [2:0]   free_preg_cnt_ROB_out; 
+   wire [5:0]   rob_head_out_for_flsh;
+   wire [5:0]   rob_tail_out_for_flsh;
    
    /*
 	wire [15:0] data1, data2, data3, data4;
@@ -383,6 +386,10 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
 
    IS_RF IS_RF(.clk(clk), .rst_n(rst_n), .stall(rob_full_stll_ROB_out),
                // Inputs
+			   .mis_pred(mis_pred_ROB_out),
+			   .mis_pred_indx(mis_pred_brnc_idx_ROB_out),
+			   .rob_head(rob_head_out_for_flsh),
+			   .rob_tail(rob_tail_out_for_flsh),
                .mult_done(mult_valid_ex_out),
                .mult_inst_pkg_in(mul_ins_to_rf_is_out),
                .alu1_inst_pkg_in(alu1_ins_to_rf_is_out),
@@ -390,10 +397,10 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
                .addr_inst_pkg_in(adr_ins_to_rf_is_out),
                // Outputs
                .mult_fun_rdy(mult_rdy_is_rf),   
-               .mult_inst_pkg_out(mult_inst_pkg_is_rf_out),
-               .alu1_inst_pkg_out(alu1_inst_pkg_is_rf_out),
-               .alu2_inst_pkg_out(alu2_inst_pkg_is_rf_out),
-               .addr_inst_pkg_out(addr_inst_pkg_is_rf_out)
+               .mult_inst_pkg_out_ok(mult_inst_pkg_is_rf_out),
+               .alu1_inst_pkg_out_ok(alu1_inst_pkg_is_rf_out),
+               .alu2_inst_pkg_out_ok(alu2_inst_pkg_is_rf_out),
+               .addr_inst_pkg_out_ok(addr_inst_pkg_is_rf_out)
                );
 
    reg_file reg_file_DUT(.clk(clk), .rst_n(rst_n),
@@ -437,6 +444,11 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
 
    RF_EX RF_EX_DUT(.clk(clk), .rst_n(rst_n), .stall(rob_full_stll_ROB_out),
                    // Inputs
+				   .mis_pred(mis_pred_ROB_out),
+				   .mis_pred_indx(mis_pred_brnc_idx_ROB_out),
+				   .rob_head(rob_head_out_for_flsh),
+				   .rob_tail(rob_tail_out_for_flsh),
+
                    .alu1_op1_rf_ex_in(alu1_op1_data_rf_out), //
                    .alu1_op2_rf_ex_in(alu1_op2_data_rf_out), //
                    .alu2_op1_rf_ex_in(alu2_op1_data_rf_out), //
@@ -528,28 +540,28 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
                    .mult_inst_vld_rf_ex_out(mult_inst_vld_rf_ex_out), //
                    .addr_inst_vld_rf_ex_out(addr_inst_vld_rf_ex_out), //
 
-                   .alu1_mem_wrt_rf_ex_out(alu1_mem_wrt_rf_ex_out), //
-                   .alu2_mem_wrt_rf_ex_out(alu2_mem_wrt_rf_ex_out), //
-                   .mult_mem_wrt_rf_ex_out(mult_mem_wrt_rf_ex_out), //
-                   .addr_mem_wrt_rf_ex_out(addr_mem_wrt_rf_ex_out), //
+                   .alu1_mem_wrt_rf_ex_out_ok(alu1_mem_wrt_rf_ex_out), //
+                   .alu2_mem_wrt_rf_ex_out_ok(alu2_mem_wrt_rf_ex_out), //
+                   .mult_mem_wrt_rf_ex_out_ok(mult_mem_wrt_rf_ex_out), //
+                   .addr_mem_wrt_rf_ex_out_ok(addr_mem_wrt_rf_ex_out), //
 
                    .alu1_mem_rd_rf_ex_out(alu1_mem_rd_rf_ex_out),
                    .alu2_mem_rd_rf_ex_out(alu2_mem_rd_rf_ex_out),
                    .mult_mem_rd_rf_ex_out(mult_mem_rd_rf_ex_out),
                    .addr_mem_rd_rf_ex_out(addr_mem_rd_rf_ex_out),
 
-                   .alu1_en_rf_ex_out(alu1_en_rf_ex_out),
-                   .alu2_en_rf_ex_out(alu2_en_rf_ex_out),
-                   .mult_en_rf_ex_out(mult_en_rf_ex_out), 
-                   .addr_en_rf_ex_out(addr_en_rf_ex_out),
+                   .alu1_en_rf_ex_out_ok(alu1_en_rf_ex_out),
+                   .alu2_en_rf_ex_out_ok(alu2_en_rf_ex_out),
+                   .mult_en_rf_ex_out_ok(mult_en_rf_ex_out), 
+                   .addr_en_rf_ex_out_ok(addr_en_rf_ex_out),
 
                    .alu1_ldi_rf_ex_out(alu1_ldi_rf_ex_out), 
                    .alu2_ldi_rf_ex_out(alu2_ldi_rf_ex_out), 
                    .mult_ldi_rf_ex_out(mult_ldi_rf_ex_out), 
                    .addr_ldi_rf_ex_out(addr_ldi_rf_ex_out), 
 
-                   .alu1_mode_rf_ex_out(alu1_mode_rf_ex_out),
-                   .alu2_mode_rf_ex_out(alu2_mode_rf_ex_out),
+                   .alu1_mode_rf_ex_out_ok(alu1_mode_rf_ex_out),
+                   .alu2_mode_rf_ex_out_ok(alu2_mode_rf_ex_out),
 
                    .alu1_done_idx_rf_ex_out(alu1_done_idx_rf_ex_out),
                    .alu2_done_idx_rf_ex_out(alu2_done_idx_rf_ex_out),
@@ -561,10 +573,10 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
                    .phy_addr_mult_rf_ex_out(phy_addr_mult_rf_ex_out),
                    .phy_addr_ld_rf_ex_out(phy_addr_ld_rf_ex_out),
 
-                   .reg_wrt_mul_rf_ex_out(reg_wrt_mul_rf_ex_out),
-                   .reg_wrt_alu1_rf_ex_out(reg_wrt_alu1_rf_ex_out),
-                   .reg_wrt_alu2_rf_ex_out(reg_wrt_alu2_rf_ex_out),
-                   .reg_wrt_ld_rf_ex_out(reg_wrt_ld_rf_ex_out),
+                   .reg_wrt_mul_rf_ex_out_ok(reg_wrt_mul_rf_ex_out),
+                   .reg_wrt_alu1_rf_ex_out_ok(reg_wrt_alu1_rf_ex_out),
+                   .reg_wrt_alu2_rf_ex_out_ok(reg_wrt_alu2_rf_ex_out),
+                   .reg_wrt_ld_rf_ex_out_ok(reg_wrt_ld_rf_ex_out),
 
                    .alu1_invtRt_rf_ex_out(alu1_invtRt_rf_ex_out),
                    .alu2_invtRt_rf_ex_out(alu2_invtRt_rf_ex_out),
@@ -691,7 +703,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
                    .phy_addr_ld_ex_wb_out(wrt_addr_dst_pnum)
                    );
 
-   top_level_wb top_level_WB_DUT(.clk(clk), .rst(rst_n),
+   top_level_wb top_level_WB_DUT(.signed_comp(signed_comp_ROB_out), .clk(clk), .rst(rst_n),
                                  // Inputs
                                  .flsh(flush_ROB_out),
                                  .mem_rd(addr_mem_rd_ex_wb_out), 
@@ -772,6 +784,7 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
                .mis_pred(mis_pred_ROB_out),// to IF, ID, AL
                .flush(flush_ROB_out), 
                .mis_pred_brnc_idx(mis_pred_brnc_idx_ROB_out),
+			   .signed_comp(signed_comp_ROB_out),
                // to AL-freelist and IS-issue_queue
                .cmt_brnc(cmt_brnc_ROB_out),// to IF, AL-freelist and IS-issue_queue
                .cmt_brnc_idx(cmt_brnc_idx_ROB_out),
@@ -789,8 +802,11 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache);
                .free_preg_num2(free_preg_num2_ROB_out),// to AL-freelist
                .free_preg_num3(free_preg_num3_ROB_out),// to AL-freelist
                .free_preg_num4(free_preg_num4_ROB_out),// to AL-freelist
-               .free_preg_cnt(free_preg_cnt_ROB_out)
+               .free_preg_cnt(free_preg_cnt_ROB_out),
                // to AL-freelist: number of freed physical regs
+
+               .rob_head_out_for_flsh(rob_head_out_for_flsh),
+               .rob_tail_out_for_flsh(rob_tail_out_for_flsh)
                );
 
 endmodule

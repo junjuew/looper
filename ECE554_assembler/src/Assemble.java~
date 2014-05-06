@@ -316,16 +316,16 @@ class Assemble {
 						}
 					}
 					if (prog[nextLineNum] != null){
-						simOut.println("next inst: " + prog[nextLineNum].srcLine);
+						//simOut.println("next inst: " + prog[nextLineNum].srcLine);
 					}else{
-						simOut.println("next inst: end");
+						//simOut.println("next inst: end");
 					}
 					return nextLineNum;
 				}else{
 					if (prog[currentLineNum+1].srcLine != null){
-	                	simOut.println("next inst: " + prog[currentLineNum+1]);
+	                	//simOut.println("next inst: " + prog[currentLineNum+1]);
 					}else{
-						simOut.println("next inst: end");
+						//simOut.println("next inst: end");
 					}
 	                return currentLineNum + 1;
 				}
@@ -512,15 +512,19 @@ class Assemble {
 				memory[memLocation] = registers[currentLine.dst];
 				memory_used[memLocation] = true;
 				simOut.println("***********************************");
-				simOut.println("********   Memory update   ********");
+				simOut.println("********   Memory write   ********");
 				simOut.println("***********************************");
 	            simOut.println("memory[" + Integer.toString(memLocation) + "] = " + Integer.toString(memory[memLocation]));
 			}else if (currentLine.inst_name.equals("ldr")){
                 int immediate = currentLine.immediateVal;
 				int memLocation = registers[currentLine.src1] + immediate;
 				registers[currentLine.dst] = memory[memLocation];
+				/*simOut.println("***********************************");
+				simOut.println("********   Memory read   ********");
+				simOut.println("***********************************");
+				simOut.println("r" + currentLine.dst + " = memory[" + memLocation + "]" + " = " + registers[currentLine.dst]);*/
 			}
-			printRegisters(simOut);
+			//printRegisters(simOut);
 			totalInstNum ++;
 		}
 	}
@@ -816,8 +820,6 @@ class Assemble {
 			  instrStringHex = "0" + instrString;
 		    }
 	    }
-	    System.out.println("instr: " + instrString);
-	    System.out.println("instr: " + instrStringHex);
             // Print the hex version to the loadfile(s)
 	    // System.out.println(instrString.substring(0, 2)+'\n'+instrString.substring(2, 4));
             /*int ramNum = memAddress % 4;

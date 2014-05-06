@@ -16,6 +16,12 @@ module RF_EX (
     input 	  clk, 
     input 	  rst_n,
     input 	  stall,
+
+    input mis_pred,
+	input [5:0] mis_pred_indx,
+    input [5:0] rob_head,
+    input [5:0] rob_tail,
+
     input [15:0]  alu1_op1_rf_ex_in, //
     input [15:0]  alu1_op2_rf_ex_in, //
     input [15:0]  alu2_op1_rf_ex_in, //
@@ -107,28 +113,28 @@ module RF_EX (
     output 	  mult_inst_vld_rf_ex_out, //
     output 	  addr_inst_vld_rf_ex_out, //
 
-    output 	  alu1_mem_wrt_rf_ex_out, //
-    output 	  alu2_mem_wrt_rf_ex_out, //
-    output 	  mult_mem_wrt_rf_ex_out, //
-    output 	  addr_mem_wrt_rf_ex_out, //
+    output 	  alu1_mem_wrt_rf_ex_out_ok, //
+    output 	  alu2_mem_wrt_rf_ex_out_ok, //
+    output 	  mult_mem_wrt_rf_ex_out_ok, //
+    output 	  addr_mem_wrt_rf_ex_out_ok, //
 
     output 	  alu1_mem_rd_rf_ex_out,
     output 	  alu2_mem_rd_rf_ex_out,
     output 	  mult_mem_rd_rf_ex_out,
     output 	  addr_mem_rd_rf_ex_out,
 
-    output 	  alu1_en_rf_ex_out,
-    output 	  alu2_en_rf_ex_out,
-    output 	  mult_en_rf_ex_out, 
-    output 	  addr_en_rf_ex_out,
+    output 	  alu1_en_rf_ex_out_ok,
+    output 	  alu2_en_rf_ex_out_ok,
+    output 	  mult_en_rf_ex_out_ok, 
+    output 	  addr_en_rf_ex_out_ok,
 
     output 	  alu1_ldi_rf_ex_out, 
     output 	  alu2_ldi_rf_ex_out, 
     output 	  mult_ldi_rf_ex_out, 
     output 	  addr_ldi_rf_ex_out, 
 
-    output [2:0]  alu1_mode_rf_ex_out,
-    output [2:0]  alu2_mode_rf_ex_out,
+    output [2:0]  alu1_mode_rf_ex_out_ok,
+    output [2:0]  alu2_mode_rf_ex_out_ok,
 
     output [5:0]  alu1_done_idx_rf_ex_out,
     output [5:0]  alu2_done_idx_rf_ex_out,
@@ -140,10 +146,10 @@ module RF_EX (
     output [5:0]  phy_addr_mult_rf_ex_out,
     output [5:0]  phy_addr_ld_rf_ex_out,
 
-    output 	  reg_wrt_mul_rf_ex_out,
-    output 	  reg_wrt_alu1_rf_ex_out,
-    output 	  reg_wrt_alu2_rf_ex_out,
-    output 	  reg_wrt_ld_rf_ex_out,
+    output 	  reg_wrt_mul_rf_ex_out_ok,
+    output 	  reg_wrt_alu1_rf_ex_out_ok,
+    output 	  reg_wrt_alu2_rf_ex_out_ok,
+    output 	  reg_wrt_ld_rf_ex_out_ok,
 
     output 	  alu1_invtRt_rf_ex_out,
     output 	  alu2_invtRt_rf_ex_out,
@@ -152,8 +158,114 @@ module RF_EX (
 
 );
     
+	wire flush_alu1; 
+	wire flush_alu2; 
+	wire flush_mult; 
+	wire flush_addr; 
+
+	assign flush_alu1 = (!mis_pred) ? 1'b0
+					  : (((alu1_done_idx_rf_ex_out  >= rob_head) &&
+						  (alu1_done_idx_rf_ex_out  <= 63      ) &&
+					      (mis_pred_indx            >= rob_head) &&
+						  (mis_pred_indx            <= 63      ))  ||
+					     ((alu1_done_idx_rf_ex_out  >= 0       ) &&
+						  (alu1_done_idx_rf_ex_out  <  rob_tail) &&
+					      (mis_pred_indx            >= 0       ) &&
+						  (mis_pred_indx            <  rob_tail)))
+					  ? ((alu1_done_idx_rf_ex_out < mis_pred_indx)
+					    ? 1'b0 
+						: 1'b1)
+					  : ((alu1_done_idx_rf_ex_out < mis_pred_indx)
+					    ? 1'b1 
+						: 1'b0);
+
+	assign flush_alu2 = (!mis_pred) ? 1'b0
+					  : (((alu2_done_idx_rf_ex_out  >= rob_head) &&
+						  (alu2_done_idx_rf_ex_out  <= 63      ) &&
+					      (mis_pred_indx            >= rob_head) &&
+						  (mis_pred_indx            <= 63      ))  ||
+					     ((alu2_done_idx_rf_ex_out  >= 0       ) &&
+						  (alu2_done_idx_rf_ex_out  <  rob_tail) &&
+					      (mis_pred_indx            >= 0       ) &&
+						  (mis_pred_indx            <  rob_tail)))
+					  ? ((alu2_done_idx_rf_ex_out < mis_pred_indx)
+					    ? 1'b0 
+						: 1'b1)
+					  : ((alu2_done_idx_rf_ex_out < mis_pred_indx)
+					    ? 1'b1 
+						: 1'b0);
+
+	assign flush_mult = (!mis_pred) ? 1'b0
+					  : (((mult_done_idx_rf_ex_out  >= rob_head) &&
+						  (mult_done_idx_rf_ex_out  <= 63      ) &&
+					      (mis_pred_indx            >= rob_head) &&
+						  (mis_pred_indx            <= 63      ))  ||
+					     ((mult_done_idx_rf_ex_out  >= 0       ) &&
+						  (mult_done_idx_rf_ex_out  <  rob_tail) &&
+					      (mis_pred_indx            >= 0       ) &&
+						  (mis_pred_indx            <  rob_tail)))
+					  ? ((mult_done_idx_rf_ex_out < mis_pred_indx)
+					    ? 1'b0 
+						: 1'b1)
+					  : ((mult_done_idx_rf_ex_out < mis_pred_indx)
+					    ? 1'b1 
+						: 1'b0);
+
+	assign flush_addr = (!mis_pred) ? 1'b0
+					  : (((addr_done_idx_rf_ex_out  >= rob_head) &&
+						  (addr_done_idx_rf_ex_out  <= 63      ) &&
+					      (mis_pred_indx            >= rob_head) &&
+						  (mis_pred_indx            <= 63      ))  ||
+					     ((addr_done_idx_rf_ex_out  >= 0       ) &&
+						  (addr_done_idx_rf_ex_out  <  rob_tail) &&
+					      (mis_pred_indx            >= 0       ) &&
+						  (mis_pred_indx            <  rob_tail)))
+					  ? ((addr_done_idx_rf_ex_out < mis_pred_indx)
+					    ? 1'b0 
+						: 1'b1)
+					  : ((addr_done_idx_rf_ex_out < mis_pred_indx)
+					    ? 1'b1 
+						: 1'b0);
+
+
+
+    wire [2:0]  alu1_mode_rf_ex_out;
+    wire [2:0]  alu2_mode_rf_ex_out;
+    wire 	  alu1_en_rf_ex_out;
+    wire 	  alu2_en_rf_ex_out;
+    wire 	  mult_en_rf_ex_out; 
+    wire 	  addr_en_rf_ex_out;
+    wire 	  reg_wrt_mul_rf_ex_out;
+    wire 	  reg_wrt_alu1_rf_ex_out;
+    wire 	  reg_wrt_alu2_rf_ex_out;
+    wire 	  reg_wrt_ld_rf_ex_out;
+    wire 	  alu1_mem_wrt_rf_ex_out; 
+    wire 	  alu2_mem_wrt_rf_ex_out; 
+    wire 	  mult_mem_wrt_rf_ex_out; 
+    wire 	  addr_mem_wrt_rf_ex_out; 
+
+    assign alu1_mode_rf_ex_out_ok = (flush_alu1) ?  3'h0 : alu1_mode_rf_ex_out;
+    assign alu2_mode_rf_ex_out_ok = (flush_alu2) ?  3'h0 : alu2_mode_rf_ex_out;
+
+    assign alu1_en_rf_ex_out_ok = (flush_alu1) ?  1'h0 : alu1_en_rf_ex_out;
+    assign alu2_en_rf_ex_out_ok = (flush_alu2) ?  1'h0 : alu2_en_rf_ex_out;
+    assign mult_en_rf_ex_out_ok = (flush_mult) ?  1'h0 : mult_en_rf_ex_out; 
+    assign addr_en_rf_ex_out_ok = (flush_addr) ?  1'h0 : addr_en_rf_ex_out;
+
+    assign reg_wrt_mul_rf_ex_out_ok = (flush_mult) ?  1'h0 : reg_wrt_mul_rf_ex_out;
+    assign reg_wrt_alu1_rf_ex_out_ok = (flush_alu1) ?  1'h0 : reg_wrt_alu1_rf_ex_out;
+    assign reg_wrt_alu2_rf_ex_out_ok = (flush_alu2) ?  1'h0 : reg_wrt_alu2_rf_ex_out;
+    assign reg_wrt_ld_rf_ex_out_ok = (flush_addr) ?  1'h0 : reg_wrt_ld_rf_ex_out;
+
+    assign alu1_mem_wrt_rf_ex_out_ok = (flush_alu1) ?  1'h0 : alu1_mem_wrt_rf_ex_out; 
+    assign alu2_mem_wrt_rf_ex_out_ok = (flush_alu2) ?  1'h0 : alu2_mem_wrt_rf_ex_out; 
+    assign mult_mem_wrt_rf_ex_out_ok = (flush_mult) ?  1'h0 : mult_mem_wrt_rf_ex_out; 
+    assign addr_mem_wrt_rf_ex_out_ok = (flush_addr) ?  1'h0 : addr_mem_wrt_rf_ex_out; 
+
+
+
     wire enable;   // ~stall
-   assign enable = ~stall;
+    assign enable = ~stall;
    
 
     //data

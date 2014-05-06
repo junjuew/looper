@@ -1,6 +1,6 @@
 module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld_al, mem_rd, phy_addr_ld_in, indx_ls, addr_ls,
 ld_grnt, done, data_sq, data_ca, fwd, fwd_rdy, ld_req, addr, reg_wrt_ld, phy_addr_ld,
-data_ld, vld_ld, indx_ld,stll, indx_fwd, cmmt_ld_ptr, ld_head);
+data_ld, vld_ld, indx_ld,stll, indx_fwd, cmmt_ld_ptr);
 
 // input and output ports declarations
 input rst, clk, flsh, mem_rd, ld_grnt, done, fwd, fwd_rdy, fnsh_unrll,  loop_strt;
@@ -8,7 +8,7 @@ input [31:0] indx_ld_al;
 input [4:0] mis_pred_ld_ptr, cmmt_ld_ptr;
 input [5:0] phy_addr_ld_in, indx_ls;
 input [15:0] addr_ls, data_ca, data_sq;
-output vld_ld, reg_wrt_ld, stll, ld_req, ld_head;
+output vld_ld, reg_wrt_ld, stll, ld_req;
 output [5:0] indx_ld, phy_addr_ld;
 output [6:0] indx_fwd;
 output [15:0] data_ld, addr;
@@ -19,7 +19,6 @@ reg [41:0] ld_entry [0:23]; // load queue entries
 reg [4:0] head, tail, current, pre_tail, pre_current, loop_end, loop_start;
 reg busy, finished, loop_mode, pre_loop_strt;
 
-assign ld_head=ld_entry[head][38];
 //integer i;
 wire [23:0] update, // whether the corresponding entry needs update
 				bid; // whether the corresponding load instruction is ready to execute
@@ -324,7 +323,12 @@ always@(vld, tail)
    
 assign nxt_tail=(pre_tail > 23)? (pre_tail-24) : pre_tail; // need modification in loop-mode  
   
-assign stll= (!ld_entry[tail][41]); 
+assign stll=  (tail < head) ? (tail+4 > head) : 
+			  ( tail > head && tail < 21) ? 0 :
+			  (tail > head && tail == 21) ? (!(head > 0)):
+			 (tail > head && tail == 22) ? (!(head >1)) :
+			 (tail >head && tail == 23) ? (!(head >2)):
+			 (head == tail) ? (ld_entry[head][41]) : 0;
 
 
 
@@ -362,7 +366,6 @@ case(tail)
     5'd23: first={pre_first[0],pre_first[23:1]};
     default: first = 0;
 endcase
-
 always@(*)
 case(tail)
     5'd0: second = pre_second;
@@ -456,7 +459,7 @@ generate
 genvar i_1;
 for (i_1=0;i_1<24;i_1=i_1+1)
 	begin : update_gen
-		assign update[i_1] = mem_rd & (!ld_entry[i_1][41]) & (indx_ls == ld_entry[i_1][37:32]);
+		assign update[i_1] = mem_rd & (ld_entry[i_1][41]) & (indx_ls == ld_entry[i_1][37:32]);
 	end
 endgenerate
    
@@ -468,7 +471,7 @@ for (i=0;i<24;i=i+1)
 	begin : ld_entry_gen
        always@(posedge clk, negedge rst)
 		 if (!rst)
-          ld_entry[i][41:0] <= 42'h20000000000;
+          ld_entry[i][41:0] <= 42'h00000000000;
        else begin
           if (update[i]) begin
               ld_entry[i][15:0] <= phy_addr_ld_in; // update physical register address field
@@ -495,13 +498,13 @@ for (i=0;i<24;i=i+1)
                    
            // state bits
            if (flush_body[i] & flsh)
-              ld_entry[i][41] <= 1;
-           else if (loop_body[i] & loop_back)
               ld_entry[i][41] <= 0;
-           else if (commit[i] & cmmt)
+           else if (loop_body[i] & loop_back)
               ld_entry[i][41] <= 1;
+           else if (commit[i] & cmmt)
+              ld_entry[i][41] <= 0;
             else if (insert[i])
-               ld_entry[i][41] <= 0;
+               ld_entry[i][41] <= 1;
             else
                ld_entry[i][41] <= ld_entry[i][41];
                
@@ -536,13 +539,15 @@ generate
 genvar i_2;
    for (i_2=0;i_2<24;i_2=i_2+1)
 	begin : bid_gen
-		assign bid[i_2] = (~busy) & (~ld_entry[i_2][41]) & (~ld_entry[i_2][39]) & (ld_entry[i_2][40]); // find ready load that has not been done
+		assign bid[i_2] = (~busy) & (ld_entry[i_2][41]) & (~ld_entry[i_2][39]) & (ld_entry[i_2][40]); // find ready load that has not been done
 	end
 endgenerate
 
 
 assign ld_rdy= |bid ;      
-
+assign ld_done_6=ld_entry[14][39];
+assign ld_vld_6=ld_entry[14][41];
+assign ld_ready_6=ld_entry[14][40];
 // Order the bids from head
 always@(bid, head)
    case(head)
@@ -698,6 +703,7 @@ always@(ld_rdy, done, flsh, fwd_rdy, ld_grnt, state) begin
              nxt_state=IDLE;
     
        WAIT: begin
+	   busy=1;	   
        ld_req=1; // Keep requesting
        if (flsh)
 		   nxt_state=IDLE;

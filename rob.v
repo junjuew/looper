@@ -55,6 +55,7 @@ module rob(
 
     // outputs:
     output [6:0] next_idx,            // to Allocation
+	output signed_comp,               // to WB Store Queue
     output mis_pred,                  // to IF, ID, AL
     output flush, 
     output [5:0] mis_pred_brnc_idx,   // to AL-freelist and IS-issue_queue
@@ -73,7 +74,9 @@ module rob(
     output [5:0] free_preg_num2,      // to AL-freelist
     output [5:0] free_preg_num3,      // to AL-freelist
     output [5:0] free_preg_num4,      // to AL-freelist
-    output [2:0] free_preg_cnt        // to AL-freelist: number of freed physical regs
+    output [2:0] free_preg_cnt,        // to AL-freelist: number of freed physical regs
+	output [5:0] rob_head_out_for_flsh,   // to IS/RF and RF/EX stage pipeline registers
+	output [5:0] rob_tail_out_for_flsh   // to IS/RF and RF/EX stage pipeline registers
 
 );
 
@@ -90,6 +93,7 @@ ROB per entry:
     reg [63:0] rob_done;
     reg [63:0] rob_brnc;
     reg [63:0] rob_brnc_pred;
+    reg [63:0] rob_signed_comp;
     reg [1:0]  rob_brnc_cond [63:0];
     reg [15:0] rob_rcvr_PC   [63:0];
     reg [63:0] rob_st;
@@ -108,6 +112,8 @@ ROB per entry:
     wire [2:0] rob_head_cmmt_num_pair1;
     wire [2:0] rob_head_cmmt_num_pair2;
     reg [6:0] rob_tail; // one extra big ahead to enable overflow comparison
+	//wire [5:0] rob_head_out_for_flsh;
+	//wire [5:0] rob_tail_out_for_flsh;
 
     reg [3:0] rob_st_cntr;
     reg [4:0] rob_ld_cntr;
@@ -123,6 +129,13 @@ ROB per entry:
     /********************************************/
     /*********** Combinational Blocks ***********/
     /********************************************/
+
+	// head and tail out to flush IS/RF and RF/EX pipeline regs
+	assign rob_head_out_for_flsh = rob_head[5:0];
+	assign rob_tail_out_for_flsh = rob_tail[5:0];
+
+	// signed_comp to WB store queue
+	assign signed_comp = rob_signed_comp[rob_head];
 
     // next_idx to Allocation stage is tail
     assign next_idx = { inverting_bit, {(mis_pred) ? rob_tail_when_mis_pred : rob_tail[5:0]}};
@@ -882,6 +895,29 @@ ROB per entry:
         end
     end
     endgenerate
+
+	/*
+    * Each entry updation : valid
+    */
+    // write section
+    generate
+    genvar rob_signed_comp_idx;
+    for(rob_signed_comp_idx = 0; rob_signed_comp_idx < 64; rob_signed_comp_idx = rob_signed_comp_idx + 1)
+    begin : rob_signed_comp_idx_gen
+        always@(posedge clk, negedge rst_n)begin
+            if(!rst_n)
+                rob_signed_comp[rob_signed_comp_idx] <= 0;
+            // adding into ROB
+            else if ((!all_nop) && (rob_signed_comp_idx >= rob_tail[5:0] && rob_signed_comp_idx <= (rob_tail[5:0]+3))) 
+                rob_signed_comp[rob_signed_comp_idx] <= inverting_bit;
+            // default
+            else begin
+                rob_signed_comp[rob_signed_comp_idx] <= rob_signed_comp[rob_signed_comp_idx];
+            end
+        end
+    end
+    endgenerate
+
 
 	branch_fifo branch_fifo_DUT(
 	// Outputs
