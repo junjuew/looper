@@ -22,8 +22,8 @@ module memory(
         reg [63:0] mem[0:16383];
         integer i;
         
-        assign read=ena&wea;
-        assign write=ena&(~wea);
+        assign read=ena&(~wea);
+        assign write=ena&(wea);
         always@(posedge clka) begin
             if (read)
               douta <= mem[addra];
