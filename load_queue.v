@@ -454,7 +454,8 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd23: fourth={pre_fourth[0],pre_fourth[23:1]};
        default: fourth = 0;
      endcase
- 
+
+ 
    generate
       genvar 	 i_1;
       for (i_1=0;i_1<24;i_1=i_1+1)
@@ -464,7 +465,8 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    endgenerate
    
    assign insert = first | second | third | fourth;
- 
+
+ 
    generate
       genvar i;
       for (i=0;i<24;i=i+1) 
@@ -533,7 +535,8 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
 	end // block: ld_entry_gen
       
    endgenerate
- 
+
+ 
    
    // execute load
    generate
@@ -543,8 +546,10 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
 	   assign bid[i_2] = (~busy) & (ld_entry[i_2][41]) & (~ld_entry[i_2][39]) & (ld_entry[i_2][40]); // find ready load that has not been done
 	end
    endgenerate
- 
- 
+
+ 
+
+ 
    assign ld_rdy= |bid ;      
    assign ld_done_6=ld_entry[14][39];
    assign ld_vld_6=ld_entry[14][41];
