@@ -1,6 +1,6 @@
 ldi r0, 0xff		// assign 0xffff to r0
 ldr r0, r0, 0
-jr  r0, 0		// jump to 0xffff
+jr  r0, 0		// jump to 0x0000
 nop
 nop
 nop

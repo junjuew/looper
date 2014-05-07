@@ -188,7 +188,4 @@ module branch_fifo(/*autoarg*/
 	  tail <= tail;
      end // always@ (posedge clk, negedge rst_n)
 
-   
-   
-   
 endmodule // scratch

@@ -23,7 +23,7 @@ module instrMemModule(
     input [15:0] pc,
     input [15:0] pc_reg,
     input start,
-	output reg[15:0] inst0,
+        output reg[15:0] inst0,
     output reg[15:0] inst1,
     output reg[15:0] inst2,
     output reg[15:0] inst3

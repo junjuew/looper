@@ -15,4 +15,3 @@ initial begin
 $readmemb("./ECE554_assembler/Test/ldr_str_tutu_mif.mif", mem);
 end
 endmodule
-

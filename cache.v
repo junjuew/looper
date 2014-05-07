@@ -8,7 +8,7 @@ module cache (flush_finish, one_line_flushed, rst, clk, flush, addr_ca, data_ca_
     input [63:0] data_from_mem;
     output miss_hit, wrt_bck, line_dirty;
     output reg [15:0] data_ca_out;
-	 output reg [13:0] addr_mem;
+         output reg [13:0] addr_mem;
     output reg [63:0] data_to_mem;
     output reg done;
     
@@ -87,6 +87,8 @@ module cache (flush_finish, one_line_flushed, rst, clk, flush, addr_ca, data_ca_
         done <= 0;
     end
     else if (flush_reg) begin
+       done <=0;
+       
       case(flush_way)
         1'b0: begin
            addr_mem <= (line_dirty ) ? {mem[flush_index][151:141], flush_index}: 0; // put memory address on the bus to write data back
@@ -111,8 +113,8 @@ module cache (flush_finish, one_line_flushed, rst, clk, flush, addr_ca, data_ca_
   else if (miss_hit & enable) begin  
           // read hit
           done <= 1;
-          data_to_mem <= data_to_mem;
-          addr_mem <= addr_mem;
+          data_to_mem <= 16'h0;
+          addr_mem <= 14'h0;
           if (read) begin
              if (hit_first) 
                 data_ca_out <=  (offset == 2'b11) ? mem[index][140:125] :
