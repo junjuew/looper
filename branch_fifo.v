@@ -17,7 +17,7 @@ module branch_fifo(/*autoarg*/
    
    output      decr_brnc_num;
 
-   reg [5:0]   fifo[0:1];
+   reg [6:0]   fifo[0:1];
 
    reg 	       head,tail;
 
@@ -31,7 +31,7 @@ module branch_fifo(/*autoarg*/
    wire [1:0]  brnc_count;
 
    wire [5:0]  indx1,indx2,indx3;
-   reg [5:0]  fifo_update_val[0:1];
+   reg [6:0]  fifo_update_val[0:1];
    
    
    assign indx1 = (rob_tail < 63) ? rob_tail + 6'h1 : 0;
@@ -52,25 +52,25 @@ module branch_fifo(/*autoarg*/
    always@(/*autosense*/brnc_count or brnc_in or indx1 or indx2
 	   or indx3 or rob_tail or tail)
      begin
-	fifo_update_val[0] = 6'b0;
-	fifo_update_val[1] = 6'b0;
+	fifo_update_val[0] = 7'b0;
+	fifo_update_val[1] = 7'b0;
 	if(brnc_in[0])
-	  fifo_update_val[tail] = rob_tail;
+	  fifo_update_val[tail] = {1'b1,rob_tail};
 	else if(brnc_in[1])
-	  fifo_update_val[tail] = indx1;
+	  fifo_update_val[tail] = {1'b1,indx1};
 	else if(brnc_in[2])
-	  fifo_update_val[tail] = indx2;
+	  fifo_update_val[tail] = {1'b1,indx2};
 	else if(brnc_in[3])
-	  fifo_update_val[tail] = indx3;
+	  fifo_update_val[tail] = {1'b1,indx3};
 
 	if(brnc_count == 2'b10)
 	  begin
 	     if(brnc_in[3])
-	       fifo_update_val[tail + 1'b1] = indx3;
+	       fifo_update_val[tail + 1'b1] = {1'b1,indx3};
 	     else if(brnc_in[2])
-	       fifo_update_val[tail + 1'b1] = indx2;
+	       fifo_update_val[tail + 1'b1] = {1'b1,indx2};
 	     else
-	       fifo_update_val[tail + 1'b1] = indx1;
+	       fifo_update_val[tail + 1'b1] = {1'b1,indx1};
 	  end
      end // always@ (...
    
@@ -92,28 +92,27 @@ module branch_fifo(/*autoarg*/
 	
 	if(mis_pred)
 	  begin
-	     if(mis_pred_brnc_indx == fifo[head])
+	     if((mis_pred_brnc_indx == fifo[head][5:0]) && fifo[head][6])
 	       begin
 		  clear_head = 1'b1;
 		  decr_brnc_num = 1'b1;
 		  
 	       end
-	     else
+	     else if((mis_pred_brnc_indx == fifo[head + 1'b1][5:0]) && fifo[head + 1'b1][6])
 	       begin
 		  decrement_tail = 1'b1;
 		  fifo_enable[head + 1'b1] = 1'b1;
-		  
 	       end
 	  end // if (mis_pred)
 
 	if(cmt_brnc)
 	  begin
-	     if(cmt_brnc_indx == fifo[head])
+	     if((cmt_brnc_indx == fifo[head][5:0]) && fifo[head][6])
 	       begin
 		  increment_head = 1'b1;
 		  fifo_enable[head] = 1'b1;
 	       end
-	     else
+	     else if ((cmt_brnc_indx == fifo[head + 1'b1][5:0]) && fifo[head + 1'b1][6])
 	       begin
 		  decrement_tail = 1'b1;
 		  fifo_enable[head + 1'b1] = 1'b1;
@@ -128,7 +127,7 @@ module branch_fifo(/*autoarg*/
 	  end
 	
 	
-	if(brnc_count == 2'b10)
+	else if(brnc_count == 2'b10)
 	  begin
 	     increment_tail2 = 1'b1;
 	     fifo_enable[0] = 1'b1;
@@ -147,9 +146,9 @@ module branch_fifo(/*autoarg*/
 	   always@(posedge clk,negedge rst_n)
 	     begin
 		if(!rst_n)
-		  fifo[i] <= 6'b0;
+		  fifo[i] <= 7'b0;
 		else if(clear_head)
-		  fifo[i] <= 6'b0;
+		  fifo[i] <= 7'b0;
 		else if(fifo_enable[i])
 		  fifo[i] <= fifo_update_val[i];
 		else

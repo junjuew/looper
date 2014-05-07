@@ -15,4 +15,3 @@ initial begin
 $readmemb("./ECE554_assembler/Test/add1_mif.mif", mem);
 end
 endmodule
-
