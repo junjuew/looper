@@ -21,6 +21,40 @@ beqz	r7, .main_end
 add r4, r5, r8	// r4 = r5 + 0 = r5
 j		.main_start
 .main_end:
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
 ldi r0, 92	// start storing registers from mem[177] ~ mem[191]
 add r0, r0, r0	
 str r1, r0, -7

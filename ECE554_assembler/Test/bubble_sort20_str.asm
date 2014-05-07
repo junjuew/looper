@@ -1,6 +1,6 @@
 ldi r1, 0	// constant 0
 ldi r2, 1	// constant 1
-ldi r3, 80	// memory start at 100
+ldi r3, 100	// memory start at 100
 ldi r5, 2	
 str r5, r3, 0
 add r3, r3, r2
@@ -25,76 +25,16 @@ add r3, r3, r2
 ldi r5, 98
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 123	
+ldi r5, 103	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 127	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 124	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, -98	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 111	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, -16	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 25	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, -4	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 69	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 39	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, -50	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, -120	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, -52	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 109	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 37	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 19	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 73	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, -100	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 92	
+ldi r5, 107	
 str r5, r3, 0
 add r3, r3, r2
 ldi r5, 108	
 str r5, r3, 0
 add r3, r3, r2
-ldi r5, 101	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, 49	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, -81	
-str r5, r3, 0
-add r3, r3, r2
-ldi r5, -121	
+ldi r5, -98	
 str r5, r3, 0
 add r3, r3, r2
 ldi r5, -10	
@@ -121,10 +61,10 @@ add r3, r3, r2
 ldi r5, 104	
 str r5, r3, 0
 add r3, r3, r2
-ldi r3, 80	// memory start
-ldi r4, 40	// length of array
-ldi r5, 80	// outter index
-ldi r12, 120	// constant 140
+ldi r3, 100	// memory start
+ldi r4, 20	// length of array
+ldi r5, 100	// outter index
+ldi r12, 120	// constant 120
 .outter_loop:
 beqz r4, .end_outter_loop
 add r6, r5, r2	// generate inner index
