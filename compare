@@ -1,2 +1,2 @@
 cd sim_compare
-java Sim_compare
+java Sim_compare $1

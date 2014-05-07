@@ -1,6 +1,4 @@
-
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Hashtable;
 import java.util.Scanner;
 import java.util.*;
@@ -21,12 +19,15 @@ public class Sim_compare{
 		File simRegFile = new File("../sim_reg.dump");
 		File memFile = new File("../mem.dump");
 		File simMemFile = new File("../sim_mem.dump");
-		
 		Scanner mapScan = null;
 		Scanner regScan = null;
 		Scanner memScan = null;
 		Scanner simRegScan = null;
 		Scanner simMemScan = null;
+		
+		String fileName = args[0];
+		FileWriter resultOut = null;
+		BufferedWriter bufferWritter = null;
 		
 		try {
 			mapScan = new Scanner(mapFile);
@@ -53,6 +54,12 @@ public class Sim_compare{
 		} catch (FileNotFoundException e) {
 			System.out.println("sim_reg.dump not found");
 		}
+		try {
+			resultOut = new FileWriter("../run_all_result.dump", true);
+    	        	bufferWritter = new BufferedWriter(resultOut);
+		} catch (IOException e) {
+			System.out.println("buffer writer error");
+		}
 		
 		// process each dump file via scanner
 		processMapDump(mapScan);
@@ -61,11 +68,29 @@ public class Sim_compare{
 		processSimRegDump(simRegScan);
 		processSimMemDump(simMemScan);
 		
-		validateRegisterResult();
-		validateMemoryResult();
+		boolean registerCorrect = validateRegisterResult();
+		boolean memoryCorrect = validateMemoryResult();
+		if (registerCorrect && memoryCorrect){
+			try{
+				bufferWritter.write(fileName + " SUCCESS\n");
+			} catch (IOException e){
+				System.out.println("buffer writer error");
+			}
+		}else{
+			try{
+				bufferWritter.write(fileName + " FAILED\n");
+			} catch (IOException e){
+				System.out.println("buffer writer error");
+			}
+		}
+		try{
+			bufferWritter.close();
+		} catch (IOException e){
+			System.out.println("buffer writer error");
+		}
 	}
 
-	private static void validateMemoryResult(){
+	private static boolean validateMemoryResult(){
 		boolean memoryCorrect = true;
 		for (int i = 0; i < 16384; i ++){
 			if ((simMem2valMAP.get(i) == null && !mem2valMAP.get(i).equals("0000000000000000")) || (simMem2valMAP.get(i) != null && !simMem2valMAP.get(i).equals(mem2valMAP.get(i)))){
@@ -82,9 +107,10 @@ public class Sim_compare{
 		}else{
 			System.out.println("Memory INCORRECT");
 		}
+		return memoryCorrect;
 	}
 
-	private static void validateRegisterResult(){
+	private static boolean validateRegisterResult(){
 		boolean allPass = true;
 		boolean[] track = new boolean[16];
 		for (int i = 0; i <= 15; i ++){
@@ -114,6 +140,7 @@ public class Sim_compare{
 		}else{
 			System.out.println("Registers CORRECT");
 		}
+		return allPass;
 	}
 
 

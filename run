@@ -1,1 +1,38 @@
-vsim -c -novopt work.tb_topmodule
+if [ $# != 1 ]; then
+	echo "Run"
+	echo "./run_all -all to process all *.asm files"
+	echo "OR run"
+	echo "./run_all <file> to process a single .asm file"
+	echo "    Example: ./run_all add1"
+else
+	rm run_all_result.dump
+	if [ $1 == "-normal" ]; then
+		for asmFile in $(ls ECE554_assembler/Test/*.asm)
+			do
+				filePrefix=${asmFile%.asm}
+				filePrefix=${filePrefix#*Test/}
+				java Modified_imem $filePrefix
+				./compile
+				echo 'run -all' | vsim -c -novopt work.tb_topmodule
+				./simulate $filePrefix
+				./compare $filePrefix
+			done
+	elif [ $1 == "-str" ]; then
+		for asmFile in $(ls ECE554_assembler/Test/STR_Test/*.asm)
+			do
+				filePrefix=${asmFile%.asm}
+				filePrefix=${filePrefix#*Test/}
+				java Modified_imem $filePrefix
+				./compile
+				echo 'run -all' | vsim -c -novopt work.tb_topmodule
+				./simulate $filePrefix
+				./compare $filePrefix
+			done	
+	else
+		java Modified_imem $1
+		./compile
+		echo 'run -all' | vsim -c -novopt work.tb_topmodule
+		./simulate $1
+		./compare $1
+	fi
+fi
