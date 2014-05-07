@@ -117,6 +117,8 @@ PC_MUX PC_MUX0(
 );
 
 //reg [15:0] pc;
+wire [15:0] pc_from_mux_ext;
+assign pc_from_mux_ext=exter_pc_en?exter_pc:pc_from_mux;
 
 always@(posedge clk or negedge rst_n)begin
 	if(!rst_n)
@@ -140,7 +142,7 @@ assign pc_plus4=pc+4;
 
 instrMemModule IMM(
     .clk(clk),
-    .pc(pc_from_mux),
+    .pc(pc_from_mux_ext),
     .pc_reg(pc),
 	.start(start),
     .inst0(inst0),
