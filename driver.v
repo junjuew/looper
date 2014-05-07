@@ -132,7 +132,7 @@ module driver(/*autoarg*/
    // this is referring to the receive side, transmission's baud value
    // is 16 times larger than receiver
    // 0x516 * 16 = (10^9) / 4800 /10
-   assign baud_rate = (br_cfg == 2'b00) ? 16'h823://16'h516://16'd64://16'h516://16'd16:
+   assign baud_rate = (br_cfg == 2'b00) ? 16'h82://16'h516://16'd64://16'h516://16'd16:
                       (br_cfg == 2'b01) ? 16'h28B:
                       (br_cfg == 2'b10) ? 16'h146: 16'ha3;
    
@@ -435,19 +435,19 @@ module driver(/*autoarg*/
                     nxt_state=PRG_EXE;
                  end
                else
-						//transmit back memory last slot for debug
-						begin
-							nxt_state = CLR_MEM;
-							enb=1'b1;
-							addrb = LAST_SLOT_MEM_ADDR;
-							if (tbr)
-							  begin
-								  ioaddr_reg = 2'b00;
-								  iorw_reg = 1'b0;        
-								  data_out = doutb[55:48];
-							  end
-							
-						end
+                                                //transmit back memory last slot for debug
+                                                begin
+                                                        nxt_state = CLR_MEM;
+                                                        enb=1'b1;
+                                                        addrb = LAST_SLOT_MEM_ADDR;
+                                                        if (tbr)
+                                                          begin
+                                                                  ioaddr_reg = 2'b00;
+                                                                  iorw_reg = 1'b0;        
+                                                                  data_out = doutb[55:48];
+                                                          end
+                                                        
+                                                end
             end
 
           //detect the end of program execution
