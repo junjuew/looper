@@ -22,7 +22,8 @@ module instrMemModule(
     input clk,
     input [15:0] pc,
     input [15:0] pc_reg,
-    output reg[15:0] inst0,
+    input start,
+	output reg[15:0] inst0,
     output reg[15:0] inst1,
     output reg[15:0] inst2,
     output reg[15:0] inst3
@@ -54,37 +55,37 @@ imemory IM0(clk, pc[15:2], instLine0, clk, pc_nxtline[15:2],instLine1);
 //inst0 mux
 always@(*)
     case(pc_reg[1:0])
-    2'b00:inst0=instLine0[63:48];
-    2'b01:inst0=instLine0[47:32];
-    2'b10:inst0=instLine0[31:16];
-    2'b11:inst0=instLine0[15:0];
+    2'b00:inst0=start?16'b0:instLine0[63:48];
+    2'b01:inst0=start?16'b0:instLine0[47:32];
+    2'b10:inst0=start?16'b0:instLine0[31:16];
+    2'b11:inst0=start?16'b0:instLine0[15:0];
     endcase
 
 //inst1 mux
 always@(*)
     case(pc_plus1[1:0])
-    2'b00:inst1=instLine1[63:48];
-    2'b01:inst1=instLine0[47:32];
-    2'b10:inst1=instLine0[31:16];
-    2'b11:inst1=instLine0[15:0];
+    2'b00:inst1=start?16'b0:instLine1[63:48];
+    2'b01:inst1=start?16'b0:instLine0[47:32];
+    2'b10:inst1=start?16'b0:instLine0[31:16];
+    2'b11:inst1=start?16'b0:instLine0[15:0];
     endcase
 
 //inst2 mux
 always@(*)
     case(pc_plus2[1:0])
-    2'b00:inst2=instLine1[63:48];
-    2'b01:inst2=instLine1[47:32];
-    2'b10:inst2=instLine0[31:16];
-    2'b11:inst2=instLine0[15:0];
+    2'b00:inst2=start?16'b0:instLine1[63:48];
+    2'b01:inst2=start?16'b0:instLine1[47:32];
+    2'b10:inst2=start?16'b0:instLine0[31:16];
+    2'b11:inst2=start?16'b0:instLine0[15:0];
     endcase
     
 //inst3 mux
 always@(*)
     case(pc_plus3[1:0])
-    2'b00:inst3=instLine1[63:48];
-    2'b01:inst3=instLine1[47:32];
-    2'b10:inst3=instLine1[31:16];
-    2'b11:inst3=instLine0[15:0];
+    2'b00:inst3=start?16'b0:instLine1[63:48];
+    2'b01:inst3=start?16'b0:instLine1[47:32];
+    2'b10:inst3=start?16'b0:instLine1[31:16];
+    2'b11:inst3=start?16'b0:instLine0[15:0];
     endcase
 
 

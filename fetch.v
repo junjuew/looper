@@ -142,6 +142,7 @@ instrMemModule IMM(
     .clk(clk),
     .pc(pc_from_mux),
     .pc_reg(pc),
+	.start(start),
     .inst0(inst0),
     .inst1(inst1),
     .inst2(inst2),

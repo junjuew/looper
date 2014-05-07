@@ -19,7 +19,7 @@ module tb_topmodule();
 `include "is_dump_inst.task"
 `include "rf_dump_reg.task"
 `include "mem_dump.task"
-`include "rf_dump_reg_all_time.task"
+//`include "rf_dump_reg_all_time.task"
 
 
    
@@ -280,11 +280,11 @@ module tb_topmodule();
       //flush all dump files
       $fflush(dump_1);
       $fflush(dump_2);
-      $fflush(reg_dump);      
+      //$fflush(reg_dump);      
       
       $fclose(dump_1);
       $fclose(dump_2);
-      $fclose(reg_dump);      
+      //$fclose(reg_dump);      
       
       
       $finish;
