@@ -1,9 +1,8 @@
 error_msg1="./simulate <.asm file name>"
 error_msg2="Example: ./simulate beqz1"
-testDIR='../Test/'
 asm='.asm'
 
-if [ $# != 1 ]; then
+if [ $# != 1 ] && [ $# != 2 ]; then
 	echo ""
 	echo 'Run simulation by entering'
 	echo "    $error_msg1"
@@ -21,9 +20,15 @@ else
 			do
 				echo $asmFile
 			done
-	else
+	elif [ $1 == "-normal" ]; then
+		testDIR='../Test/'
 		cd ECE554_assembler/src
-		java Assemble $testDIR$1$asm $1 -m sim
-		echo "$1$asm done"
+		java Assemble $testDIR$2$asm $2 -m sim
+		echo "$2$asm done"
+	elif [ $1 == "-str" ]; then
+		testDIR='../Test/STR_Test/'
+		cd ECE554_assembler/src
+		java Assemble $testDIR$2$asm $2 -m sim
+		echo "$2$asm done"
 	fi
 fi
