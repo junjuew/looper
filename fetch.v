@@ -117,6 +117,8 @@ PC_MUX PC_MUX0(
 );
 
 //reg [15:0] pc;
+wire [15:0] pc_from_mux_ext;
+assign pc_from_mux_ext=exter_pc_en?exter_pc:pc_from_mux;
 
 always@(posedge clk or negedge rst_n)begin
 	if(!rst_n)
@@ -140,7 +142,7 @@ assign pc_plus4=pc+4;
 
 instrMemModule IMM(
     .clk(clk),
-    .pc(pc_from_mux),
+    .pc(pc_from_mux_ext),
     .pc_reg(pc),
 	.start(start),
     .inst0(inst0),
@@ -237,11 +239,12 @@ jumpHandler jumpHandler(
     .instruction1(instruction1),
     .instruction2(instruction2),
     .instruction3(instruction3),
+    .extern_pc_en(exter_pc_en),
     .jump_base_from_rf_0(jump_base_from_rf),
     .jump_base_rdy_from_rf_0(jump_base_rdy_from_rf),
     .jump_addr_pc(jump_addr_pc),
     .jump_for_pcsel(jump_for_pcsel),
-    .stall_for_jump(stall_for_jump),
+    .stall_for_jump_ext(stall_for_jump),
     .instruction0_j(instruction0_j),
     .instruction1_j(instruction1_j),
     .instruction2_j(instruction2_j),

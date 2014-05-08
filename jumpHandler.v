@@ -28,12 +28,18 @@ module jumpHandler(input has_mispredict,
 		   input [15:0]  instruction3,
 		   input [15:0]  jump_base_from_rf_0,
 		   input 	 jump_base_rdy_from_rf_0,
+
+           //input for extern_pc
+           input extern_pc_en,
+
 		   //input [15:0] jump_base_for_fetch,
 		   // input jump_base_rdy_for_fetch,
 		   // output reg[15:0] jump_addr_pc, // fan
 		   output [15:0] jump_addr_pc,
 		   output 	 jump_for_pcsel,
-		   output reg 	 stall_for_jump,
+
+            //modified for extern pc
+		   output  stall_for_jump_ext,
 		   output [15:0] instruction0_j,
 		   output [15:0] instruction1_j,
 		   output [15:0] instruction2_j,
@@ -48,10 +54,16 @@ module jumpHandler(input has_mispredict,
    reg 				 jump_base_rdy_from_rf_buf; 
    reg 				 disable_ins;
    //assign disable_ins=0;
-   
+   reg stall_for_jump;
    wire 			 stall_for_jump1;
    
-   
+   wire stall_for_jump1_ext;
+   assign stall_for_jump_ext=extern_pc_en?1'b0:stall_for_jump;
+   assign stall_for_jump1_ext=extern_pc_en?1'b0:stall_for_jump1;
+
+
+
+
    always@(posedge clk or negedge rst_n) begin
       if(!rst_n)begin
 	 jump_base_from_rf<=16'b0;
@@ -138,7 +150,7 @@ end
  end
     */
    assign jump_for_pcsel = (jump_base_rdy_from_rf_buf) ? 1'b1 :
-			   (stall_for_jump1) ?   1'b1:
+			   (stall_for_jump1_ext) ?   1'b1:
  			   (preJmp)	    ? 1'b0 :
  			   (existImdJmp)     ? 1'b1 : 1'b0;
    
@@ -181,7 +193,7 @@ end*/
          jump_pc<=16'b0;
          wtJumpAddr<=0;
          preJmp<=0;
-      end else if(has_mispredict)begin
+      end else if(has_mispredict||extern_pc_en)begin
          stall_for_jump<=0;
          jump_pc<=16'b0;
          wtJumpAddr<=0;
@@ -258,10 +270,10 @@ end*/
    end//always
 
 
-   assign instruction0_j=(stall_for_jump||jump_base_rdy_from_rf_buf)?16'b0:(instruction0);
-   assign instruction1_j=(stall_for_jump||jump_base_rdy_from_rf_buf)?16'b0:(instruction1);
-   assign instruction2_j=(stall_for_jump||jump_base_rdy_from_rf_buf)?16'b0:(instruction2);
-   assign instruction3_j=(stall_for_jump||jump_base_rdy_from_rf_buf)?16'b0:(instruction3);
+   assign instruction0_j=((stall_for_jump||jump_base_rdy_from_rf_buf)&&(!extern_pc_en))?16'b0:(instruction0);
+   assign instruction1_j=((stall_for_jump||jump_base_rdy_from_rf_buf)&&(!extern_pc_en))?16'b0:(instruction1);
+   assign instruction2_j=((stall_for_jump||jump_base_rdy_from_rf_buf)&&(!extern_pc_en))?16'b0:(instruction2);
+   assign instruction3_j=((stall_for_jump||jump_base_rdy_from_rf_buf)&&(!extern_pc_en))?16'b0:(instruction3);
 
 
    /*//delete BsJmp,so that jump can be issued to next stage
