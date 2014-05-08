@@ -66,7 +66,7 @@ wire [63:0] evicted_data;
     begin: cache_assignment
     always@(posedge clk, negedge rst) begin
     if (!rst)
-       mem[i][153:0]=154'b0;
+       mem[i][153:0]<=154'b0;
     else if ( match[i] ) begin
          if (write_hit_first)
             mem[i][153:0] <= (offset == 2'b11) ? {1'b1, 1'b1,mem[i][151:141], data_ca_in, mem[i][124:0]}:
