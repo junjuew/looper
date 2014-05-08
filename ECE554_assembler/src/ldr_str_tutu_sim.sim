@@ -1,285 +1,45 @@
 
-next inst: ldi r0, 0xff
 current inst: ldi r1, 0x00
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 0000 decimal: 0
-R1: hex: 0000 decimal: 0
-R2: hex: 0000 decimal: 0
-R3: hex: 0000 decimal: 0
-R4: hex: 0000 decimal: 0
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: str r0, r1, 0
 current inst: ldi r0, 0xff
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 0000 decimal: 0
-R3: hex: 0000 decimal: 0
-R4: hex: 0000 decimal: 0
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: ldr r2, r1, 0
 current inst: str r0, r1, 0
 ***********************************
-********   Memory update   ********
+********   Memory write   ********
 ***********************************
 memory[0] = 255
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 0000 decimal: 0
-R3: hex: 0000 decimal: 0
-R4: hex: 0000 decimal: 0
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: str r2, r1, 1
 current inst: ldr r2, r1, 0
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 00ff decimal: 255
-R3: hex: 0000 decimal: 0
-R4: hex: 0000 decimal: 0
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: str r2, r1, 2
 current inst: str r2, r1, 1
 ***********************************
-********   Memory update   ********
+********   Memory write   ********
 ***********************************
 memory[1] = 255
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 00ff decimal: 255
-R3: hex: 0000 decimal: 0
-R4: hex: 0000 decimal: 0
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: str r2, r1, 3
 current inst: str r2, r1, 2
 ***********************************
-********   Memory update   ********
+********   Memory write   ********
 ***********************************
 memory[2] = 255
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 00ff decimal: 255
-R3: hex: 0000 decimal: 0
-R4: hex: 0000 decimal: 0
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: str r2, r1, 4
 current inst: str r2, r1, 3
 ***********************************
-********   Memory update   ********
+********   Memory write   ********
 ***********************************
 memory[3] = 255
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 00ff decimal: 255
-R3: hex: 0000 decimal: 0
-R4: hex: 0000 decimal: 0
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: ldr r3, r1, 1
 current inst: str r2, r1, 4
 ***********************************
-********   Memory update   ********
+********   Memory write   ********
 ***********************************
 memory[4] = 255
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 00ff decimal: 255
-R3: hex: 0000 decimal: 0
-R4: hex: 0000 decimal: 0
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: ldr r4, r1, 2
 current inst: ldr r3, r1, 1
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 00ff decimal: 255
-R3: hex: 00ff decimal: 255
-R4: hex: 0000 decimal: 0
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: ldr r4, r1, 3
 current inst: ldr r4, r1, 2
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 00ff decimal: 255
-R3: hex: 00ff decimal: 255
-R4: hex: 00ff decimal: 255
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: ldr r4, r1, 4
 current inst: ldr r4, r1, 3
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 00ff decimal: 255
-R3: hex: 00ff decimal: 255
-R4: hex: 00ff decimal: 255
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 
-next inst: end
 current inst: ldr r4, r1, 4
-***********************************
-*******   View registers   ********
-***********************************
-R0: hex: 00ff decimal: 255
-R1: hex: 0000 decimal: 0
-R2: hex: 00ff decimal: 255
-R3: hex: 00ff decimal: 255
-R4: hex: 00ff decimal: 255
-R5: hex: 0000 decimal: 0
-R6: hex: 0000 decimal: 0
-R7: hex: 0000 decimal: 0
-R8: hex: 0000 decimal: 0
-R9: hex: 0000 decimal: 0
-R10: hex: 0000 decimal: 0
-R11: hex: 0000 decimal: 0
-R12: hex: 0000 decimal: 0
-R13: hex: 0000 decimal: 0
-R14: hex: 0000 decimal: 0
-R15: hex: 0000 decimal: 0
 Executed instruction #: 12

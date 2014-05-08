@@ -12,7 +12,7 @@ douta<=mem[addra];
 doutb<=mem[addrb];
 end
 initial begin
-$readmemb("./ECE554_assembler/Test/bubble_sort_mif.mif", mem);
+$readmemb("./ECE554_assembler/Test/ldr_str_tutu_mif.mif", mem);
 end
 endmodule
 
