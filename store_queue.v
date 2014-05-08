@@ -552,7 +552,7 @@ generate
         if (indx_to_fwd_i == 16)
           assign indx_to_fwd_gen[indx_to_fwd_i][3:0] = 4'h0;
         else
-          assign indx_to_fwd_gen[indx_to_fwd_i][3:0] = (shifted_match[15-indx_to_fwd_i])? head[3:0] + (15 - indx_to_fwd_i[3:0]) : indx_to_fwd_gen[indx_to_fwd_i+1][3:0];
+          assign indx_to_fwd_gen[indx_to_fwd_i][3:0] = (shifted_match[15-indx_to_fwd_i])? head[3:0] + (15 - indx_to_fwd_i) : indx_to_fwd_gen[indx_to_fwd_i+1][3:0];
      end
    
 endgenerate

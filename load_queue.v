@@ -595,7 +595,7 @@ generate
         if (shift_i == 24)
           assign pre_current_gen[shift_i][4:0] = head[4:0];
         else
-          assign pre_current_gen[shift_i][4:0] = (shifted_bid[shift_i])? head[4:0] + shift_i[4:0]: pre_current_gen[shift_i+1][4:0];
+          assign pre_current_gen[shift_i][4:0] = (shifted_bid[shift_i])? head[4:0] + shift_i: pre_current_gen[shift_i+1][4:0];
      end
    
 endgenerate
