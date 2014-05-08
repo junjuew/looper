@@ -144,7 +144,8 @@
 		  .inst_in1		(inst_from_ID1),
 		  .inst_in2		(inst_from_ID2),
 		  .inst_in3		(inst_from_ID3),
-		  .nxt_indx		(nxt_indx_from_CMT));
+		  .nxt_indx		(nxt_indx_from_CMT),
+		  .stall                (stall));
 
    //instCombiner
    instCombiner iscb0(/*autoinst*/

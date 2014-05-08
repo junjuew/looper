@@ -142,6 +142,7 @@ module tb_topmodule();
 
 
 
+/* -----\/----- EXCLUDED -----\/-----
    always@(posedge clk)
      begin
         if(DUT.al_DUT.br0.brnc_count != 2'b00)
@@ -182,6 +183,7 @@ module tb_topmodule();
 
 
 
+ -----/\----- EXCLUDED -----/\----- */
 
    
    /* -----\/----- EXCLUDED -----\/-----
@@ -269,6 +271,20 @@ module tb_topmodule();
 
      end
     */
+
+
+   always@(posedge clk)
+     begin
+	#0;
+	$display("%t, the coming store is %b",$time,{DUT.al_DUT.r0.inst_in0[25],DUT.al_DUT.r0.inst_in1[25],DUT.al_DUT.r0.inst_in2[25],DUT.al_DUT.r0.inst_in3[25]});
+	
+	$display("%t,first store valid is %b, first store index is %d\n", $time, DUT.al_DUT.r0.st_indx_to_lsq[7],DUT.al_DUT.r0.st_indx_to_lsq[5:0]);
+	$display("%t,second store valid is %b, second store index is %d\n", $time, DUT.al_DUT.r0.st_indx_to_lsq[15],DUT.al_DUT.r0.st_indx_to_lsq[13:8]);
+	$display("%t,third store valid is %b, third store index is %d\n", $time, DUT.al_DUT.r0.st_indx_to_lsq[23],DUT.al_DUT.r0.st_indx_to_lsq[21:16]);
+	$display("%t,fourth store valid is %b, first fourth index is %d\n", $time, DUT.al_DUT.r0.st_indx_to_lsq[31],DUT.al_DUT.r0.st_indx_to_lsq[29:24]);
+     end
+
+   
    
    
    initial begin
