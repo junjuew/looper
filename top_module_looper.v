@@ -7,8 +7,13 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache,
                          mmu_mem_dinb ,
                          mmu_mem_doutb,
                          pc_to_dec,
-                         mem_sys_idle
-                         );
+                         mem_sys_idle,
+			 mmu_counter_clr,
+		 	 mmu_counter_enable,
+                         mmu_mis_brnch_cnt,
+			 mmu_cmt_brnch_cnt,
+			 mmu_inst_cnt
+			 );
 
    input  mmu_mem_clk ;
    input  mmu_mem_rst ;
@@ -16,6 +21,8 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache,
    input  mmu_mem_web ;
    input [13:0] mmu_mem_addrb ;
    input [63:0] mmu_mem_dinb ;
+   input 	mmu_counter_clr;
+   input 	mmu_counter_enable;
    output [63:0] mmu_mem_doutb ;
    
    input clk, rst_n, flush_cache;
@@ -23,7 +30,10 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache,
    input        extern_pc_en;
    output       pc_to_dec;
    output wire  mem_sys_idle;
-
+   output [15:0] mmu_mis_brnch_cnt;
+   output [15:0] mmu_cmt_brnch_cnt;
+   output [15:0] mmu_inst_cnt;
+   
    // IF output wires
    wire [63:0]  pc_to_dec,inst_to_dec,recv_pc_to_dec;
    wire [3:0]   pred_result_to_dec;
@@ -842,4 +852,36 @@ module top_module_looper(clk, rst_n, extern_pc, extern_pc_en, flush_cache,
                .rob_tail_out_for_flsh(rob_tail_out_for_flsh)
                );
 
+
+
+
+
+   //performance uni
+   performCount p0(/*autoinst*/
+		   // Outputs
+		   .cmt_brnch_cnt	(mmu_cmt_brnch_cnt[15:0]),
+		   .mis_brnch_cnt	(mmu_mis_brnch_cnt[15:0]),
+		   // Inputs
+		   .cmt_brnch		(cmt_brnc_ROB_out),
+		   .mis_brnch		(mis_pred_ROB_out),
+		   .clk			(clk),
+		   .rst_n		(rst_n),
+		   .clr			(mmu_clr),
+		   .enable		(mmu_enable));
+   performCount_is p1(/*autoinst*/
+		      // Outputs
+		      .instruction_cnt	(mmu_inst_cnt[15:0]),
+		      // Inputs
+		      .isnt_valid0	(mul_ins_to_rf_is_out[65]),
+		      .isnt_valid1	(alu1_ins_to_rf_is_out[65]),
+		      .isnt_valid2	(alu2_ins_to_rf_is_out[65]),
+		      .isnt_valid3	(adr_ins_to_rf_is_out[65]),
+		      .enable		(mmu_enable),
+		      .clr		(mmu_clr),
+		      .clk		(clk),
+		      .rst_n		(rst_n));
+
+
+
+   
 endmodule
