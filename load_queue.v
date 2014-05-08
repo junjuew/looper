@@ -118,12 +118,12 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    //assign nxt_head =  (pre_head > 23)? (pre_head-24) : pre_head; // need modification in loop-mode
    assign cmmt_round_up=cmmt_ld_ptr < head;
    assign loop_round_up=loop_end < loop_start;
-   assign added_cmmt_ld_ptr=cmmt_ld_ptr+24;
-   assign added_loop_end=loop_end+24;
+   assign added_cmmt_ld_ptr=cmmt_ld_ptr+6'd24;
+   assign added_loop_end=loop_end+6'd24;
    assign cmmt_diff=(cmmt_round_up) ? (added_cmmt_ld_ptr - head) : (cmmt_ld_ptr - head); // round up
    assign loop_body_diff= (loop_round_up) ? (added_loop_end-loop_start+1) : (loop_end - loop_start+1);
    assign flush_round_up=nxt_tail < mis_pred_ld_ptr;
-   assign added_tail=nxt_tail+24;
+   assign added_tail=nxt_tail+6'd24;
    assign flush_body_diff=(flush_round_up) ? (added_tail-mis_pred_ld_ptr) : (nxt_tail-mis_pred_ld_ptr);
    always@(cmmt_diff)
      case(cmmt_diff)
