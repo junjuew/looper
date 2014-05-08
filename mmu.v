@@ -24,7 +24,7 @@
   module mmu(/*autoarg*/
    // Outputs
    txd, state, enb, web, addrb, dinb, flsh, d, blank, hsync, vsync,
-   dvi_clk, dvi_clk_n, dvi_rst, scl, sda,
+   dvi_clk, dvi_clk_n, dvi_rst, scl, sda,extern_pc,extern_pc_en,
    // Inputs
    clk_100mhz, clk_25mhz, rst_n, rxd, br_cfg, doutb, cpu_pc,
    mem_sys_fin, locked_dcm
@@ -49,6 +49,9 @@
    input wire [15:0]  cpu_pc;
    input wire         mem_sys_fin;
         input wire locked_dcm;
+		  
+	output wire [15:0] extern_pc;
+	output wire extern_pc_en;
 
 
    //dvi ouput
@@ -105,6 +108,8 @@
                   .rom_out              (rom_out[23:0]),
                   .dis_dvi_out          (dis_dvi_out),
                   .state                (state[3:0]),
+						.extern_pc (extern_pc),
+						.extern_pc_en(extern_pc_en),
                   // Inouts
                   .databus              (databus[7:0]),
                   // Inputs
