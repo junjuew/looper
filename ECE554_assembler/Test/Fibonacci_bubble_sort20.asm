@@ -1,5 +1,5 @@
 ldi r0, 0
-jr	r0
+jr  r0, 0
 nop
 nop
 nop
@@ -41,7 +41,43 @@ sub r7, r7, r6		// r7 = r7 - 1
 bgtz	r7, .loop_start	// branch if not reaching 24 times
 add r5, r5, r4		// else r5 = r5
 ldi r0, 0
-jr	r0
+jr  r0, 0
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
 nop
 nop
 nop
@@ -176,7 +212,43 @@ sub r4, r4, r2
 j	.outter_loop
 .end_outter_loop:
 ldi r0, 0
-jr	r0
+jr  r0, 0
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
 nop
 nop
 nop
@@ -240,7 +312,43 @@ j		.main_start
 .main_end:
 ldi r1, 0
 ldi r0, 0
-jr	r0
+jr  r0, 0
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
 nop
 nop
 nop
@@ -297,7 +405,43 @@ sub r7, r7, r6		// r7 = r7 - 1
 bgtz r7,	.loop_start2
 add r5, r5, r4		// else r5 = r5
 ldi r0, 0
-jr	r0
+jr  r0, 0
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
 nop
 nop
 nop
