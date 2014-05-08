@@ -1,11 +1,47 @@
 if [ $# == 0 ] || [ $# != 1 ]; then
 	echo "Run"
-	echo "./run_java -all to process all *.asm files"
+	echo "./run_java -normal to process all *.asm files under ./ECE554_assembler/Test/"
+	echo "OR run"
+	echo "./run_java -mmu1 to process all *_mmu.asm files under ./ECE554_assembler/Test/MMU_Test"
+	echo "OR run"
+	echo "./run_java -mmu2 to process all *_mmu.asm files under ./ECE554_assembler/Test/MMU_Test2"
+	echo "OR run"
+	echo "./run_java -str to process all *_str.asm files under ./ECE554_assembler/Test/STR_Test"
 	echo "OR run"
 	echo "./run_java <file.asm> to process a single .asm file"
 else
-	if [ $1 == "-all" ]; then
+	if [ $1 == "-normal" ]; then
 		for asmFile in $(ls ../Test/*.asm)
+			do
+				filePrefix=${asmFile%.asm}
+				java Assemble $asmFile $filePrefix -m lst
+				java Assemble $asmFile $filePrefix -m mif
+				java Assemble $asmFile $filePrefix -m coe
+				foo='.asm done'
+				echo $filePrefix$foo
+			done
+	elif [ $1 == "-mmu1" ]; then
+		for asmFile in $(ls ../Test/MMU_Test/*.asm)
+			do
+				filePrefix=${asmFile%.asm}
+				java Assemble $asmFile $filePrefix -m lst
+				java Assemble $asmFile $filePrefix -m mif
+				java Assemble $asmFile $filePrefix -m coe
+				foo='.asm done'
+				echo $filePrefix$foo
+			done
+	elif [ $1 == "-mmu2" ]; then
+		for asmFile in $(ls ../Test/MMU_Test2/*.asm)
+			do
+				filePrefix=${asmFile%.asm}
+				java Assemble $asmFile $filePrefix -m lst
+				java Assemble $asmFile $filePrefix -m mif
+				java Assemble $asmFile $filePrefix -m coe
+				foo='.asm done'
+				echo $filePrefix$foo
+			done	
+	elif [ $1 == "-str" ]; then
+		for asmFile in $(ls ../Test/STR_Test/*.asm)
 			do
 				filePrefix=${asmFile%.asm}
 				java Assemble $asmFile $filePrefix -m lst
