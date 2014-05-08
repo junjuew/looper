@@ -393,7 +393,7 @@ module driver(/*autoarg*/
 
                     
                     /*********** external pc to start jumping ***********/
-                    extern_pc = wrt_mem_data;
+                    extern_pc = wrt_mem_data[15:0];
                     extern_pc_en=1'b1;
 
                     
