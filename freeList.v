@@ -44,9 +44,9 @@ module freeList(/*autoarg*/
    assign free_pr_value[2] = free_pr_num_in2;
    assign free_pr_value[3] = free_pr_num_in3;
    
-   assign next_pr1 = (alloc_ptr[5:0] + 1 >=64) ? (alloc_ptr[5:0] + 1 -64) : alloc_ptr[5:0] + 1;
-   assign next_pr2 = (alloc_ptr[5:0] + 2 >=64) ? (alloc_ptr[5:0] + 2 -64) : alloc_ptr[5:0] + 2;
-   assign next_pr3 = (alloc_ptr[5:0] + 3 >=64) ? (alloc_ptr[5:0] + 3 -64) : alloc_ptr[5:0] + 3;
+   assign next_pr1 = (alloc_ptr[5:0] + 6'h1 >=64) ? (alloc_ptr[5:0] + 6'd1 -6'd64) : alloc_ptr[5:0] + 6'd1;
+   assign next_pr2 = (alloc_ptr[5:0] + 6'h2 >=64) ? (alloc_ptr[5:0] + 6'd2 -6'd64) : alloc_ptr[5:0] + 6'd2;
+   assign next_pr3 = (alloc_ptr[5:0] + 6'h3 >=64) ? (alloc_ptr[5:0] + 6'd3 -6'd64) : alloc_ptr[5:0] + 6'd3;
    
    
    generate
@@ -135,9 +135,9 @@ module freeList(/*autoarg*/
    assign curr_pos = alloc_ptr;
 
    //output the list empty signal
-   assign alloc_ptr1 = alloc_ptr + 1;
-   assign alloc_ptr2 = alloc_ptr + 2;
-   assign alloc_ptr3 = alloc_ptr + 3;
+   assign alloc_ptr1 = alloc_ptr + 7'd1;
+   assign alloc_ptr2 = alloc_ptr + 7'd2;
+   assign alloc_ptr3 = alloc_ptr + 7'd3;
    
    assign list_empty0 = ((alloc_ptr[5:0] == cmt_ptr[5:0]) && alloc_ptr[6] != cmt_ptr[6]) ? 1:0;
    assign list_empty1 = ((alloc_ptr1[5:0] == cmt_ptr[5:0]) && alloc_ptr1[6] != cmt_ptr[6]) ? 1:0;

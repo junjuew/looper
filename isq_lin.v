@@ -58,6 +58,8 @@ module isq_lin(/*autoarg*/
           wat<=1'b1;
         else if (en)
           wat<=isq_lin_in[ISQ_LINE_NO_IDX_BIT_WAT];
+		else
+		  wat<=wat;
      end
 
    /////////////////////////////////////
@@ -73,6 +75,8 @@ module isq_lin(/*autoarg*/
           brn_wat<=1'b0;
         else if (en)
           brn_wat<=isq_lin_in[ISQ_LINE_NO_IDX_BIT_BRN_WAT];
+		else
+		  brn_wat<=brn_wat;
      end
      
 
@@ -87,6 +91,8 @@ module isq_lin(/*autoarg*/
           inst[INST_WIDTH-1:0]<=0;
         else if (en)
           inst[INST_WIDTH-1:0]<=isq_lin_in[INST_WIDTH-1:0];
+	    else
+		  inst[INST_WIDTH-1:0]<=inst[INST_WIDTH-1:0];
      end
 
    
