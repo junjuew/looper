@@ -14,7 +14,7 @@ else
 				java Modified_imem $filePrefix
 				./compile
 				echo 'run -all' | vsim -c -novopt work.tb_topmodule
-				./simulate $filePrefix
+				./simulate -normal $filePrefix
 				./compare $filePrefix
 			done
 	elif [ $1 == "-str" ]; then
@@ -25,14 +25,14 @@ else
 				java Modified_imem $filePrefix
 				./compile
 				echo 'run -all' | vsim -c -novopt work.tb_topmodule
-				./simulate $filePrefix
+				./simulate -str $filePrefix
 				./compare $filePrefix
 			done	
 	else
 		java Modified_imem $1
 		./compile
 		echo 'run -all' | vsim -c -novopt work.tb_topmodule
-		./simulate $1
+		./simulate -normal $1
 		./compare $1
 	fi
 fi
