@@ -28,7 +28,7 @@ module dataout_pack(input start,
 		    input [15:0]      instruction1,
 		    input [15:0]      instruction2,
 		    input [15:0]      instruction3,
-		    input [15:0]      jump_addr_pc,
+	//	    input [15:0]      jump_addr_pc,
 		    input [15:0]      brnch_addr_pc0,
 		    input [15:0]      brnch_addr_pc1,
 		    input [1:0]       pred_to_pcsel,
@@ -42,19 +42,19 @@ module dataout_pack(input start,
 		    );
 
    //internal signal
-   reg [3:0] 			      taken;
+  // reg [3:0] 			      taken;
 
    always@(/*autosense*/brnch_addr_pc0 or brnch_addr_pc1
 	   or brnch_pc_sel_from_bhndlr or pc_plus1 or pc_plus2
 	   or pc_plus3 or pred_to_pcsel)begin
       
-      taken=brnch_pc_sel_from_bhndlr;
+    //  taken=brnch_pc_sel_from_bhndlr;
       recv_pc_to_dec=64'b0;
       pred_result_to_dec=4'b0;
       
-      if((|brnch_pc_sel_from_bhndlr)==0)//no branch inst
+      if(((|brnch_pc_sel_from_bhndlr)!=0)&&/*//no branch inst
 	taken=4'b0000;
-      else if ((^brnch_pc_sel_from_bhndlr)==0)//two branch inst
+      else if*/ ((^brnch_pc_sel_from_bhndlr)==0))//two branch inst
 	begin
 	   if(brnch_pc_sel_from_bhndlr==4'b1100)
 	     begin

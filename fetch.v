@@ -201,10 +201,10 @@ dynBranchPredictor bpred0(
     .brnch_pc_sel_from_bhndlr(brnch_pc_sel_from_bhndlr),
     .update_bpred(update_bpred),
     .loop_start(loop_start),
-    .pc(pc),
-    .pc_plus1(pc_plus1),
-    .pc_plus2(pc_plus2),
-    .pc_plus3(pc_plus3),
+    //.pc(pc),
+    //.pc_plus1(pc_plus1),
+    //.pc_plus2(pc_plus2),
+    //.pc_plus3(pc_plus3),
     .pred_to_pcsel(pred_to_pcsel)
 );
 /*GshareBranchPredictor bpred1(clk,rst_n,decr_count_brnch,
@@ -277,7 +277,7 @@ dataout_pack dataout(.start(start),
     .instruction1(instruction1_j),
     .instruction2(instruction2_j),
     .instruction3(instruction3_j),
-    .jump_addr_pc(jump_addr_pc),
+   // .jump_addr_pc(jump_addr_pc),
     .brnch_addr_pc0(recv_pc0),//modified input from brnch addr calculator recv_pc port
     .brnch_addr_pc1(recv_pc1),
     .pred_to_pcsel(pred_to_pcsel),

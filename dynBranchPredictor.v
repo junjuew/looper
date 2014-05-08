@@ -28,17 +28,17 @@ module dynBranchPredictor(
     brnch_pc_sel_from_bhndlr,
     update_bpred,
     loop_start,
-    pc,
-    pc_plus1,
-    pc_plus2,
-    pc_plus3,
+ //   pc,
+  //  pc_plus1,
+  //  pc_plus2,
+  //  pc_plus3,
     pred_to_pcsel
 );
 
 input clk,rst_n,decr_count_brnch,mispredict,mispred_num,brnc_pred_log;
 input [3:0]brnch_pc_sel_from_bhndlr;
 input update_bpred,loop_start;
-input [15:0]pc, pc_plus1, pc_plus2, pc_plus3;
+//input [15:0]pc, pc_plus1, pc_plus2, pc_plus3;
 output [1:0] pred_to_pcsel;
 
 /*
@@ -140,7 +140,7 @@ always@(decr_count_brnch, predCounter, brnc_pred_log, mispredict)begin
         end
 end
 
-reg [1:0] tmp;
+///reg [1:0] tmp;
 
 
 wire [1:0] numbrnch;
