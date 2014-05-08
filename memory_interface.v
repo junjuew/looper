@@ -55,7 +55,7 @@ module memory_interface(rst, clk, addr_mem, rd_wrt_mem, enable, data_mem_in, dat
    reg           cntr_clr, cntr_enable, load;
    reg [63:0]    stored_data_out;
    wire [63:0]   data_out;
-   assign data_mem_out= done ? stored_data_out:64'd0;
+   assign data_mem_out= done ? stored_data_out:0;
 
    always@(posedge clk, negedge rst)
      if (!rst)
@@ -66,11 +66,11 @@ module memory_interface(rst, clk, addr_mem, rd_wrt_mem, enable, data_mem_in, dat
    
    always@(posedge clk, negedge rst)
      if (!rst)
-       cntr <=6'd0;
+       cntr <=0;
      else if (cntr_clr)
-       cntr <=6'd0;
+       cntr <=0;
      else if (cntr_enable)
-       cntr <= cntr+6'd1;
+       cntr <= cntr+1;
      else
        cntr <= cntr;
    
@@ -78,7 +78,7 @@ module memory_interface(rst, clk, addr_mem, rd_wrt_mem, enable, data_mem_in, dat
    assign time_up= (cntr == 3);
    always@(posedge clk, negedge rst)
      if (!rst)
-       stored_data_out <= 64'd0;
+       stored_data_out <= 0;
      else if (load)
        stored_data_out <= data_out;
      else
@@ -121,9 +121,6 @@ module memory_interface(rst, clk, addr_mem, rd_wrt_mem, enable, data_mem_in, dat
              nxt_state=IDLE;
              cntr_clr=1;
           end
-
-		default:
-		  nxt_state=IDLE;
       endcase
    end
 

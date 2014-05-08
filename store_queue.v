@@ -58,7 +58,7 @@ assign fourth_indx=indx_str_al[30:24];
    assign second_data_entry = str_entry[1];
 always@(posedge clk, negedge rst)
 if (!rst)
-   loop_start <= 4'd0;
+   loop_start <= 0;
 else if (loop_strt)
   loop_start <= tail;
 else
@@ -67,16 +67,16 @@ else
   
 always@(posedge clk, negedge rst)
 if (!rst)
-   loop_end <= 4'd0;
+   loop_end <= 0;
 else if (fnsh_unrll)
-    loop_end <= nxt_tail-4'd1;
+    loop_end <= nxt_tail-1;
 else
    loop_end <= loop_end;
    
 // tail pointer update
 always@(posedge clk,negedge rst)
 if (!rst)
-   tail <= 4'd0;
+   tail <= 0;
 else if (flsh)
    tail <= mis_pred_str_ptr;
 else
@@ -104,14 +104,14 @@ assign vld={indx_str_al[31], indx_str_al[23], indx_str_al[15], indx_str_al[7]};
 always@(vld, tail)
    case (vld)
        4'b0000: nxt_tail = tail;
-       4'b0001: nxt_tail = tail+4'd1;
-       4'b0011: nxt_tail = tail+4'd2;
-       4'b0111: nxt_tail = tail+4'd3;
-       4'b1111: nxt_tail = tail+4'd4;
+       4'b0001: nxt_tail = tail+1;
+       4'b0011: nxt_tail = tail+2;
+       4'b0111: nxt_tail = tail+3;
+       4'b1111: nxt_tail = tail+4;
        default: nxt_tail = tail;
    endcase
    
-assign tail_plus_four = tail+4'd4;
+assign tail_plus_four = tail+4;
 assign stll=  (tail < head) ? (tail_plus_four > head) : 
 			  ( tail > head && tail < 13) ? 0 :
 			  (tail > head && tail == 13) ? (!(head > 0)):
@@ -124,15 +124,15 @@ assign stll=  (tail < head) ? (tail_plus_four > head) :
 
 always@(posedge clk,negedge rst)
 if (!rst)
-   head <= 4'd0;
+   head <= 0;
 else if (loop_back)
    head <= loop_start;
 else if (finished)
-   head <= head+4'd1;
+   head <= head+1;
 else
    head <= head;
    
-assign loop_back= loop_mode & (head+4'd1 > loop_end) & finished;   
+assign loop_back= loop_mode & (head+1 > loop_end) & finished;   
 assign no_wait=str_entry[head][39];
 
 always@(head)
@@ -153,23 +153,23 @@ case(head)
     4'hd: commit = 16'h2000;
     4'he: commit = 16'h4000;
     4'hf: commit = 16'h8000;
-    default: commit=16'h0;
+    default: commit=0;
 endcase
 
 
 assign loop_round_up=loop_end < loop_start;
 
-assign added_loop_end=loop_end+4'd16;
+assign added_loop_end=loop_end+16;
 
-assign loop_body_diff= (loop_round_up) ? (added_loop_end-loop_start+4'd1) : (loop_end - loop_start+4'd1);
+assign loop_body_diff= (loop_round_up) ? (added_loop_end-loop_start+1) : (loop_end - loop_start+1);
 
 assign flush_round_up=nxt_tail < mis_pred_str_ptr;
-assign added_tail=nxt_tail+5'd16;
+assign added_tail=nxt_tail+16;
 assign flush_body_diff= (flush_round_up) ? (added_tail-mis_pred_str_ptr) : (nxt_tail-mis_pred_str_ptr);
  
 always@(loop_body_diff)
 case(loop_body_diff)
-    5'd0: pre_loop_body=16'h0;
+    5'd0: pre_loop_body=0;
     5'd1: pre_loop_body=16'h0001;
     5'd2: pre_loop_body=16'h0003;
     5'd3: pre_loop_body=16'h0007;
@@ -186,7 +186,7 @@ case(loop_body_diff)
     5'd14: pre_loop_body=16'h3fff;
     5'd15: pre_loop_body=16'h7fff;
     5'd16: pre_loop_body=16'hffff;
-    default: pre_loop_body=16'h0;
+    default: pre_loop_body=0;
 endcase
 
 
@@ -211,11 +211,11 @@ case(loop_start)
     4'd13: loop_body={pre_loop_body[2:0],pre_loop_body[15:3]};
     4'd14: loop_body={pre_loop_body[1:0],pre_loop_body[15:2]};
     4'd15: loop_body={pre_loop_body[0],pre_loop_body[15:1]};
-    default: loop_body = 16'h0;
+    default: loop_body = 0;
 endcase
 always@(flush_body_diff)
 case(flush_body_diff)
-    5'd0: pre_flush_body=16'h0;
+    5'd0: pre_flush_body=0;
     5'd1: pre_flush_body=16'h0001;
     5'd2: pre_flush_body=16'h0003;
     5'd3: pre_flush_body=16'h0007;
@@ -232,7 +232,7 @@ case(flush_body_diff)
     5'd14: pre_flush_body=16'h3fff;
     5'd15: pre_flush_body=16'h7fff;
     5'd16: pre_flush_body=16'hffff;
-    default: pre_flush_body=16'h0;
+    default: pre_flush_body=0;
 endcase
 
 
@@ -257,7 +257,7 @@ case(mis_pred_str_ptr)
     4'd13: flush_body={pre_flush_body[2:0],pre_flush_body[15:3]};
     4'd14: flush_body={pre_flush_body[1:0],pre_flush_body[15:2]};
     4'd15: flush_body={pre_flush_body[0],pre_flush_body[15:1]};
-    default: flush_body = 16'h0;
+    default: flush_body = 0;
 endcase
 
 assign pre_first={23'h000000, vld[0]};
@@ -283,7 +283,7 @@ case(tail)
     4'd13: first={pre_first[2:0],pre_first[15:3]};
     4'd14: first={pre_first[1:0],pre_first[15:2]};
     4'd15: first={pre_first[0],pre_first[15:1]};
-    default: first = 16'h0;
+    default: first = 0;
 endcase
 
 always@(*)
@@ -304,7 +304,7 @@ case(tail)
     4'd13: second={pre_second[2:0],pre_second[15:3]};
     4'd14: second={pre_second[1:0],pre_second[15:2]};
     4'd15: second={pre_second[0],pre_second[15:1]};
-    default: second = 16'h0;
+    default: second = 0;
 endcase
 
 always@(*)
@@ -325,7 +325,7 @@ case(tail)
     4'd13: third={pre_third[2:0],pre_third[15:3]};
     4'd14: third={pre_third[1:0],pre_third[15:2]};
     4'd15: third={pre_third[0],pre_third[15:1]};
-    default: third = 16'h0;
+    default: third = 0;
 endcase
 
 
@@ -347,7 +347,7 @@ case(tail)
     4'd13: fourth={pre_fourth[2:0],pre_fourth[15:3]};
     4'd14: fourth={pre_fourth[1:0],pre_fourth[15:2]};
     4'd15: fourth={pre_fourth[0],pre_fourth[15:1]};
-    default: fourth = 16'h0;
+    default: fourth = 0;
 endcase
 
 assign insert = first | second | third | fourth;
@@ -473,10 +473,6 @@ begin
     end
     else 
         nxt_state=ISSUED;
-
-	default:
-       nxt_state=IDLE;
-
  endcase
  end
        
@@ -546,23 +542,23 @@ always@(match, head)
    
 // find the closest match for data forwarding     
 always@(shifted_match,head)
-   case(shifted_match)
-       16'h0: indx_to_fwd=4'd0;
-       16'b1???????????????: indx_to_fwd=head+4'd15;
-       16'b01??????????????: indx_to_fwd=head+4'd14;
-       16'b001?????????????: indx_to_fwd=head+4'd13;
-       16'b0001????????????: indx_to_fwd=head+4'd12;
-       16'b00001???????????: indx_to_fwd=head+4'd11;
-       16'b000001??????????: indx_to_fwd=head+4'd10;
-       16'b0000001?????????: indx_to_fwd=head+4'd9;
-       16'b00000001????????: indx_to_fwd=head+4'd8;
-       16'b000000001???????: indx_to_fwd=head+4'd7;
-       16'b0000000001??????: indx_to_fwd=head+4'd6;
-       16'b00000000001?????: indx_to_fwd=head+4'd5;
-       16'b000000000001????: indx_to_fwd=head+4'd4;
-       16'b0000000000001???: indx_to_fwd=head+4'd3;
-       16'b00000000000001??: indx_to_fwd=head+4'd2;
-       16'b000000000000001?: indx_to_fwd=head+4'd1;
+   casex(shifted_match)
+       16'h0: indx_to_fwd=0;
+       16'b1???????????????: indx_to_fwd=head+15;
+       16'b01??????????????: indx_to_fwd=head+14;
+       16'b001?????????????: indx_to_fwd=head+13;
+       16'b0001????????????: indx_to_fwd=head+12;
+       16'b00001???????????: indx_to_fwd=head+11;
+       16'b000001??????????: indx_to_fwd=head+10;
+       16'b0000001?????????: indx_to_fwd=head+9;
+       16'b00000001????????: indx_to_fwd=head+8;
+       16'b000000001???????: indx_to_fwd=head+7;
+       16'b0000000001??????: indx_to_fwd=head+6;
+       16'b00000000001?????: indx_to_fwd=head+5;
+       16'b000000000001????: indx_to_fwd=head+4;
+       16'b0000000000001???: indx_to_fwd=head+3;
+       16'b00000000000001??: indx_to_fwd=head+2;
+       16'b000000000000001?: indx_to_fwd=head+1;
        16'h0001: indx_to_fwd=head;
      endcase
       

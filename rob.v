@@ -135,18 +135,18 @@ ROB per entry:
 	assign rob_tail_out_for_flsh = rob_tail[5:0];
 
 	// signed_comp to WB store queue
-	assign signed_comp = rob_signed_comp[rob_head[5:0]];
+	assign signed_comp = rob_signed_comp[rob_head];
 
     // next_idx to Allocation stage is tail
     assign next_idx = { inverting_bit, {(mis_pred) ? rob_tail_when_mis_pred : rob_tail[5:0]}};
 
     // when tail catch up with head, and that one's vld is 1, that means ROB is full
-    assign rob_full_stll = ((rob_tail[5:0] < rob_head[5:0]) && ((rob_tail[5:0] + 6'd4) >= rob_head[5:0])) ? 1
-                         : ((rob_tail[5:0] > rob_head[5:0]) && (rob_tail[5:0] > 59) && (rob_tail[5:0] - 6'd60 >= rob_head[5:0])) ? 1 
+    assign rob_full_stll = ((rob_tail[5:0] < rob_head[5:0]) && (rob_tail[5:0] + 4 >= rob_head[5:0])) ? 1
+                         : ((rob_tail[5:0] > rob_head[5:0]) && (rob_tail[5:0] > 59) && (rob_tail[5:0] -60 >= rob_head[5:0])) ? 1 
                          : 0;
 
     // when head catch up with tail, and that one's vld is 0, that means ROB is empty 
-    assign rob_empt = ((rob_head[5:0] == rob_tail[5:0]) && (rob_vld[rob_head[5:0]] == 0)) ? 1:0;
+    assign rob_empt = ((rob_head == rob_tail[5:0]) && (rob_vld[rob_head] == 0)) ? 1:0;
 
     // misprediction
     assign mis_pred = ((brnc_cmp_rslt != 0) && rob_brnc[brnc_idx] && 
@@ -172,52 +172,52 @@ ROB per entry:
                          : 1'b0;
     
     // head is pointing to a store instruction
-    assign cmmt_st = (rob_st[rob_head[5:0]]) ? 1:0;
+    assign cmmt_st = (rob_st[rob_head]) ? 1:0;
 
     // for load and store head and tail updation
-    assign mis_pred_ld_ptr_num = (mis_pred) ? rob_ld_ptr[mis_pred_brnc_idx] : 5'd0;
-    assign mis_pred_st_ptr_num = (mis_pred) ? rob_st_ptr[mis_pred_brnc_idx] : 5'd0;
+    assign mis_pred_ld_ptr_num = (mis_pred) ? rob_ld_ptr[mis_pred_brnc_idx] : 0;
+    assign mis_pred_st_ptr_num = (mis_pred) ? rob_st_ptr[mis_pred_brnc_idx] : 0;
 
-    assign cmmt_ld_ptr_num = (rob_done[rob_head[5:0]]) ? rob_ld_ptr[rob_head[5:0]] : ((rob_head[5:0]!=0) ? rob_ld_ptr[rob_head[5:0]-5'd1] : rob_ld_ptr[63]);
+    assign cmmt_ld_ptr_num = (rob_done[rob_head]) ? rob_ld_ptr[rob_head] : ((rob_head!=0) ? rob_ld_ptr[rob_head-1] : rob_ld_ptr[63]);
 
     // rob_head_cmmt_number
     wire [5:0] rob_head_1, rob_head_2, rob_head_3, rob_head_4, rob_head_5, rob_head_6, rob_head_7;
-    assign rob_head_1 = rob_head[5:0] + 5'd1;
-    assign rob_head_2 = rob_head[5:0] + 5'd2;
-    assign rob_head_3 = rob_head[5:0] + 5'd3;
-    assign rob_head_4 = rob_head[5:0] + 5'd4;
-    assign rob_head_5 = rob_head[5:0] + 5'd5;
-    assign rob_head_6 = rob_head[5:0] + 5'd6;
-    assign rob_head_7 = rob_head[5:0] + 5'd7;
+    assign rob_head_1 = rob_head + 1;
+    assign rob_head_2 = rob_head + 2;
+    assign rob_head_3 = rob_head + 3;
+    assign rob_head_4 = rob_head + 4;
+    assign rob_head_5 = rob_head + 5;
+    assign rob_head_6 = rob_head + 6;
+    assign rob_head_7 = rob_head + 7;
 
-    assign rob_head_cmmt_num_st = (rob_st[rob_head[5:0]] && (!st_iss)) ? 3'd0 
-                                : (rob_st[rob_head_1]) ? 3'd1
-                                : (rob_st[rob_head_2]) ? 3'd2
-                                : (rob_st[rob_head_3]) ? 3'd3
-                                : (rob_st[rob_head_4]) ? 3'd4
-                                : (rob_st[rob_head_5]) ? 3'd5
-                                : (rob_st[rob_head_6]) ? 3'd6
-                                : (rob_st[rob_head_7]) ? 3'd7
-                                : 3'd7;
+    assign rob_head_cmmt_num_st = (rob_st[rob_head] && (!st_iss)) ? 0 
+                                : (rob_st[rob_head_1]) ? 1
+                                : (rob_st[rob_head_2]) ? 2
+                                : (rob_st[rob_head_3]) ? 3
+                                : (rob_st[rob_head_4]) ? 4
+                                : (rob_st[rob_head_5]) ? 5
+                                : (rob_st[rob_head_6]) ? 6
+                                : (rob_st[rob_head_7]) ? 7
+                                : 7;
     
-    assign rob_head_cmmt_num_brnc = (rob_brnc[rob_head[5:0]]   && (!rob_done[rob_head[5:0]]))   ? 3'd0 
-                                  : (rob_brnc[rob_head_1] && (!rob_done[rob_head_1])) ? 3'd1
-                                  : (rob_brnc[rob_head_2] && (!rob_done[rob_head_2])) ? 3'd2
-                                  : (rob_brnc[rob_head_3] && (!rob_done[rob_head_3])) ? 3'd3
-                                  : (rob_brnc[rob_head_4] && (!rob_done[rob_head_4])) ? 3'd4
-                                  : (rob_brnc[rob_head_5] && (!rob_done[rob_head_5])) ? 3'd5
-                                  : (rob_brnc[rob_head_6] && (!rob_done[rob_head_6])) ? 3'd6
-                                  : (rob_brnc[rob_head_7] && (!rob_done[rob_head_7])) ? 3'd7
-                                  : 3'd7;
+    assign rob_head_cmmt_num_brnc = (rob_brnc[rob_head]   && (!rob_done[rob_head]))   ? 0 
+                                  : (rob_brnc[rob_head_1] && (!rob_done[rob_head_1])) ? 1
+                                  : (rob_brnc[rob_head_2] && (!rob_done[rob_head_2])) ? 2
+                                  : (rob_brnc[rob_head_3] && (!rob_done[rob_head_3])) ? 3
+                                  : (rob_brnc[rob_head_4] && (!rob_done[rob_head_4])) ? 4
+                                  : (rob_brnc[rob_head_5] && (!rob_done[rob_head_5])) ? 5
+                                  : (rob_brnc[rob_head_6] && (!rob_done[rob_head_6])) ? 6
+                                  : (rob_brnc[rob_head_7] && (!rob_done[rob_head_7])) ? 7
+                                  : 7;
 
     wire [3:0] sum_1, sum_2, sum_3, sum_4, sum_5, sum_6, sum_7, sum_8;
-    assign sum_1 = rob_reg_wrt[rob_head[5:0]];
-    assign sum_2 = rob_reg_wrt[rob_head[5:0]]
+    assign sum_1 = rob_reg_wrt[rob_head] + 0;
+    assign sum_2 = rob_reg_wrt[rob_head]
                  + rob_reg_wrt[rob_head_1];
-    assign sum_3 = rob_reg_wrt[rob_head[5:0]]
+    assign sum_3 = rob_reg_wrt[rob_head]
                  + rob_reg_wrt[rob_head_1]
                  + rob_reg_wrt[rob_head_2];
-    assign sum_4 = rob_reg_wrt[rob_head[5:0]]
+    assign sum_4 = rob_reg_wrt[rob_head]
                  + rob_reg_wrt[rob_head_1]
                  + rob_reg_wrt[rob_head_2]
                  + rob_reg_wrt[rob_head_3];
@@ -226,21 +226,21 @@ ROB per entry:
     assign sum_7 = sum_6 + rob_reg_wrt[rob_head_6];
     assign sum_8 = sum_7 + rob_reg_wrt[rob_head_7];
 
-    assign rob_head_cmmt_num_free_preg = (sum_5 == 5) ? 3'd4
-                                       : (sum_6 == 5) ? 3'd5
-                                       : (sum_7 == 5) ? 3'd6
-                                       : (sum_8 == 5) ? 3'd7
-                                       : 3'd7;
+    assign rob_head_cmmt_num_free_preg = (sum_5 == 5) ? 4
+                                       : (sum_6 == 5) ? 5
+                                       : (sum_7 == 5) ? 6
+                                       : (sum_8 == 5) ? 7
+                                       : 7;
     
-    assign rob_head_cmmt_num_vld = ((rob_reg_wrt[rob_head[5:0]]   || rob_brnc[rob_head[5:0]])   && (!rob_done[rob_head[5:0]])   || (!rob_vld[rob_head[5:0]]))   ? 3'd0
-                                 : ((rob_reg_wrt[rob_head_1] || rob_brnc[rob_head_1]) && (!rob_done[rob_head_1]) || (!rob_vld[rob_head_1])) ? 3'd1
-                                 : ((rob_reg_wrt[rob_head_2] || rob_brnc[rob_head_2]) && (!rob_done[rob_head_2]) || (!rob_vld[rob_head_2])) ? 3'd2
-                                 : ((rob_reg_wrt[rob_head_3] || rob_brnc[rob_head_3]) && (!rob_done[rob_head_3]) || (!rob_vld[rob_head_3])) ? 3'd3
-                                 : ((rob_reg_wrt[rob_head_4] || rob_brnc[rob_head_4]) && (!rob_done[rob_head_4]) || (!rob_vld[rob_head_4])) ? 3'd4
-                                 : ((rob_reg_wrt[rob_head_5] || rob_brnc[rob_head_5]) && (!rob_done[rob_head_5]) || (!rob_vld[rob_head_5])) ? 3'd5
-                                 : ((rob_reg_wrt[rob_head_6] || rob_brnc[rob_head_6]) && (!rob_done[rob_head_6]) || (!rob_vld[rob_head_6])) ? 3'd6
-                                 : ((rob_reg_wrt[rob_head_7] || rob_brnc[rob_head_7]) && (!rob_done[rob_head_7]) || (!rob_vld[rob_head_7])) ? 3'd7
-                                 : 3'd7;
+    assign rob_head_cmmt_num_vld = ((rob_reg_wrt[rob_head]   || rob_brnc[rob_head])   && (!rob_done[rob_head])   || (!rob_vld[rob_head]))   ? 0
+                                 : ((rob_reg_wrt[rob_head_1] || rob_brnc[rob_head_1]) && (!rob_done[rob_head_1]) || (!rob_vld[rob_head_1])) ? 1
+                                 : ((rob_reg_wrt[rob_head_2] || rob_brnc[rob_head_2]) && (!rob_done[rob_head_2]) || (!rob_vld[rob_head_2])) ? 2
+                                 : ((rob_reg_wrt[rob_head_3] || rob_brnc[rob_head_3]) && (!rob_done[rob_head_3]) || (!rob_vld[rob_head_3])) ? 3
+                                 : ((rob_reg_wrt[rob_head_4] || rob_brnc[rob_head_4]) && (!rob_done[rob_head_4]) || (!rob_vld[rob_head_4])) ? 4
+                                 : ((rob_reg_wrt[rob_head_5] || rob_brnc[rob_head_5]) && (!rob_done[rob_head_5]) || (!rob_vld[rob_head_5])) ? 5
+                                 : ((rob_reg_wrt[rob_head_6] || rob_brnc[rob_head_6]) && (!rob_done[rob_head_6]) || (!rob_vld[rob_head_6])) ? 6
+                                 : ((rob_reg_wrt[rob_head_7] || rob_brnc[rob_head_7]) && (!rob_done[rob_head_7]) || (!rob_vld[rob_head_7])) ? 7
+                                 : 7;
     assign rob_head_cmmt_num_pair1 = (rob_head_cmmt_num_st <= rob_head_cmmt_num_brnc) ? 
                                       rob_head_cmmt_num_st :  rob_head_cmmt_num_brnc;
     assign rob_head_cmmt_num_pair2 = (rob_head_cmmt_num_free_preg <= rob_head_cmmt_num_vld) ? 
@@ -248,7 +248,7 @@ ROB per entry:
     assign rob_head_cmmt_num = (rob_head_cmmt_num_pair1 <= rob_head_cmmt_num_pair2) ? 
                                 rob_head_cmmt_num_pair1 :  rob_head_cmmt_num_pair2;
     
-    assign free_preg_cnt = (rob_head_cmmt_num == 0) ? 3'd0
+    assign free_preg_cnt = (rob_head_cmmt_num == 0) ? 0
                          : (rob_head_cmmt_num == 1) ? sum_1
                          : (rob_head_cmmt_num == 2) ? sum_2
                          : (rob_head_cmmt_num == 3) ? sum_3
@@ -256,9 +256,9 @@ ROB per entry:
                          : (rob_head_cmmt_num == 5) ? sum_5
                          : (rob_head_cmmt_num == 6) ? sum_6
                          : (rob_head_cmmt_num == 7) ? sum_7
-                         : 3'd0;
+                         : 0;
 
-    assign free_preg_num1 = (sum_8 == 0) ? 6'd0
+    assign free_preg_num1 = (sum_8 == 0) ? 0
                           : (sum_7 == 0) ? rob_free_preg_num[rob_head_7]
                           : (sum_6 == 0) ? rob_free_preg_num[rob_head_6]
                           : (sum_5 == 0) ? rob_free_preg_num[rob_head_5]
@@ -266,9 +266,9 @@ ROB per entry:
                           : (sum_3 == 0) ? rob_free_preg_num[rob_head_3]
                           : (sum_2 == 0) ? rob_free_preg_num[rob_head_2]
                           : (sum_1 == 0) ? rob_free_preg_num[rob_head_1]
-                          : rob_free_preg_num[rob_head[5:0]];
+                          : rob_free_preg_num[rob_head];
 
-    assign free_preg_num2 = (sum_8 == 1) ? 6'd0
+    assign free_preg_num2 = (sum_8 == 1) ? 0
                           : (sum_7 == 1) ? rob_free_preg_num[rob_head_7]
                           : (sum_6 == 1) ? rob_free_preg_num[rob_head_6]
                           : (sum_5 == 1) ? rob_free_preg_num[rob_head_5]
@@ -276,29 +276,29 @@ ROB per entry:
                           : (sum_3 == 1) ? rob_free_preg_num[rob_head_3]
                           : (sum_2 == 1) ? rob_free_preg_num[rob_head_2]
                           : (sum_1 == 1) ? rob_free_preg_num[rob_head_1]
-                          : 6'd0;
+                          : 0;
 
-    assign free_preg_num3 = (sum_8 == 2) ? 6'd0
+    assign free_preg_num3 = (sum_8 == 2) ? 0
                           : (sum_7 == 2) ? rob_free_preg_num[rob_head_7]
                           : (sum_6 == 2) ? rob_free_preg_num[rob_head_6]
                           : (sum_5 == 2) ? rob_free_preg_num[rob_head_5]
                           : (sum_4 == 2) ? rob_free_preg_num[rob_head_4]
                           : (sum_3 == 2) ? rob_free_preg_num[rob_head_3]
                           : (sum_2 == 2) ? rob_free_preg_num[rob_head_2]
-                          : 6'd0;
+                          : 0;
 
-    assign free_preg_num4 = (sum_8 == 3) ? 6'd0
+    assign free_preg_num4 = (sum_8 == 3) ? 0
                           : (sum_7 == 3) ? rob_free_preg_num[rob_head_7]
                           : (sum_6 == 3) ? rob_free_preg_num[rob_head_6]
                           : (sum_5 == 3) ? rob_free_preg_num[rob_head_5]
                           : (sum_4 == 3) ? rob_free_preg_num[rob_head_4]
                           : (sum_3 == 3) ? rob_free_preg_num[rob_head_3]
-                          : 6'd0;
+                          : 0;
 
-	assign rob_ld_cntr_add1 = (rob_ld_cntr == 23) ? rob_ld_cntr - 5'd23 : rob_ld_cntr + 5'd1;
-	assign rob_ld_cntr_add2 = (rob_ld_cntr >= 22) ? rob_ld_cntr - 5'd22 : rob_ld_cntr + 5'd2;
-	assign rob_ld_cntr_add3 = (rob_ld_cntr >= 21) ? rob_ld_cntr - 5'd21 : rob_ld_cntr + 5'd3;
-	assign rob_ld_cntr_add4 = (rob_ld_cntr >= 20) ? rob_ld_cntr - 5'd20 : rob_ld_cntr + 5'd4;
+	assign rob_ld_cntr_add1 = (rob_ld_cntr == 23) ? rob_ld_cntr - 23 : rob_ld_cntr + 1;
+	assign rob_ld_cntr_add2 = (rob_ld_cntr >= 22) ? rob_ld_cntr - 22 : rob_ld_cntr + 2;
+	assign rob_ld_cntr_add3 = (rob_ld_cntr >= 21) ? rob_ld_cntr - 21 : rob_ld_cntr + 3;
+	assign rob_ld_cntr_add4 = (rob_ld_cntr >= 20) ? rob_ld_cntr - 20 : rob_ld_cntr + 4;
 
     /********************************************/
     /************ Sequential Blocks *************/
@@ -309,11 +309,11 @@ ROB per entry:
     */
     always@(posedge clk, negedge rst_n)begin
         if(!rst_n)
-            rob_head <= 7'd0;
+            rob_head <= 0;
         else if ((rob_head + rob_head_cmmt_num) <= 63)
             rob_head <= rob_head + rob_head_cmmt_num;
         else if ((rob_head + rob_head_cmmt_num) > 63)
-            rob_head <= rob_head + rob_head_cmmt_num - 7'd64;
+            rob_head <= rob_head + rob_head_cmmt_num - 64;
         else
             rob_head <= rob_head;
     end
@@ -323,7 +323,7 @@ ROB per entry:
     */
     always@(posedge clk, negedge rst_n)begin
         if(!rst_n)
-            rob_tail <= 7'd0;
+            rob_tail <= 0;
 		else if(mis_pred)begin
 			if (rob_tail < rob_tail_when_mis_pred)
 				rob_tail <= {~inverting_bit,rob_tail_when_mis_pred};
@@ -331,8 +331,8 @@ ROB per entry:
 				rob_tail <= {inverting_bit,rob_tail_when_mis_pred};
 		end
         else if(!all_nop)
-            rob_tail <= (rob_tail[5:0] < 60) ? rob_tail+7'd4
-                      : rob_tail - 7'd60;
+            rob_tail <= (rob_tail[5:0] < 60) ? rob_tail+4
+                      : rob_tail - 60;
         else
             rob_tail <= rob_tail;
     end
@@ -360,7 +360,7 @@ ROB per entry:
     */
     always@(posedge clk, negedge rst_n)begin
         if(!rst_n)
-            rob_st_cntr <= 4'd0;
+            rob_st_cntr <= 0;
 		else if(mis_pred)begin
 			rob_st_cntr <= rob_st_ptr[mis_pred_brnc_idx];
 		end
@@ -372,7 +372,7 @@ ROB per entry:
                 (st_in == 4'd2 ) ||
                 (st_in == 4'd4 ) ||
                 (st_in == 4'd8 )))begin
-            rob_st_cntr <= rob_st_cntr + 4'd1;
+            rob_st_cntr <= rob_st_cntr + 1;
         end
         else if((!all_nop) && (
 				(st_in == 4'd3 ) || 
@@ -381,18 +381,18 @@ ROB per entry:
                 (st_in == 4'd6 ) ||
                 (st_in == 4'd10) ||
                 (st_in == 4'd12)))begin
-            rob_st_cntr <= rob_st_cntr + 4'd2;
+            rob_st_cntr <= rob_st_cntr + 2;
         end
         else if((!all_nop) && (
 				(st_in == 4'd7 ) || 
                 (st_in == 4'd11) ||
                 (st_in == 4'd13) ||
                 (st_in == 4'd14)))begin
-            rob_st_cntr <= rob_st_cntr + 4'd3;
+            rob_st_cntr <= rob_st_cntr + 3;
         end
         else if((!all_nop) && (
 				st_in == 4'd15))begin
-            rob_st_cntr <= rob_st_cntr + 4'd4;
+            rob_st_cntr <= rob_st_cntr + 4;
         end
         else begin
             rob_st_cntr <= rob_st_cntr;
@@ -404,7 +404,7 @@ ROB per entry:
     */
     always@(posedge clk, negedge rst_n)begin
         if(!rst_n)
-            rob_ld_cntr <= 5'd0;
+            rob_ld_cntr <= 0;
 		else if(mis_pred)begin
 			rob_ld_cntr <= rob_ld_ptr[mis_pred_brnc_idx];
 		end
@@ -465,7 +465,7 @@ ROB per entry:
             else if ((!all_nop) && (rob_tail[5:0] == 61 && (rob_vld_idx == 0)))
                 rob_vld[rob_vld_idx] <= 1;
             // commiting out ROB
-            else if ((rob_vld_idx >= rob_head[5:0]) && (rob_vld_idx < (rob_head[5:0] + rob_head_cmmt_num))) 
+            else if ((rob_vld_idx >= rob_head) && (rob_vld_idx < (rob_head + rob_head_cmmt_num))) 
                 rob_vld[rob_vld_idx] <= 0;
             else if (((rob_head + rob_head_cmmt_num) >= 64) && 
                     (rob_vld_idx < (rob_head + rob_head_cmmt_num - 64)))
@@ -702,7 +702,7 @@ ROB per entry:
     begin : rob_free_preg_idx_gen
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n) begin
-                rob_free_preg_num[rob_free_preg_idx] <= 6'd0;
+                rob_free_preg_num[rob_free_preg_idx] <= 0;
             end
             // adding into ROB
             else if (mult_inst_vld && mult_reg_wrt && (rob_free_preg_idx == mult_idx)) begin 
@@ -735,7 +735,7 @@ ROB per entry:
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n) begin
                 rob_st    [rob_st_idx] <= 0;
-                rob_st_ptr[rob_st_idx] <= 5'd0;
+                rob_st_ptr[rob_st_idx] <= 0;
             end
             // misprediction
             else if (mis_pred && (mis_pred_brnc_idx <= rob_tail_when_mis_pred) && 
@@ -751,62 +751,62 @@ ROB per entry:
             // adding into ROB
             else if ((!all_nop) && (rob_st_idx == rob_tail[5:0])) begin 
                 rob_st    [rob_st_idx] <= (st_in[0]) ? 1:0;
-                rob_st_ptr[rob_st_idx] <= (st_in[0]) ? rob_st_cntr + 5'd1
+                rob_st_ptr[rob_st_idx] <= (st_in[0]) ? rob_st_cntr + 1
                                         : rob_st_cntr;
             end
             else if ((!all_nop) && 
                     ((rob_st_idx == rob_tail[5:0] + 1) || ((rob_tail[5:0]>=63) && (rob_st_idx == (rob_tail[5:0]-63))))) begin
                 rob_st    [rob_st_idx] <= (st_in[1]) ? 1:0;
-                rob_st_ptr[rob_st_idx] <= (st_in[1:0] == 2'b11) ? rob_st_cntr + 5'd2
-                                        : (st_in[1:0] == 2'b01) ? rob_st_cntr + 5'd1
-                                        : (st_in[1:0] == 2'b10) ? rob_st_cntr + 5'd1
+                rob_st_ptr[rob_st_idx] <= (st_in[1:0] == 2'b11) ? rob_st_cntr + 2
+                                        : (st_in[1:0] == 2'b01) ? rob_st_cntr + 1
+                                        : (st_in[1:0] == 2'b10) ? rob_st_cntr + 1
                                         : rob_st_cntr;
             end
             else if ((!all_nop) && 
                     ((rob_st_idx == rob_tail[5:0] + 2) || ((rob_tail[5:0]>=62) && (rob_st_idx == (rob_tail[5:0]-62))))) begin
                 rob_st    [rob_st_idx] <= (st_in[2]) ? 1:0;
-                rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 5'd3
-                                        : (st_in[2:0] == 3'b011) ? rob_st_cntr + 5'd2
-                                        : (st_in[2:0] == 3'b110) ? rob_st_cntr + 5'd2
-                                        : (st_in[2:0] == 3'b101) ? rob_st_cntr + 5'd2
-                                        : (st_in[2:0] == 3'b001) ? rob_st_cntr + 5'd1
-                                        : (st_in[2:0] == 3'b010) ? rob_st_cntr + 5'd1
-                                        : (st_in[2:0] == 3'b100) ? rob_st_cntr + 5'd1
+                rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 3
+                                        : (st_in[2:0] == 3'b011) ? rob_st_cntr + 2
+                                        : (st_in[2:0] == 3'b110) ? rob_st_cntr + 2
+                                        : (st_in[2:0] == 3'b101) ? rob_st_cntr + 2
+                                        : (st_in[2:0] == 3'b001) ? rob_st_cntr + 1
+                                        : (st_in[2:0] == 3'b010) ? rob_st_cntr + 1
+                                        : (st_in[2:0] == 3'b100) ? rob_st_cntr + 1
                                         : rob_st_cntr;
             end
             else if ((!all_nop) && 
                     ((rob_st_idx == rob_tail[5:0] + 3) || ((rob_tail[5:0]>=61) && (rob_st_idx == (rob_tail[5:0]-61))))) begin
                 rob_st    [rob_st_idx] <= (st_in[3]) ? 1:0;
                 if (st_in[3]) begin
-                    rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 5'd4
-                                            : (st_in[2:0] == 3'b011) ? rob_st_cntr + 5'd3
-                                            : (st_in[2:0] == 3'b110) ? rob_st_cntr + 5'd3
-                                            : (st_in[2:0] == 3'b101) ? rob_st_cntr + 5'd3
-                                            : (st_in[2:0] == 3'b001) ? rob_st_cntr + 5'd2
-                                            : (st_in[2:0] == 3'b010) ? rob_st_cntr + 5'd2
-                                            : (st_in[2:0] == 3'b100) ? rob_st_cntr + 5'd2
-                                            : rob_st_cntr + 5'd1;
+                    rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 4
+                                            : (st_in[2:0] == 3'b011) ? rob_st_cntr + 3
+                                            : (st_in[2:0] == 3'b110) ? rob_st_cntr + 3
+                                            : (st_in[2:0] == 3'b101) ? rob_st_cntr + 3
+                                            : (st_in[2:0] == 3'b001) ? rob_st_cntr + 2
+                                            : (st_in[2:0] == 3'b010) ? rob_st_cntr + 2
+                                            : (st_in[2:0] == 3'b100) ? rob_st_cntr + 2
+                                            : rob_st_cntr + 1;
                 end
                 else begin
-                    rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 5'd3
-                                            : (st_in[2:0] == 3'b011) ? rob_st_cntr + 5'd2
-                                            : (st_in[2:0] == 3'b110) ? rob_st_cntr + 5'd2
-                                            : (st_in[2:0] == 3'b101) ? rob_st_cntr + 5'd2
-                                            : (st_in[2:0] == 3'b001) ? rob_st_cntr + 5'd1
-                                            : (st_in[2:0] == 3'b010) ? rob_st_cntr + 5'd1
-                                            : (st_in[2:0] == 3'b100) ? rob_st_cntr + 5'd1
+                    rob_st_ptr[rob_st_idx] <= (st_in[2:0] == 3'b111) ? rob_st_cntr + 3
+                                            : (st_in[2:0] == 3'b011) ? rob_st_cntr + 2
+                                            : (st_in[2:0] == 3'b110) ? rob_st_cntr + 2
+                                            : (st_in[2:0] == 3'b101) ? rob_st_cntr + 2
+                                            : (st_in[2:0] == 3'b001) ? rob_st_cntr + 1
+                                            : (st_in[2:0] == 3'b010) ? rob_st_cntr + 1
+                                            : (st_in[2:0] == 3'b100) ? rob_st_cntr + 1
                                             : rob_st_cntr;
                 end
             end
             // commiting out ROB
 			else if ((rob_st_idx >= rob_head) && (rob_st_idx < (rob_head + rob_head_cmmt_num)))begin 
                 rob_st[rob_st_idx] <= 0;
-                rob_st_ptr[rob_st_idx] <= 5'd0;
+                rob_st_ptr[rob_st_idx] <= 0;
 			end
             else if (((rob_head + rob_head_cmmt_num) >= 64) && 
-					(rob_st_idx < (rob_head + rob_head_cmmt_num - 7'd64)))begin
+					(rob_st_idx < (rob_head + rob_head_cmmt_num - 64)))begin
                 rob_st[rob_st_idx] <= 0;
-                rob_st_ptr[rob_st_idx] <= 5'd0;
+                rob_st_ptr[rob_st_idx] <= 0;
 			end
             else begin
                 rob_st    [rob_st_idx] <= rob_st    [rob_st_idx];
@@ -826,7 +826,7 @@ ROB per entry:
     begin : rob_ld_idx_gen
         always@(posedge clk, negedge rst_n)begin
             if(!rst_n) begin
-                rob_ld_ptr[rob_ld_idx] <= 5'd0;
+                rob_ld_ptr[rob_ld_idx] <= 0;
             end
             // misprediction
             else if (mis_pred && (mis_pred_brnc_idx <= rob_tail_when_mis_pred) && 
@@ -841,14 +841,14 @@ ROB per entry:
                                         : rob_ld_cntr;
             end
             else if ((!all_nop) && 
-                    ((rob_ld_idx == rob_tail[5:0] + 6'd1) || ((rob_tail[5:0]>=63) && (rob_ld_idx == (rob_tail[5:0]-6'd63))))) begin
+                    ((rob_ld_idx == rob_tail[5:0] + 1) || ((rob_tail[5:0]>=63) && (rob_ld_idx == (rob_tail[5:0]-63))))) begin
                 rob_ld_ptr[rob_ld_idx] <= (ld_in[1:0] == 2'b11) ? rob_ld_cntr_add2
                                         : (ld_in[1:0] == 2'b01) ? rob_ld_cntr_add1
                                         : (ld_in[1:0] == 2'b10) ? rob_ld_cntr_add1
                                         : rob_ld_cntr;
             end
             else if ((!all_nop) && 
-                    ((rob_ld_idx == rob_tail[5:0] + 6'd2) || ((rob_tail[5:0]>=62) && (rob_ld_idx == (rob_tail[5:0]-6'd62))))) begin
+                    ((rob_ld_idx == rob_tail[5:0] + 2) || ((rob_tail[5:0]>=62) && (rob_ld_idx == (rob_tail[5:0]-62))))) begin
                 rob_ld_ptr[rob_ld_idx] <= (ld_in[2:0] == 3'b111) ? rob_ld_cntr_add3
                                         : (ld_in[2:0] == 3'b011) ? rob_ld_cntr_add2
                                         : (ld_in[2:0] == 3'b110) ? rob_ld_cntr_add2
@@ -859,7 +859,7 @@ ROB per entry:
                                         : rob_ld_cntr;
             end
             else if ((!all_nop) && 
-                    ((rob_ld_idx == rob_tail[5:0] + 6'd3) || ((rob_tail[5:0]>=61) && (rob_ld_idx == (rob_tail[5:0]-6'd61))))) begin
+                    ((rob_ld_idx == rob_tail[5:0] + 3) || ((rob_tail[5:0]>=61) && (rob_ld_idx == (rob_tail[5:0]-61))))) begin
                 if (ld_in[3]) begin
                     rob_ld_ptr[rob_ld_idx] <= (ld_in[2:0] == 3'b111) ? rob_ld_cntr_add4
                                             : (ld_in[2:0] == 3'b011) ? rob_ld_cntr_add3
