@@ -62,76 +62,82 @@ localparam ST=2'b11;
 //======1level dynamic predictor=====//
 ///////////////////////////////////////
 reg [1:0] predCounter;
+reg [1:0] predCounter_next;
+
 always@(posedge clk or negedge rst_n)begin
     if(!rst_n)
         predCounter<=WT;
-    else if(decr_count_brnch==1)//a branch is committed
+	else
+		predCounter<=predCounter_next;
+end
+
+always@(decr_count_brnch, predCounter, brnc_pred_log, mispredict)begin
+
+	predCounter_next = predCounter;
+
+    if(decr_count_brnch==1)//a branch is committed
     begin
         case(predCounter)
             SN:begin
             if(brnc_pred_log==1)
-                predCounter<=WN;
+                predCounter_next = WN;
             else
-                predCounter<=SN;
+                predCounter_next = SN;
             end
             WN:begin
                 if(brnc_pred_log==1)
-                predCounter<=WT;
+                predCounter_next = WT;
             else
-                predCounter<=SN;
+                predCounter_next = SN;
             end
             WT:begin
                 if(brnc_pred_log==1)
-                predCounter<=ST;
+                predCounter_next = ST;
             else
-                predCounter<=WN;
+                predCounter_next = WN;
             end
             ST:begin
                 if(brnc_pred_log==1)
-                predCounter<=ST;
+                predCounter_next = ST;
             else
-                predCounter<=WT;
+                predCounter_next = WT;
             end
         endcase
     end
     else if(mispredict==1)
 /*       if(mispred_num==1)begin
            if(brnc_pred_log==1)
-               case(predCounter)
-                   SN:predCounter<=SN;
-                    WN:predCounter<=SN;
-                    WT:predCounter<=SN;
-                    ST:predCounter<=WN;
+               case(predCounter_next)
+                   SN:predCounter_next = SN;
+                    WN:predCounter_next = SN;
+                    WT:predCounter_next = SN;
+                    ST:predCounter_next = WN;
                 endcase
            else
-               case(predCounter)
-                    SN:predCounter<=WT;
-                    WN:predCounter<=ST;
-                    WT:predCounter<=ST;
-                    ST:predCounter<=ST;
+               case(predCounter_next)
+                    SN:predCounter_next = WT;
+                    WN:predCounter_next = ST;
+                    WT:predCounter_next = ST;
+                    ST:predCounter_next = ST;
                 endcase
         end else
 		*/
 		begin
- 
 		if(brnc_pred_log==1)
                case(predCounter)
-                   SN:predCounter<=SN;
-                   WN:predCounter<=SN;
-                   WT:predCounter<=WN;
-                   ST:predCounter<=WT;
+                   SN:predCounter_next = SN;
+                   WN:predCounter_next = SN;
+                   WT:predCounter_next = WN;
+                   ST:predCounter_next = WT;
                 endcase
            else
                case(predCounter)
-                   SN:predCounter<=WN;
-                   WN:predCounter<=WT;
-                   WT:predCounter<=ST;
-                   ST:predCounter<=ST;
+                   SN:predCounter_next = WN;
+                   WN:predCounter_next = WT;
+                   WT:predCounter_next = ST;
+                   ST:predCounter_next = ST;
                 endcase
         end
-    else
-        predCounter<=predCounter;
-
 end
 
 reg [1:0] tmp;

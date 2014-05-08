@@ -39,10 +39,10 @@ wire [63:0] instLine0,instLine1;
 wire [15:0] pc_plus1,pc_plus2,pc_plus3,pc_nxtline;
 
 
-assign pc_plus1=pc_reg+1;
-assign pc_plus2=pc_reg+2;
-assign pc_plus3=pc_reg+3;
-assign pc_nxtline=pc+3;//input to imm
+assign pc_plus1=pc_reg+16'd1;
+assign pc_plus2=pc_reg+16'd2;
+assign pc_plus3=pc_reg+16'd3;
+assign pc_nxtline=pc+16'd3;//input to imm
 
 
 
@@ -59,6 +59,7 @@ always@(*)
     2'b01:inst0=start?16'b0:instLine0[47:32];
     2'b10:inst0=start?16'b0:instLine0[31:16];
     2'b11:inst0=start?16'b0:instLine0[15:0];
+	default:inst0=16'd0;
     endcase
 
 //inst1 mux
@@ -68,6 +69,7 @@ always@(*)
     2'b01:inst1=start?16'b0:instLine0[47:32];
     2'b10:inst1=start?16'b0:instLine0[31:16];
     2'b11:inst1=start?16'b0:instLine0[15:0];
+	default:inst1=16'd0;
     endcase
 
 //inst2 mux
@@ -77,6 +79,7 @@ always@(*)
     2'b01:inst2=start?16'b0:instLine1[47:32];
     2'b10:inst2=start?16'b0:instLine0[31:16];
     2'b11:inst2=start?16'b0:instLine0[15:0];
+	default:inst2=16'd0;
     endcase
     
 //inst3 mux
@@ -86,6 +89,7 @@ always@(*)
     2'b01:inst3=start?16'b0:instLine1[47:32];
     2'b10:inst3=start?16'b0:instLine1[31:16];
     2'b11:inst3=start?16'b0:instLine0[15:0];
+	default:inst3=16'd0;
     endcase
 
 

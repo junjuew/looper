@@ -12,7 +12,7 @@ douta<=mem[addra];
 doutb<=mem[addrb];
 end
 initial begin
-$readmemb("./ECE554_assembler/Test/xor1_str_mif.mif", mem);
+$readmemb("./ECE554_assembler/Test/str3_mif.mif", mem);
 end
 endmodule
 

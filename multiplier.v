@@ -62,6 +62,8 @@ module multiplier( mult_op1, mult_op2, mult_out, mult_en, mult_valid_wb, /*mult_
                 rst_cnt = 1;
              end
           end
+		  default:
+			  nstate = 1'b0;
         endcase 
      end 
    assign done = counter[3];
@@ -86,7 +88,7 @@ module multiplier( mult_op1, mult_op2, mult_out, mult_en, mult_valid_wb, /*mult_
      else if (rst_cnt)
        counter <= 4'h0;
      else if(cnt_en)
-       counter <= counter + 1;
+       counter <= counter + 4'd1;
      else
        counter <=counter;
 

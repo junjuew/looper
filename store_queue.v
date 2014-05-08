@@ -29,7 +29,9 @@ reg [15:0]  shifted_match, // reordered match start from head
             pre_loop_body, 
             flush_body,
             pre_flush_body;
-reg [3:0] head, tail,  nxt_tail, indx_to_fwd, loop_start, loop_end;
+reg [3:0] head, tail,  nxt_tail, loop_start, loop_end;
+   wire [3:0] indx_to_fwd;
+   
 wire [4:0] loop_body_diff, flush_body_diff;
 wire [3:0] vld;
 //integer i;
@@ -113,11 +115,11 @@ always@(vld, tail)
    
 assign tail_plus_four = tail+4;
 assign stll=  (tail < head) ? (tail_plus_four > head) : 
-			  ( tail > head && tail < 13) ? 0 :
-			  (tail > head && tail == 13) ? (!(head > 0)):
-			 (tail > head && tail == 14) ? (!(head >1)) :
-			 (tail >head && tail == 15) ? (!(head >2)):
-			 (head == tail) ? (str_entry[head][40]) : 0;
+                          ( tail > head && tail < 13) ? 0 :
+                          (tail > head && tail == 13) ? (!(head > 0)):
+                         (tail > head && tail == 14) ? (!(head >1)) :
+                         (tail >head && tail == 15) ? (!(head >2)):
+                         (head == tail) ? (str_entry[head][40]) : 0;
 
 
 
@@ -356,9 +358,9 @@ assign insert = first | second | third | fourth;
 generate
 genvar i_1;
    for (i_1=0;i_1<16;i_1=i_1+1)
-	begin : update_st_gen
-		assign update[i_1]=mem_wrt & (str_entry[i_1][37:32] == indx_ls) & (str_entry[i_1][40]);
-	end
+        begin : update_st_gen
+                assign update[i_1]=mem_wrt & (str_entry[i_1][37:32] == indx_ls) & (str_entry[i_1][40]);
+        end
 endgenerate
 
 generate
@@ -366,7 +368,7 @@ genvar i;
 for (i=0;i<16;i=i+1) 
 begin : str_entry_gen
 always@(posedge clk, negedge rst)
-	begin
+        begin
     if (!rst)
       str_entry[i][40:0] <= 41'h00000000000;
     else begin
@@ -381,8 +383,8 @@ always@(posedge clk, negedge rst)
            end
            
            if (flush_body[i] & flsh)
-			   str_entry[i][38:32] <= 7'h00;
-		   else if (first[i])
+                           str_entry[i][38:32] <= 7'h00;
+                   else if (first[i])
               str_entry[i][38:32] <= first_indx;
            else if (second[i])
               str_entry[i][38:32] <= second_indx;
@@ -406,10 +408,10 @@ always@(posedge clk, negedge rst)
                str_entry[i][40] <= str_entry[i][40];
                
            if (flush_body[i] & flsh)
-			   str_entry[i][39] <= 0;
-		   else if (loop_body[i] & loop_back)
-			   str_entry[i][39] <= 0;
-		   else if (commit[i] & finished)
+                           str_entry[i][39] <= 0;
+                   else if (loop_body[i] & loop_back)
+                           str_entry[i][39] <= 0;
+                   else if (commit[i] & finished)
                str_entry[i][39] <= 0;
             else if (update[i])
                str_entry[i][39] <= 1;
@@ -451,13 +453,13 @@ begin
        nxt_state=IDLE;
        
    WAIT_ONE:
-	if (no_wait)
+        if (no_wait)
       nxt_state=WAIT_TWO;
    else
       nxt_state=WAIT_ONE;
     
     WAIT_TWO:
-	if (str_grnt) begin
+        if (str_grnt) begin
        nxt_state= ISSUED;
        str_iss=1;
     end
@@ -467,7 +469,7 @@ begin
     end
      
     ISSUED:
-	if (done) begin
+        if (done) begin
          finished=1;
          nxt_state = IDLE;
     end
@@ -480,26 +482,26 @@ begin
 generate
 genvar i_2;
 for (i_2=0;i_2<16;i_2=i_2+1)
-	begin : index_comp_gen
-		assign indx_comp[i_2] = (signed_comp) ? (($signed(indx_fwd) > $signed(str_entry[i_2][38:32])) ? 1:0) : ((indx_fwd > str_entry[i_2][38:32])? 1 : 0); 
-	end
+        begin : index_comp_gen
+                assign indx_comp[i_2] = (signed_comp) ? (($signed(indx_fwd) > $signed(str_entry[i_2][38:32])) ? 1:0) : ((indx_fwd > str_entry[i_2][38:32])? 1 : 0); 
+        end
 endgenerate
       
 generate
 genvar i_3;
 for (i_3=0;i_3<16;i_3=i_3+1)
-	begin : addr_comp_gen
-		assign addr_comp[i_3]= (addr_fwd == str_entry[i_3][31:16]);
-	end
+        begin : addr_comp_gen
+                assign addr_comp[i_3]= (addr_fwd == str_entry[i_3][31:16]);
+        end
 endgenerate
             
       
 generate
 genvar i_4;
 for (i_4=0;i_4<16;i_4=i_4+1)
-	begin : ready_gen
+        begin : ready_gen
       assign ready[i_4]= (~str_entry[i_4][40]) | (str_entry[i_4][39] & indx_comp[i_4]) | (~indx_comp[i_4]);
-	end
+        end
 endgenerate
 
 
@@ -509,11 +511,11 @@ assign fwd_rdy=&ready;
 generate
 genvar i_5;
 for(i_5 = 0; i_5 < 16; i_5 = i_5 + 1)
-	begin : match_gen
-		assign match[i_5] = (str_entry[i_5][40]) & addr_comp[i_5] & indx_comp[i_5];
-	end
+        begin : match_gen
+                assign match[i_5] = (str_entry[i_5][40]) & addr_comp[i_5] & indx_comp[i_5];
+        end
 endgenerate
-/**	
+/**     
 always@(*)
    for (i=0;i<16;i=i+1)
       match[i]= (~str_entry[i][40]) & addr_comp[i] & indx_comp[i];
@@ -539,7 +541,26 @@ always@(match, head)
        4'hf:shifted_match={match[14:0],match[15]};
        default: shifted_match=match;
    endcase
+
+
+
+wire [3:0] indx_to_fwd_gen[16:0];
+generate
+   genvar indx_to_fwd_i;
+   for (indx_to_fwd_i =0; indx_to_fwd_i < 17; indx_to_fwd_i=indx_to_fwd_i+1)
+     begin: indx_to_fwd_i_gen
+        if (indx_to_fwd_i == 16)
+          assign indx_to_fwd_gen[indx_to_fwd_i][3:0] = 4'h0;
+        else
+          assign indx_to_fwd_gen[indx_to_fwd_i][3:0] = (shifted_match[15-indx_to_fwd_i])? head[3:0] + (15 - indx_to_fwd_i[3:0]) : indx_to_fwd_gen[indx_to_fwd_i+1][3:0];
+     end
    
+endgenerate
+assign indx_to_fwd[3:0] = indx_to_fwd_gen[0][3:0];
+
+
+   
+/* -----\/----- EXCLUDED -----\/-----
 // find the closest match for data forwarding     
 always@(shifted_match,head)
    casex(shifted_match)
@@ -561,6 +582,7 @@ always@(shifted_match,head)
        16'b000000000000001?: indx_to_fwd=head+1;
        16'h0001: indx_to_fwd=head;
      endcase
+ -----/\----- EXCLUDED -----/\----- */
       
 assign fwd=|match;
 assign data_to_fwd = str_entry[indx_to_fwd][15:0];

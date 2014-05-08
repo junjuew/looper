@@ -1,49 +1,51 @@
 module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld_al, mem_rd, phy_addr_ld_in, indx_ls, addr_ls,
-		  ld_grnt, done, data_sq, data_ca, fwd, fwd_rdy, ld_req, addr, reg_wrt_ld, phy_addr_ld,
-		  data_ld, vld_ld, indx_ld,stll, indx_fwd, cmmt_ld_ptr);
+                  ld_grnt, done, data_sq, data_ca, fwd, fwd_rdy, ld_req, addr, reg_wrt_ld, phy_addr_ld,
+                  data_ld, vld_ld, indx_ld,stll, indx_fwd, cmmt_ld_ptr);
 
    // input and output ports declarations
    input rst, clk, flsh, mem_rd, ld_grnt, done, fwd, fwd_rdy, fnsh_unrll,  loop_strt;
    input [31:0] indx_ld_al;
-   input [4:0] 	mis_pred_ld_ptr, cmmt_ld_ptr;
-   input [5:0] 	phy_addr_ld_in, indx_ls;
+   input [4:0]  mis_pred_ld_ptr, cmmt_ld_ptr;
+   input [5:0]  phy_addr_ld_in, indx_ls;
    input [15:0] addr_ls, data_ca, data_sq;
-   output 	vld_ld, reg_wrt_ld, stll, ld_req;
+   output       vld_ld, reg_wrt_ld, stll, ld_req;
    output [5:0] indx_ld, phy_addr_ld;
    output [6:0] indx_fwd;
    output [15:0] data_ld, addr;
-   wire [3:0] 	 vld;
-   wire 	 ld_rdy, loop_back; // indicate whether a load instruction is ready to execute
-   wire [4:0] 	 nxt_head, nxt_tail, pre_head, cmmt_diff, loop_body_diff, flush_body_diff;
-   reg [41:0] 	 ld_entry [0:23]; // load queue entries
-   reg [4:0] 	 head, tail, current, pre_tail, pre_current, loop_end, loop_start;
-   reg 		 busy, finished, loop_mode, pre_loop_strt;
+   wire [3:0]    vld;
+   wire          ld_rdy, loop_back; // indicate whether a load instruction is ready to execute
+   wire [4:0]    nxt_head, nxt_tail, pre_head, cmmt_diff, loop_body_diff, flush_body_diff;
+   reg [41:0]    ld_entry [0:23]; // load queue entries
+   reg [4:0]     head, tail, current, pre_tail, loop_end, loop_start;
+   wire [4:0]    pre_current;
+   
+   reg           busy, finished, loop_mode, pre_loop_strt;
 
    //integer i;
-   wire [23:0] 	 update, // whether the corresponding entry needs update
-		 bid; // whether the corresponding load instruction is ready to execute
-   reg [23:0] 	 shifted_bid, // shifted version of bid for priority decoding
-		 execute, // whether the corresponding entry 
-		 pre_commit,
-		 commit,
-		 loop_body,
-		 pre_loop_body,
-		 flush_body,
-		 pre_flush_body,
-		 first,
-		 second,
-		 third, 
-		 fourth;
-   wire [23:0] 	 insert, pre_first, pre_second, pre_third, pre_fourth;
-   reg 		 vld_ld, reg_wrt_ld, stored_fwd, ld_req;
-   reg [15:0] 	 stored_data_sq, stored_data_ca; // used to store data received from store queue and cache
-   reg [2:0] 	 state, nxt_state; // state registers
-   wire [6:0] 	 first_indx, second_indx, third_indx, fourth_indx;
-   wire [5:0] 	 added_cmmt_ld_ptr, added_loop_end, added_tail;
-   wire 	 cmmt_round_up, loop_round_up, flush_round_up, cmmt;
+   wire [23:0]   update, // whether the corresponding entry needs update
+                 bid; // whether the corresponding load instruction is ready to execute
+   reg [23:0]    shifted_bid, // shifted version of bid for priority decoding
+                 execute, // whether the corresponding entry 
+                 pre_commit,
+                 commit,
+                 loop_body,
+                 pre_loop_body,
+                 flush_body,
+                 pre_flush_body,
+                 first,
+                 second,
+                 third, 
+                 fourth;
+   wire [23:0]   insert, pre_first, pre_second, pre_third, pre_fourth;
+   reg           vld_ld, reg_wrt_ld, stored_fwd, ld_req;
+   reg [15:0]    stored_data_sq, stored_data_ca; // used to store data received from store queue and cache
+   reg [2:0]     state, nxt_state; // state registers
+   wire [6:0]    first_indx, second_indx, third_indx, fourth_indx;
+   wire [5:0]    added_cmmt_ld_ptr, added_loop_end, added_tail;
+   wire          cmmt_round_up, loop_round_up, flush_round_up, cmmt;
 
-   wire [41:0] 	 first_load_entry; //add by ling for test
-   wire [41:0] 	 second_load_entry; //add by ling for test
+   wire [41:0]   first_load_entry; //add by ling for test
+   wire [41:0]   second_load_entry; //add by ling for test
    assign first_indx=indx_ld_al[6:0];
    assign second_indx=indx_ld_al[14:8];
    assign third_indx=indx_ld_al[22:16];
@@ -324,11 +326,11 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    assign nxt_tail=(pre_tail > 23)? (pre_tail-24) : pre_tail; // need modification in loop-mode  
    
    assign stll=  (tail < head) ? (tail+4 > head) : 
-		 ( tail > head && tail < 21) ? 0 :
-		 (tail > head && tail == 21) ? (!(head > 0)):
-		 (tail > head && tail == 22) ? (!(head >1)) :
-		 (tail >head && tail == 23) ? (!(head >2)):
-		 (head == tail) ? (ld_entry[head][41]) : 0;
+                 ( tail > head && tail < 21) ? 0 :
+                 (tail > head && tail == 21) ? (!(head > 0)):
+                 (tail > head && tail == 22) ? (!(head >1)) :
+                 (tail >head && tail == 23) ? (!(head >2)):
+                 (head == tail) ? (ld_entry[head][41]) : 0;
 
 
 
@@ -457,11 +459,11 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
 
  
    generate
-      genvar 	 i_1;
+      genvar     i_1;
       for (i_1=0;i_1<24;i_1=i_1+1)
-	begin : update_gen
-	   assign update[i_1] = mem_rd & (ld_entry[i_1][41]) & (indx_ls == ld_entry[i_1][37:32]);
-	end
+        begin : update_gen
+           assign update[i_1] = mem_rd & (ld_entry[i_1][41]) & (indx_ls == ld_entry[i_1][37:32]);
+        end
    endgenerate
    
    assign insert = first | second | third | fourth;
@@ -470,69 +472,69 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    generate
       genvar i;
       for (i=0;i<24;i=i+1) 
-	begin : ld_entry_gen
-	   always@(posedge clk, negedge rst)
-	     if (!rst)
+        begin : ld_entry_gen
+           always@(posedge clk, negedge rst)
+             if (!rst)
                ld_entry[i][41:0] <= 42'h00000000000;
-	     else begin
-		if (update[i]) begin
-		   ld_entry[i][15:0] <= phy_addr_ld_in; // update physical register address field
-		   ld_entry[i][31:16] <= addr_ls; // update memory address field
-		end
-		
-		else begin
-		   ld_entry[i][15:0] <= ld_entry[i][15:0]; 
-		   ld_entry[i][31:16] <= ld_entry[i][31:16]; 
-		end
-		
-		if (flush_body[i] & flsh)
-		  ld_entry[i][38:32] <= 7'h00;	
-		else if (first[i])
-		  ld_entry[i][38:32] <= first_indx;
-		else if (second[i])
-		  ld_entry[i][38:32] <= second_indx;
-		else if (third[i])
-		  ld_entry[i][38:32] <= third_indx;
-		else if (fourth[i])
-		  ld_entry[i][38:32] <= fourth_indx;
-		else
-		  ld_entry[i][38:32] <= ld_entry[i][38:32];
+             else begin
+                if (update[i]) begin
+                   ld_entry[i][15:0] <= phy_addr_ld_in; // update physical register address field
+                   ld_entry[i][31:16] <= addr_ls; // update memory address field
+                end
                 
-		// state bits
-		if (flush_body[i] & flsh)
-		  ld_entry[i][41] <= 0;
-		else if (loop_body[i] & loop_back)
-		  ld_entry[i][41] <= 1;
-		else if (commit[i] & cmmt)
-		  ld_entry[i][41] <= 0;
-		else if (insert[i])
-		  ld_entry[i][41] <= 1;
-		else
-		  ld_entry[i][41] <= ld_entry[i][41];
-		
-		if (flush_body[i] & flsh)
-		  ld_entry[i][40] <= 0;
-		else if (loop_body[i] & loop_back)
-		  ld_entry[i][40] <=0;
-		else if (commit[i] & cmmt)
-		  ld_entry[i][40] <= 0;
-		else if (update[i])
-		  ld_entry[i][40] <= 1;
-		else
-		  ld_entry[i][40] <= ld_entry[i][40];
-		
-		if (flush_body[i] & flsh)
-		  ld_entry[i][39] <= 0;
-		else if (loop_body[i] & loop_back)
-		  ld_entry[i][39] <= 0;
-		else if (commit[i] & cmmt)
-		  ld_entry[i][39] <= 0;
-		else if (finished & execute[i] )
-		  ld_entry[i][39] <= 1;
-		else
-		  ld_entry[i][39] <= ld_entry[i][39];
-	     end
-	end // block: ld_entry_gen
+                else begin
+                   ld_entry[i][15:0] <= ld_entry[i][15:0]; 
+                   ld_entry[i][31:16] <= ld_entry[i][31:16]; 
+                end
+                
+                if (flush_body[i] & flsh)
+                  ld_entry[i][38:32] <= 7'h00;  
+                else if (first[i])
+                  ld_entry[i][38:32] <= first_indx;
+                else if (second[i])
+                  ld_entry[i][38:32] <= second_indx;
+                else if (third[i])
+                  ld_entry[i][38:32] <= third_indx;
+                else if (fourth[i])
+                  ld_entry[i][38:32] <= fourth_indx;
+                else
+                  ld_entry[i][38:32] <= ld_entry[i][38:32];
+                
+                // state bits
+                if (flush_body[i] & flsh)
+                  ld_entry[i][41] <= 0;
+                else if (loop_body[i] & loop_back)
+                  ld_entry[i][41] <= 1;
+                else if (commit[i] & cmmt)
+                  ld_entry[i][41] <= 0;
+                else if (insert[i])
+                  ld_entry[i][41] <= 1;
+                else
+                  ld_entry[i][41] <= ld_entry[i][41];
+                
+                if (flush_body[i] & flsh)
+                  ld_entry[i][40] <= 0;
+                else if (loop_body[i] & loop_back)
+                  ld_entry[i][40] <=0;
+                else if (commit[i] & cmmt)
+                  ld_entry[i][40] <= 0;
+                else if (update[i])
+                  ld_entry[i][40] <= 1;
+                else
+                  ld_entry[i][40] <= ld_entry[i][40];
+                
+                if (flush_body[i] & flsh)
+                  ld_entry[i][39] <= 0;
+                else if (loop_body[i] & loop_back)
+                  ld_entry[i][39] <= 0;
+                else if (commit[i] & cmmt)
+                  ld_entry[i][39] <= 0;
+                else if (finished & execute[i] )
+                  ld_entry[i][39] <= 1;
+                else
+                  ld_entry[i][39] <= ld_entry[i][39];
+             end
+        end // block: ld_entry_gen
       
    endgenerate
 
@@ -542,9 +544,9 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    generate
       genvar i_2;
       for (i_2=0;i_2<24;i_2=i_2+1)
-	begin : bid_gen
-	   assign bid[i_2] = (~busy) & (ld_entry[i_2][41]) & (~ld_entry[i_2][39]) & (ld_entry[i_2][40]); // find ready load that has not been done
-	end
+        begin : bid_gen
+           assign bid[i_2] = (~busy) & (ld_entry[i_2][41]) & (~ld_entry[i_2][39]) & (ld_entry[i_2][40]); // find ready load that has not been done
+        end
    endgenerate
 
  
@@ -584,9 +586,26 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        default: shifted_bid=bid;
      endcase
 
+   
+wire [4:0] pre_current_gen[24:0];
+generate
+   genvar shift_i;
+   for (shift_i =0; shift_i < 25; shift_i=shift_i+1)
+     begin: shift_i_gen
+        if (shift_i == 24)
+          assign pre_current_gen[shift_i][4:0] = head[4:0];
+        else
+          assign pre_current_gen[shift_i][4:0] = (shifted_bid[shift_i])? head[4:0] + shift_i[4:0]: pre_current_gen[shift_i+1][4:0];
+     end
+   
+endgenerate
+assign pre_current[4:0] = pre_current_gen[0][4:0];
+   
+   
+/* -----\/----- EXCLUDED -----\/-----
    // Priority decoding to find the oldest ready load for execution   
-   always@(/*autosense*/head or shifted_bid)
-     casex(shifted_bid)
+   always@(/-*autosense*-/head or shifted_bid)
+     case(shifted_bid)
        24'h0: pre_current = head;
        24'b???????????????????????1: pre_current=head; // 
        24'b??????????????????????10: pre_current=head+1; // 
@@ -614,6 +633,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        24'b100000000000000000000000: pre_current=head+23; //
        default: pre_current = head;
      endcase
+ -----/\----- EXCLUDED -----/\----- */
 
    // Round-up update of current pointer
    always@(posedge clk, negedge rst)
@@ -701,53 +721,53 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
       vld_ld=0;
       finished=0;
       case(state)
-	IDLE:
-	  if (ld_rdy & (~flsh)) begin
+        IDLE:
+          if (ld_rdy & (~flsh)) begin
              nxt_state=WAIT;
-	  end
-	  else
+          end
+          else
             nxt_state=IDLE;
-	
-	WAIT: begin
-	   busy=1;	   
-	   ld_req=1; // Keep requesting
-	   if (flsh)
-	     nxt_state=IDLE;
-	   else if (ld_grnt) begin
+        
+        WAIT: begin
+           busy=1;         
+           ld_req=1; // Keep requesting
+           if (flsh)
+             nxt_state=IDLE;
+           else if (ld_grnt) begin
               nxt_state=ISSUED;
-	   end
-	   else 
+           end
+           else 
              nxt_state=WAIT;
-	end
-	
-	ISSUED: begin
-	   busy=1;
-	   if (flsh)
-	     nxt_state=IDLE;
-	   else if (done & !fwd_rdy)
+        end
+        
+        ISSUED: begin
+           busy=1;
+           if (flsh)
+             nxt_state=IDLE;
+           else if (done & !fwd_rdy)
              nxt_state=MEM_RDY;
-	   else if (!done & fwd_rdy)
+           else if (!done & fwd_rdy)
              nxt_state=FWD_RDY;
-	   else if (done & fwd_rdy)
+           else if (done & fwd_rdy)
              nxt_state=BOTH_RDY;
-	   else
+           else
              nxt_state=ISSUED;
-	end
-	
+        end
+        
         FWD_RDY: begin
            busy=1;
-	   if (flsh)
-	     nxt_state=IDLE;
+           if (flsh)
+             nxt_state=IDLE;
            else if (done)
              nxt_state=WRITEBACK;
            else
              nxt_state=FWD_RDY;
         end
-	
+        
         MEM_RDY: begin
            busy=1;
-	   if (flsh)
-	     nxt_state=IDLE;
+           if (flsh)
+             nxt_state=IDLE;
            else if (fwd_rdy)
              nxt_state=WRITEBACK;
            else
@@ -755,33 +775,33 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
         end   
         
         BOTH_RDY: begin
-	   busy=1;
-	   if (flsh)
-	     nxt_state=IDLE;
+           busy=1;
+           if (flsh)
+             nxt_state=IDLE;
            else
-	     nxt_state=WRITEBACK;
+             nxt_state=WRITEBACK;
            
-	end
-	
-	WRITEBACK: begin
-	   busy=1;
-	   if (flsh)
-	     nxt_state=IDLE;
-	   else begin
+        end
+        
+        WRITEBACK: begin
+           busy=1;
+           if (flsh)
+             nxt_state=IDLE;
+           else begin
               reg_wrt_ld=1;
               vld_ld=1;
               busy=1;
               finished=1;
               if (ld_rdy)
-		nxt_state=WAIT;
+                nxt_state=WAIT;
               else
-		nxt_state=IDLE;
+                nxt_state=IDLE;
            end
-	end // case: WRITEBACK
+        end // case: WRITEBACK
 
-	default:
-	  nxt_state = IDLE;
-	
+        default:
+          nxt_state = IDLE;
+        
       endcase
    end
 
