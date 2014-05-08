@@ -23,15 +23,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module driver(/*autoarg*/
-              // Outputs
-              iocs, iorw, ioaddr, enb, web, addrb, dinb, flsh, rom_out,
-              dis_dvi_out, state,
-              // Inouts
-              databus,
-              // Inputs
-              clk, rst_n, br_cfg, rda, tbr, doutb, cpu_pc, mem_sys_fin, 
-              display_plane_addr
-              );
+   // Outputs
+   iocs, iorw, ioaddr, enb, web, extern_pc, extern_pc_en, addrb, dinb,
+   flsh, rom_out, dis_dvi_out, state,
+   // Inouts
+   databus,
+   // Inputs
+   clk, rst_n, br_cfg, rda, tbr, doutb, cpu_pc, mem_sys_fin,
+   display_plane_addr
+   );
 
 
    parameter LAST_SLOT_MEM_ADDR=14'h3fff;
@@ -49,7 +49,8 @@ module driver(/*autoarg*/
    inout wire [7:0]  databus;
    
    //interface with memory
-   output reg        enb, web;
+   output reg        enb, web, extern_pc_en;
+   output reg [15:0] extern_pc;
    output reg [13:0] addrb;
    output reg [63:0] dinb;
    input wire [63:0] doutb;   
@@ -204,7 +205,7 @@ module driver(/*autoarg*/
 
 
    //combine stored_spart_data into one value
-   // array idx 0 -- highest byte: 7
+   // array idx 0 -- highest byte: 7 --- earliest inputs
    // array idx 7 -- lowest byte: 0
    wire [63:0] wrt_mem_data;
    generate
@@ -364,6 +365,9 @@ module driver(/*autoarg*/
         ld_mem_out_buf=1'b0;
         dis_dvi_out=1'b1;
         rom_out = 24'h0;
+
+        extern_pc = 16'h0;
+        extern_pc_en = 1'b0;
         
         case(state)
           IDLE://idle state
@@ -386,6 +390,12 @@ module driver(/*autoarg*/
                     addrb = LAST_SLOT_MEM_ADDR;
                     dinb = wrt_mem_data;
                     clr_cmd=1'b1;
+
+                    
+                    /*********** external pc to start jumping ***********/
+                    extern_pc = wrt_mem_data;
+                    extern_pc_en=1'b1;
+
                     
                     // overwrite memory value
                     //next state clr such value

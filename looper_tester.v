@@ -130,6 +130,8 @@ module looper_tester(/*autoarg*/
    assign mmu_mem_rst = ~rst_n;
 
 
+   wire [15:0] extern_pc;
+   wire        extern_pc_en;
    
    
    top_module_looper looper_DUT(
@@ -147,8 +149,8 @@ module looper_tester(/*autoarg*/
                                 .clk            (clk_10mhz),
                                 .rst_n          (rst_n),
                                 .flush_cache    (flsh),
-                                .extern_pc      (16'b0),
-                                .extern_pc_en   (1'b0));
+                                .extern_pc      (extern_pc),
+                                .extern_pc_en   (extern_pc_en));
 
    /*   
     clock_gen c0(
@@ -162,7 +164,7 @@ module looper_tester(/*autoarg*/
    
 //   clk_gen clk_25mhz1(clk, ~rst_n, clk_25mhz, clkin_ibufg_out, clk_100mhz_buf, locked_dcm); 
         
-	  clk_gen clk_10mhz1 (
+          clk_gen clk_10mhz1 (
     .CLKIN_IN(clk_100mhz), 
     .RST_IN(~rst_n), 
     .CLKDV_OUT(clk_10mhz), //right now use 10Mhz clk
@@ -171,7 +173,7 @@ module looper_tester(/*autoarg*/
     .LOCKED_OUT(locked_dcm)
     );
 /*
-	  clk_gen_vga clk_25mhz1 (
+          clk_gen_vga clk_25mhz1 (
     .CLKIN_IN(clk_100mhz), 
     .RST_IN(~rst_n), 
     .CLKDV_OUT(clk_25mhz), //for dvi
@@ -201,6 +203,8 @@ module looper_tester(/*autoarg*/
             .dvi_rst                    (dvi_rst),
             .scl                        (scl),
             .sda                        (sda),
+            .extern_pc_en (extern_pc_en),
+            .extern_pc (extern_pc),
             // Inputs
             .clk_100mhz                 (clk_10mhz),
             .clk_25mhz                  (clk_10mhz),//wrong, just for testing. should use 25mhz
@@ -216,11 +220,11 @@ module looper_tester(/*autoarg*/
    assign sda_tri = (sda)? 1'bz: 1'b0;
    assign scl_tri = (scl)? 1'bz: 1'b0;
    
-	wire[35:0] control;
-	
-	chipscopeicon icon(.CONTROL0(control)) /* synthesis syn_noprune=1 */;
-	chipscopeila ila(.CLK(clk_10mhz),.DATA({pc_to_dec}), .TRIG0(state[0]), .CONTROL(control) ) /* synthesis syn_noprune=1 */;
+//        wire[35:0] control;
+        
+//        chipscopeicon icon(.CONTROL0(control)) /* synthesis syn_noprune=1 */;
+//        chipscopeila ila(.CLK(clk_10mhz),.DATA({pc_to_dec}), .TRIG0(state[0]), .CONTROL(control) ) /* synthesis syn_noprune=1 */;
 
-	
+        
    
 endmodule
