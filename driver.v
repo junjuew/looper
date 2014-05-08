@@ -134,8 +134,8 @@ module driver(/*autoarg*/
    // is 16 times larger than receiver
    // 0x516 * 16 = (10^9) / 4800 /10
    assign baud_rate = (br_cfg == 2'b00) ? 16'h82://16'h516://16'd64://16'h516://16'd16:
-                      (br_cfg == 2'b01) ? 16'h28B:
-                      (br_cfg == 2'b10) ? 16'h146: 16'ha3;
+                      (br_cfg == 2'b01) ? 16'h41://16'h28B:
+                      (br_cfg == 2'b10) ? 16'h21:16'h10;//16'h146: 16'ha3;
    
    wire [7:0]        stored_spart_data_en;
 
