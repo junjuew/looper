@@ -22,7 +22,7 @@ else
 		for asmFile in $(ls ECE554_assembler/Test/STR_Test/*.asm)
 			do
 				filePrefix=${asmFile%.asm}
-				filePrefix=${filePrefix#*Test/}
+				filePrefix=${filePrefix#*STR_Test/}
 				java Modified_imem $filePrefix
 				./compile
 				echo 'run -all' | vsim -c -novopt work.tb_topmodule

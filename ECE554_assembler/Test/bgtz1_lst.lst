@@ -11,7 +11,7 @@ PC: 0009 Binary: 0001001100010010 Hex: 1312 add r3, r1, r2		 // set r3 = -1, but
 000a      .label1:
 PC: 000a Binary: 1100000100000010 Hex: c102 ldi r1, 2            // set r1 to 2
 PC: 000b Binary: 1100001000000010 Hex: c202 ldi r2, 2	     	 // set r2 to 2
-PC: 000c Binary: 0010001100010010 Hex: 2312 sub r3, r1, r2		 // r3 = -1
+PC: 000c Binary: 0010001100010010 Hex: 2312 sub r3, r1, r2		 // r3 = 0
 PC: 000d Binary: 1011001100000001 Hex: b301 bgtz r3, .label2     // it will do branch here
 PC: 000e Binary: 0001010001000100 Hex: 1444 add r4, r4, r4	     // if the beqz above didn't branch, r4 will be 8
 000f      .label2:

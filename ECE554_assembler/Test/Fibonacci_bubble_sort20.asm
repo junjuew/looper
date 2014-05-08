@@ -310,7 +310,9 @@ beqz	r7, .main_end
 add r4, r5, r8	// r4 = r5 + 0 = r5
 j		.main_start
 .main_end:
-ldi r1, 0
+ldi r1, 75
+add r1, r1, r1
+str r5, r1, 0
 ldi r0, 0
 jr  r0, 0
 nop
