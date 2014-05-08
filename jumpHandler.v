@@ -56,7 +56,17 @@ module jumpHandler(input has_mispredict,
    //assign disable_ins=0;
    reg stall_for_jump;
    wire 			 stall_for_jump1;
-   
+
+   wire ImJmp0,
+        ImJmp1,
+        ImJmp2,
+        ImJmp3,
+        existImdJmp,
+        BsJmp0,
+        BsJmp1,
+        BsJmp2,
+        BsJmp3;
+
    wire stall_for_jump1_ext;
    assign stall_for_jump_ext=extern_pc_en?1'b0:stall_for_jump;
    assign stall_for_jump1_ext=extern_pc_en?1'b0:stall_for_jump1;
@@ -97,21 +107,23 @@ end
        disable_ins<=1;
      else if(stall_for_jump1==0)
        disable_ins<=0;
+     else 
+	   disable_ins<=disable_ins;
 
 
 
 
 
    //reg [15:0]in_pc;
-   wire ImJmp0=(instruction0[15:12]==4'b1111)&&(instruction0[0]==0);
-   wire ImJmp1=(instruction1[15:12]==4'b1111)&&(instruction1[0]==0);
-   wire ImJmp2=(instruction2[15:12]==4'b1111)&&(instruction2[0]==0);
-   wire ImJmp3=(instruction3[15:12]==4'b1111)&&(instruction3[0]==0);
-   wire existImdJmp=ImJmp0||ImJmp1||ImJmp2||ImJmp3;
-   wire BsJmp0=disable_ins?0:(instruction0[15:12]==4'b1111)&&(instruction0[0]==1);
-   wire BsJmp1=disable_ins?0:(instruction1[15:12]==4'b1111)&&(instruction1[0]==1);
-   wire BsJmp2=disable_ins?0:(instruction2[15:12]==4'b1111)&&(instruction2[0]==1);
-   wire BsJmp3=disable_ins?0:(instruction3[15:12]==4'b1111)&&(instruction3[0]==1);
+   assign ImJmp0=(instruction0[15:12]==4'b1111)&&(instruction0[0]==0);
+   assign ImJmp1=(instruction1[15:12]==4'b1111)&&(instruction1[0]==0);
+   assign ImJmp2=(instruction2[15:12]==4'b1111)&&(instruction2[0]==0);
+   assign ImJmp3=(instruction3[15:12]==4'b1111)&&(instruction3[0]==0);
+   assign existImdJmp=ImJmp0||ImJmp1||ImJmp2||ImJmp3;
+   assign BsJmp0=disable_ins?0:(instruction0[15:12]==4'b1111)&&(instruction0[0]==1);
+   assign BsJmp1=disable_ins?0:(instruction1[15:12]==4'b1111)&&(instruction1[0]==1);
+   assign BsJmp2=disable_ins?0:(instruction2[15:12]==4'b1111)&&(instruction2[0]==1);
+   assign BsJmp3=disable_ins?0:(instruction3[15:12]==4'b1111)&&(instruction3[0]==1);
 
 
    /*//add signal to clear disable_ins signal
@@ -163,10 +175,10 @@ end
     (ImJmp2?(pc+1+{{6{instruction2[11]}},instruction2[11:2]}):
     (ImJmp3?(pc+1+{{6{instruction3[11]}},instruction3[11:2]}):16'b0)))))));*/
    wire [15:0] ImJmp_addr;
-   assign ImJmp_addr=(ImJmp0?(pc+1+{{6{instruction0[11]}},instruction0[11:2]}):
-		      (ImJmp1?(pc+2+{{6{instruction1[11]}},instruction1[11:2]}):
-		       (ImJmp2?(pc+3+{{6{instruction2[11]}},instruction2[11:2]}):
-			(ImJmp3?(pc+4+{{6{instruction3[11]}},instruction3[11:2]}):16'b0))));
+   assign ImJmp_addr=(ImJmp0?(pc+16'd1+{{6{instruction0[11]}},instruction0[11:2]}):
+		             (ImJmp1?(pc+16'd2+{{6{instruction1[11]}},instruction1[11:2]}):
+		             (ImJmp2?(pc+16'd3+{{6{instruction2[11]}},instruction2[11:2]}):
+			         (ImJmp3?(pc+16'd4+{{6{instruction3[11]}},instruction3[11:2]}):16'b0))));
    /*   if(!rst_n)
     jump_addr_pc<=16'b0;
     else if(jump_base_rdy_from_rf_buf)
@@ -179,7 +191,7 @@ end
     jump_addr_pc<=jump_addr_pc;
 end*/
    assign jump_addr_pc = (jump_base_rdy_from_rf_buf) ? jump_pc+jump_base_from_rf :
-			 (stall_for_jump1)? (BsJmp0?pc:(BsJmp1?(pc+1):(BsJmp2?(pc+2):(pc+3)))):
+			 (stall_for_jump1)? (BsJmp0?pc:(BsJmp1?(pc+16'd1):(BsJmp2?(pc+16'd2):(pc+16'd3)))):
 			 (preJmp)                    ? 16'b0 :
 			 (existImdJmp)               ? ImJmp_addr : 16'b0;
 

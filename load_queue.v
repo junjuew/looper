@@ -61,7 +61,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
 
    always@(posedge clk, negedge rst)
      if (!rst)
-       loop_start <= 0;
+       loop_start <= 5'd0;
      else if (loop_strt)
        loop_start <= tail;
      else
@@ -71,16 +71,16 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    
    always@(posedge clk, negedge rst)
      if (!rst)
-       loop_end <= 0;
+       loop_end <= 5'd0;
      else if (fnsh_unrll)
-       loop_end <= nxt_tail-1;
+       loop_end <= nxt_tail-5'd1;
      else
        loop_end <= loop_end;
    
    // tail pointer update
    always@(posedge clk, negedge rst)
      if (!rst)
-       tail <= 0;
+       tail <= 5'd0;
      else if (flsh)
        tail <= mis_pred_ld_ptr;
      else
@@ -90,7 +90,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    // head pointer udpate
    always@(posedge clk, negedge rst)
      if (!rst)
-       head <= 0;
+       head <= 5'd0;
      else
        head <= cmmt_ld_ptr;
 
@@ -127,7 +127,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    assign flush_body_diff=(flush_round_up) ? (added_tail-mis_pred_ld_ptr) : (nxt_tail-mis_pred_ld_ptr);
    always@(cmmt_diff)
      case(cmmt_diff)
-       5'd0: pre_commit=0;
+       5'd0: pre_commit=24'h0;
        5'd1: pre_commit=24'h000001;
        5'd2: pre_commit=24'h000003;
        5'd3: pre_commit=24'h000007;
@@ -152,7 +152,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd22: pre_commit=24'h3fffff;
        5'd23: pre_commit=24'h7fffff;
        5'd24: pre_commit=24'hffffff;
-       default: pre_commit=0;
+       default: pre_commit=24'h0;
      endcase
 
 
@@ -183,13 +183,13 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd21: commit={pre_commit[2:0],pre_commit[23:3]};
        5'd22: commit={pre_commit[1:0],pre_commit[23:2]};
        5'd23: commit={pre_commit[0],pre_commit[23:1]};
-       default: commit = 0;
+       default: commit = 24'h0;
      endcase
 
 
    always@(loop_body_diff)
      case(loop_body_diff)
-       5'd0: pre_loop_body=0;
+       5'd0: pre_loop_body=24'h0;
        5'd1: pre_loop_body=24'h000001;
        5'd2: pre_loop_body=24'h000003;
        5'd3: pre_loop_body=24'h000007;
@@ -214,7 +214,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd22: pre_loop_body=24'h3fffff;
        5'd23: pre_loop_body=24'h7fffff;
        5'd24: pre_loop_body=24'hffffff;
-       default: pre_loop_body=0;
+       default: pre_loop_body=24'h0;
      endcase
 
 
@@ -247,11 +247,11 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd21: loop_body={pre_loop_body[2:0],pre_loop_body[23:3]};
        5'd22: loop_body={pre_loop_body[1:0],pre_loop_body[23:2]};
        5'd23: loop_body={pre_loop_body[0],pre_loop_body[23:1]};
-       default: loop_body = 0;
+       default: loop_body = 24'h0;
      endcase
    always@(flush_body_diff)
      case(flush_body_diff)
-       5'd0: pre_flush_body=0;
+       5'd0: pre_flush_body=24'h0;
        5'd1: pre_flush_body=24'h000001;
        5'd2: pre_flush_body=24'h000003;
        5'd3: pre_flush_body=24'h000007;
@@ -276,7 +276,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd22: pre_flush_body=24'h3fffff;
        5'd23: pre_flush_body=24'h7fffff;
        5'd24: pre_flush_body=24'hffffff;
-       default: pre_flush_body=0;
+       default: pre_flush_body=24'h0;
      endcase
    always@(*) 
      case(mis_pred_ld_ptr)
@@ -304,7 +304,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd21: flush_body={pre_flush_body[2:0],pre_flush_body[23:3]};
        5'd22: flush_body={pre_flush_body[1:0],pre_flush_body[23:2]};
        5'd23: flush_body={pre_flush_body[0],pre_flush_body[23:1]};
-       default: flush_body = 0;
+       default: flush_body = 24'h0;
      endcase
 
 
@@ -314,16 +314,16 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    always@(vld, tail)
      case (vld)
        4'b0000: pre_tail = tail;
-       4'b0001: pre_tail = tail+1;
-       4'b0011: pre_tail = tail+2;
-       4'b0111: pre_tail = tail+3;
-       4'b1111: pre_tail = tail+4;
+       4'b0001: pre_tail = tail+5'd1;
+       4'b0011: pre_tail = tail+5'd2;
+       4'b0111: pre_tail = tail+5'd3;
+       4'b1111: pre_tail = tail+5'd4;
        default: pre_tail = tail;
      endcase
    
-   assign nxt_tail=(pre_tail > 23)? (pre_tail-24) : pre_tail; // need modification in loop-mode  
+   assign nxt_tail=(pre_tail > 23)? (pre_tail-5'd24) : pre_tail; // need modification in loop-mode  
    
-   assign stll=  (tail < head) ? (tail+4 > head) : 
+   assign stll=  (tail < head) ? (tail+5'd4 > head) : 
 		 ( tail > head && tail < 21) ? 0 :
 		 (tail > head && tail == 21) ? (!(head > 0)):
 		 (tail > head && tail == 22) ? (!(head >1)) :
@@ -364,7 +364,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd21: first={pre_first[2:0],pre_first[23:3]};
        5'd22: first={pre_first[1:0],pre_first[23:2]};
        5'd23: first={pre_first[0],pre_first[23:1]};
-       default: first = 0;
+       default: first = 24'd0;
      endcase
    always@(*)
      case(tail)
@@ -392,7 +392,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd21: second={pre_second[2:0],pre_second[23:3]};
        5'd22: second={pre_second[1:0],pre_second[23:2]};
        5'd23: second={pre_second[0],pre_second[23:1]};
-       default: second = 0;
+       default: second = 24'd0;
      endcase
 
 
@@ -422,7 +422,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd21: third={pre_third[2:0],pre_third[23:3]};
        5'd22: third={pre_third[1:0],pre_third[23:2]};
        5'd23: third={pre_third[0],pre_third[23:1]};
-       default: third = 0;
+       default: third = 24'd0;
      endcase
 
 
@@ -452,7 +452,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd21: fourth={pre_fourth[2:0],pre_fourth[23:3]};
        5'd22: fourth={pre_fourth[1:0],pre_fourth[23:2]};
        5'd23: fourth={pre_fourth[0],pre_fourth[23:1]};
-       default: fourth = 0;
+       default: fourth = 24'd0;
      endcase
 
  
@@ -586,43 +586,43 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
 
    // Priority decoding to find the oldest ready load for execution   
    always@(/*autosense*/head or shifted_bid)
-     casex(shifted_bid)
+     case(shifted_bid)
        24'h0: pre_current = head;
        24'b???????????????????????1: pre_current=head; // 
-       24'b??????????????????????10: pre_current=head+1; // 
-       24'b?????????????????????100: pre_current=head+2; // 
-       24'b????????????????????1000: pre_current=head+3; // 
-       24'b???????????????????10000: pre_current=head+4; //
-       24'b??????????????????100000: pre_current=head+5; // 
-       24'b?????????????????1000000: pre_current=head+6; // 
-       24'b????????????????10000000: pre_current=head+7; // 
-       24'b???????????????100000000: pre_current=head+8; // 
-       24'b??????????????1000000000: pre_current=head+9; // 
-       24'b?????????????10000000000: pre_current=head+10; // 
-       24'b????????????100000000000: pre_current=head+11; // 
-       24'b???????????1000000000000: pre_current=head+12; // 
-       24'b??????????10000000000000: pre_current=head+13; // 
-       24'b?????????100000000000000: pre_current=head+14; // 
-       24'b????????1000000000000000: pre_current=head+15; // 
-       24'b???????10000000000000000: pre_current=head+16; // 
-       24'b??????100000000000000000: pre_current=head+17; // 
-       24'b?????1000000000000000000: pre_current=head+18; // 
-       24'b????10000000000000000000: pre_current=head+19; // 
-       24'b???100000000000000000000: pre_current=head+20; // 
-       24'b??1000000000000000000000: pre_current=head+21; // 
-       24'b?10000000000000000000000: pre_current=head+22; // 
-       24'b100000000000000000000000: pre_current=head+23; //
+       24'b??????????????????????10: pre_current=head+5'd1; // 
+       24'b?????????????????????100: pre_current=head+5'd2; // 
+       24'b????????????????????1000: pre_current=head+5'd3; // 
+       24'b???????????????????10000: pre_current=head+5'd4; //
+       24'b??????????????????100000: pre_current=head+5'd5; // 
+       24'b?????????????????1000000: pre_current=head+5'd6; // 
+       24'b????????????????10000000: pre_current=head+5'd7; // 
+       24'b???????????????100000000: pre_current=head+5'd8; // 
+       24'b??????????????1000000000: pre_current=head+5'd9; // 
+       24'b?????????????10000000000: pre_current=head+5'd10; // 
+       24'b????????????100000000000: pre_current=head+5'd11; // 
+       24'b???????????1000000000000: pre_current=head+5'd12; // 
+       24'b??????????10000000000000: pre_current=head+5'd13; // 
+       24'b?????????100000000000000: pre_current=head+5'd14; // 
+       24'b????????1000000000000000: pre_current=head+5'd15; // 
+       24'b???????10000000000000000: pre_current=head+5'd16; // 
+       24'b??????100000000000000000: pre_current=head+5'd17; // 
+       24'b?????1000000000000000000: pre_current=head+5'd18; // 
+       24'b????10000000000000000000: pre_current=head+5'd19; // 
+       24'b???100000000000000000000: pre_current=head+5'd20; // 
+       24'b??1000000000000000000000: pre_current=head+5'd21; // 
+       24'b?10000000000000000000000: pre_current=head+5'd22; // 
+       24'b100000000000000000000000: pre_current=head+5'd23; //
        default: pre_current = head;
      endcase
 
    // Round-up update of current pointer
    always@(posedge clk, negedge rst)
      if (!rst)
-       current <= 0;
+       current <= 5'd0;
      else if (busy)
        current <= current;
      else if (pre_current > 23)
-       current <= pre_current-24;
+       current <= pre_current-5'd24;
      else 
        current <= pre_current;
    
@@ -652,7 +652,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd21: execute = 24'h200000;
        5'd22: execute = 24'h400000;
        5'd23: execute = 24'h800000;
-       default: execute = 0;
+       default: execute = 24'h0;
      endcase
 
    always@(posedge clk, negedge rst)
@@ -665,7 +665,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    
    always@(posedge clk, negedge rst)
      if (!rst)
-       stored_data_sq <= 0;
+       stored_data_sq <= 16'd0;
      else if (fwd_rdy)
        stored_data_sq <= data_sq;
      else
@@ -673,7 +673,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    
    always@(posedge clk, negedge rst)
      if (!rst)
-       stored_data_ca <= 0;
+       stored_data_ca <= 16'd0;
      else if (done)
        stored_data_ca <= data_ca;
      else
