@@ -84,7 +84,17 @@ module tb_topmodule();
       #flush_mem;
       flush_cache = 1'b1;
    end
-   
+  
+
+    initial begin
+    #300
+        extern_pc_en=1'b1;
+        extern_pc=16'h0004;
+    #10
+        extern_pc_en=1'b0;
+        extern_pc=16'b0;
+    end
+
    /* -----\/----- EXCLUDED -----\/-----
     always@(posedge clk)begin
     #2;
