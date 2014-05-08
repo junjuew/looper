@@ -5,6 +5,7 @@ if [ $# != 1 ]; then
 	echo "./run_all <file> to process a single .asm file"
 	echo "    Example: ./run_all add1"
 else
+	rm -rf *.wlf
 	rm run_all_result.dump
 	if [ $1 == "-normal" ]; then
 		for asmFile in $(ls ECE554_assembler/Test/*.asm)
