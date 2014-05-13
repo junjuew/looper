@@ -1,4 +1,14 @@
-module load_store_arbi(clk, rst, ld_req, str_req, idle, done, ld_grnt, str_grnt, enable, addr_sel, rd_wrt_ca);
+module load_store_arbi(clk, 
+			rst, 
+			ld_req, 
+			str_req, 
+			idle, // whether the memory system is idle
+			done, // whether the memory operation is done
+			ld_grnt, // grant a load
+			str_grnt, // grant a store
+			enable, // whether to enable memory operation
+			addr_sel, // which address to selet, store or load
+			rd_wrt_ca); // read or write operation
    // input and output ports declarations
    input clk, rst, ld_req, str_req, idle, done;
    output reg ld_grnt, str_grnt, enable, addr_sel, rd_wrt_ca;
