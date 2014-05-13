@@ -1,8 +1,6 @@
 //`default_nettype none
 
-  //TODO: output all the bits in the tpu_inst?? some may not be needed for next stage. need to strip those bits off
-  // added reorder function to solve the problem
-  
+
    ////////////////////////////
    // instruction format used for testing:
    // inst idx | inst vld | inst wat | BR | JMP | MULT| ADD | ADDR | lsrc1 | ldst | lsrc2 | pdest
