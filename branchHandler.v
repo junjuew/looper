@@ -45,8 +45,6 @@ module branchHandler(input clk,
 		     output [15:0] instruction2,
 		     output [15:0] instruction3,
 		     output 	   brch_full, 
-		     //output [15:0] brnch_inst0,
-		     // output [15:0] brnch_inst1,
 		     output [3:0]  tkn_brnch,
 		     output [3:0]  isImJmp
 		     );
@@ -55,15 +53,11 @@ module branchHandler(input clk,
    wire [3:0] 			   all_nop;
    wire [3:0] 			   isJump;//tkn_brnch;
    reg [1:0] 			   brnch_cnt;
-   //wire [1:0] pred_to_pcsel;
-   //wire [15:0] inst0_b,inst1_b,inst2_b,inst3_b;
+  
    
    //////////////////////////////////////////////////////////
    ///////============code starts here=============//////////
    //////////////////////////////////////////////////////////
-
-   //assign pred_to_pcsel=loop_start?2'b11:pred_to_pcsel0;//move from bpred to bhndlr,
-   //if loop start,no need consider brnch_cnt 
 
 
    //////////////////////////////////////
@@ -95,15 +89,6 @@ module branchHandler(input clk,
    assign brnch_pc_sel_from_bhndlr[1]=(inst2[15:14]==2'b10) && (!(inst2[13:12]==2'b00));
    assign brnch_pc_sel_from_bhndlr[0]=(inst3[15:14]==2'b10) && (!(inst3[13:12]==2'b00));
 
-   /*//if there is branch enable branch predictor
-    assign update_bpred=hold_for_brnch?0:(isJump[3]?0:
-    (brnch_pc_sel_from_bhndlr[3]?1:(isJump[2]?0:
-    (brnch_pc_sel_from_bhndlr[2]?1:(isJump[1]?0:
-    ((|brnch_pc_sel_from_bhndlr[1:0])?1:0))))));
-    */ 
-
-   //|brnch_pc_sel_from_bhndlr
-
 
    //if branch instruction is taken and not flushed, increase counter
    //calculate number of instructions before current branch instruction
@@ -119,22 +104,15 @@ module branchHandler(input clk,
    wire [3:0] 			   third_brnch;
    
    
-   //modify third_brnch signal as below because the original way will hold when
-   //2nd brnch is the 1st instruction
 
-   //modified by ling
+   //if a third branch is detected, stall fetch
    assign third_brnch[3]=((brnch_cnt+brnch_pc_sel_from_bhndlr[3])>=3'b011);
    assign third_brnch[2]=((brnch_cnt+brnch_pc_sel_from_bhndlr[3]+brnch_pc_sel_from_bhndlr[2])>=3'b011);
    assign third_brnch[1]=((brnch_cnt+brnch_pc_sel_from_bhndlr[3]+brnch_pc_sel_from_bhndlr[2]+brnch_pc_sel_from_bhndlr[1])>=3'b011);
    assign third_brnch[0]=((brnch_cnt+brnch_pc_sel_from_bhndlr[3]+brnch_pc_sel_from_bhndlr[2]+brnch_pc_sel_from_bhndlr[1]+brnch_pc_sel_from_bhndlr[0])>=3'b011);
 
 
-   /*
-    assign third_brnch[3]=exd_cnt[3]&&brnch_pc_sel_from_bhndlr[3];
-    assign third_brnch[2]=(exd_cnt[2]&&brnch_pc_sel_from_bhndlr[2])||third_brnch[3];
-    assign third_brnch[1]=(exd_cnt[1]&&brnch_pc_sel_from_bhndlr[1])||third_brnch[2];
-    assign third_brnch[0]=(exd_cnt[0]&&brnch_pc_sel_from_bhndlr[0])||third_brnch[1] ;
-    */
+   //if a third branch is detected, stall fetch and hold PC at the third branch's PC
    reg 				   hold_for_brnch;
    always@(posedge clk or negedge rst_n)begin
       if(!rst_n)
@@ -148,12 +126,7 @@ module branchHandler(input clk,
       else
 	hold_for_brnch<=hold_for_brnch;
    end
-   /*///limit number of brnches
-    assign inst0_b=exd_cnt[3]?16'b0:inst0;
-    assign inst1_b=exd_cnt[3]?16'b0:inst1;
-    assign inst2_b=exd_cnt[3]?16'b0:inst2;
-    assign inst3_b=exd_cnt[3]?16'b0:inst3;
-    */
+
 
    //if there is branch enable branch predictor
    assign update_bpred = hold_for_brnch?0:((isJump[3]||third_brnch[3])?0:
@@ -169,22 +142,8 @@ module branchHandler(input clk,
    
 
 
-   //update counter
-   /*
-    assign incr_cnt=all_nop[3]?2'b00:(all_nop[2]?
-    (brnch_pc_sel_from_bhndlr[3]?2'b01:2'b00):
-    (      all_nop[1]?(   (&brnch_pc_sel_from_bhndlr[3:2])?2'b10:
-    (   (|brnch_pc_sel_from_bhndlr[3:2])?2'b01:2'b00)):
-    (   all_nop[0]?(   (|brnch_pc_sel_from_bhndlr[3:1]==0)?2'b00:
-    (   (^brnch_pc_sel_from_bhndlr[3:1]==1)?2'b01:2'b10)):
-    (   ((brnch_before_inst3-brnch_cnt)==2'b10)?2'b10:
-    (   ((brnch_before_inst3-brnch_cnt)==2'b01)?2'b01:
-    //nothing flushed, check last instruction
-    ((brnch_before_inst3-brnch_cnt+brnch_pc_sel_from_bhndlr[0])==2'b10)?2'b10:
-    (((brnch_before_inst3-brnch_cnt+brnch_pc_sel_from_bhndlr[0])==2'b01)?2'b01:2'b00))))   ));//nothing flushed
-    */
-
-   always@(*)begin
+   //signal to increase counter
+    always@(*)begin
       if(all_nop[3]==1)
         incr_cnt=2'b00;
       else if(loop_start)
@@ -195,9 +154,9 @@ module branchHandler(input clk,
          else
            incr_cnt=2'b00;
       end else if(all_nop[1]==1)begin
-         if(&brnch_pc_sel_from_bhndlr[3:2]==1)
+         if(&brnch_pc_sel_from_bhndlr[3:2]==1)// the first two instructions are branches
            incr_cnt=2'b10;
-         else if(|brnch_pc_sel_from_bhndlr[3:2]==1)
+         else if(|brnch_pc_sel_from_bhndlr[3:2]==1)// there is one branch in the first two instrutions
            incr_cnt=2'b01;
          else
            incr_cnt=2'b00;
@@ -214,7 +173,7 @@ module branchHandler(input clk,
       
    end
 
-
+	//branch counter
    reg [1:0] brnch_cnt_update;
 
    always@(/*autosense*/brnch_cnt or decr_count_from_rob or incr_cnt
@@ -251,11 +210,7 @@ module branchHandler(input clk,
           brnch_cnt_update = brnch_cnt_update;
      end
 
-   //(brnch_before_inst3>=2'b10)?2'b10:(
-   //  ((brnch_before_inst3-brnch_cnt)==2'b01)?2'b01:2'b00);
-   //(brnch_before_inst0>=2'b10)+(brnch_before_inst1>=2'b10)+
-   //  (brnch_before_inst2>=2'b10)+(brnch_before_inst3>=2'b10);
-   
+     
    //counter to keep track of number of branches
    //counter need to be decreased if misperdiction takes place
    always@(posedge clk or negedge rst_n)begin
@@ -264,6 +219,7 @@ module branchHandler(input clk,
       else 
 	brnch_cnt <= brnch_cnt_update;
    end
+
 
    //<3>
    //check if taken or not
@@ -306,11 +262,5 @@ module branchHandler(input clk,
    assign instruction2=(all_nop[1])?16'b0:inst2;
    assign instruction3=(all_nop[0])?16'b0:inst3;
 
-   //move this all to branch addr calculator
-   /*
-    //output branch target address
-    assign brnch_inst0=tkn_brnch[3]?inst0:(tkn_brnch[2]?inst1:(tkn_brnch[1]?inst2:(tkn_brnch[0]?inst3:16'b0)));
-    assign brnch_inst1=(&tkn_brnch[3:2])?inst1:(((tkn_brnch[3]&tkn_brnch[1])||(&tkn_brnch[2:1]))?inst2:
-    (((tkn_brnch[3]&tkn_brnch[0])||(tkn_brnch[2]&tkn_brnch[0])||(&tkn_brnch[1:0]))?inst3:16'b0));
-    */
+ 
 endmodule

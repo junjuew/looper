@@ -41,6 +41,8 @@ module branchAddrCalculator(
    assign immd_brnch2={{8{inst2[7]}},inst2[7:0]};
    assign immd_brnch3={{8{inst3[7]}},inst3[7:0]};
 
+   //calculate branch target address not matter it is taken or not
+   //because this will be used as recovery PC when misprediction occurs
    always@(*)
      if((|brnch_pc_sel_from_bhndlr)==0)//no branch inst
        begin
@@ -54,7 +56,6 @@ module branchAddrCalculator(
 
           brnch_target_addr2=pc+3+immd_brnch2;
           brnch_target_addr3=pc+4+immd_brnch3;
-
        end
 
 
@@ -253,8 +254,5 @@ module branchAddrCalculator(
 	end
    end//always
 
-
-
-   //add recov pc
 
 endmodule

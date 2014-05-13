@@ -28,28 +28,14 @@ module dynBranchPredictor(
     brnch_pc_sel_from_bhndlr,
     update_bpred,
     loop_start,
- //   pc,
-  //  pc_plus1,
-  //  pc_plus2,
-  //  pc_plus3,
     pred_to_pcsel
 );
 
 input clk,rst_n,decr_count_brnch,mispredict,mispred_num,brnc_pred_log;
 input [3:0]brnch_pc_sel_from_bhndlr;
 input update_bpred,loop_start;
-//input [15:0]pc, pc_plus1, pc_plus2, pc_plus3;
 output [1:0] pred_to_pcsel;
 
-/*
-///////////////////////////////////////
-//=======always TAKEN branch=========//
-///////////////////////////////////////
-wire [1:0] numbrnch;
-assign numbrnch=brnch_pc_sel_from_bhndlr[0]+brnch_pc_sel_from_bhndlr[1]+brnch_pc_sel_from_bhndlr[2]+brnch_pc_sel_from_bhndlr[3];
-assign pred_to_pcsel=(update_bpred)?((loop_start)?2'b11:((numbrnch==1)?2'b10:2'b11)):2'b00;
-*/
-//assign brnch_pc_sel_from_bhndlr=brnch_pc_sel_from_bhndlr;
 
 
 localparam SN=2'b00;
@@ -104,26 +90,9 @@ always@(decr_count_brnch, predCounter, brnc_pred_log, mispredict)begin
             end
         endcase
     end
-    else if(mispredict==1)
-/*       if(mispred_num==1)begin
-           if(brnc_pred_log==1)
-               case(predCounter_next)
-                   SN:predCounter_next = SN;
-                    WN:predCounter_next = SN;
-                    WT:predCounter_next = SN;
-                    ST:predCounter_next = WN;
-                endcase
-           else
-               case(predCounter_next)
-                    SN:predCounter_next = WT;
-                    WN:predCounter_next = ST;
-                    WT:predCounter_next = ST;
-                    ST:predCounter_next = ST;
-                endcase
-        end else
-		*/
+    else if(mispredict==1)//update predictor when misprediction takes place
 		begin
-		if(brnc_pred_log==1)
+		if(brnc_pred_log==1)//==1 indicates mistakenly predicted taken
                case(predCounter)
                    SN:predCounter_next = SN;
                    WN:predCounter_next = SN;
@@ -140,7 +109,6 @@ always@(decr_count_brnch, predCounter, brnc_pred_log, mispredict)begin
         end
 end
 
-///reg [1:0] tmp;
 
 
 wire [1:0] numbrnch;

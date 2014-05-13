@@ -87,20 +87,11 @@ wire [15:0] pc_from_mux;
    wire     brch_full,start;
    reg [15:0]pc;
 
-///////////////////////////////////
-//internal registers and signals///
-///////////////////////////////////
-//reg [PC_WIDTH-1:0] pc,pc_reg,pc_next,
-//reg [2:0] PC_select;
-//reg [PC_WIDTH-1:0]brnch_addr_pc0,brnch_addr_pc1;
 
 ///////////////////////////////////////////////////////////////////
 /////================code starts here=========================/////
 ///////////////////////////////////////////////////////////////////
 
-//PC_MUX and PC_reg
-//PC_MUX PC_MUX0(clk, rst_n,pc_recovery, brnch_addr_pc0, brnch_addr_pc1, jump_addr_pc,
-//    pc_plus4, pc_bhndlr, PC_select, pc_from_mux);
 
 PC_MUX PC_MUX0(
     //.clk(clk), 
@@ -137,8 +128,6 @@ assign pc_plus3=pc+3;
 assign pc_plus4=pc+4;
 
 //instruction memory
-//instrMemModule IMM(clk, pc,inst0,inst1, inst2, inst3, pc_plus1, pc_plus2, pc_plus3);
-
 
 instrMemModule IMM(
     .clk(clk),
@@ -149,9 +138,6 @@ instrMemModule IMM(
     .inst1(inst1),
     .inst2(inst2),
     .inst3(inst3)
-    //.pc_plus1(pc_plus1),
-    //.pc_plus2(pc_plus2),
-    //.pc_plus3(pc_plus3)
 );
 
 
@@ -177,8 +163,6 @@ branchHandler branchjumpHandler(
     .instruction2(instruction2), 
     .instruction3(instruction3),//to output
     .brch_full(brch_full),
-    //.brnch_inst0(brnch_inst0),
-    //.brnch_inst1(brnch_inst1),
 	.tkn_brnch(tkn_brnch),
     .isImJmp(isImJmp)
 );//to calculator
@@ -201,10 +185,6 @@ dynBranchPredictor bpred0(
     .brnch_pc_sel_from_bhndlr(brnch_pc_sel_from_bhndlr),
     .update_bpred(update_bpred),
     .loop_start(loop_start),
-    //.pc(pc),
-    //.pc_plus1(pc_plus1),
-    //.pc_plus2(pc_plus2),
-    //.pc_plus3(pc_plus3),
     .pred_to_pcsel(pred_to_pcsel)
 );
 /*GshareBranchPredictor bpred1(clk,rst_n,decr_count_brnch,
@@ -214,8 +194,6 @@ dynBranchPredictor bpred0(
 
 branchAddrCalculator branchAddrCalculator(
     .brnch_pc_sel_from_bhndlr(brnch_pc_sel_from_bhndlr), 
-    //.brnch_inst0(brnch_inst0), 
-    //.brnch_inst1(brnch_inst1), 
 	.inst0(inst0),
 	.inst1(inst1),
 	.inst2(inst2),
@@ -277,7 +255,6 @@ dataout_pack dataout(.start(start),
     .instruction1(instruction1_j),
     .instruction2(instruction2_j),
     .instruction3(instruction3_j),
-   // .jump_addr_pc(jump_addr_pc),
     .brnch_addr_pc0(recv_pc0),//modified input from brnch addr calculator recv_pc port
     .brnch_addr_pc1(recv_pc1),
     .pred_to_pcsel(pred_to_pcsel),

@@ -27,14 +27,10 @@ module instrMemModule(
     output reg[15:0] inst1,
     output reg[15:0] inst2,
     output reg[15:0] inst3
-//    output [15:0] pc_plus1,
-  //  output [15:0] pc_plus2,
-  //  output [15:0] pc_plus3
-    //output [15:0] pc_plus4
+
 );
 
 //internal signals
-//wire [15:0] pc_plus4;
 wire [63:0] instLine0,instLine1;
 wire [15:0] pc_plus1,pc_plus2,pc_plus3,pc_nxtline;
 
@@ -45,12 +41,10 @@ assign pc_plus3=pc_reg+16'd3;
 assign pc_nxtline=pc+16'd3;//input to imm
 
 
-
-
-
+//in put pc from pc_mux tp instruction memory
+//because this is one cycle delay
 imemory IM0(clk, pc[15:2], instLine0, clk, pc_nxtline[15:2],instLine1);
 
-//IM IM0(clk, pc[15:2], instLine0, clk, pc_plus3[15:2],instLine1);
 
 //inst0 mux
 always@(*)

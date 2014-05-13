@@ -37,13 +37,9 @@ wire stall;
 assign stall=(stall_fetch==1) || (stall_for_jump==1);
 
 
-//assign PC_select=(!rst_n)?3'd7:(stall?3'd6:
-//   (has_mispredict?3'd3:(jump_for_pcsel?3'd2:
-//   ((|pred_to_pcsel)?(pred_to_pcsel[1]?3'd0:3'd1)://check which branch tkn
-//   (pcsel_from_bhndlr?3'd4:3'd5)))));
-
-
-always@(posedge clk or negedge rst_n)
+   //add start signal so that only when rst is done, can the instructions 
+   //be read from imemory and send to the next stages
+   always@(posedge clk or negedge rst_n)
 	if(!rst_n)
 		start<=1'b1;
    else
