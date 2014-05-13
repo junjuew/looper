@@ -18,40 +18,40 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module top_level_wb(signed_comp,
+module top_level_wb(signed_comp,  // used by store queue for index comparison in data forwarding
                                         clk,
                      rst,
-                     flsh,
-                     flsh_cache,                
-                     mis_pred_ld_ptr ,  
-                     indx_ld_al, 
-                     mem_rd, 
-                     phy_addr_ld_in, 
-                     mis_pred_str_ptr, 
-                     cmmt_str, 
-                     indx_str_al, 
-                     mem_wrt, 
-                     data_str, 
-                     indx_ls,
-                     addr_ls,
-                     fnsh_unrll,
-                     loop_strt,
-                     stll,
-                     indx_ld,
-                     vld_ld,
-                     data_ld,
-                     phy_addr_ld,
-                     reg_wrt_ld,
-                     str_iss,
-                     cmmt_ld_ptr,
-                     mmu_mem_clk  ,
-                     mmu_mem_rst  ,
-                     mmu_mem_enb  ,
-                     mmu_mem_web  ,
-                     mmu_mem_addrb,
-                     mmu_mem_dinb ,
-                     mmu_mem_doutb,
-                     ca_idle
+                     flsh, // whether a misprediction occurs
+                     flsh_cache,                // whether to flush cache data back to main memory
+                     mis_pred_ld_ptr ,  // tail position after misprediction
+                     indx_ld_al, // load indices from allocation
+                     mem_rd, // whether the calculated address is for a load
+                     phy_addr_ld_in, // physical register address for the coming load
+                     mis_pred_str_ptr, // tail position after misprediction
+                     cmmt_str, // whether to commit a store
+                     indx_str_al, // store indices from allocation
+                     mem_wrt, // whether the calculated address is for a store
+                     data_str, // the data for the store
+                     indx_ls, // index for the calculated address
+                     addr_ls, // the calculated address
+                     fnsh_unrll, // whether loop unrolling is finished
+                     loop_strt, // whether a loop starts
+                     stll, // load/store queue fullness, call for stall
+                     indx_ld, // index of the load written to physical register file
+                     vld_ld, // whether the load index is valid
+                     data_ld, // data written back to register file
+                     phy_addr_ld, // physical register address to write to
+                     reg_wrt_ld, // whether to write
+                     str_iss, // whether the store is issued
+                     cmmt_ld_ptr, // used to direct the head position of the load queue
+                     mmu_mem_clk  , // clk for the second port of memory
+                     mmu_mem_rst  , // rst for the second port of memory
+                     mmu_mem_enb  , // enable for the second port of memory
+                     mmu_mem_web  , // write enable for the second port of memory
+                     mmu_mem_addrb, // address for the second port of memory
+                     mmu_mem_dinb , // input data for the second port of memory
+                     mmu_mem_doutb, // output data from the second port of memory
+                     ca_idle // whether the memory system is idle
                      );
 
 
@@ -134,7 +134,5 @@ assign stll= stll_ld | stll_str;
 
 
    
-   assign addr_ca= (addr_sel == 1) ? addr_str : addr_ld;
-   assign stll= stll_ld | stll_str;
 
 endmodule

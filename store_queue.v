@@ -1,6 +1,29 @@
-module store_queue(signed_comp, fnsh_unrll, loop_strt, clk,rst, mis_pred_str_ptr, cmmt_str, flsh, addr_fwd, indx_fwd, indx_str_al,ld_grnt,
-                     mem_wrt, data_str, indx_ls, addr_ls, str_grnt, done, str_req,
-                     str_iss, stll, fwd, fwd_rdy, addr, data_ca, data_fwd);
+module store_queue(signed_comp, // whether to use signed index comparison in data forwarding
+               	fnsh_unrll, 
+		loop_strt, 
+		clk,
+		rst, 
+		mis_pred_str_ptr, 
+		cmmt_str, 
+		flsh, 
+		addr_fwd, // memory address of the load being exected
+		indx_fwd, // index of the load being executed
+		indx_str_al,
+		ld_grnt, // starts the data forwarding process
+                mem_wrt, 
+		data_str, 
+		indx_ls, 
+		addr_ls, 
+		str_grnt, // acknowledgement from load store arbitrator that the store is issued to memory 
+		done, // the store is finished
+		str_req,
+                str_iss, 
+		stll, 
+		fwd, // the data forwarding decision
+		fwd_rdy, // whether the decision is ready
+		addr, 
+		data_ca, 
+		data_fwd); // forwarded data to load queue
                      
 // input and output ports declarations
 input signed_comp, rst, mem_wrt, flsh, clk, cmmt_str, done, str_grnt, ld_grnt, fnsh_unrll, loop_strt;
@@ -11,53 +34,75 @@ input [5:0] indx_ls;
 input [6:0] indx_fwd;
 output str_req, str_iss, fwd, fwd_rdy, stll;
 output  [15:0] data_ca, addr, data_fwd;
+
 wire [4:0] tail_plus_four;   
-reg str_req, str_iss, finished, loop_mode, pre_loop_strt;
+reg str_req, 
+    str_iss, 
+    finished, // whether a store is completed from memory side
+    loop_mode, // whether a loop mode is entered
+    pre_loop_strt; // used to determine whether the loop_strt goes high
+
 reg [40:0] str_entry [0:15]; // store queue entries
 wire [15:0] indx_comp, // used to tell whether the corresponding store occurs before the load being executed
             update, // indicate whether there is an index match for address and data update in the store queue entry
             ready, // indicate whether all stores occurring before the load being executed have memory addresses updated
             addr_comp, // indicate whether an address match occurs between the store and load to trigger data forwarding
             match; // indicate whether the corresponding store is a candidate for data forwarding
+
 reg [15:0]  shifted_match, // reordered match start from head
-            first,
-            second,
-            third,
-            fourth, 
-            commit,
-            loop_body,
+            first, // whether to insert first index to the corresponding entry
+            second, // whether to insert second index to the corresponding entry
+            third,  // whether to insert third index to the corresponding entry
+            fourth, // whether to insert fourth index to the corresponding entry
+            commit,// whether to commit corresponding entry
+            loop_body, // whether the entry belongs to the loop body
             pre_loop_body, 
-            flush_body,
+            flush_body, // whether the entry should be flushed
             pre_flush_body;
-reg [3:0] head, tail,  nxt_tail, loop_start, loop_end;
-   wire [3:0] indx_to_fwd;
-   
+
+// pointers used in the store queue
+reg [3:0] head, 
+	  tail,  
+	  nxt_tail, // tail value of the next clock cycle 
+	  loop_start, 
+	  loop_end;
+
+wire [3:0] indx_to_fwd; // if forwarding is needed, the position of the entry whose data to forward  
 wire [4:0] loop_body_diff, flush_body_diff;
 wire [3:0] vld;
-//integer i;
+
 reg [1:0] state,nxt_state; // state registers
-wire [15:0] data_to_fwd; 
-wire [6:0] first_indx, second_indx, third_indx, fourth_indx;
-wire [15:0] pre_first, pre_second, pre_third, pre_fourth, insert;
-wire no_wait, loop_round_up, loop_back, flush_round_up;
+wire [15:0] data_to_fwd; // data value to forward
+wire [6:0] first_indx, // first index value from allocation
+	   second_indx, // second index value from allocation
+	   third_indx, // third index value from allocation
+	   fourth_indx; // fourth index value from allocation
+
+wire [15:0] pre_first, 
+	    pre_second, 
+	    pre_third, 
+	    pre_fourth, 
+	    insert; // whether a insertion occurs to the entry
+
+wire no_wait, // the address is ready so that the store does not need to wait to execution
+     loop_round_up, // round-up occurs in loop unrolling
+     loop_back, // whether a loop is back to its beginning
+     flush_round_up; // roupd-up occurs in flushing when misprediction happens
+
+// used by round-up calculation
 wire [4:0] added_loop_end, added_tail;
 
-localparam IDLE=2'b00;
+localparam IDLE=2'b00; // idle state
 localparam WAIT_TWO=2'b01; // wait for the grant signal
-localparam ISSUED=2'b10;
+localparam ISSUED=2'b10; // store issued to memory
 localparam WAIT_ONE=2'b11; // wait for the store to be ready
-
-
-   wire[40:0] first_data_entry; // add by ling for test
-   wire[40:0] second_data_entry; // add by ling for test
    
 assign first_indx=indx_str_al[6:0];
 assign second_indx=indx_str_al[14:8];
 assign third_indx=indx_str_al[22:16];
 assign fourth_indx=indx_str_al[30:24];
 
-   assign first_data_entry = str_entry[0];
-   assign second_data_entry = str_entry[1];
+// mark the start of the loop
 always@(posedge clk, negedge rst)
 if (!rst)
    loop_start <= 0;
@@ -66,7 +111,7 @@ else if (loop_strt)
 else
   loop_start <= loop_start;
   
-  
+// mark the end of the loop
 always@(posedge clk, negedge rst)
 if (!rst)
    loop_end <= 0;
@@ -84,14 +129,15 @@ else if (flsh)
 else
    tail <= nxt_tail;
    
-   
+// determine whether the loop_strt goes high   
 always@(posedge clk, negedge rst)
 if (!rst)
    pre_loop_strt <= 0;
 else
-   pre_loop_strt <= loop_strt;
-   
+   pre_loop_strt <= loop_strt;   
 assign strt_rise=(!pre_loop_strt) & loop_strt;
+
+// whether a loop mode is entered
 always@(posedge clk, negedge rst)
 if (!rst)
    loop_mode <= 0;
@@ -101,7 +147,8 @@ else if (flsh)
    loop_mode <= 0;
 else
    loop_mode <= loop_mode;
-   
+
+// determine the position of tail depending on the incoming valid store instructions   
 assign vld={indx_str_al[31], indx_str_al[23], indx_str_al[15], indx_str_al[7]};
 always@(vld, tail)
    case (vld)
@@ -113,6 +160,7 @@ always@(vld, tail)
        default: nxt_tail = tail;
    endcase
    
+// whether the store queue is full
 assign tail_plus_four = tail+4;
 assign stll=  (tail < head) ? (tail_plus_four > head) : 
                           ( tail > head && tail < 13) ? 0 :
@@ -123,7 +171,7 @@ assign stll=  (tail < head) ? (tail_plus_four > head) :
 
 
 
-
+// head pointer update
 always@(posedge clk,negedge rst)
 if (!rst)
    head <= 0;
@@ -135,8 +183,9 @@ else
    head <= head;
    
 assign loop_back= loop_mode & (head+1 > loop_end) & finished;   
-assign no_wait=str_entry[head][39];
+assign no_wait=str_entry[head][39]; // whether the address is already updated
 
+// determine which entry to commit from head
 always@(head)
 case(head)
     4'h0: commit = 16'h0001;
@@ -168,7 +217,8 @@ assign loop_body_diff= (loop_round_up) ? (added_loop_end-loop_start+1) : (loop_e
 assign flush_round_up=nxt_tail < mis_pred_str_ptr;
 assign added_tail=nxt_tail+16;
 assign flush_body_diff= (flush_round_up) ? (added_tail-mis_pred_str_ptr) : (nxt_tail-mis_pred_str_ptr);
- 
+
+// determine how many entries are in the loop body 
 always@(loop_body_diff)
 case(loop_body_diff)
     5'd0: pre_loop_body=0;
@@ -191,10 +241,7 @@ case(loop_body_diff)
     default: pre_loop_body=0;
 endcase
 
-
-
-
-
+// loop body starts from loop_start
 always@(*) 
 case(loop_start)
     4'd0: loop_body = pre_loop_body;
@@ -215,6 +262,8 @@ case(loop_start)
     4'd15: loop_body={pre_loop_body[0],pre_loop_body[15:1]};
     default: loop_body = 0;
 endcase
+
+// determine how many entries to flush when misprediction occurs
 always@(flush_body_diff)
 case(flush_body_diff)
     5'd0: pre_flush_body=0;
@@ -237,10 +286,7 @@ case(flush_body_diff)
     default: pre_flush_body=0;
 endcase
 
-
-
-
-
+// flushing starts from mis_pred_str_ptr
 always@(*) 
 case(mis_pred_str_ptr)
     4'd0: flush_body = pre_flush_body;
@@ -267,6 +313,7 @@ assign pre_second={22'h000000, vld[1], 1'b0};
 assign pre_third={21'h000000, vld[2], 2'b00};
 assign pre_fourth={20'h00000, vld[3], 3'b000};
 
+// insertion starts from tail
 always@(*)
 case(tail)
     4'd0: first = pre_first;
@@ -287,7 +334,6 @@ case(tail)
     4'd15: first={pre_first[0],pre_first[15:1]};
     default: first = 0;
 endcase
-
 always@(*)
 case(tail)
     4'd0: second = pre_second;
@@ -308,7 +354,6 @@ case(tail)
     4'd15: second={pre_second[0],pre_second[15:1]};
     default: second = 0;
 endcase
-
 always@(*)
 case(tail)
     4'd0: third = pre_third;
@@ -329,8 +374,6 @@ case(tail)
     4'd15: third={pre_third[0],pre_third[15:1]};
     default: third = 0;
 endcase
-
-
 always@(*)
 case(tail)
     4'd0: fourth = pre_fourth;
@@ -478,7 +521,8 @@ begin
  endcase
  end
        
-
+// data forwarding process
+// index comparison
 generate
 genvar i_2;
 for (i_2=0;i_2<16;i_2=i_2+1)
@@ -486,7 +530,8 @@ for (i_2=0;i_2<16;i_2=i_2+1)
                 assign indx_comp[i_2] = (signed_comp) ? (($signed(indx_fwd) > $signed(str_entry[i_2][38:32])) ? 1:0) : ((indx_fwd > str_entry[i_2][38:32])? 1 : 0); 
         end
 endgenerate
-      
+
+// address comparison      
 generate
 genvar i_3;
 for (i_3=0;i_3<16;i_3=i_3+1)
@@ -495,7 +540,7 @@ for (i_3=0;i_3<16;i_3=i_3+1)
         end
 endgenerate
             
-      
+// whether a forwarding decision can be made depending on whether there are unresolved addresses in previous stores    
 generate
 genvar i_4;
 for (i_4=0;i_4<16;i_4=i_4+1)
@@ -507,7 +552,7 @@ endgenerate
 
 assign fwd_rdy=&ready;
 
-
+// whether there is any match candidate for data forwarding
 generate
 genvar i_5;
 for(i_5 = 0; i_5 < 16; i_5 = i_5 + 1)
@@ -521,6 +566,7 @@ always@(*)
       match[i]= (~str_entry[i][40]) & addr_comp[i] & indx_comp[i];
 */
 
+// find the youngest store to forward
 always@(match, head)
    case(head)
        4'h0:shifted_match=match;

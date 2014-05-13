@@ -9,7 +9,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
-// Description: 
+// Description: Used to wrap around data memory to emulate long-latency access
 //
 // Dependencies: 
 //
@@ -51,12 +51,12 @@ module memory_interface(rst, clk, addr_mem, rd_wrt_mem, enable, data_mem_in, dat
    localparam DONE=2'b11;
 
    reg [1:0]     state, nxt_state;
-   reg [5:0]     cntr;
+   reg [5:0]     cntr; // counter used to control the latency
    reg           cntr_clr, cntr_enable, load;
    reg [63:0]    stored_data_out;
    wire [63:0]   data_out;
-   assign data_mem_out= done ? stored_data_out:64'd0;
-
+   assign data_mem_out= done ? stored_data_out:64'd0; // send the data out to cache only when the latency value is reached
+   // state transition
    always@(posedge clk, negedge rst)
      if (!rst)
        state <= IDLE;
@@ -76,6 +76,7 @@ module memory_interface(rst, clk, addr_mem, rd_wrt_mem, enable, data_mem_in, dat
    
    
    assign time_up= (cntr == 3);
+   // store the data read from main memory
    always@(posedge clk, negedge rst)
      if (!rst)
        stored_data_out <= 64'd0;
@@ -84,6 +85,7 @@ module memory_interface(rst, clk, addr_mem, rd_wrt_mem, enable, data_mem_in, dat
      else
        stored_data_out <= stored_data_out;
 
+   // control signals generation
    always@(enable, state, time_up, rd_wrt_mem) begin
       done=0;
       cntr_enable=0;

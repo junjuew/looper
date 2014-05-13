@@ -1,11 +1,20 @@
-module memory_system(flush, clk, rst, addr_ca, data_ca_in, rd_wrt_ca, enable, idle, done, data_ca_out,   
-                     mmu_mem_clk ,
-                     mmu_mem_rst ,
-                     mmu_mem_enb ,
-                     mmu_mem_web ,
-                     mmu_mem_addrb ,
-                     mmu_mem_dinb ,
-                     mmu_mem_doutb
+module memory_system(flush, // flush cache back to memory
+		    	clk, 
+			rst, 
+			addr_ca, // address for cache operation
+			data_ca_in, // input data for cache
+			rd_wrt_ca, // read or write
+			enable, // enable signal for memory system
+			idle, // whether the system is idle
+			done, // whether operation is completed
+			data_ca_out, // data read out from the system
+                     	mmu_mem_clk ,
+                     	mmu_mem_rst ,
+                     	mmu_mem_enb ,
+                     	mmu_mem_web ,
+                     	mmu_mem_addrb ,
+                     	mmu_mem_dinb ,
+                     	mmu_mem_doutb
                      );
 
    input rd_wrt_ca, enable, clk, rst, flush;
@@ -23,7 +32,15 @@ module memory_system(flush, clk, rst, addr_ca, data_ca_in, rd_wrt_ca, enable, id
    output wire [63:0] mmu_mem_doutb ;
    
    
-   wire              miss_hit, wrt_bck,done_mem, rd_wrt_mem, mem_enable, mem_rdy, miss_handling, line_dirty, one_line_flushed, flush_finish;
+   wire              	miss_hit, // whether it's a cache hit/miss
+			wrt_bck, // whether cache line writeback is needed
+			done_mem, // whether main memory operation is completed
+			rd_wrt_mem, // read or write to the first port of main memory
+			mem_enable, // enable for the first port of main memory
+			mem_rdy, // whether the data read out from main memory is ready for cache use
+			line_dirty, // whether the cache line is dirty
+			one_line_flushed, // when a cache line is flushed back to main memory
+			flush_finish; // when the cache flushing should end
    wire [63:0]       data_to_mem, data_from_mem;  
    wire [13:0]       addr_mem;
    

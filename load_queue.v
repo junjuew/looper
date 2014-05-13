@@ -1,6 +1,30 @@
-module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld_al, mem_rd, phy_addr_ld_in, indx_ls, addr_ls,
-                  ld_grnt, done, data_sq, data_ca, fwd, fwd_rdy, ld_req, addr, reg_wrt_ld, phy_addr_ld,
-                  data_ld, vld_ld, indx_ld,stll, indx_fwd, cmmt_ld_ptr);
+module load_queue(fnsh_unrll, 
+		clk,
+		rst, 
+		mis_pred_ld_ptr, 
+		loop_strt, 
+		flsh, 
+		indx_ld_al, 
+		mem_rd, 
+		phy_addr_ld_in, 
+		indx_ls, 
+		addr_ls,
+                ld_grnt, // sent from load store arbitrator to acknowledge the execution of the current load 
+		done, // sent from memory to notify the completion of the read operation
+		data_sq, // the forwarded data from store queue
+		data_ca, // the data read out from memory
+		fwd, // whether to select the forwarded data
+		fwd_rdy, // whether the forwarding decision is ready
+		ld_req, // output to load store arbitrator to bid for the current load
+		addr, // the memory address for read operation
+		reg_wrt_ld, 
+		phy_addr_ld,
+                data_ld, 
+		vld_ld, 
+		indx_ld,
+		stll, 
+		indx_fwd, // index of the load being executed
+		cmmt_ld_ptr);
 
    // input and output ports declarations
    input rst, clk, flsh, mem_rd, ld_grnt, done, fwd, fwd_rdy, fnsh_unrll,  loop_strt;
@@ -12,55 +36,97 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
    output [5:0] indx_ld, phy_addr_ld;
    output [6:0] indx_fwd;
    output [15:0] data_ld, addr;
-   wire [3:0]    vld;
-   wire          ld_rdy, loop_back; // indicate whether a load instruction is ready to execute
-   wire [4:0]    nxt_head, nxt_tail, pre_head, cmmt_diff, loop_body_diff, flush_body_diff;
-   reg [41:0]    ld_entry [0:23]; // load queue entries
-   reg [4:0]     head, tail, current, pre_tail, loop_end, loop_start;
-   wire [4:0]    pre_current;
-   
-   reg           busy, finished, loop_mode, pre_loop_strt;
 
-   //integer i;
+   wire [3:0]    vld; // whether the indices are valid
+   wire          ld_rdy, // whether there is a load that is ready for execution 
+		 loop_back, // indicate whether a loop is finished and back to its beginning
+		 strt_rise; // whether the loop_strt signal goes high
+
+   wire [4:0]    nxt_head, // the head value for next clock cycle
+		 nxt_tail, // the tail value for next clock cycle
+		 cmmt_diff, // how many entries should be committed in this clock cycle
+		 loop_body_diff, // how many entries reside in the loop body
+		 flush_body_diff; // how many entries should be flushed out
+
+   reg [41:0]    ld_entry [0:23]; // load queue entries
+   // pointers used in the load queue
+   reg [4:0]     head, 
+		 tail, 
+		 current, 
+	 	 pre_tail, // the next value of tail without wrap-around processing
+		 loop_end, 
+		 loop_start; 
+
+   wire [4:0]    pre_current;
+   reg           busy, // whether the load queue is busy executing one load
+		 finished, // whether the load is finished
+		 loop_mode, // whether a loop mode is entered
+		 pre_loop_strt; // used to tell whether the loop_strt signal goes high
+
    wire [23:0]   update, // whether the corresponding entry needs update
                  bid; // whether the corresponding load instruction is ready to execute
-   reg [23:0]    shifted_bid, // shifted version of bid for priority decoding
-                 execute, // whether the corresponding entry 
-                 pre_commit,
-                 commit,
-                 loop_body,
-                 pre_loop_body,
-                 flush_body,
-                 pre_flush_body,
-                 first,
-                 second,
-                 third, 
-                 fourth;
-   wire [23:0]   insert, pre_first, pre_second, pre_third, pre_fourth;
-   reg           vld_ld, reg_wrt_ld, stored_fwd, ld_req;
-   reg [15:0]    stored_data_sq, stored_data_ca; // used to store data received from store queue and cache
-   reg [2:0]     state, nxt_state; // state registers
-   wire [6:0]    first_indx, second_indx, third_indx, fourth_indx;
-   wire [5:0]    added_cmmt_ld_ptr, added_loop_end, added_tail;
-   wire          cmmt_round_up, loop_round_up, flush_round_up, cmmt;
 
-   wire [41:0]   first_load_entry; //add by ling for test
-   wire [41:0]   second_load_entry; //add by ling for test
+   reg [23:0]    shifted_bid, // shifted version of bid for priority decoding
+                 execute, // whether the corresponding entry should be executed 
+                 pre_commit,
+                 commit, // whether the corresponding entry is committed
+                 loop_body, // whether the corresponding entry belongs to the loop body
+                 pre_loop_body,
+                 flush_body, // whether the corresponding entry should be flushed when misprediction occurs
+                 pre_flush_body,
+                 first, // whether to insert the first index value 
+                 second, // whether to insert the second index value
+                 third, // whether to insert the third index value
+                 fourth; // whether to insert the fourth index value
+
+   wire [23:0]   insert, // whether a load is inserted to the corresponding entry
+		 pre_first, 
+		 pre_second, 
+		 pre_third, 
+		 pre_fourth;
+
+   reg           vld_ld, 
+		 reg_wrt_ld, 
+		 stored_fwd, // register used to store the value of fwd from store queue for data selection afterwards
+		 ld_req;
+
+   reg [15:0]    stored_data_sq, 
+		 stored_data_ca; // used to store data received from store queue and cache
+
+   reg [2:0]     state, nxt_state; // state registers
+   wire [6:0]    first_indx, // first index value
+		 second_indx, // second index value 
+		 third_indx, // third index value
+	 	 fourth_indx; // fourth index value
+
+   // used in entry count when wrap-around occurs
+   wire [5:0]    added_cmmt_ld_ptr, 
+		 added_loop_end, 
+		 added_tail;
+
+   wire          cmmt_round_up, // whether wrap-around occurs during commitment
+		 loop_round_up, // whether wrap-around occurs during loop unrolling
+	   	 flush_round_up, // whether wrap-around occurs in flushing when misprediction occurs
+		 cmmt; // whether some loads are committed
+
+
    assign first_indx=indx_ld_al[6:0];
    assign second_indx=indx_ld_al[14:8];
    assign third_indx=indx_ld_al[22:16];
    assign fourth_indx=indx_ld_al[30:24];
-   assign cmmt= (cmmt_ld_ptr != head);
-   assign first_load_entry = ld_entry[0];
-   assign second_load_entry = ld_entry[1];
+   assign cmmt= (cmmt_ld_ptr != head); // whether some loads are committed
+
    localparam IDLE=3'b000; // Idle state
    localparam WAIT=3'b001; // Send request to load store arbitrator and wait
    localparam ISSUED=3'b010; // Receive the grant signal and wait for incoming data
    localparam MEM_RDY=3'b011; // Receive data from cache but pending data from store queue
    localparam FWD_RDY=3'b100;  // Receive data and forwarding signal from store queue but pending data from cache
-   localparam BOTH_RDY=3'b101;
+   localparam BOTH_RDY=3'b101; // Both forwarded data and read data are ready
    localparam WRITEBACK=3'b110; // Write loaded data back to physical register file
 
+
+  
+   // mark the start of the loop
    always@(posedge clk, negedge rst)
      if (!rst)
        loop_start <= 0;
@@ -69,8 +135,9 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
      else
        loop_start <= loop_start;
 
-   assign loop_back=loop_mode & cmmt & (cmmt_ld_ptr == loop_start);
+   assign loop_back=loop_mode & cmmt & (cmmt_ld_ptr == loop_start); // a loop is back to its beginning when the commit pointer is equal to loop_start in loop mode
    
+   // mark the end of the loop
    always@(posedge clk, negedge rst)
      if (!rst)
        loop_end <= 0;
@@ -97,14 +164,16 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        head <= cmmt_ld_ptr;
 
    
-   
+   // whether loop_strt goes high
    always@(posedge clk, negedge rst)
      if (!rst)
        pre_loop_strt <= 0;
      else
-       pre_loop_strt <= loop_strt;   
-   
+       pre_loop_strt <= loop_strt;     
    assign strt_rise=(!pre_loop_strt) & loop_strt;
+
+
+   // whether a loop mode is entered
    always@(posedge clk, negedge rst)
      if (!rst)
        loop_mode <= 0;
@@ -116,17 +185,18 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        loop_mode <= loop_mode;
 
 
-   //assign pre_head = head + cmmt_ld;
-   //assign nxt_head =  (pre_head > 23)? (pre_head-24) : pre_head; // need modification in loop-mode
+
    assign cmmt_round_up=cmmt_ld_ptr < head;
    assign loop_round_up=loop_end < loop_start;
    assign added_cmmt_ld_ptr=cmmt_ld_ptr+6'd24;
    assign added_loop_end=loop_end+6'd24;
    assign cmmt_diff=(cmmt_round_up) ? (added_cmmt_ld_ptr - head) : (cmmt_ld_ptr - head); // round up
-   assign loop_body_diff= (loop_round_up) ? (added_loop_end-loop_start+1) : (loop_end - loop_start+1);
+   assign loop_body_diff= (loop_round_up) ? (added_loop_end-loop_start+1) : (loop_end - loop_start+1); // round up
    assign flush_round_up=nxt_tail < mis_pred_ld_ptr;
    assign added_tail=nxt_tail+6'd24;
-   assign flush_body_diff=(flush_round_up) ? (added_tail-mis_pred_ld_ptr) : (nxt_tail-mis_pred_ld_ptr);
+   assign flush_body_diff=(flush_round_up) ? (added_tail-mis_pred_ld_ptr) : (nxt_tail-mis_pred_ld_ptr); // round up
+
+   // determine how many entries should be committed
    always@(cmmt_diff)
      case(cmmt_diff)
        5'd0: pre_commit=0;
@@ -158,7 +228,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
      endcase
 
 
-
+   // need to start committing from head 
    always@(*)
      case(head)
        5'd0: commit = pre_commit;
@@ -188,7 +258,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        default: commit = 0;
      endcase
 
-
+   // determine how many entries are in the loop body
    always@(loop_body_diff)
      case(loop_body_diff)
        5'd0: pre_loop_body=0;
@@ -222,7 +292,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
 
 
 
-
+   // loop body starts from loop_start
    always@(*) 
      case(loop_start)
        5'd0: loop_body = pre_loop_body;
@@ -251,6 +321,8 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd23: loop_body={pre_loop_body[0],pre_loop_body[23:1]};
        default: loop_body = 0;
      endcase
+
+   // determine how many entries should be flushed
    always@(flush_body_diff)
      case(flush_body_diff)
        5'd0: pre_flush_body=0;
@@ -280,6 +352,8 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd24: pre_flush_body=24'hffffff;
        default: pre_flush_body=0;
      endcase
+   
+   // entries are flushed from mis_pred_ld_ptr
    always@(*) 
      case(mis_pred_ld_ptr)
        5'd0: flush_body = pre_flush_body;
@@ -321,25 +395,23 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        4'b0111: pre_tail = tail+3;
        4'b1111: pre_tail = tail+4;
        default: pre_tail = tail;
-     endcase
-   
-   assign nxt_tail=(pre_tail > 23)? (pre_tail-24) : pre_tail; // need modification in loop-mode  
-   
+     endcase  
+   assign nxt_tail=(pre_tail > 23)? (pre_tail-24) : pre_tail; // round up
+
+   // whether the load queue is full   
    assign stll=  (tail < head) ? (tail+4 > head) : 
                  ( tail > head && tail < 21) ? 0 :
                  (tail > head && tail == 21) ? (!(head > 0)):
                  (tail > head && tail == 22) ? (!(head >1)) :
                  (tail >head && tail == 23) ? (!(head >2)):
-                 (head == tail) ? (ld_entry[head][41]) : 0;
-
-
-
+                 (head == tail) ? (ld_entry[head][41]) : 0; 
 
    assign pre_first={23'h000000, indx_ld_al[7]};
    assign pre_second={22'h000000, indx_ld_al[15], 1'b0};
    assign pre_third={21'h000000, indx_ld_al[23], 2'b00};
    assign pre_fourth={20'h00000, indx_ld_al[31], 3'b000};
-
+   
+   // insertion starts from the tail 
    always@(*)
      case(tail)
        5'd0: first = pre_first;
@@ -396,8 +468,6 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd23: second={pre_second[0],pre_second[23:1]};
        default: second = 0;
      endcase
-
-
    always@(*)
      case(tail)
        5'd0: third = pre_third;
@@ -426,8 +496,6 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'd23: third={pre_third[0],pre_third[23:1]};
        default: third = 0;
      endcase
-
-
    always@(*)
      case(tail)
        5'd0: fourth = pre_fourth;
@@ -457,12 +525,12 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        default: fourth = 0;
      endcase
 
- 
+   // whether the corresponding entry needs memory address and physical register address update
    generate
       genvar     i_1;
       for (i_1=0;i_1<24;i_1=i_1+1)
         begin : update_gen
-           assign update[i_1] = mem_rd & (ld_entry[i_1][41]) & (indx_ls == ld_entry[i_1][37:32]);
+           assign update[i_1] = mem_rd & (ld_entry[i_1][41]) & (indx_ls == ld_entry[i_1][37:32]); // the calculated address is for a load and the index matches a valid entry
         end
    endgenerate
    
@@ -537,9 +605,7 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
         end // block: ld_entry_gen
       
    endgenerate
-
- 
-   
+  
    // execute load
    generate
       genvar i_2;
@@ -553,9 +619,6 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
 
  
    assign ld_rdy= |bid ;      
-   assign ld_done_6=ld_entry[14][39];
-   assign ld_vld_6=ld_entry[14][41];
-   assign ld_ready_6=ld_entry[14][40];
    // Order the bids from head
    always@(bid, head)
      case(head)
@@ -585,7 +648,6 @@ module load_queue(fnsh_unrll, clk,rst, mis_pred_ld_ptr, loop_strt, flsh, indx_ld
        5'h17:shifted_bid={bid[22:0],bid[23]};
        default: shifted_bid=bid;
      endcase
-
    
 wire [4:0] pre_current_gen[24:0];
 generate
@@ -646,6 +708,7 @@ assign pre_current[4:0] = pre_current_gen[0][4:0];
      else 
        current <= pre_current;
    
+   // determine which entry is being executed
    always@(current)
      case(current)
        5'd0: execute = 24'h000001;
@@ -674,7 +737,7 @@ assign pre_current[4:0] = pre_current_gen[0][4:0];
        5'd23: execute = 24'h800000;
        default: execute = 0;
      endcase
-
+   // store the fwd signal from store queue
    always@(posedge clk, negedge rst)
      if (!rst)
        stored_fwd <= 0;
@@ -682,7 +745,7 @@ assign pre_current[4:0] = pre_current_gen[0][4:0];
        stored_fwd <= fwd;
      else
        stored_fwd <= stored_fwd;
-   
+   // store the forwarded data value
    always@(posedge clk, negedge rst)
      if (!rst)
        stored_data_sq <= 0;
@@ -690,7 +753,7 @@ assign pre_current[4:0] = pre_current_gen[0][4:0];
        stored_data_sq <= data_sq;
      else
        stored_data_sq <= stored_data_sq;
-   
+   // store the data read from memory
    always@(posedge clk, negedge rst)
      if (!rst)
        stored_data_ca <= 0;

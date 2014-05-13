@@ -1,5 +1,17 @@
-module cache_controller(rst, clk, flush, enable_cache,line_dirty, done_mem, miss_hit, wrt_bck, rd_wrt_mem,
-			mem_enable, idle, mem_rdy, one_line_flushed, flush_finish);
+module cache_controller(rst, 
+			clk, 
+			flush, // whether a cache flushing is initiated 
+			enable_cache, // whether a cache operation is enabled
+			line_dirty, // whether the line is dirty, needing flushing back to main memory
+			done_mem, // whether memory operation is done
+			miss_hit, // whether a cache miss/hit occurs
+			wrt_bck, // whether writeback is needed
+			rd_wrt_mem,// read or write, control the first port of main memory
+			mem_enable, // enable for the first port of main memory
+			idle, // whether the memory system is idle
+			mem_rdy, // whether the data read from main memory is ready for cache use
+			one_line_flushed, // whether one line is done flushing
+			flush_finish); // when the cache flushing should end
    
    // input and output ports declarations
    input rst, clk, miss_hit, wrt_bck, enable_cache, done_mem,flush, line_dirty;
@@ -15,12 +27,12 @@ module cache_controller(rst, clk, flush, enable_cache,line_dirty, done_mem, miss
    
    reg [2:0]  state, nxt_state; // state registers
    
-   reg [3:0]  flush_cntr;
+   reg [3:0]  flush_cntr; // counter used to count how many lines have been flushed
    
-   reg 	      flush_clr, flush_enable;
+   reg 	      flush_clr, flush_enable; // control signals for the flush counter
    
    
-   
+   // count how many lines have been flushed
    always@(posedge clk, negedge rst)
      if (!rst)
        flush_cntr <= 0;
@@ -33,7 +45,7 @@ module cache_controller(rst, clk, flush, enable_cache,line_dirty, done_mem, miss
    
    
    
-   assign flush_end=(flush_cntr == 4'b1111);
+   assign flush_end=(flush_cntr == 4'b1111); // 16 lines to flush
    
    // state transition
    always@(posedge clk, negedge rst)

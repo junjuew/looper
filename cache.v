@@ -1,6 +1,21 @@
-module cache (flush_finish, one_line_flushed, rst, clk, flush, addr_ca, data_ca_in, rd_wrt_ca, enable,
-    data_ca_out, mem_rdy, addr_mem,
-    data_to_mem, wrt_bck, miss_hit, data_from_mem, done, line_dirty); 
+module cache (flush_finish, 
+		one_line_flushed, 
+		rst, 
+		clk, 
+		flush, 
+		addr_ca, 
+		data_ca_in, 
+		rd_wrt_ca, 
+		enable,
+    		data_ca_out, 
+		mem_rdy, 
+		addr_mem,
+    		data_to_mem, 
+		wrt_bck, 
+		miss_hit, 
+		data_from_mem, 
+		done, 
+		line_dirty); 
     
     // input and output ports declarations
     input rst, clk, rd_wrt_ca, enable, mem_rdy, flush, one_line_flushed, flush_finish;
@@ -13,7 +28,7 @@ module cache (flush_finish, one_line_flushed, rst, clk, flush, addr_ca, data_ca_
     output reg done;
     
     parameter ENTRY_NUMBER = 8;
-   wire [7:0] match;
+    wire [7:0] match;
     reg victim; // indicate which way to evict if a miss occurs
     reg [153:0] mem[0:ENTRY_NUMBER-1]; // cache memory
     wire [10:0] tag; // tag bits for comparison
@@ -23,32 +38,36 @@ module cache (flush_finish, one_line_flushed, rst, clk, flush, addr_ca, data_ca_
           write, // whether this is a write operation
           hit_first, // whether the first way is a cache hit
           hit_second, // whether the second way is a cache hit
-          non_cache_able,
-          write_hit_first,
-          write_hit_second,
-          miss_read_ready;
-      reg flush_way, flush_reg;
-      reg [2:0] flush_index;
-wire [63:0] flush_data_to_mem;
-wire [13:0] flush_addr_mem, evicted_data_addr;
-wire [15:0] candidate_data;
-wire [63:0] evicted_data;
+          non_cache_able, // whether the address is noncacheable
+          write_hit_first, // whether to write the first way when hit
+          write_hit_second, // whether to write the second way when hit
+          miss_read_ready; // a miss occurred and the data read out from main memory is ready
+      reg flush_way, // which way to flush
+		flush_reg; // whether a cache flush is being executed
+      reg [2:0] flush_index; // which entry to flush
+wire [63:0] flush_data_to_mem; // data flushed back to memory
+wire [13:0] flush_addr_mem, // memory address for flushed data 
+	    evicted_data_addr; // memory address for evicted cache line
+wire [15:0] candidate_data; // data read out from cache when hit
+wire [63:0] evicted_data; // data written back to main memory
       
     assign tag=addr_ca[15:5];
     assign index=addr_ca[4:2];
     assign offset=addr_ca[1:0];
     assign read=enable & rd_wrt_ca;
     assign write=enable & (!rd_wrt_ca);
-    assign hit_first=(mem[index][152] == 1) & (tag == mem[index][151:141]);
-    assign hit_second=(mem[index][75] == 1) & (tag == mem[index][74:64]);
+    assign hit_first=(mem[index][152] == 1) & (tag == mem[index][151:141]); // hit the first way
+    assign hit_second=(mem[index][75] == 1) & (tag == mem[index][74:64]); // hit the second way
     assign miss_hit=(non_cache_able) ? 0 : (hit_first | hit_second);
     assign wrt_bck= (non_cache_able) ? 0 :
                       (victim == 1'b1) ?  (!(miss_hit) & (mem[index][153] == 1)) :
                                           (!(miss_hit) & (mem[index][76] == 1)); // whether a writeback is needed telling from the corresponding dirty bit
+
     assign line_dirty= (flush_way == 0 && (&mem[flush_index][153:152] == 1'b1)) ? 1 : 
                       (flush_way == 1 && (&mem[flush_index][76:75] == 1'b1)) ? 1:
                                                                               0;
-    assign non_cache_able= (&addr_ca) & enable;
+
+    assign non_cache_able= (&addr_ca) & enable; // address 0xffff is noncacheable
     assign write_hit_first = write & hit_first;
     assign write_hit_second = write & hit_second;
     assign miss_read_ready= (~miss_hit) & enable & mem_rdy;
@@ -60,6 +79,9 @@ wire [63:0] evicted_data;
 	assign match[5] = (index == 5);
 	assign match[6] = (index == 6);
 	assign match[7] = (index == 7);
+
+
+    // cache entry update
     generate
     genvar i;
     for (i=0;i < ENTRY_NUMBER ; i=i+1)
@@ -93,7 +115,7 @@ endgenerate
 
 
 
-      
+      // whether cache flushing is initiated
       always@(posedge clk, negedge rst)
       if (!rst)
         flush_reg <= 0;
@@ -104,8 +126,8 @@ endgenerate
       else
         flush_reg <= flush_reg;
    
-
-
+   
+      // determine which way to flush
       always@(posedge clk, negedge rst)
       if (!rst)
         flush_way <= 0;
@@ -117,7 +139,7 @@ endgenerate
 
 
 
-
+        // determine which entry to flush
         always@(posedge clk, negedge rst)
         if (!rst)
           flush_index <= 3'b000;
@@ -146,6 +168,7 @@ assign candidate_data = (hit_first & offset == 2'b11)? mem[index][140:125]:
 assign evicted_data = (victim == 1) ?  mem[index][140:77] : mem[index][63:0];
 assign evicted_data_addr= (victim == 1)? {mem[index][151:141], index} : {mem[index][74:64], index};
  
+// output data/address generation
     always@(posedge clk, negedge rst)
     if (!rst) begin
         data_to_mem <= 0;
@@ -154,7 +177,7 @@ assign evicted_data_addr= (victim == 1)? {mem[index][151:141], index} : {mem[ind
         victim <= 0;
         done <= 0;
     end
-    else if (flush_reg) begin
+    else if (flush_reg) begin // flush cache
 		done <= 0;
 		victim <= victim;
 		data_ca_out <= 16'h0000;
@@ -162,43 +185,42 @@ assign evicted_data_addr= (victim == 1)? {mem[index][151:141], index} : {mem[ind
 		data_to_mem <= flush_data_to_mem;
 	
     end
-    else if (non_cache_able & (~mem_rdy)) begin
+    else if (non_cache_able & (~mem_rdy)) begin // non_cache_able, requesting data from main memory
 	  victim <= victim;
           done <= 0;
           addr_mem <= 14'b11111111111111;
           data_to_mem <= data_to_mem;
 	 data_ca_out <= 16'h0000;
     end
-    else if (non_cache_able & mem_rdy) begin
+    else if (non_cache_able & mem_rdy) begin // non_cache_able, received the data from main memory and sending the data out
 	addr_mem <= 14'h0000;
 	victim <= victim;
 	data_to_mem <= data_to_mem;
         data_ca_out <= data_from_mem[15:0];
         done <= 1;
     end      
-    else if (miss_hit & read) begin
-          // read hit
+    else if (miss_hit & read) begin // read hit
           done <= 1;
           data_to_mem <= 16'h0000;
           addr_mem <= 14'h0000;
           data_ca_out <= candidate_data;
           victim <= victim;
     end
-else if (miss_hit & write) begin
+else if (miss_hit & write) begin // write hit
 	  done <= 1;
 	  data_to_mem <= data_to_mem;
 	 addr_mem <= addr_mem;
          data_ca_out <= data_ca_out;
          victim <= victim;
 end
-else if ((~miss_hit) & enable & (~mem_rdy)) begin
+else if ((~miss_hit) & enable & (~mem_rdy)) begin // miss occurs, requesting data from main memory
     done <= 0;
     addr_mem <= {tag, index};
     data_to_mem <= 64'b0;
     victim <= victim;
     data_ca_out <= 16'h0000;
 end
-else if ((~miss_hit) & enable & mem_rdy & wrt_bck) begin
+else if ((~miss_hit) & enable & mem_rdy & wrt_bck) begin // miss occurs, data fetched from main memory, cache update, victim register flips
 	    // writeback is needed
             // eviction and replacement
            addr_mem <= evicted_data_addr;
