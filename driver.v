@@ -1,27 +1,5 @@
 //`default_nettype none
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: UW-Madison
-// Engineer: J.J.(Junjue) Wang, Pari Lingampally, Zheng Ling
-// 
-// Create Date: Feb 03   
-// Design Name: SPART
-// Module Name:    driver 
-// Project Name: SPART
-// Target Devices: FPGA Virtex 2 Pro
-// Tool versions: Xilinx 10.1
-// Description: This block is used to drive the whole spart and let it can work on  the FPGA board. 
-// The functionality of this block is to receive the data from spart when there is data received by spart and then transmit it back to spart and let it do the transmission. // There is a FSM designed in the driver, it has five state, including one idle state, one receive state, 
-// one transmit state and the other two state used to write the baud rate divisor. '
-// It can also write different baud rate to spart based on the two selections br_cfg.
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
 module driver(/*autoarg*/
    // Outputs
    iocs, iorw, ioaddr, enb, web, extern_pc, extern_pc_en, addrb, dinb,
