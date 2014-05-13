@@ -1,25 +1,5 @@
 //`default_nettype none
 `timescale 1ns / 1ps
-  //////////////////////////////////////////////////////////////////////////////////
-// company: uw-madison
-  // engineer: j.j.(junjue) wang, pari lingampally, zheng ling
-  // 
-  // create date: feb 03   
-  // design name: spart
-  // module name: top_level
-  // project name: spart
-  // target devices: fpga virtex 2 pro
-  // tool versions: xilinx 10.1
-  // description: 
-  // the overall purpose of the spart (special purpose asynchronous receiver/transmitter) is to function as a serial i/o interface of communicating between the computer and the fpga. 
-  //
-  // dependencies: spart, driver
-  //
-  // revision: 
-  // revision 0.01 - file created
-  // additional comments: 
-  //
-  //////////////////////////////////////////////////////////////////////////////////
 
   module mmu(/*autoarg*/
    // Outputs
