@@ -1,7 +1,7 @@
 # Overview
 
-This is a 7-people semester-long capstone project for University of Wisconsin-Madison ECE deparment 
-([ECE554/ECE901](https://guide.wisc.edu/courses/e_c_e/)) in digital hardware engineering.
+This is a 7-people semester-long digital hardware capstone project for University of Wisconsin-Madison ECE deparment 
+([ECE554/ECE901](https://guide.wisc.edu/courses/e_c_e/)).
 
 This repository implements an out-of-order superscalar processor called Looper. Looper is a 4-issue
 superscalar, out-of-order execution, 7-stage pipelined processor, with special designs inspired by
