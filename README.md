@@ -9,4 +9,4 @@ Mitchell Hayenga’s [Revolver architecture](https://ieeexplore.ieee.org/abstrac
 including frontend loop detection, training and dispatch, and 
 multiple backend supporting schemes in issue queue, re-order buffer and load/store queue. 
 
-See [this report](final-report.pdf) for design and implementation details.
+See [this report](ECE901_Final_Report_LOOPERS.pdf) for design and implementation details.
